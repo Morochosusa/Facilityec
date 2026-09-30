@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morochos Facility OS EC</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: #f4f2ec;
+    margin: 0;
+    color: #2c2c2a;
+  }
+
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #e2e0d6;
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 18px;
+  }
+  .brand-logo { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+  .brand-texto { line-height: 1.25; }
+  .brand { font-size: 15px; font-weight: 600; color: #2c2c2a; }
+  .brand-sub { font-size: 12px; color: #888780; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #5f5e5a;
+    cursor: pointer;
+  }
+  .nav-item:hover { background: #f4f2ec; }
+  .nav-item.activo { background: #eeedfe; color: #3c3489; font-weight: 500; }
+
+  .content { flex: 1; min-width: 0; padding-bottom: 100px; }
+
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid #e2e0d6;
+    padding: 18px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar h1 { margin: 0; font-size: 19px; font-weight: 600; }
+  .topbar p { margin: 4px 0 0; font-size: 13px; color: #888780; }
+
+  @media (max-width: 900px) {
+    .shell { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
+      overflow-y: visible;
+      border-right: none;
+      border-bottom: 1px solid #e2e0d6;
+    }
+    .brand-block { display: none; }
+    .nav-item {
+      flex-shrink: 0;
+      width: auto;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin: 0 4px;
+      white-space: nowrap;
+    }
+    .barra-inferior { left: 0 !important; }
+  }
+
+  .panel {
+    background: #fff;
+    margin: 14px;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2e0d6;
+  }
+  label { font-size: 13px; color: #5f5e5a; display: block; margin-bottom: 6px; }
+  select {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #b4b2a9;
+    background: #fff;
+  }
+
+  .categoria-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 22px 0 6px;
+    color: #3c3489;
+  }
+  .subcategoria-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 12px 0 4px;
+    color: #5f5e5a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #lista-productos, #lista-productos-compra {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    padding: 0 14px;
+    align-items: start;
+  }
+  @media (max-width: 1300px) {
+    #lista-productos, #lista-productos-compra { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 900px) {
+    #lista-productos, #lista-productos-compra { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    #lista-productos, #lista-productos-compra { grid-template-columns: 1fr; }
+  }
+  .categoria-title, .subcategoria-title {
+    grid-column: 1 / -1;
+  }
+  .item {
+    background: #fff;
+    margin: 0;
+    border-radius: 10px;
+    border: 1px solid #e2e0d6;
+    padding: 10px 12px;
+    display: none;
+  }
+  .item.checked {
+    border-color: #7f77dd;
+    background: #f7f6fd;
+  }
+  .item-row1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .item-row1 input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .item-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3c3489;
+    background: #eeedfe;
+    overflow: hidden;
+  }
+  .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .item-texto { flex: 1; min-width: 0; }
+  .item-nombre { font-size: 15px; font-weight: 500; }
+  .item-unidad { font-size: 12px; color: #888780; }
+  .item.checked .item-nombre,
+  .item.checked .item-unidad {
+    text-decoration: line-through;
+    color: #b4b2a9;
+  }
+
+  .item-detalle {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e2e0d6;
+    gap: 10px;
+  }
+  .item.checked .item-detalle { display: flex; }
+  .item-detalle > div { flex: 1; }
+  .item-detalle label { margin-bottom: 4px; }
+  .item-detalle input, .item-detalle select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #b4b2a9;
+  }
+
+  .buscador {
+    margin: 14px;
+  }
+  .buscador input {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 10px;
+    border: 1px solid #b4b2a9;
+  }
+
+  .barra-inferior {
+    position: fixed;
+    bottom: 0;
+    left: 240px;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e2e0d6;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .contador { font-size: 14px; color: #5f5e5a; }
+  .btn-despachar {
+    background: #3c3489;
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .btn-despachar:disabled { background: #b4b2a9; cursor: not-allowed; }
+
+  .aviso {
+    margin: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .aviso.ok { background: #eaf3de; color: #173404; }
+  .aviso.error { background: #fcebeb; color: #501313; }
+
+  .guia-imprimible {
+    display: none;
+  }
+  @media print {
+    .sidebar, .topbar, .barra-inferior, .buscador, .panel { display: none !important; }
+    .item { display: block !important; border: none; margin: 0; padding: 4px 0; }
+    .item-detalle { display: none !important; }
+    .categoria-title, .subcategoria-title { margin: 10px 0 2px; }
+    .guia-imprimible { display: block; padding: 20px; }
+  }
+
+  .vista { display: none; }
+  .vista.activa { display: block; }
+
+  table.inv-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table.inv-tabla th, table.inv-tabla td {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #e2e0d6;
+  }
+  table.inv-tabla th {
+    background: #f4f2ec;
+    color: #5f5e5a;
+    font-weight: 500;
+  }
+  table.inv-tabla input[type="number"] {
+    width: 80px;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #b4b2a9;
+  }
+  .cantidad-actual { font-weight: 500; }
+
+  .form-entrada {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-entrada select, .form-entrada input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #b4b2a9;
+  }
+  .btn-secundario {
+    background: #eeedfe;
+    color: #3c3489;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .compra-top-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0;
+  }
+  .compra-top-grid .panel:first-child { margin-right: 7px; }
+  .compra-top-grid .panel:last-child { margin-left: 7px; }
+  @media (max-width: 560px) {
+    .compra-top-grid .panel:first-child,
+    .compra-top-grid .panel:last-child {
+      margin-left: 14px;
+      margin-right: 14px;
+    }
+  }
+
+  .guia-card {
+    background: #fff;
+    margin: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e0d6;
+    padding: 14px;
+    cursor: pointer;
+  }
+  .panel .guia-card {
+    margin: 10px 0 0;
+  }
+  .panel #listas-compra-pendientes .guia-card:first-child { margin-top: 10px; }
+  .panel #listas-compra-pendientes p,
+  .panel #listas-compra-pendientes > div.panel { margin: 10px 0 0; padding: 12px; }
+  .guia-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .guia-local { font-size: 15px; font-weight: 500; }
+  .guia-fecha { font-size: 12px; color: #888780; margin-top: 2px; }
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .badge.despachado { background: #faeeda; color: #633806; }
+  .badge.recibido_ok { background: #eaf3de; color: #173404; }
+  .badge.recibido_diferencias { background: #fcebeb; color: #501313; }
+
+  .detalle-panel {
+    background: #fff;
+    margin: 14px;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2e0d6;
+  }
+  .detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .detalle-header h2 { font-size: 18px; margin: 0; font-weight: 500; }
+  .btn-cerrar {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888780;
+    cursor: pointer;
+  }
+  .detalle-fila {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e0d6;
+  }
+  .btn-imprimir {
+    margin-top: 14px;
+    width: 100%;
+  }
+
+  .costo-input {
+    width: 90px;
+    padding: 6px 8px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #b4b2a9;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  @media print {
+    #guias-lista { display: none !important; }
+    .sidebar, .topbar, .aviso { display: none !important; }
+    #lista-compra-detalle input[type="checkbox"] { display: none !important; }
+    #lista-compra-detalle .costo-input {
+      border: none;
+      background: none;
+      -webkit-appearance: none;
+      font-weight: 500;
+    }
+    #lista-compra-detalle .btn-imprimir { display: none !important; }
+    #listas-compra-pendientes, #lista-productos-compra, .compra-top-grid, .buscador { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand-block">
+      <img class="brand-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAABCh0lEQVR42u19d3hd1ZXvb+29zzn3XkmWey+YYsA2LaaGBLlgIIF05JDJDEkIj8nkDeRBylACF1ECeSm8CZkUZoaQhEmIlUAqAYyL6MUGY9zBNrZxt2yr3HLK3uv9se+5klwlWQbbOuv75M+fyr3S2eu31/qtSkik88JMtfUQW5eABk8A188gvbdvq/kxVzo5f5g24SjBcpRhjBICI9iYYQANANAP4D7MyABIEcEBWAEkSm9kwNAMCkBUJHAeoGYAOwFuJMJmw+JdQVhvSK+XwlkfVnibGv6VWvf2+9TOZFn+nWthQMTJYXZOKHkE+0UEZbOgeYCYDJi6OjIdgDCXlXi1OEYaOsmwmQjm8QCOB/MoAANJqLRQHogABuw/bMClD7ABmMFggHfTWSIQCCACSIBKHyABkD04ZsBEPthEBRC2E2g9A2+DaKkgsVgLXm7OSq1tmEJR+5fOZlm0/U1gIAFMApAugKJ2prUSDXUdFavmvp19ZVBxCqLoPBJ0DticxsAY5WUUCQsAYwDWEViHYNbMQAkBVukBJgIBzGSfPtGBzBYYAFH8Hy6DiSx8iCSRdEBSQQh7qmyAyM9HBKxlEm+A+GWQelG7uTcbru+3q8PflWVlLSJMApYEIPsEBQC0d5tqsqxkJjhVGJ7CMFPBmETKHSKVLN3eGkb7YGM0UWwkiIhZdE75e873AwNMZKiEHmYQCSGF9CCUBBGgIw2Ogi0gLCCIOUbQXJ13F7W/CGpnsrTPIQFLrwdI7Gq0V5Dp3+MKcHS+0fpjDJ5GoJOV54ENoKMAHPkMIs0MsqYg9oMOT9IEgJnBRGAwS1IeSeWCBBD5Phi8jECzhZR/AannZ32Tcu0viL25lglAeoG1GL8EHB/8+Cy7w1LFCwC6HMAlQrljhCToUMNEBQCImEEECBAd2c+MmRkwJYunhEpDOhJGM0wUrAXwBMC/31RMPbO0joL4Ilk6AdQbrUrvAQgz1dwO2d5aTLnXnyCBK5jN5UK6JwkloIMQWvuGAANAtEWWjtoHYwAYBoSUnpCuAxMZGBMsJ4jfa+CRuTd6S9pblYbboXtLJOzoB0iWRe0EUMwtarJrUjI97DJiugrQ05WXVjrU0FGhBAoSFhi9UgzAFiwqLaQjEfmFCJCzmPhBXdj014a6scWYq9QvAeMod7+otwBj6t0tQ0g5V8Lwl6WbOhEMRH4OAEe9w1J0z7IApJRXARCgg+IKCPnfHPm/mnNL1ZbeAJSjDyClZF4MjOl3FsayI/6FwV9UrjdIhxo6LGgbYyKBJJLXGdZiAEA6aSkdiSjwt4H5lyLCT2bdml5TBspRmIQ8ipSDqSY7TzbUTYkAYNo9hWMh6HoYfEGlvKqo6INNGDEgKLEWB2VVSDhKeR4i328hwkM6LP773Fv7rrIu7FzVUDdZHy1k/qgASO1MlrHFuPC7ueHM6gYwX6M8ryoqFsCsIzDkER+BOoxsCgiaSCqVSiPy/RYQPUAU/fDpf6vYuPuZJAB5v2hGlkUdANSRmf71TRVmUPV1gLhBud7AMjAAefjmKY58pADtgBIG26D5PtG480ezfjAshyyLLIAjOY9yhCoOU022LWQ79e78FSTl7cpzT4xdqQQY7wNQhKNUyoP2gxVG69vn3JJ5xLpdrBrqcES6XUecAtXWsqyvL0emTiXh3itd9yMmimCiYuJKHQaul1ApJZSCDoK/s8ndOOeW/ot2P7sEIIfQalxy7UovGjH6RoBuFI6bCgut2hbuJeT7sDgpW67PTrpSmtAvMvN3nY3r73ni/nH+kWZNjgiAZLMs6uqEARgX3tn8ITjuj6TnnRHm82A2mohkopaHpUHRREI6mQy077+OMLju6Vv7PAcQslkjjgRuctgDxN44FE26Zr7Td+yELAlxEwlH6CCX8IwjiJ9It0IZExoYc8+uNUvqFjxwZhifbQKQbrpUtTNtwu+CO3ac4niZB5TrnRvmW5mZmUgk7tQRBRNjiIicTCVFgf9S6Oeveea2/m/acPDhWwR5WCpZNssCIK6fQXrqPa1Xu17lC0J654a5lgg2AZ6A4wiT0plRmGuNhPTOdb3KF6be03q1zZUQ2zNPLEgnXKq5qqFuSnTu9evSmUEDf6xS6at0sQBjdMI1jiJuIoSUMpVGVCw82PTO0msXPHBmPj77BCAH4BvTsk3jkPZ+ozxvUpjPRWBOQrdHIUpApJ1MhYp8fwEK/j/MrqteebjxksNE6dpCuFPuaPqo9FK/IukO0MWWCCRUok1HM1BMJFNVinXQqP3ilXNvq378cAoFi8PgJqFs1g5ImHxXy3XSS/+NmQdExRadgKM3kBOhomKLZuYBMpX+27S7Wq5rqKMomwWB+X2/wN/fXyDLAqWxM1O/k/+hk0pfHxbzhtkgSfr1MkMCNkQEJ1UhwmLhvjk3Z24AmJAFvZ+9Ju8bQGzyj8yka9ipHpv/tZPKfDbhGwkviXlJWMz/bvNra65cWj8xiHWl1wCktnamrK+foT/4zW1Vqf4Vjzqp9IVhLuEbiZSBEjoVlU5YLDxd3JH79AvfG9QS68xRD5C4YG3ajU0DUO3+TXmpc8J8awgiJ9GMRDqAJFPpRH7xZTQ1Xjr73pGN70exI70f4Jh60+Yh1KfvE9L1To8KieVIZF8gMZFKVykd+Au5edclc+4ZuuW9Bol478AxU9bXk56ebRksqqtnJeBI5MDXt1BRoSWSrne6qK6eNT3bMri+nnRt7Ux5VAEkm2VRXz9DT7vx3QHGU08JJ3VKAo5EugIS4aROMZ56atqN7w6or5+h36vSlEPvYpVCuTVZVKhU8Wnpps5JwJFI992t4suFHa3TX/jewNb3IgR8aFHITFkAk34OJb38H5WXgCORg7Mkykudk+qXeWzSNVDZko4doQCxoz7r6shUb8s97KQz02y0KgFHIt0HSZhvDZ10Zlr16NzDdXVkam6HBA4dSA4ZQOLaqql3tf7QqayYEeaSUG4iPQEScsJca+hUVsyYelfrDxvqKKrJQh5RAIkrMqfcuetap6Li+jCXT8CRSA+DJB86FRXXT7lz17UWJHxIPJMeN03xwLDJd7Ve7LjeE0aHEWudlI8k0tP8lklKLaSjwiB3ybxv933yUAyr61ELks2yqJ9Besqdu46TjvqtMZqN0SIBRyKHwIqQMVoYo1mq1G+n3Fk4rn4G9Xj4l3oQ0VQ7A2LreDjSK7wo3dTpUbFVE4mkCzCRQ2hIjFapSqmD4kLtp88bvBRh/cyeG6LdY2iruR2yvp60dFp/4qTTp+tia5SAI5FDb0iE1MXWyEmnT5dO60/q60nbyNZh5GLZXmKKptzRdJWTqfxSmG9Nch2JvIcoESrMt0ZOpvJLU+5ousqS9rk9on8H7WLFtfo1dxdPUooWwBiPdZTwjkTeB9KuDITwo4gnNdySWt4TfSQHaUGYlk4A1WRZSUS/FtLJGB0hAUci7wtp1xGEdDKSol/XZFktnQA62CTiQQGkJgtZP4O0UK23O5mKM3UxFyWjeRJ5HzEidTEXOemKM4VsrqufQfpgk4jdRldclz/5O03nKJV6wUQRg41IRoEm8n77WiBhhFIURdEH591c8fLB9JB0U5ntWFAsgWx0cgukl5oY+XmTTDzsqZvQHgyjNNk2kS5CxBjlZYT2/cUDwswkTIDu7njTbil0TXaerJ9ButFpucmpqJio/UKUgOPgRZaeYBAB+QDww9IhJU+2ixeMENovRE5FZmKj03KTdbXmdcvV6rIFsZEBcM3d/olKYiEbo8A6ca0O3jFAq8+o9AhDqgl90oRiCLy7wyBX+nxiTLrqailDgiKpcfpTt3grsllQV6NaXY4VL10KAsgIbr5fOlVeWGjRRCIBx0GCgwj4woddXHyqwqgBAp4CtAHe2Wbwy2cDzFum4arE5eqKHWETQnlVXhi13A+kpi+d0PUylC4pdlwMNvWO5stVRVV9WGhNBkr3gFvVlGfUXZ7CJae23VfG2NOJr56P/yCP5gJDyQQkXbt8WDvpSqmD/OWzb6r4Q1cLGruAKKbxS8CTshsykOL/mihkIiSWowesh6sIL6yMsHSDQT5o4x2CgE27GN/9i4+mfAKO7hkSkIlCZsPfuyy7ITN+CbgruZFOf2M8mn7Knc03upVV94T51gigpJykq1ER6sjWmO1HIbTWJO0CI/sJ9K0gNLYy1m03KIaMtEsdiDwAGE4A08lrKHIylSpobblp7q197u3KmoXOASTLAreDp3+/dZAOxQoSsg9HISUZ866DIx8AQdSm1a4iZFwbucp4wIUTFMYNkygEjFVbDVZsMnh7s4HntBF5sD25lENIOZarJLJ/P4uUw2x0s3TMibO+UbkNt3du4EOnLEDtBFA9kQnvbL7Rq8z0tcWIifXoiplmAC1FxuljJD5wjETKIfgRY8EajTfWaYwaIPDdK1IYO0js4YLVvxLiR08EqEwBXzzbxZBqwrs7DF54S+OdbQZVKXtPJcZkn3ydWIfayVT29VtbbgTRDbUzWdT3iAUpWY8Lv7tzFHNqGYNSMBElYd2uiR8C//siF587r2PnsWHgM/8vj69/1MOHTpQIdRsxj7kIAbjmvwo49wSJq2rc8tfyAeM3L4R4qCGE57QBMZG9mxESihlcVA5Oeurr6Xc7Y0UOSNJrJ4BAxDqS31KpdAYmMgk4uuBWCesWXXuxBYdh6xKFGog00FpkZFzg9DECkbZKTtTGVaJSvEVJYFR/+z1BZF8j4xKunuziWx9zUQgYSchk/2aETWScVDoTFvSNIOLaCQd+YuJA1qN+BsxFdzaOIuF8KSoUGEAS1u0C58gVGeccJ/HZcx3o0tVCZMm2ksDP5wRYusHg9Xc0lLSfi8EhCHAkMH+1xiurNF5fa78n/hqzBdDHP+DgI6c5aClwBxKfyB4io0KBSaovfPjOxlH1M2BwgBbd/X6xBvMEQBwJ9zonnc4wa51Yj67cWfam/9gZDiJTItNslVsQ8NPZAR59JUS/CsJdf/Txg8d9/HFBiPmrNd7eYvDaOxo/mx3glvoiqlKExxdGeOltDSfeDk/WpYoM8OmzHHiKYBIfa/9WhLV20qkKR7jXAcQ1B8AA7c9lAwE12ZYB0pUrSci+rMOk16OLFqSlyPj+P6TxoRPbDO/8NRo/nx3ghZUaw/sRiIC8b92xj39AYdJYCSGAResMnl0eYV2jJeKRAYoh44pzHVx0qoOTh7ed7bYWxhX35+MAVyL7i2hJB2z0Lh3ocQ11VY32oe29kHGfkaia2yEbQJHw8l900ul+SeSqG2cBG8b9ydM+Nu6yLlBjK6NPmnDZGQqnjpL4w6shDAPD+xF++I8pjOzfpvQ1JwHXXuTikRdD/MesAEoA5xyn0NjK+NWzAQZWEY4ZJDCoitCwTKMYAhkXiRU5UETLhJGTqezHVPgiQN+vuZ1VAxB1wYLYTOMl//6W67cMWyqd1FgTFRnJ3sBuuVmRBrY0GXz8Aw6+domL4f3aHuMPHvfx6+dC/PKf0zhtjI1ixTyCuY2P3PA/RRCAH3w+1cFqLHxH46FnLI8Z1IeSnEjnri4jVIp0WFzjbdk0/on7TyjVL+xpRfaq8LYLizhoGfFRJ115rA6LJgFH9wFSDBlfu8TDdz+XwvB+ohzFMgxMGa8wfoTAaWMkDFtSHnMUKSxv0QY4ebjAsL4EZhvFYgYGVRGmn6Lwi3/O4PxxEq1FRlI22qlTETosGiddeWwwZMRHAeJ9dR7uVeknA8a6CPpfwElovdshEwG0FBhTxit8ZZoLbaxiS9FmJZQA0g6VLUZcPhI3S3HpdTbtYrz2jgYRypEshrVOrgL+7WMe0m5C0rvoAzND/0t7nT8gQOJJEFPuaDpRSDUl8vNIKna7J5EBqlKEay9yy9aESuFZbayVWPCOzaQvWqchRZtLFedDHAks32jw3IoIq7caNCyLIEpuG8GCxRhg1ACBs46VyPmcNFh1jorIyM9DSGfKlDuaTqyrI7O3qYx7fGJe6XOk1D+qVFoBRiePsxsRLAEUfFtaMryfQKjbChNjxX/pbY3/eS5ExiPc9LsiHnomwHMrNVZsMtjSxFjfaPDn1yL82yNFBBGQdgnffzzAliZb2RuVLJIuve5xQ6z7lnhZnRWjVSqlSKl/bK/7+yHplpyPzy5xhjpjlgondZyJEv7RLYCQLQWZOFLi519Od/jauzsMHpsf4Q+vhGWwFEOgucD40DiJs49T8Bxg4VqN51dqFAJGvwp7VPkAGFpNuOezKZwwtOOxfPUXBbyxziSRrK6RdWHC4qrN4drxS+smhLuT9Q4AKTdE3d0yRbrpOVFQMJSA46AIuh8C5xwvceZYG6FqyjOWb9RYv4OxK8+gEpiUBLKfTuH8cR292a3NjAfmBHj8jRCeIggCBlQSqtKES05VOGWUhCOBx+aH+MMrISpTCQ/pIg0xyk0LHRSmzrmlau7uDVUd8hpbl8wrAUZcIaRkssQlAUh3Hz4DKRd4ZnmEF96K8LWLPXz2XAf9K10QAW+s07jrMR/rGg3ummHBUXaRSjxkcB/Ctz/pYVuzwetrDb73+RQmjZUIImBto8H6RoPHXg3x7AqNIdVJmLfLlxhghJSkIa4AMLcNA3tYECaA+LLshkzO7bNSSm+E0UECkIN7+DBsrcO/X5nukPk2pRzHw8+HePTVEI/+nwxMyZltf0KRBqQE/vJaiL8vjPDTq9J7ZMu1Ae75s4+/vh6iT5rKTVSJJekcERHSFVr7GyqC5nF/rRuRj7HQgaTXzrT/z7t9zlduZoTWfgKOg+AfgA3PtvqMf57m4uThJaLeDiDaAFUp4KThwoZ39ySFtuaKbTSsEJZ+ntsslDb2fb55mYdjBgkUQ6AQlBqrEunUcWntG+VmRuTdPue3x0IHgGxdYs+GQR8XUsTuVSLd4B35wAKguQicMFTg4x9wypaE2lkXKYCVmw1yvgVV+xxIe0tDZKebLHlXY9NO0+HzUtholqeAT3zAwc4c4xuXurjhIx6KISelpZ12swQz6OPtsdABIA11pGuyrMDmYh1p4sR6dP0qEra/4/KzFX7+5TRG9iecNtqSaG7XrhG7Vzmf8fxKjcXrNdZtN+Uq3fY67UhgWzPjz69FYAYeesZGvozpaLGYgXHDBE4eLvDJMx3UnuPgM2c7aE5K4DtB1CF0pAlsLrb7NaE7AKSUIGE4uYlCusebsMBJ9KprEmfNJ5+scP1HPIwbKnDFuQ4GVFLZndKmDRxEwH1/D7ClyUAbW2v11JsR1jcaNBUY2lj+sWi9xjd+U8S2ZoMBlYS/vB5izpKonAcxcfYdtnxl3DBRfr8v17gY0kcgiJLcyP4tCAkTFlhI93g4uYkAcZw0VEA5QWIk8TSV8ijMhxG6MVSuN0ukLU+47mKvXCYyeqDAiy+FEGTLQcrubDPjZ7MDPPFGiErPqu72FsYNDxcxbpjApLESVSnCso0ar66yGfa+FYRIAxUu4c4/+iCydVztOc/vXw7L44JCA1RnCBefqvDLZwP0q0giXAcQrVKe4nw4DcDCGBMKsHUoDdbUTGObnU26PrpoPXblGbVnOxjejxBE1jVqLTLmLIlw+6NFnDRcojnPSDmEzU0GyzZoSNEWcYoMcN3FLi4/x0G/jH2N7a2MFRs1Hno2wKotBhUeIefb177nzz7eWKdxwUkKKYcwd2mEZ1dEGD3QEvUYkNNPUZj5cphEtA7kZjGIjcUAgB/EmCDbGEV8dnZ7n0rHW0XKHchRkECki8TcD4GfXZXChJE2IehI4I7HfPz9jRDM1v358mQXn5ykyuXuP3k6wP88H8Aw8KULXFwz1d3r6zflGf/7oSJWbtK47AwH//RhB9VpwuYmxuYmg+dXaDw2P8TAKkJTnnHzJzx8YpJt8WUAX/p5Ae9saxsdlMheEcKkXOIo2N4a+se9UjewGcwkaustD+mjMqcKJz2QdWAScHQdHMcMEjhxuE30ORJYtcVg7tIIKYdQnSb819VpfPVC2wsS3+ZfmeZiaLXA8L4CX6pxy3yi3a2GMLKu0j980EFVmnDTJzyMHSTQv5IwfoTA1PEKt37Kw3c+m0IhACo8wgNzbL2WFNZPOGGIQBAlpfAHOEhiHRjhpAf2UZlTAaC2HkLEIS1N5jzpSiAJ73YtckV2ENwJQ0W5hyPvM+oe9W3fRwTc/EkPZxwjEZXyIILaqnknjLS9IHGkq70SE9kkITNw7GCB4f0IUrQLB7ONZkUGuORUhcvOUMj5DD8EvvGbIjbuNBACGNQnKT/ppBjpSkQwHwRsuFcMnlAKuxPOY2P/k0gXnyrb+ihBlnd8//EA21sNigHjolMVak5SiEzHPEhsIfpXUjnSdQAfGRt3MhpbuC2XQqUZvqXf4dNnObbF96o0/nmai2/8xkbGVmwyZQAmsv94FttqhnMBYPAEsLLLRViBW08zkQbAIgFJl8gdPAW8uV7jmeURnlmuccV5Dq67yEXtj/L4+AeUtQz7cM8272I4isuRJ8Ed58bELtvidzU27DB4dkWET59l+YUsfV9cnjK0mnDmWIljBgqMGwqEkYvrHy6ibwUhkzRTdeY0hYk0wHxaTZZV/QyKbKw31TSahBhttN+rTEhPNBYZtjNyl280uP7hIqafojBuqB0+/bEP2DwIo60DMJ5lJYXtKX99rcYrb2usb2xLFLYHnyOBHa2M374YYmCVwK+fC9GU57KrFR8YlzL1SrXlW6aMV7j8bAfFIGmi6qwJMdoHCTFapZpGA6WLTWs6WXkZxcb0irlXopStbilwuf/7oJ6qAPyQcenpCuccJ8s94xUesHEX79ElqEpKf2t9ETkfKEbA9Q8X8fTiCFuaGIWwzcIs32jwjd8UsaXJoDIFbNplcPef/PLfYUpEnghYscng5bc1duZMuXPxHz7oIOUkOZDOMnU2Ris3o7Smk4FSMlBATiS7RI17AzhyPuPycxz4IfDHBSEcQch4lvB26wGU3KKPT3LKBYdENvl3z598ZD/jYfwIiUgzNuxkvPRWhD/Oj7C1hZF27Htub2Fc/3ARYwYKnD5GoE+a8PZmOzxOSRvJCiKgOk14ZnmEGx4u4vqPuhjVX0AoW6D4k6cD7Mox5i7V+Pz5ApGx5P600RKvro5Q4SVuVieikkzSYgLA32w6iXh8bxnNYIcgEOav1vj1v2RQc7LCz2cHWLpBoypFULJr6wSIAD+yWfNTR0lbhFjqE1+20WBzk8G1DxUwoEpg/Ahb9rFhhy0naT9sOtSML11ga6gGVAn4IWPTLsayDRqPvBRi005GxgMCDXiOzXc8+kqEE4YKbNhpMOvNCJubGAOqCL9/JcQnJqnyTpHTjxF44a22yuBEOqEk4AllC8JMJ9jb8+hPgDDb4WorNhnMfDnE585zcObYNB55McCvnwvRUmBUpanT1iQO844bKuEqO5LHVcCTb0ZYvlGj0iM4CviXC13UnKSQLuUC391h8IPHA8xfrREZxuc/6OJfL2pLFGZcQr8Km+v40IkK1/6ygM2l3Ma3P+Fh+in2bmsuMN5YByxaR9iw0yDjEjbuNHiwIcR1F9tJKoOrRFLV22lsEJXO/ngAENO/xxVEGMk6AjH3Ciqn2SbU/rwgRD5guAq48sMu/vPqNM47QWFXnmEYna6C1QblBKCrgPWNBj9+KkDaJYQauLPW7h9Mu21EfWR/gTsu91Dh2antX5nWMVEYf18QAUOqCV+Z5mJ7C+MzZzmYfooqjxDqkyZ8+ESF+7+QxvnjFJoLjAqP8IuGAI++GtoiyiInId7OegTMgnUEIho5/XtcIfxC83CAB9m5u70nNJtygFVbDZ5bocGwinjMIIEf/mMK37rMs81ORYbqBEikADY3WTL+2hqNr/6iiC3NBoWA8dEzVLkfHe34iS6NBDphqMDZx8ny/sE4YNB+7A8zMHGUxOA+hCnjZVv0qvS98YqE/3OJByLCScMFfnJVGi+v0rj7Tz6eXGQz+gn/6AxCANYhAB7EhebhQkkxkoSTYtbcmya3M9uhbX9eEIJgFTHOUF9+toOffzmNU0ZL7MjxHnsFd7ceGZfw4soIX3mwgOff0qi73MMNH/HADFx6us2DSNrjHGwOxSGMHij2687F87T6Zgj9K8UekbcYXMP7WcB95mwH5x0vcc+MFFZuso1WaTdJFHY6ksWaSTgpI8VIQUSjhXLBvYy+GQYyHmHReoPlG00ZAPHtfuxggf/4YhpXfshFS9H2Z+wrlyCldWMM22HTHzhG4orzHFxwksKgkv+/O8Diz61vNLb5iffNFw0DW5sMGlsZ2ux91GXsko0ZKDCk2nIoIYBbP1WauJiEebvC0VkoF2AzRhhjRpPNYvW6+0UQUAwYTy6KylYldpliDnLtxS7uqk1BCRtK3SsvKd0u/2uyJdlBZH9+aDWV8xG7Wx0i4K3NBqu2GLyxTpcBFCf54jGkcc3WrMUaja1swQxbf7XXiFpoS+pFaa7v8UMETh0tkA+SYsUuIISJCAwaJQAa0Vufg2E7rfC5lVFZ+bkdeGKFvXCiwk++ZFtomwsdeQmRBcSIfgITR9mZVvEA6pWbDd7dYa1TTMCNaQPZ/U/58BzC8ys1/rQgLM/s3X3D1HMrIvxxfoiBlYRfPhuiEDAc2fY3RLptF8nr72iEURvAAOC00ZYDJZGsLrtbI+Sx026+mqR7kjEhUy/sQ1fK9nyfNlpi1ABhXZN2RDmuvB1YRZg2QWHFRlNuXjJcGjEaME4dLXHp6ao8uqc5z/j5nAArNxucfZxCnzSV3apdecZ3/xLgmWURKksbap9bobF6q8GOHKO1aHMrm3YxHlsQ4j+eCsAAPMeuUXhjncHoAQKVKbLD5EoW7wePB3j+LY0xA6lcPawksGEn45kVlqgnPKRTRJ2FdIUxwQYFpoFgg9IsoN4YtAAz0LA8wgfHyb0+ASnszd+vgnDfP6VR92gRTy6KyuNANVsAxY1RnrCv11xgrNpicOXP8hgzQOCk4QKFAHhuZYSNOxnD+lJ5bA8A/O31CO9sM5gw0v4eSzcYLN+kIciGc+O23gVrNK7+zwJOGyNxwlCbfHxzvcaGnYwh1YTfvRTio6c7GNynbWp8AoyuQsSAmAYqBvoxG1AvreCNiw0XrLEzcNMu7XU+VXxLOxK4qzaFCs/HH14NMaiqTQmJ7C2f8xm/fi4sZ7IrPLtRauIoe6tfOFHhmeUR/vJahJRr+YQjgfv+KYXJJ6sOXGV9o8GDDQFmLY7QJ0XIBZZXXHeRh+OHCrQUGW+u19jewtiwU0MJmzz86i8KuHtGCicOE3jtnaiD+5jIgdBBYDZgoJ88dtrNN4JENWydYq9ESVw8OGmswoh+wvYE0N5JcDy36oKTbFJu/mqNyhShpWj3gDQVGHWPBlixScNVhAoP+MmX0jj7OIX+lYSBVYRRA2x2PNTAq6s1AMLtn/Yw+WTVYTZWPKxhyniFt7fYaNvASoH7v5DGySMEMp7Ntp84TOKS0xTyvn29So/wkdMcNOUZ//F0gPmrDbzEveoCSWdACAKbomJGhrh3z8yP16S9/LbGWcfKA+YkUCLA37jUQ6iBR1+1SdarHigg1IymvN1DuKOV8dXpHkb2t1MVY3IfD337wgUufv9KiJNHCNScXGqqEh3NVzx69Ms1Lv6+MMInzlQY3s9m6JVs+10EAV+90MWTi0KcfozE/57eVray8B0flenuh3oF7TnQ7uj3uw2YuUIASNmrpffGOJjtss3X39GdKjGJS9cNAzd93MPFpyrkiox8wCiGQGWK4EeWl0w+WZWTku13pBNsNn9Ef4Gzj1UdBst14D+lLsQR/Qkj+hPOGCPLW6ribHsclhYCOPNYm7mP52pdcZ6Dk0dIFIKulfXH7cOAHWMamt6kIVQyt+QJAru9fcuaYcsd3tluw7Lx5zoDEmYg+6kUzixtd3JVqUdDA0OqBfpX0F4The0DAENK+ZIDgTilCNWZfX8vw75W3wrqwDnOPk7C78QY0ngcajw+dVfO1nCde7zCyNI4o94CEgaDwK4AQSbOKcpFfW+uM2WF7IxrxgAcZYn7qP4Ceb9UVhLXVdHeFRmw+ZP1jQaB3vf7xRGorc12xI8f7vt7CcCOHCPvt2XWAVtIuT/Fjq2QZjtiyA+BCSMErrvEw4PXpHH9JS525kojTHuLqliTLkWyPaqjgi1cp8v/76wrEoeA76pNwZG2t9x1gA07DXa2crnNNlb2qJS0e+ntCJt2Mhas1h12F7Zf4hln3We9GWFHjjF/TVTmTO0z7rG8tsbmU+LWDzv5ZO8EIrYYkbbWwnOAT57p4MdfTOGBq9P4x/MdHDNI4AePB2hstcnJ3nWVUtKp3N7NcpXtLY9M1/rV47KOccMEvnmZh9Yiw5U2IfjQs0GHzbRxhe6OHOPHTwXoX0mYvSTC04vtvN3YxWlfzfvGOo3fvRRiWF+BR14MsWKTgas6ZtylAP5ayqO8sDJCVBpeRwSs3W72ajENW2BUpQlfnuziF9dkcNPHPZw2WpZLXma9GeHFtyJUZ3pn264cO+2m25IihI5u1tTxCn0zVI42ddaSxCBpbGG8tlajbwXhjbUaa7ebcqlJIbS7B7/zpwBrG00579KwTGNHK5eHXANAcwGYtTjCd//iwy81YhUCYN5SWxrT4jPCCNiZYzy+MMLPZgdIuYStTYyWIuP8cQo7Whn3PxXYiSloA1VzgZHxCJ/7oIubP+HhgpMUqlI20hX/3UEE3P6HoiX4vfIqZUNT72oJIIST8BALkKY8487aFC4qNSV1ZXVA7BoVA8ZV/1nAhh22TXZHK2P0AIHTj5HY1sx4dXWEIAQG9iGEkVU+ZmBLE2PsIIEJIwUcabseV24ySLltmXQlbSIy0sBZx0mM7C+wbrvB/NUaQthMO3NpgegoiVyRsa7Ruk+CLMC0YUw/xcGXJzsYPcD+gXFRZFzNLAUw8+UQ3/ur3zsHX9sdE6FiUCBADid51rKSL31X46JTVLeeKRtbRv+tyzxc+8sCAIKrbNn56WMkojg7Pi/A04sjVJUUnxm443IPl57uwHPsLb4zx1izzeDXz4Z4ZXVbJn3MQIE7Lk/h+CFt6F291Wbc5y6NkHEJFR5hybsGUqDcC7Irzzh2sMC/TvfwoRNVB2DEFwG3213yuxfDXjtPi0AwoEAA7JeyX5yAA3AUYeVmU+YWXZWYj3zgGIlPnemgudS+u6gUHSMAYwcJ3FmbwoUTS6NCI8Y3LvXw6bOc8oDpeJvtmWMl7vunFM49XqG5yMi4wHc+a8ER8wTA9q/cVZvCGWMk8oH9ZNoF0o51lVqKjMvPdvBfV6fxoRPbMvYx52nPxYhsXdi6xt468JrjmHhREFEOlBTqlAEigfWNbSuau6Mcceb5f01xMaSvgCTCHxeEaClyOQIFAP96kQcAOGOMxKVn2Ew6t+M9cfFjnCUvBHYG7zEDRXn4XJz8i1t6xw0T5XyFIJvk8xzgzsttK3FliWfsrUuSSwD3Q7tWOt1bpzEyABIgQl4wo4XsUKzEgsD6+DtzXI78dOehxP0f1RnCVTUOtGFs3GldpVgx46Te6AEC552gOszTav86qhRaPWaQwIh+hEljZQcQxb+jLFmu+auNbZgiy6eOGyzws6vSHQY97MsymlLF0TPLI6zaapDqresSiJhIgBktgoCdRAIJB2m7/f2I8dbmzicM90X4DQOXnu5g/EgJJQj1r4R4a7Mpl88zLPke3s/WUtM+/WH7UZmyg653z8zHPOJ3L4VYvkmjMgU0tjI+fJJt9Bo7SJSJ9/6icrE1+tOCEEr0XqebwSASIGCnYOLtpVxhgpB2ihID5GBdNimAL13gwLANyd7/VFBOGMaRK+b9FAOWvtZUYGxt5rIb1h4cSgAL1mj8bHaAvhnC9hbGJ8908L3PpaxL1Yn6sph7LN9osGidQaZXT2EkthPBebsAY3Myca+jUitJWL3VlF2X7kpsRc4fp3DaGAkhgFdWRZhdWsK5cK3Gqq0GKze3teXufgxxJv3V1RqbdxksWm/KPCYs8ZCVmwxunlmEU0pOfu48B7d8wusQlerM3w0Af38jRDHs5f3rJY7OjM0C4A0JLDoqiquAjTsNduX4oNys+GeJgM9/0EGobUPWf84N8Mf5If79iQBVKcKfXwuxLp7uDnTYiqukHbL94LwAA6oEfvdiUM6kOxJYs83g678pIojsHK8Z5zi44aPeHrOzDsS9pLC5k+dX6t5Lzvd8MhvksVNvPJak+0ljQlCSUbculgByReBDJ0oMrRY4mGaAOKI1sr/Ai2/Zzr9iCMxeGiFXBDIekPOB51dqDKkmDO5DcBWVZ1+t3W5w2x98vLXZoNKzeZA5iyM0F607dN8TAZrzjGLIuPR0Bzd9woKDuvA7x1Gtl97S+MOrYTLkmgAhHQJHv1QgsdZEASjZmtNBqYOIsXqrwWmjS8XOB/F0Yg7wqTMd3PFYERmP0Fe27U9POXZwxLfrfQzrRzh2kJ1t1dhqOxZbinacaGisdStGwEPPBOXRo0HEOPs4hZs/2XVwtLcy85bpJBtmj5pMFICZ1ymhzbsGYZFI9rrpigd6Sj1B1NtHh6aMl3iwQWBHjjusRGPYxijfZ6zewlix0ZTH9AyoJFSmbAdhnJeRpSmLotS3MbK/wJ2Xe1ACXaofi987zpe89k7iXgHMRJLYhMVIm3cVpftsRJDbRtIZxfEpJDwEjiSs2db9jPruN7Q2Nkw7ZbzCw88F8CoIul1RYIUHfOYsFxNHCngOYWeO8fYWg3lLI2xuMh1KPrjkFmlYsNxZm0J1pm2aYpesWyn8u2itweZd5qBac4+OwwdIOeDIbPPSfTaqWd+k3JS7Wt4lqUZxRIYA2esBAkuAN+xgNBdsfzkfpG2Nf/biUxV+/0pYvum1BqpSwP/7pzROGLqndn/+gw5u+l0Ri9/VHUAihE1o3vwJDycOE10urNxdXnw7soDt7WdPZEgqyWHx3VnfpJwoHd5bQgDJ3Is2CxJn1Nfv4DJoDtbNYgbGDbWLdAqBzV+0+owrznPL8620KVkHY8O4/SsJX/+oByna1n/J0mifCycqfOpM56DAIYUdO/TGWgNPJdErArOwCdW3gHiSItPSxLXaU6H9kLFqiy6D5mAlthoXnKQQRPYFXUWYOEqUQSmFtQ5StE1tH1vakR5E9vcKIwuceIJ8dy1bDIZ3thmsa7Sh4+SKLAVkmJaWAWKgF7MtuU5gstuDWrGp5xzyWJHPHydRlbY9FrTb1/b1M7EFEsKWon9lmotBfag88qe7lhIAFq3TyPl8UC7aUeQ9EBuLiTJApORlUZCPSIhk3fxuRP3tzT1D1Nsr+eiBAuOGCvgREBrGmq17r/uKS1C2tzC2Nduq3NYiMGmsxGVnOF3agrU/8C1cq5M10XEESwgZ+flISl5WBkhUrF7HxqwT0usJd/uoAYirgHd3MHbkul/6vlc3C22jeDxFeHpxtMetDrSVmcxZEqEpH0+VZ3zlQvegS0Hi8G4Q2VKVhH/YxyKkBzZmXVSsXgcAonYmy4Y6ikD0hlASACWrVkoKpASwM2eweuvBVfbu7dY+61gJRxHSDvDaOxp/nB+Wq23j93EksGqLwa+eC9AnQ9iVZ0w+WeG00fKgXKv2f8u6RoPNTR3zMr3YpzbCTtd4o6GOotqZLMXWJdYNZoOXkqLePZU51MCyDd3vDdkXQE4YKjG8L9lJjB7hvr8H+N1LdvdHvFp69pII1z9shyYQWUJ/5YfdHrOQgC1XyQcJ/4ivRbKzv14EgK1LQGrwBHvuCuIFHei2yFYi5SK+Je9qAE6P1BjExYgpBzhpuMDa7RE8h6AA3Pd3H4++Gtoykxbbj+4oQtq1VboXTlA4cZg4aOvRXpZt1MlBt6OJOtCQLF4EgMETwKK+FgYAmqP8IhMWtpN0BTgxtvEt6ynC21vsxlpBPWNF4qd76mjZwe+vShM27bL1V+sbbf2VI9t6Pmac66CnTFlMyt/ebODIJAMGZibpChMWtjdH+UUAUF8LI0DE2SyLV+oGNjPhVem4YCDhIXEkS9mmplWHgIeMHyE7rGc2pWLECo/gOm2EvuDbNWqnlgonDzbiFA/K3pljbNiZ5D9Kd46RjgsmvPpK3cDmbJYFiFgAwLySW0XAbNuenhCR8k1LQDFkvLG25wEyZqDdF9J+f2A8SpTb9XOEhnHpGU7ZPesJ1xEA3t1h0JRHslzHPmcmOzF/dntMCACYXLIYmml2VPQZST1Wh9tWSRtpigHTEzyE2VqK0QMFwmjvGVqCDcMO6ytwwUmyx94/Bt+qrQZ+mGy/LYmMij5rptntMSEAoK6ODMCEsGKx0cHbwkkT28WFCUBKK9pWbDLYmeO9rnXujsSW4PjBojzMem88IR8wzjtBlseC9mQzwspNJqlOBMBgI5w0GR28jbBiMQCymGgXsarJopQPEU9KJZkSHlJ2RxwJbG+x+8zRQ25OLMcNEftU0njow5Txqqe4ub0qSxNL3tps4CYEHQQYqSSDxJMNdRTVZLnsQZUBEod7Cfxnow1xEu7dQ1lfWNm11Qid5SF7y2LHfSIj+wucVtq/3hPlIDEYtrUw1icFivHFI4w2ROA/t8dCB4DUz7AWIxM0Px8F+Q1SegKJFSlbjJRLmL/GFvWJHiC1MciG9hXok0aHwsX2wYEzxkik3Lahbj3l2q3YpLErz5Cy1xN0I6UnoiC/IRM0P98eCx0AAhDXZOeqv9aNyBPE36TrMBIeUr5140knC9bockdfT1iQvhnCgErLQ/aGgLOPkz3qXsWy8B3TY6A7wk/XSNdhgvjbX+tG5GuycxVAvBeAAIMnTI4j8o8YrRM3ay83/qw3oy4PRdjfbS4FMLiaEOmOkaxI2xXQp4zquehV7KYZBl5fa9dUJ+4VhNGaAPNIRwzsBSDWtDBtDtY+r/3CKqlSIrEiVrQBMi7h5VUam5u4XLreE3xgWN+2/vQYDH5kp8APqSZwDwKSYBukVm815TULvdp6qJTQfmHV5mDt8wBTe/dqD4BYNwtyad3EAEL8VroKCQ9pk7gN9+8Lww7+/MHK0GrRAWxEQBgxxo+w1qOnhijE7/H8yqRBqsw/XAUmPLK0bmJQk4Vs717tBSBtCRKOooejYjECRJI0bHcDZ1zC3xZGyAc9Y0UA62Lt7kIRAeNH9KwGi9J403nLIniJewVAyKhYiKDNr9vr/n4BUldHJptlMfe26hVGh3OVlwEzJyWfpRvYc+y0w8cXRuV5ugdL1AdUElS7fIQubak6rrRBqkfcK2OJ1KJ1Gss3aqTd3u1eMbNWXgZGR3Pn3la9IptlEScH9wsQoH1tlvwpKAl07M2K/PaFEDm/ZzLr/TJ2TVs81CHSwMAqwrC+PQeQeHTmY/PDfWbue2HkhQjyp+11vlMAaaiDBpjcLRseDwutq6WTkPXdrci6RoP/eT4suy3d1FkAtsw9VSLMgoBQM4b3FeUFNtQDoBYEvL3FoGGZRmWqd6507kDOnZQIC62r3aoNjwNMVuc7CZCYrD9x/zgfQv5UuooSst4xotUnTfjtiyFWbTHlNQfdRUjGtVYprrWKDDBqAPVYICC2cA/OC1AME3JeIucEIX/6xNfG+Xsj5wcACNBwu7Uixo8eCvP5nSQcmTRSdSS8QcS49y8+IoPyopvuWBDPIWTacYJ4GnxPgVkKu1ZtztKoPG6oN5MPEo4M8/mdAulfAExW1/dxzvthkGwLGPtsB8x/q5RHICRkvZ3bUuER3lircf+Tvt1uexDr2tpvdJICGNaPeuR3lMKODfr+3wJ4ThK5AkGrlEeA+e/ZN1NjTXae3N9+zv1eUw2wicPQBD8KC8UckUxmX+x2O1dXWFdr5st2r1/Uxds5fpoZj8DMpbIWwuCqgyPoMe8IIuDW3xexrcXA6/WFicxEUoaFQj40wY8ApgZM3u+J7d+O15GpnQnx7K0D1rOOfqnSaQISK9JBEUt85L7HfTw234LEmM4rYvxtcdg1HujQt4I6uGFdBW4Mjm/XF/HaGo2qXk/M7aNR6TRxFP7i2VsHrK+dCYE6OgiAAKhfAgYzOWl5b1gs5En05v2n+5YKj/Ddv/j4RUOA0vDjzilk6UmmHSoDrsIjVKW6ZzVit2prM+P6hwtoWBahOpOAA2CGUCIsFvLS1f8XzFS/5MA1oAdmgnVkaushnvpGZr2Jop+rVEokVmQvbhIBVSnCT58OcPPMIra1tEWL9H4sCpeJentuA6Rd6pSLxdz2+vHatjlLIlzzXwW89o5OwNHOejiplDBR9POnb+y/rrb+wNajcwBpb0VSdG9YyO8i6SSjgfaiqIatazR7SYSrHyjgsflheRNtnHXfF1hsJL2N/O8rFBu/jzZticX49Ret0/jWb4u4ZWYRO3OcuFXtI1fSEWEhv8tJ0b2dtR5AZ4czNNRxDSarObec2HLM5BvJyWSmmyjQKC1YT6SjAqddQj4A5i6N8OJbEZiBIX0FMq6tuYqtQqzoAPDaGo1F6zUE2UEO009Rlsug44ST+CN+nZ05xjPLNf5jVoD/nhdizVaDyhSVy9oTsZErJ52R2i/Wzb6pz5M1mKzW1o3VnfvRzh89ZbOgBdiYyrvVi4Vyj9GRz5SAZO8PtqTEhQDwI8bQaoFJYyXOPV5iwkiBYX1FByvxi2cC/Gx2ACUI0yZI3HH53knIrrxtlV220eD1dzSWvGuwpclACGt5iNC7V6jtqbdGKI9MFLzTFDRNvAzDi3V14H0lBncX1YUj56UTWPx1xoj8tHty3xTK+b0OfZNUau2HG5QiUmmX0FxgPL4wxOMLQ/RJE4b1Exg9gDC8n8CIfoTVW+yedABoLgAvvmVbYpsLjO0tjC1NBpt2MbY0MXbm2I7rEXbiSnWG9pinlUj5HFgoRxi/+K0FdSPyx85k2ZUB7V1W79qZLOtnkJ5yV/MsJ111YVho0URJSXxnLQpgixFDbWuu4ipbT5HNU5RIvR/Zr8VNTnbrlB1FqiTKY1A5AcV+wGG0k66SYaHl6bnf7jO9tpZlfT11KcCkuvqm45eAASZD/rU69BeScBQ4StZHd9KixGDxHDsIIn5o7W9/JQCn5C7t/hq822slsu8nTkJBh75vyL0WYBo/vuut/V3mD3V1ZGqy82TDLanlHAX3OOmUBCdh325FvUrLOnePbHE7At/+I3GhuvKAoZ10WnIU3NNwS2p5TXaerKvr+u6b7m63o9qZEFgC2ejkF0jPmxj5eUOULPJK5LBwrYzyMkL7xcUDwopJmABte83p0FuQmLCjHqivo8AIXM2sDQmZ3G+JHCaulWRmbYzQV9fXUYD6ks52Q7p949fXk67Jspp3c8XLuli810lnElcrkcPEtcpI7Qf3zLu5+uWaLKuuEvMecLE6ulpbl4Ckl3tRupkzo2JOE1ES1UrkfbAdrFWqQmo/P18HFecNngDurmt10BYkdrXGLwE31FEUReZKo8O8kApJGUoi7wc6hFQwOsxH2lzZUEeRjbjSQeniQZNqG9Waq565rc8y4xevVV5KJo1VibznQtDKS0njF6995rY+y2qyc1V3olY97GK1SU2WVUMdRVPvannQqaj8UphriUBCJSeXyKG3HiZyKqpUmGv9xZxvV10V62LP4K4Hgwe1MyC2jocjvcKL0k2dHhVbkyx7IofYszJapSqlDooLtZ8+b/BShPUzYfbXRvueulhtUCMePx7cUEdF1nS5iYKdQrki2VSVyCEDB9gI5Qqjg52sg8sb6qg4fjy4p8DRsxakJHGt1uS6XRc76YonjA4j1lqCklKURHqWlJOUWkhHhYF/ybxvVz4Z615Pvk2PZ77rZ5TyI9m+T0Z+7jqVSiuQiJITTaRnSbmIlJdWkZ+7bt63K5+sybLqaXAcEoAAQGnPm5p7a9/7w1zuPqci44A5TE41kR6yHqFTkXHCfO6+ubf2vb8nSfkhd7Ha/RUULwadelfr75yKihlhrjUEkZOccCIHB45KJ8zlZs75duVnLTigDzbf8T4ABAAzZW8H/XUTZPUx+b87qcy0MJ+EfxPprj6ZyMlUqbCYn900IPORyzZC193es6T8PXGx2uBHXAdgwQOItJ/5ZOQXX1bpKgU2CSdJpMvgUOkqFfnFl7Wf+eSCf0ZUV9KxQ/m2h748vY5MNgtqqKNWNDVeqgN/YQKSRLoDDh34C9HUeGlDHbVmsyD0QKb8/XWx2klt7UxZXz9DT8+2DOa0elo4qVOiQuJuJdI5cJiw+CYVogtn1VVtjXXpvXj79zQ3EfcET71p8xDq0/cJ6XqnJyBJpDOWg5t3XTLnnqFbutNXfni7WO2kvp50bS3LOfcM3YKm7RfqoPiyk6lSSQg4kT3BwaGTqVI6KL6MJv/C9wMc7zlA2kAyU86+d2RjYUfr9NAvPO1UVCZ5kkQ6WA6notIJ/cLThR2t02ffW91o3Sp6z6vE37fyj3hp4qRr2Kkem/+1k8p8NsznIjAnZSm912owiLSTqVBRsfjIrjWpKxc8QOG+Fmwe1QCxKGGB0pS7qd/J/9BJpa8PiznDzEgmNvYybIANkYCTyoiwWLhvzs2ZGwAmvEfRqsPGxeogdWTA1prMuTlzQ5Rv/ZpQrhDSEcwmabrqNYbDaCEdIaQj/Hzr1+bcnLkhm2UBLunI+yiHiSvTVpYy5Y6mj0ov9SuS7gBdTCJcvYFvyFSVYh00ar945dzbqh8/1OUjRyBArMRFZ9O+0zQOwvuN8rxJCS/pBXzD9xeg4P/D7LrqlYey8PDIc7F2E1sFPFfNvrl65a7Viy8IC4UHVbpCkZDEzInLdfRgQ5OQpNIVKiwUHty1evEFFhxzDytwHHYWpMzd20Utpt7TerUQ7n0knUpdbI1AUEhGyh+xVBzMJZcqbDUmuH7OTZX/tfuZJwDpJC+pnQlRP4P0BXfsOMXxMg8o1zs3zLcyM3My5vSII+KGiMjJVFIU+C+Ffv6aZ27r/6btAjy42VW9xsXaDbscdyc+c1v/N3etWnxBVCzeTcpl5VUKgKNk1OmRAQ2AI+VVCqFcjorFu3etWnzBM7f1f7OtC5AO23M8InwVa36FARgX3tn8ITjuj6TnnRHm82A2ySTHw5lrkJBOJgPt+68jDK57+tY+zwGEbNYcli7VEQmQ2OWKQ8GXXLvSi0aMvhHAjcLxUmGhVYNASXLxcGEabMBgJ10pTRgUAb5XbVh37xP3j/MPpxDuUQYQK+0L1qbeveNUEhX3Stf9iIkimKgYgZGEhN9HkwGCFiqlhFLQQfB3NsGNc26pWrT72R0pcoQqUps1sUDJXyGkvF167olR0QebMAIgk61X7yXPgCbhKJXyEPnBCtb69jm3ZB4B4vzWkWM1jgKAtOMmAFBHZvrXN1WYAf2ug6TrleMOiooFMOsEKO8FMEgqlUojCvztgPmh2Nb0o1k/GJZDlkUWdn7zkfoXHhWK035g2IXfzQ1nVjeA+RrleVVloCSuV4+7UmVg+H4LiB4gin749L9VbNz9TI5kOYoUhqkmO0821E2JAGDKnbuOk07qa8z4ovK8qsgvu14CCZnvNvkmwJRdqaLfAuCXAN83+6b0autOzVUNdZOPSHfqKAdI+Xaj2nqbYASA6XcWxhqFr4LoC8r1BulQQ4cFDQBEJJCk5TthL+x8ZemkpXQkosDfRqCHKDQ/nXVrek3ZYtT23NDoBCCHnKCwqJ0AioEy9e6WIaS8K2H0l6WbOhEMRH4ONuGYWJW94MIAMAAp5VUABOiguAKC/puj8FdzbqnaUgbGEjCOYJ7ROwGyD6DUZNekZHrYZcR0FaCnKy+tdKiho4IhqxACh3WFwSEVA7BhQEiVFtKRiPxCBMhZTPygLmz6a0Pd2GJvAEbvAUg716vm9rbQMABMudefIIErGOZyIdyThBLQQQitfUN2Lbk4+pOP1lIwIKT0hHQdmMjA6GA5kfi9Bh6Ze6O3JP7umiyrhtuhjzZXKgFIOzJfOxNi/BJwHH4cn2V3WKp4AUCXA7hEKHeMkAQdapioAAARM4gAccRHwpiZAUMEBqCESkM6EkYzTBSsBfAEwL/fVEw9s7SOAsCG05dOAB3ORYUJQA6F95VlMQ8Q7a3K9O9xBTg632j9MQZPI9DJyvPABtBRAI58BpFmBhGB7DM8XEHDbCEBJgKDWZLySCoXJIDI98HgZQSaLaT8C0g9P+ublGtvLSYDpu4od6MSgHTSqgB2v0l7BZGZ4FQYnkIwU8GYRModIpUEM2AiDaN9sDG6dCODQUTMwj7Z9wo4zGCAiQyVKpyZQSSEFNKDUBJEgA41WAdbQFjAEHMgaK7Ou4vaXxC1M1na59D7rEUCkC6AZesS0O7dbTX37ewrg4pTwNF5YDqH2JzGwBjlZRQJAAwYA7COwDoEs2YGGGzBY/HC1vAwU+dAZJUfRPF/uFzlTyACiEgSSQckFUQpcM0GiPx8BGAtkXiDDb8MpV7Ubu7Nhuv77erwd2VZ9cRO8QQgvRAs2SxoHiD25mrUzGUlXi2OkYZOMmwmgnk8AcczeBQYA0motFAeiBCbF4ANuPQBNiX95z1bW4hAsfdGAlT6AAnr1JUcKBP5YEuUthPRegbeBtFSQWKxFrzcnJVa2zClI9Bj19L+TQe/SzwBSCLlSFhtvbUu9sbdeylFzY+50sn5w7QJRwmWowxjlCAzkhlDARoAoB/AfZgpA3CKwC4Isi0XwwagiBkhgCIR8gA1A9gJcCMJsckYbBCE9Yb0eimc9WGFt6nhX6l1b79P7UyW5d/5KEzmHUr5/xjjbx/AFMB8AAAAAElFTkSuQmCC" alt="Morochos logo">
+      <div class="brand-texto">
+        <div class="brand">Morochos</div>
+        <div class="brand-sub">Facility Os Ec</div>
+      </div>
+    </div>
+
+    <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
+    <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
+    <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
+    <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')">📦 Inventario</button>
+    <button class="nav-item" id="nav-conteo" onclick="cambiarVista('conteo')">📅 Conteo semanal</button>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <h1 id="topbar-title">Lista de compras</h1>
+      <p id="topbar-subtitle">Transcribe aqui el pedido del local antes de despachar</p>
+    </header>
+
+    <div id="aviso-container"></div>
+
+<!-- VISTA: LISTA DE COMPRAS -->
+<div class="vista activa" id="vista-compra">
+  <div class="compra-top-grid">
+    <div class="panel">
+      <label for="local-compra">Local que pidio (WhatsApp)</label>
+      <select id="local-compra">
+        <option value="la_victoria">La Victoria</option>
+        <option value="el_salado">El Salado</option>
+      </select>
+      <p style="font-size:12px; color:#888780; margin:8px 0 0;">Transcribe aqui solo lo que el local pidio y que NO esta en stock de bodega (compra directa en mercado/tiendas).</p>
+    </div>
+
+    <div class="panel">
+      <label>Listas de compras pendientes</label>
+      <div id="listas-compra-pendientes"></div>
+    </div>
+  </div>
+
+  <div id="lista-compra-detalle"></div>
+
+  <div class="buscador">
+    <input type="text" id="buscador-compra" placeholder="Buscar producto..." oninput="filtrarProductosCompra()">
+  </div>
+
+  <div id="lista-productos-compra"></div>
+
+  <div class="barra-inferior">
+    <span class="contador" id="contador-compra">0 items seleccionados</span>
+    <button class="btn-despachar" onclick="crearListaCompra()">Guardar lista de compras</button>
+  </div>
+</div>
+
+<!-- VISTA: DESPACHO -->
+<div class="vista" id="vista-despacho">
+  <div class="panel">
+    <label for="local">Local de destino</label>
+    <select id="local" onchange="actualizarSelectListaCompra()">
+      <option value="la_victoria">La Victoria</option>
+      <option value="el_salado">El Salado</option>
+    </select>
+    <label for="cargar-lista-compra" style="margin-top:10px;">Cargar lista de compras pendiente (opcional)</label>
+    <select id="cargar-lista-compra" onchange="cargarListaCompraEnDespacho()">
+      <option value="">-- Ninguna --</option>
+    </select>
+  </div>
+
+  <div class="buscador">
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarProductos()">
+  </div>
+
+  <div id="lista-productos"></div>
+
+  <div class="barra-inferior">
+    <span class="contador" id="contador">0 items seleccionados</span>
+    <button class="btn-despachar" id="btn-despachar" onclick="crearGuiaDespacho()">Crear guia de despacho</button>
+  </div>
+</div>
+
+<!-- VISTA: GUIAS -->
+<div class="vista" id="vista-guias">
+  <div id="guias-lista"></div>
+  <div id="guias-detalle"></div>
+</div>
+
+<!-- VISTA: INVENTARIO -->
+<div class="vista" id="vista-inventario">
+  <div class="panel">
+    <label>Registrar entrada a bodega</label>
+    <div class="form-entrada">
+      <select id="entrada-producto"></select>
+      <select id="entrada-tipo">
+        <option value="compra">Compra</option>
+        <option value="produccion">Produccion / procesado</option>
+      </select>
+      <input type="number" id="entrada-cantidad" min="0" step="0.5" placeholder="Cantidad">
+      <button class="btn-secundario" onclick="registrarEntrada()">Agregar al inventario</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <label>Inventario actual de bodega</label>
+    <table class="inv-tabla">
+      <thead>
+        <tr><th>Producto</th><th>Cantidad</th></tr>
+      </thead>
+      <tbody id="tabla-inventario"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- VISTA: CONTEO SEMANAL -->
+<div class="vista" id="vista-conteo">
+  <div class="panel">
+    <label>Conteo fisico semanal</label>
+    <p style="font-size:13px; color:#5f5e5a; margin-top:-4px;">Ingresa lo que cuentas fisicamente. El sistema calcula el consumo de la semana (stock inicial + entradas - conteo).</p>
+  </div>
+  <table class="inv-tabla">
+    <thead>
+      <tr><th>Producto</th><th>Actual</th><th>Conteo fisico</th></tr>
+    </thead>
+    <tbody id="tabla-conteo"></tbody>
+  </table>
+  <div class="barra-inferior">
+    <span class="contador" id="contador-conteo">Conteo semanal</span>
+    <button class="btn-despachar" onclick="guardarConteoSemanal()">Guardar conteo</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   FIREBASE CONFIG DE EJEMPLO - REEMPLAZAR CON EL CONFIG REAL DE EC
+   Reemplaza el objeto de abajo con el firebaseConfig de tu
+   proyecto de Firebase Ecuador (Firestore).
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyD0IehL6skl91CLhxaCx15J3xOyX_VlkwQ",
+  authDomain: "morochos-ecuador.firebaseapp.com",
+  projectId: "morochos-ecuador",
+  storageBucket: "morochos-ecuador.firebasestorage.app",
+  messagingSenderId: "200807513837",
+  appId: "1:200807513837:web:3d51063e75be94753e56e4"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ============================================================
+   CATALOGO COMPLETO DE PRODUCTOS - digitalizado desde
+   "Lista de compras La Victoria" (AnyList / PDF).
+   Estructura: categoria -> subcategoria -> productos
+   ============================================================ */
+const PRODUCTOS = [
+  // ---------- COCINA / MERCADO ----------
+  { id: "cocina_cebolla_blanca", nombre: "Cebolla blanca", categoria: "cocina", subcategoria: "mercado", unidad: "arroba pequena" },
+  { id: "cocina_tomate_cherry", nombre: "Tomates cherry", categoria: "cocina", subcategoria: "mercado", unidad: "libras" },
+  { id: "cocina_pimiento_rojo", nombre: "Pimiento rojo", categoria: "cocina", subcategoria: "mercado", unidad: "arroba" },
+  { id: "cocina_ajo_entero", nombre: "Ajo entero", categoria: "cocina", subcategoria: "mercado", unidad: "libras" },
+  { id: "cocina_pimiento_verde", nombre: "Pimiento verde", categoria: "cocina", subcategoria: "mercado", unidad: "arroba" },
+  { id: "cocina_cebolla_roja", nombre: "Cebolla roja", categoria: "cocina", subcategoria: "mercado", unidad: "arroba x 20 lb" },
+  { id: "cocina_tomate_rinon", nombre: "Tomate rinon", categoria: "cocina", subcategoria: "mercado", unidad: "caja" },
+  { id: "cocina_aji_escabeche", nombre: "Aji escabeche", categoria: "cocina", subcategoria: "mercado", unidad: "dolar" },
+  { id: "cocina_aguacate_duro", nombre: "Aguacate duro", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_aguacate_maduro", nombre: "Aguacate maduro", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_tomate_arbol_maduro", nombre: "Tomate de arbol maduro", categoria: "cocina", subcategoria: "mercado", unidad: "carton" },
+  { id: "cocina_platano_verde_dominico", nombre: "Platano verde dominico", categoria: "cocina", subcategoria: "mercado", unidad: "racimo" },
+  { id: "cocina_platano_maduro", nombre: "Platano maduro", categoria: "cocina", subcategoria: "mercado", unidad: "dolares" },
+  { id: "cocina_cebollin", nombre: "Cebollin", categoria: "cocina", subcategoria: "mercado", unidad: "atados x 1kg" },
+  { id: "cocina_cilantro_fresco", nombre: "Cilantro fresco", categoria: "cocina", subcategoria: "mercado", unidad: "atados x 1kg" },
+  { id: "cocina_lechuga_delicia_verde", nombre: "Lechuga delicia verde", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_lechuga_delicia_morada", nombre: "Lechuga delicia morada", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_mix_lechuga", nombre: "Mix de lechuga limpia y cortada", categoria: "cocina", subcategoria: "mercado", unidad: "fundas x 1.600g" },
+  { id: "cocina_col_morada", nombre: "Col morada repollo", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_albaca_fresca", nombre: "Albaca fresca", categoria: "cocina", subcategoria: "mercado", unidad: "atados" },
+  { id: "cocina_zucchine", nombre: "Zucchine", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
+  { id: "cocina_carbon_grueso", nombre: "Carbon grueso", categoria: "cocina", subcategoria: "mercado", unidad: "fundas" },
+
+  // ---------- COCINA / FACILITY ----------
+  { id: "cocina_azucar_300g", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 300g" },
+  { id: "cocina_azucar_600g", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 600g" },
+  { id: "cocina_queso_fresco_2kg", nombre: "Queso fresco", categoria: "cocina", subcategoria: "facility", unidad: "empaques x 2kg" },
+  { id: "cocina_base_anis", nombre: "Base de anis", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 250g" },
+  { id: "cocina_frijol_cocido", nombre: "Frijol cocido", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 2 kg" },
+  { id: "cocina_papas_francesas", nombre: "Papas francesas congeladas", categoria: "cocina", subcategoria: "facility", unidad: "paquetes x 250g" },
+  { id: "cocina_filete_pechuga_pollo", nombre: "Filete pechuga pollo", categoria: "cocina", subcategoria: "facility", unidad: "unid x 120g" },
+  { id: "cocina_salchicha_papas", nombre: "Salchicha para papas", categoria: "cocina", subcategoria: "facility", unidad: "unid" },
+  { id: "cocina_jamon_laminado", nombre: "Jamon laminado", categoria: "cocina", subcategoria: "facility", unidad: "unid" },
+  { id: "cocina_tocino_premium", nombre: "Tocino premium", categoria: "cocina", subcategoria: "facility", unidad: "paquetes x 200g" },
+  { id: "cocina_filete_lomo_cerdo", nombre: "Filete lomo cerdo", categoria: "cocina", subcategoria: "facility", unidad: "unid x 120g" },
+  { id: "cocina_chuleta_mariposa", nombre: "Chuleta mariposa", categoria: "cocina", subcategoria: "facility", unidad: "unidades x 200g" },
+  { id: "cocina_presas_pollo", nombre: "Presas de pollo", categoria: "cocina", subcategoria: "facility", unidad: "unidades" },
+  { id: "cocina_trucha_adobada", nombre: "Trucha adobada", categoria: "cocina", subcategoria: "facility", unidad: "unidades" },
+  { id: "cocina_muslo_pollo_picado", nombre: "Muslo de pollo picado", categoria: "cocina", subcategoria: "facility", unidad: "empaques x 180g" },
+  { id: "cocina_hueso_pollo_fondo", nombre: "Hueso de pollo para fondo", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 5kg" },
+  { id: "cocina_chicharron_cerdo", nombre: "Chicharron cerdo", categoria: "cocina", subcategoria: "facility", unidad: "empaque de 45g" },
+  { id: "cocina_morocho_cocido", nombre: "Morocho cocido", categoria: "cocina", subcategoria: "facility", unidad: "empaque de 450g" },
+  { id: "cocina_masa_tigrillo", nombre: "Masa de tigrillo", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 2kg" },
+  { id: "cocina_hueso_chancho", nombre: "Hueso de chancho", categoria: "cocina", subcategoria: "facility", unidad: "libras" },
+  { id: "cocina_maiz_amarillo_congelado", nombre: "Maiz amarillo congelado", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 1 kg" },
+  { id: "cocina_base_pina_800", nombre: "Base de pina", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 800gr" },
+  { id: "cocina_base_pina_400", nombre: "Base de pina", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 400gr" },
+  { id: "cocina_azucar_400gr_facility", nombre: "Azucar", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 400gr" },
+  { id: "cocina_azucar_200gr_facility", nombre: "Azucar", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 200gr" },
+  { id: "cocina_adobo_pollo_cerdo", nombre: "Adobo de pollo y cerdo", categoria: "cocina", subcategoria: "facility", unidad: "galon" },
+
+  // ---------- COCINA / BODEGA ----------
+  { id: "cocina_huevos_medianos", nombre: "Huevos medianos", categoria: "cocina", subcategoria: "bodega", unidad: "cubetas x 30 uds" },
+  { id: "cocina_leche_entera_nutri", nombre: "Leche entera nutri", categoria: "cocina", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "cocina_panela_molida_350", nombre: "Panela molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 350g" },
+  { id: "cocina_panela_molida_175", nombre: "Panela molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 175g" },
+  { id: "cocina_huevos_criollos", nombre: "Huevos criollos", categoria: "cocina", subcategoria: "bodega", unidad: "cubetas x 30 uds" },
+  { id: "cocina_canela_entera", nombre: "Canela entera", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 400g" },
+  { id: "cocina_mix_morocho", nombre: "Mix morocho", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 12g" },
+  { id: "cocina_maicena_220", nombre: "Maicena", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 220g" },
+  { id: "cocina_maicena_370", nombre: "Maicena", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 370g" },
+  { id: "cocina_avena_hojuelas", nombre: "Avena hojuelas", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 500g" },
+  { id: "cocina_arroz_grano", nombre: "Arroz en grano", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 1.6 kg" },
+  { id: "cocina_avena_molida_250", nombre: "Avena molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 250g" },
+  { id: "cocina_avena_molida_125", nombre: "Avena molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 125g" },
+  { id: "cocina_comino_molido", nombre: "Comino molido", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
+  { id: "cocina_pimienta_negra", nombre: "Pimienta negra", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
+  { id: "cocina_oregano_entero", nombre: "Oregano entero", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
+  { id: "cocina_sal_crisal", nombre: "Sal crisal", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 2 kg" },
+  { id: "cocina_sal_grano_parrilla", nombre: "Sal en grano para parrilla", categoria: "cocina", subcategoria: "bodega", unidad: "frasco x 500g" },
+  { id: "cocina_esencia_vainilla_500", nombre: "Esencia de vainilla", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 500cm3" },
+  { id: "cocina_miel_abeja", nombre: "Miel de abeja", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 500g" },
+  { id: "cocina_aceite_vegetal", nombre: "Aceite vegetal", categoria: "cocina", subcategoria: "bodega", unidad: "litros" },
+  { id: "cocina_achiote", nombre: "Achiote", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 1 litro" },
+  { id: "cocina_mantequilla_nutri", nombre: "Mantequilla nutri sin sal", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 250g" },
+  { id: "cocina_mostaza_maggi", nombre: "Mostaza maggi", categoria: "cocina", subcategoria: "bodega", unidad: "galon" },
+  { id: "cocina_aceite_oliva_500cc", nombre: "Aceite de oliva", categoria: "cocina", subcategoria: "bodega", unidad: "botella x 500cc" },
+  { id: "cocina_vinagre_blanco", nombre: "Vinagre blanco", categoria: "cocina", subcategoria: "bodega", unidad: "galones" },
+  { id: "cocina_azucar_200gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200gr" },
+  { id: "cocina_azucar_300gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 300gr" },
+  { id: "cocina_azucar_500gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 500gr" },
+  { id: "cocina_azucar_400gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 400gr" },
+  { id: "cocina_guantes_latex_m", nombre: "Guantes latex negros talla M", categoria: "cocina", subcategoria: "bodega", unidad: "cajas x 100 unid" },
+  { id: "cocina_limpion_industrial", nombre: "Limpion industrial", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 550m" },
+  { id: "cocina_fundas_desglosables_12x18", nombre: "Fundas desglosables transparentes 12x18", categoria: "cocina", subcategoria: "bodega", unidad: "rollos" },
+  { id: "cocina_fundas_desglosables_5x10", nombre: "Fundas desglosables transparentes 5x10", categoria: "cocina", subcategoria: "bodega", unidad: "rollos" },
+  { id: "cocina_papel_aluminio", nombre: "Papel aluminio", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 200m" },
+  { id: "cocina_papel_antigrasa", nombre: "Papel antigrasa para papas", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 50 unid" },
+  { id: "cocina_contenedor_5x5", nombre: "Contenedor 5x5 ensaladas", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unidades" },
+  { id: "cocina_lonchera", nombre: "Lonchera 8 1/2 x 5 1/2", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
+  { id: "cocina_contenedores_llevar", nombre: "Contenedores para llevar", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
+
+  // ---------- CAFETERIA / FACILITY ----------
+  { id: "cafe_tiramisu", nombre: "Tiramisu", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
+  { id: "cafe_cheesecake_mora", nombre: "Cheesecake mora", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
+  { id: "cafe_cheesecake_maracuya", nombre: "Cheesecake maracuya", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
+  { id: "cafe_cheesecake_oreo", nombre: "Cheesecake oreo", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
+
+  // ---------- CAFETERIA / BODEGA ----------
+  { id: "cafe_cuchara_sopera", nombre: "Cuchara sopera grande plasti util", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_cuchara_negra_pequena", nombre: "Cuchara negra pequena HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_removedor", nombre: "Removedor de cafe", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
+  { id: "cafe_tenedores_grandes", nombre: "Tenedores grandes HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_mini_tenedor_papas", nombre: "Mini tenedor para papas", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_cubiertos_desechables", nombre: "Cubiertos desechables negros", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_palillos_dientes", nombre: "Palillos de dientes pequenos", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidad x 30g" },
+  { id: "cafe_sorbete_eco", nombre: "Sorbete eco organico cafetero negro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
+  { id: "cafe_funda_papel_6", nombre: "Funda de papel #6", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
+  { id: "cafe_funda_papel_3", nombre: "Funda de papel #3", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
+  { id: "cafe_funda_papel_12", nombre: "Funda papel #12", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
+  { id: "cafe_papel_despacho", nombre: "Papel de despacho", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 75 unidades" },
+  { id: "cafe_fundas_dina_hg4", nombre: "Fundas dina HG #4", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 90 unid" },
+  { id: "cafe_fundas_dina_hg5", nombre: "Fundas dina blancas HG #5", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 90 unid" },
+  { id: "cafe_fundas_transparentes_8x12", nombre: "Fundas transparente 8x12", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollo" },
+  { id: "cafe_servilleta_fantasia", nombre: "Servilleta fantasia 24x24", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 300 unid" },
+  { id: "cafe_tarrina_litro", nombre: "Tarrina transparente de litro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_vasos_10oz", nombre: "Vasos bebidas calientes 10oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 20 uds" },
+  { id: "cafe_vasos_14oz", nombre: "Vasos bebidas calientes 14oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
+  { id: "cafe_vaso_7oz_opal", nombre: "Vaso 7 oz Opal HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_vaso_1oz_opal", nombre: "Vaso 1 oz Opal vacan", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_vasitos_salsas", nombre: "Vasitos salsas negros 2 oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
+  { id: "cafe_tapas_14oz", nombre: "Tapas bebidas calientes 14oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "tiras x 100 unid" },
+  { id: "cafe_tapas_10oz", nombre: "Tapas bebidas calientes 10oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "tiras x 100 unid" },
+  { id: "cafe_tapas_salseros", nombre: "Tapas salseros 2oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes" },
+  { id: "cafe_tapas_tarrina", nombre: "Tapas para tarrina litro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_bowl_negro", nombre: "Bowl negro con tapa", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
+  { id: "cafe_portacomida", nombre: "Portacomida negro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
+  { id: "cafe_guantes_handy", nombre: "Guantes multiuso Handy", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 100 unid" },
+  { id: "cafe_plastico_film", nombre: "Plastico film industrial", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollos x 2.000 ft" },
+  { id: "cafe_filtros_cafe", nombre: "Filtros de cafe", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 250 unidades" },
+  { id: "cafe_papel_termico", nombre: "Papel termico de impresora", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollos x 5 uds" },
+  { id: "cafe_leche_semidescremada", nombre: "Leche semidescremada", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades x 1 litro" },
+  { id: "cafe_leche_entera_nutri", nombre: "Leche entera nutri", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "cafe_crema_leche_nutri", nombre: "Crema de leche nutri", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "cafe_leche_almendras", nombre: "Leche de almendras", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "cafe_azucar_1_5kg", nombre: "Azucar blanca", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 1.5kg" },
+  { id: "cafe_stevia_gotas", nombre: "Stevia en gotas", categoria: "cafeteria", subcategoria: "bodega", unidad: "frasco x 30 ml" },
+  { id: "cafe_splenda", nombre: "Endulzante Splenda", categoria: "cafeteria", subcategoria: "bodega", unidad: "caja x 120 unidades" },
+  { id: "cafe_mix_frutos_secos", nombre: "Mix frutos secos", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades x 70g" },
+  { id: "cafe_nuez", nombre: "Nuez", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90 gr" },
+  { id: "cafe_almendras", nombre: "Almendras", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90gr" },
+  { id: "cafe_arandanos", nombre: "Arandanos", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90gr" },
+  { id: "cafe_blend_grano_filtrado", nombre: "Cafe blend grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 160gr" },
+  { id: "cafe_nabon_grano_filtrado", nombre: "Cafe nabon grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 200gr" },
+  { id: "cafe_ibarra_grano_filtrado", nombre: "Cafe ibarra grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 1kg" },
+  { id: "cafe_nabon_grano_venta", nombre: "Cafe nabon grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
+  { id: "cafe_blend_grano_venta", nombre: "Cafe blend grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
+  { id: "cafe_ibarra_grano_venta", nombre: "Cafe ibarra grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
+  { id: "cafe_porta_vaso", nombre: "Porta vaso para llevar", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades" },
+  { id: "cafe_servilleta_z", nombre: "Servilleta en Z Blanchy 14x23 cm", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unidades" },
+
+  // ---------- BEBIDAS / MERCADO ----------
+  { id: "beb_perejil", nombre: "Perejil", categoria: "bebidas", subcategoria: "mercado", unidad: "tongos" },
+  { id: "beb_apio", nombre: "Apio tallo grueso", categoria: "bebidas", subcategoria: "mercado", unidad: "atados" },
+  { id: "beb_espinaca", nombre: "Espinaca americana", categoria: "bebidas", subcategoria: "mercado", unidad: "tongos" },
+  { id: "beb_limon", nombre: "Limon", categoria: "bebidas", subcategoria: "mercado", unidad: "empaques x 100 uds" },
+  { id: "beb_naranja_colombiana", nombre: "Naranja colombiana grande", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 100 uds" },
+  { id: "beb_pina_hawaiana", nombre: "Pina hawaiana", categoria: "bebidas", subcategoria: "mercado", unidad: "cajas x 5 unid" },
+  { id: "beb_pepino", nombre: "Pepino", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 50lb" },
+  { id: "beb_zanahoria", nombre: "Zanahoria", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 50 lb" },
+  { id: "beb_remolacha", nombre: "Remolacha", categoria: "bebidas", subcategoria: "mercado", unidad: "dolares" },
+  { id: "beb_curcuma", nombre: "Curcuma", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
+  { id: "beb_jengibre", nombre: "Jengibre", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
+  { id: "beb_sandia", nombre: "Sandia pequena", categoria: "bebidas", subcategoria: "mercado", unidad: "unidades" },
+  { id: "beb_manzana_roja", nombre: "Manzana roja americana", categoria: "bebidas", subcategoria: "mercado", unidad: "caja" },
+  { id: "beb_manzana_verde", nombre: "Manzana verde", categoria: "bebidas", subcategoria: "mercado", unidad: "caja" },
+  { id: "beb_uvas", nombre: "Uvas sin papa", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
+  { id: "beb_papaya_hawaiana", nombre: "Papaya hawaiana", categoria: "bebidas", subcategoria: "mercado", unidad: "unidad" },
+  { id: "beb_banana_fresca", nombre: "Banana fresca", categoria: "bebidas", subcategoria: "mercado", unidad: "dolares" },
+  { id: "beb_chocolate_milano", nombre: "Chocolate milano", categoria: "bebidas", subcategoria: "mercado", unidad: "unidades x 650g" },
+
+  // ---------- BEBIDAS / FACILITY ----------
+  { id: "beb_mora_congelada", nombre: "Mora congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_fresa_congelada", nombre: "Fresa congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_mango_congelado", nombre: "Mango congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_melon_congelado", nombre: "Melon congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_banana_congelada", nombre: "Banana congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_pina_congelada", nombre: "Pina congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+  { id: "beb_tomate_arbol_congelado", nombre: "Tomate de arbol congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 100g" },
+  { id: "beb_papaya_congelada", nombre: "Papaya congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
+
+  // ---------- BEBIDAS / BODEGA ----------
+  { id: "beb_vasos_domo_16oz", nombre: "Vasos domo 16 oz", categoria: "bebidas", subcategoria: "bodega", unidad: "tiras x 50 unid" },
+  { id: "beb_tapas_domo", nombre: "Tapas domo Perf 12-16oz", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 25 uds" },
+  { id: "beb_sorbetes_biodeg", nombre: "Sorbetes biodegradables empacado", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
+  { id: "beb_sorbete_ninos", nombre: "Sorbete flexible ninos", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
+  { id: "beb_crema_chantilly", nombre: "Crema chantilly", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "beb_pasas", nombre: "Pasas", categoria: "bebidas", subcategoria: "bodega", unidad: "libra" },
+  { id: "beb_canela_rama", nombre: "Canela en rama", categoria: "bebidas", subcategoria: "bodega", unidad: "funda x 200gr" },
+  { id: "beb_laurel", nombre: "Laurel", categoria: "bebidas", subcategoria: "bodega", unidad: "funda x 200gr" },
+  { id: "beb_canela_polvo", nombre: "Canela en polvo", categoria: "bebidas", subcategoria: "bodega", unidad: "fundas x 200g" },
+  { id: "beb_cacao_molido", nombre: "Cacao molido munai", categoria: "bebidas", subcategoria: "bodega", unidad: "libras x 454g" },
+  { id: "beb_cacao_polvo", nombre: "Cacao en polvo natures heart", categoria: "bebidas", subcategoria: "bodega", unidad: "unidad x 100g" },
+  { id: "beb_marshmellows_fundas", nombre: "Marshmellows", categoria: "bebidas", subcategoria: "bodega", unidad: "fundas x 250g" },
+  { id: "beb_gas_crema", nombre: "Gas para crema", categoria: "bebidas", subcategoria: "bodega", unidad: "caja" },
+  { id: "beb_marshmallows_unid", nombre: "Marshmallows", categoria: "bebidas", subcategoria: "bodega", unidad: "unidades x 200g" },
+  { id: "beb_crema_leche_nutri", nombre: "Crema de leche nutri", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "beb_leche_almendras", nombre: "Leche de almendras", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
+  { id: "beb_te_natures_heart", nombre: "Te natures heart (manzanilla)", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 20 sobres" },
+
+  // ---------- PANADERIA / FACILITY ----------
+  { id: "pan_arepa_masa", nombre: "Arepa masa", categoria: "panaderia", subcategoria: "facility", unidad: "orden" },
+  { id: "pan_pure_camote", nombre: "Pure de camote", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 600g" },
+  { id: "pan_pure_zapallo", nombre: "Pure de zapallo", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 600g" },
+  { id: "pan_jamon_laminado", nombre: "Jamon laminado", categoria: "panaderia", subcategoria: "facility", unidad: "unidades" },
+  { id: "pan_queso_fresco_pan", nombre: "Queso fresco para pan", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 6 kg" },
+
+  // ---------- PANADERIA / BODEGA ----------
+  { id: "pan_harina_blanca", nombre: "Harina blanca", categoria: "panaderia", subcategoria: "bodega", unidad: "quintales x 50kg" },
+  { id: "pan_harina_mollete", nombre: "Harina de mollete", categoria: "panaderia", subcategoria: "bodega", unidad: "quintales x 50kg" },
+  { id: "pan_levadura", nombre: "Levadura activa seca", categoria: "panaderia", subcategoria: "bodega", unidad: "unidades x 500g" },
+  { id: "pan_polvo_hornear", nombre: "Polvo de hornear", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
+  { id: "pan_margarina_vegetal", nombre: "Margarina vegetal", categoria: "panaderia", subcategoria: "bodega", unidad: "caja x 27.5kg" },
+  { id: "pan_mermelada_mora", nombre: "Mermelada de mora", categoria: "panaderia", subcategoria: "bodega", unidad: "galon" },
+  { id: "pan_azucar_2_5kg", nombre: "Azucar blanca", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 2.5kg" },
+  { id: "pan_ajonjoli_blanco", nombre: "Ajonjoli blanco", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 1500gr" },
+  { id: "pan_nuez", nombre: "Nuez", categoria: "panaderia", subcategoria: "bodega", unidad: "libra" },
+  { id: "pan_esencia_banana", nombre: "Esencia de banana", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
+  { id: "pan_esencia_vainilla", nombre: "Esencia vainilla", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
+  { id: "pan_canela_polvo", nombre: "Canela en polvo", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad x 200g" },
+  { id: "pan_crema_pastelera", nombre: "Crema pastelera", categoria: "panaderia", subcategoria: "bodega", unidad: "funda" },
+  { id: "pan_gragea", nombre: "Gragea", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
+  { id: "pan_azucar_impalpable", nombre: "Azucar impalpable", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 4kg" },
+  { id: "pan_avena_hojuelas", nombre: "Avena en hojuelas", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 500g" },
+  { id: "pan_harina_maiz_amarillo", nombre: "Harina de maiz amarillo", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
+  { id: "pan_color_caramelo", nombre: "Color caramelo", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
+  { id: "pan_huevos_medianos", nombre: "Huevos medianos", categoria: "panaderia", subcategoria: "bodega", unidad: "cubetas x 30 unid" },
+  { id: "pan_chispas_chocolate", nombre: "Chispas de chocolate", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 1kg" },
+  { id: "pan_parmesano_rallado", nombre: "Parmesano rallado", categoria: "panaderia", subcategoria: "bodega", unidad: "x 500g" },
+  { id: "pan_panela_molida", nombre: "Panela molida", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 2.5 kg" },
+  { id: "pan_esencia_vainilla_500", nombre: "Esencia de vainilla", categoria: "panaderia", subcategoria: "bodega", unidad: "botellas x 500cm3" },
+  { id: "pan_sal_crisal", nombre: "Sal crisal", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 2 kg" },
+  { id: "pan_mantequilla_nutri", nombre: "Mantequilla nutri", categoria: "panaderia", subcategoria: "bodega", unidad: "paquetes x 250g" },
+  { id: "pan_achiote", nombre: "Achiote", categoria: "panaderia", subcategoria: "bodega", unidad: "botella x 1 litro" },
+  { id: "pan_aceite_oliva_espanola", nombre: "Aceite oliva la espanola", categoria: "panaderia", subcategoria: "bodega", unidad: "botella x 500ml" },
+  { id: "pan_pirutines", nombre: "Pirutines para cupcake #12", categoria: "panaderia", subcategoria: "bodega", unidad: "paquete x 50 unidades" },
+  { id: "pan_coco_rallado", nombre: "Coco rallado", categoria: "panaderia", subcategoria: "bodega", unidad: "paquete x 250gr" },
+  { id: "pan_salvado_trigo", nombre: "Salvado de trigo", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
+  { id: "pan_azucar_morena", nombre: "Azucar morena", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 1kg" },
+
+  // ---------- LIMPIEZA / BODEGA ----------
+  { id: "lim_desinfectante", nombre: "Desinfectante", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_foaming_caustic", nombre: "Foaming caustic cleaner", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_metaquat", nombre: "Metaquat", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_cloro", nombre: "Cloro 100%", categoria: "limpieza", subcategoria: "bodega", unidad: "galones" },
+  { id: "lim_lava_vajillas_maquina", nombre: "Lava vajillas maquina", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_limpia_vidrios", nombre: "Limpia vidrios", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_vinagre_blanco", nombre: "Vinagre blanco para limpieza", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_alcohol_antibacterial", nombre: "Alcohol antibacterial", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_gel_antibacterial", nombre: "Gel antibacterial", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_detergente_polvo", nombre: "Detergente en polvo", categoria: "limpieza", subcategoria: "bodega", unidad: "fundas x 500g" },
+  { id: "lim_jabon_liquido_manos", nombre: "Jabon liquido para manos", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
+  { id: "lim_atomizadores", nombre: "Atomizadores", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_raid", nombre: "Raid doble accion azul", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_brizze", nombre: "Brizze ambientador aerosol", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_esponja_amarilla_verde", nombre: "Esponja amarilla con verde", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_esponja_negra", nombre: "Esponja lava platos negra", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_esponja_rosada", nombre: "Esponja lava platos rosada", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_estropajo_industrial", nombre: "Estropajo industrial", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_lija_plancha", nombre: "Lija para limpieza de plancha", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_funda_basura_negra_5070", nombre: "Funda basura negra 50x70", categoria: "limpieza", subcategoria: "bodega", unidad: "rollos x 10 unid" },
+  { id: "lim_fundas_basura_celeste", nombre: "Fundas de basura celeste 30x36", categoria: "limpieza", subcategoria: "bodega", unidad: "paquetes x 10 unid" },
+  { id: "lim_fundas_basura_negra_3036", nombre: "Fundas de basura negra 30x36", categoria: "limpieza", subcategoria: "bodega", unidad: "paquetes x 10 unid" },
+  { id: "lim_guantes_caucho_9", nombre: "Guantes de caucho talla 9", categoria: "limpieza", subcategoria: "bodega", unidad: "pares" },
+  { id: "lim_guantes_caucho_8", nombre: "Guantes de caucho talla 8", categoria: "limpieza", subcategoria: "bodega", unidad: "pares" },
+  { id: "lim_guantes_negros", nombre: "Guantes negros", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
+  { id: "lim_mascarillas", nombre: "Mascarillas", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
+  { id: "lim_pano_blanco", nombre: "Pano blanco", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_pano_cafe", nombre: "Pano cafe", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_pano_celeste", nombre: "Pano celeste", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_pano_rojo", nombre: "Pano rojo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_panos_amarillo", nombre: "Panos amarillo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_panos_verde", nombre: "Panos verde", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_panos_verde_limon", nombre: "Panos verde limon", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_jabon_lava_todo", nombre: "Jabon lava todo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_escoba_plastico", nombre: "Escoba de plastico para salon con palo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_escoba_madera", nombre: "Escoba de madera grande", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_recogedor_metal", nombre: "Recogedor de metal", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_filtros_luz_uv", nombre: "Filtros para luz UV", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_gel_cabello", nombre: "Gel para cabello", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_curitas", nombre: "Curitas", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
+  { id: "lim_paracetamol", nombre: "Paracetamol", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_buscapina", nombre: "Buscapina", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_papel_higienico_tork", nombre: "Papel higienico industrial Tork", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_guantes_latex_m", nombre: "Guantes latex negros talla M", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_guante_tela", nombre: "Guante de tela", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_malla_cabello", nombre: "Malla para cabello", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
+  { id: "lim_toalla_mano", nombre: "Toalla de mano para flujo central", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_fosforera", nombre: "Fosforera", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_cepillo_acero", nombre: "Cepillo de acero", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
+  { id: "lim_pilas_aaa", nombre: "Pilas triple A", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
+  { id: "lim_guillet", nombre: "Guillet", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" }
+];
+
+const NOMBRES_CATEGORIA = {
+  cocina: "Cocina",
+  cafeteria: "Cafeteria",
+  bebidas: "Bebidas",
+  panaderia: "Panaderia",
+  limpieza: "Limpieza"
+};
+const NOMBRES_SUBCATEGORIA = {
+  mercado: "Mercado",
+  facility: "Facility",
+  bodega: "Bodega"
+};
+const ORDEN_CATEGORIA = ["cocina", "cafeteria", "bebidas", "panaderia", "limpieza"];
+const ORDEN_SUBCATEGORIA = ["mercado", "facility", "bodega"];
+
+function obtenerIniciales(nombre) {
+  const palabras = nombre.trim().split(/\s+/);
+  if (palabras.length === 1) return palabras[0].slice(0, 2).toUpperCase();
+  return (palabras[0][0] + palabras[1][0]).toUpperCase();
+}
+
+function renderProductos() {
+  const contenedor = document.getElementById("lista-productos");
+  contenedor.innerHTML = "";
+
+  ORDEN_CATEGORIA.forEach(cat => {
+    const productosCategoria = PRODUCTOS.filter(p => p.categoria === cat);
+    if (productosCategoria.length === 0) return;
+
+    const catTitle = document.createElement("div");
+    catTitle.className = "categoria-title";
+    catTitle.textContent = NOMBRES_CATEGORIA[cat] || cat;
+    contenedor.appendChild(catTitle);
+
+    ORDEN_SUBCATEGORIA.forEach(sub => {
+      const productosSub = productosCategoria.filter(p => p.subcategoria === sub);
+      if (productosSub.length === 0) return;
+
+      const subTitle = document.createElement("div");
+      subTitle.className = "subcategoria-title";
+      subTitle.textContent = NOMBRES_SUBCATEGORIA[sub] || sub;
+      contenedor.appendChild(subTitle);
+
+      productosSub.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.dataset.id = p.id;
+        item.dataset.nombre = p.nombre.toLowerCase();
+        item.innerHTML = `
+          <div class="item-row1" onclick="if(event.target.type!=='checkbox'){document.getElementById('chk_${p.id}').checked=!document.getElementById('chk_${p.id}').checked; toggleItem('${p.id}');}">
+            <input type="checkbox" id="chk_${p.id}" onchange="toggleItem('${p.id}')">
+            <div class="item-thumb">${obtenerIniciales(p.nombre)}</div>
+            <div class="item-texto">
+              <div class="item-nombre">${p.nombre}</div>
+              <div class="item-unidad">${p.unidad}</div>
+            </div>
+          </div>
+          <div class="item-detalle">
+            <div>
+              <label>Cantidad despachada</label>
+              <input type="number" id="cant_${p.id}" min="0" step="0.5" placeholder="0">
+            </div>
+            <div>
+              <label>Origen</label>
+              <select id="origen_${p.id}">
+                <option value="stock">Ya en stock</option>
+                <option value="compra_directa">Compra directa</option>
+                <option value="procesado">Procesado</option>
+              </select>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(item);
+      });
+    });
+  });
+
+  mostrarTodosLosItems();
+}
+
+function mostrarTodosLosItems() {
+  document.querySelectorAll(".item").forEach(el => el.style.display = "block");
+}
+
+function filtrarProductos() {
+  const q = document.getElementById("buscador").value.toLowerCase().trim();
+
+  document.querySelectorAll(".item").forEach(el => {
+    el.style.display = el.dataset.nombre.includes(q) ? "block" : "none";
+  });
+
+  // Ocultar titulos de categoria/subcategoria que no tengan items visibles debajo
+  const contenedor = document.getElementById("lista-productos");
+  const hijos = Array.from(contenedor.children);
+
+  hijos.forEach((el, i) => {
+    if (el.classList.contains("categoria-title") || el.classList.contains("subcategoria-title")) {
+      let tieneItemsVisibles = false;
+      for (let j = i + 1; j < hijos.length; j++) {
+        const siguiente = hijos[j];
+        if (siguiente.classList.contains("categoria-title")) break;
+        if (el.classList.contains("subcategoria-title") && siguiente.classList.contains("subcategoria-title")) break;
+        if (siguiente.classList.contains("item") && siguiente.style.display !== "none") {
+          tieneItemsVisibles = true;
+          break;
+        }
+      }
+      el.style.display = tieneItemsVisibles ? "block" : "none";
+    }
+  });
+}
+
+function toggleItem(id) {
+  const item = document.querySelector(`.item[data-id="${id}"]`);
+  const checked = document.getElementById(`chk_${id}`).checked;
+  item.classList.toggle("checked", checked);
+  actualizarContador();
+}
+
+function actualizarContador() {
+  const n = document.querySelectorAll(".item.checked").length;
+  document.getElementById("contador").textContent = `${n} item${n === 1 ? "" : "s"} seleccionado${n === 1 ? "" : "s"}`;
+}
+
+function mostrarAviso(mensaje, tipo) {
+  const cont = document.getElementById("aviso-container");
+  cont.innerHTML = `<div class="aviso ${tipo}">${mensaje}</div>`;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function crearGuiaDespacho() {
+  const local = document.getElementById("local").value;
+  const itemsSeleccionados = [];
+
+  document.querySelectorAll(".item.checked").forEach(el => {
+    const id = el.dataset.id;
+    const producto = PRODUCTOS.find(p => p.id === id);
+    const cantidad = parseFloat(document.getElementById(`cant_${id}`).value);
+    const origen = document.getElementById(`origen_${id}`).value;
+
+    if (!cantidad || cantidad <= 0) return;
+
+    itemsSeleccionados.push({
+      producto_id: id,
+      producto_nombre: producto.nombre,
+      categoria: producto.categoria,
+      subcategoria: producto.subcategoria,
+      unidad_medida: producto.unidad,
+      cantidad_despachada: cantidad,
+      origen: origen,
+      cantidad_recibida: null,
+      diferencia: null,
+      nota_diferencia: ""
+    });
+  });
+
+  if (itemsSeleccionados.length === 0) {
+    mostrarAviso("Selecciona al menos un producto y coloca su cantidad antes de despachar.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("btn-despachar");
+  btn.disabled = true;
+  btn.textContent = "Guardando...";
+
+  try {
+    await db.collection("pedidos").add({
+      local: local,
+      estado: "despachado",
+      fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(),
+      fecha_recepcion: null,
+      despachado_por: "Edison Pacurucu",
+      recibido_por: null,
+      items: itemsSeleccionados
+    });
+
+    // Descontar del inventario de bodega solo los items cuyo origen es "stock"
+    for (const item of itemsSeleccionados) {
+      if (item.origen === "stock") {
+        await descontarInventarioBodega(item.producto_id, item.producto_nombre, item.cantidad_despachada);
+      }
+    }
+
+    // Si se cargo una lista de compras, marcarla como despachada para que ya no aparezca pendiente
+    if (listaCompraCargadaId) {
+      await db.collection("listas_compra").doc(listaCompraCargadaId).update({ estado: "despachada" });
+      listaCompraCargadaId = null;
+      document.getElementById("cargar-lista-compra").value = "";
+    }
+
+    mostrarAviso(`Guia de despacho creada para ${local === "la_victoria" ? "La Victoria" : "El Salado"} con ${itemsSeleccionados.length} productos.`, "ok");
+
+    document.querySelectorAll(".item.checked").forEach(el => {
+      document.getElementById(`chk_${el.dataset.id}`).checked = false;
+      el.classList.remove("checked");
+    });
+    actualizarContador();
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar la guia. Verifica la conexion o la configuracion de Firebase.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Crear guia de despacho";
+  }
+}
+
+/* ============================================================
+   PESTANAS
+   ============================================================ */
+const TITULOS_VISTA = {
+  compra: ["Lista de compras", "Transcribe aqui el pedido del local antes de despachar"],
+  despacho: ["Despacho", "Crea la guia digital hacia La Victoria o El Salado"],
+  guias: ["Guias", "Historial de guias de despacho creadas"],
+  inventario: ["Inventario de bodega", "Stock actual y registro de entradas"],
+  conteo: ["Conteo semanal", "Ajusta el inventario al conteo fisico real"]
+};
+
+function cambiarVista(nombre) {
+  document.querySelectorAll(".vista").forEach(v => v.classList.remove("activa"));
+  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("activo"));
+  document.getElementById(`vista-${nombre}`).classList.add("activa");
+  document.getElementById(`nav-${nombre}`).classList.add("activo");
+
+  document.getElementById("topbar-title").textContent = TITULOS_VISTA[nombre][0];
+  document.getElementById("topbar-subtitle").textContent = TITULOS_VISTA[nombre][1];
+}
+
+/* ============================================================
+   INVENTARIO DE BODEGA
+   Coleccion: inventario_bodega/{productoId}
+     { producto_nombre, cantidad_actual, ultima_actualizacion }
+   Coleccion: movimientos_inventario_bodega
+     { producto_id, producto_nombre, tipo, cantidad, fecha, nota }
+   ============================================================ */
+
+function llenarSelectEntrada() {
+  const select = document.getElementById("entrada-producto");
+  select.innerHTML = PRODUCTOS.map(p => `<option value="${p.id}">${p.nombre} (${p.unidad})</option>`).join("");
+}
+
+async function registrarEntrada() {
+  const productoId = document.getElementById("entrada-producto").value;
+  const tipo = document.getElementById("entrada-tipo").value;
+  const cantidad = parseFloat(document.getElementById("entrada-cantidad").value);
+  const producto = PRODUCTOS.find(p => p.id === productoId);
+
+  if (!cantidad || cantidad <= 0) {
+    mostrarAviso("Ingresa una cantidad valida antes de registrar la entrada.", "error");
+    return;
+  }
+
+  try {
+    const ref = db.collection("inventario_bodega").doc(productoId);
+    const snap = await ref.get();
+    const actual = snap.exists ? (snap.data().cantidad_actual || 0) : 0;
+
+    await ref.set({
+      producto_nombre: producto.nombre,
+      cantidad_actual: actual + cantidad,
+      ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    await db.collection("movimientos_inventario_bodega").add({
+      producto_id: productoId,
+      producto_nombre: producto.nombre,
+      tipo: tipo,
+      cantidad: cantidad,
+      fecha: firebase.firestore.FieldValue.serverTimestamp(),
+      nota: ""
+    });
+
+    document.getElementById("entrada-cantidad").value = "";
+    mostrarAviso(`Se agregaron ${cantidad} de ${producto.nombre} al inventario.`, "ok");
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al registrar la entrada. Verifica la conexion.", "error");
+  }
+}
+
+async function descontarInventarioBodega(productoId, productoNombre, cantidad) {
+  const ref = db.collection("inventario_bodega").doc(productoId);
+  const snap = await ref.get();
+  const actual = snap.exists ? (snap.data().cantidad_actual || 0) : 0;
+
+  await ref.set({
+    producto_nombre: productoNombre,
+    cantidad_actual: actual - cantidad,
+    ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+
+  await db.collection("movimientos_inventario_bodega").add({
+    producto_id: productoId,
+    producto_nombre: productoNombre,
+    tipo: "despacho",
+    cantidad: -cantidad,
+    fecha: firebase.firestore.FieldValue.serverTimestamp(),
+    nota: ""
+  });
+}
+
+let inventarioActual = {};
+
+function escucharInventario() {
+  db.collection("inventario_bodega").onSnapshot(snapshot => {
+    inventarioActual = {};
+    snapshot.forEach(doc => {
+      inventarioActual[doc.id] = doc.data();
+    });
+    renderTablaInventario();
+    renderTablaConteo();
+  });
+}
+
+function renderTablaInventario() {
+  const tbody = document.getElementById("tabla-inventario");
+  tbody.innerHTML = PRODUCTOS.map(p => {
+    const cantidad = inventarioActual[p.id] ? inventarioActual[p.id].cantidad_actual : 0;
+    return `<tr><td>${p.nombre}</td><td class="cantidad-actual">${cantidad} <span style="color:#888780; font-weight:400;">${p.unidad}</span></td></tr>`;
+  }).join("");
+}
+
+/* ============================================================
+   CONTEO SEMANAL
+   Coleccion: cierres_bodega/{fecha}
+     { fecha, cerrado_por, items: [...] }
+   ============================================================ */
+
+function renderTablaConteo() {
+  const tbody = document.getElementById("tabla-conteo");
+  tbody.innerHTML = PRODUCTOS.map(p => {
+    const cantidad = inventarioActual[p.id] ? inventarioActual[p.id].cantidad_actual : 0;
+    return `<tr>
+      <td>${p.nombre}</td>
+      <td>${cantidad}</td>
+      <td><input type="number" id="conteo_${p.id}" min="0" step="0.5" placeholder="${cantidad}"></td>
+    </tr>`;
+  }).join("");
+}
+
+async function guardarConteoSemanal() {
+  const items = [];
+
+  for (const p of PRODUCTOS) {
+    const input = document.getElementById(`conteo_${p.id}`);
+    const conteoFisico = parseFloat(input.value);
+    if (isNaN(conteoFisico)) continue;
+
+    const stockAntesDelConteo = inventarioActual[p.id] ? inventarioActual[p.id].cantidad_actual : 0;
+    const consumoCalculado = stockAntesDelConteo - conteoFisico;
+
+    items.push({
+      producto_id: p.id,
+      producto_nombre: p.nombre,
+      stock_antes_conteo: stockAntesDelConteo,
+      conteo_fisico: conteoFisico,
+      consumo_calculado: consumoCalculado
+    });
+  }
+
+  if (items.length === 0) {
+    mostrarAviso("Ingresa el conteo fisico de al menos un producto.", "error");
+    return;
+  }
+
+  try {
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+
+    await db.collection("cierres_bodega").doc(fechaHoy).set({
+      fecha: fechaHoy,
+      cerrado_por: "Edison Pacurucu",
+      items: items
+    });
+
+    for (const item of items) {
+      await db.collection("inventario_bodega").doc(item.producto_id).set({
+        producto_nombre: item.producto_nombre,
+        cantidad_actual: item.conteo_fisico,
+        ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      await db.collection("movimientos_inventario_bodega").add({
+        producto_id: item.producto_id,
+        producto_nombre: item.producto_nombre,
+        tipo: "ajuste_conteo",
+        cantidad: item.conteo_fisico - item.stock_antes_conteo,
+        fecha: firebase.firestore.FieldValue.serverTimestamp(),
+        nota: `Conteo semanal, consumo calculado: ${item.consumo_calculado}`
+      });
+    }
+
+    mostrarAviso(`Conteo semanal guardado. Se ajustaron ${items.length} productos.`, "ok");
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar el conteo. Verifica la conexion.", "error");
+  }
+}
+
+/* ============================================================
+   GUIAS CREADAS (coleccion pedidos)
+   ============================================================ */
+const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado" };
+const NOMBRES_ESTADO = {
+  despachado: "Despachado",
+  recibido_ok: "Recibido OK",
+  recibido_diferencias: "Con diferencias",
+  pendiente: "Pendiente",
+  en_despacho: "En despacho"
+};
+
+let guiasCache = [];
+
+function escucharGuias() {
+  db.collection("pedidos").orderBy("fecha_despacho", "desc").limit(30).onSnapshot(snapshot => {
+    guiasCache = [];
+    snapshot.forEach(doc => guiasCache.push({ id: doc.id, ...doc.data() }));
+    renderListaGuias();
+  }, err => console.error(err));
+}
+
+function renderListaGuias() {
+  const cont = document.getElementById("guias-lista");
+  if (guiasCache.length === 0) {
+    cont.innerHTML = `<div class="panel">Todavia no hay guias creadas.</div>`;
+    return;
+  }
+  cont.innerHTML = guiasCache.map(g => {
+    const fecha = g.fecha_despacho && g.fecha_despacho.toDate ? g.fecha_despacho.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+    const estadoClase = g.estado || "despachado";
+    return `
+      <div class="guia-card" onclick="verGuia('${g.id}')">
+        <div class="guia-card-top">
+          <div>
+            <div class="guia-local">${NOMBRES_LOCAL[g.local] || g.local}</div>
+            <div class="guia-fecha">${fecha} - ${g.items.length} productos</div>
+          </div>
+          <span class="badge ${estadoClase}">${NOMBRES_ESTADO[estadoClase] || estadoClase}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function verGuia(id) {
+  const guia = guiasCache.find(g => g.id === id);
+  if (!guia) return;
+
+  document.getElementById("guias-lista").style.display = "none";
+
+  const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
+
+  const filasItems = guia.items.map(it => `
+    <div class="detalle-fila">
+      <span>${it.producto_nombre}</span>
+      <span>${it.cantidad_despachada} ${it.unidad_medida}</span>
+    </div>
+  `).join("");
+
+  document.getElementById("guias-detalle").innerHTML = `
+    <div class="detalle-panel">
+      <div class="detalle-header">
+        <div>
+          <h2>${NOMBRES_LOCAL[guia.local] || guia.local}</h2>
+          <div class="guia-fecha">${fecha}</div>
+          <div class="guia-fecha">Despachado por: ${guia.despachado_por || "-"}</div>
+        </div>
+        <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
+      </div>
+      ${filasItems}
+      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir guia</button>
+    </div>
+  `;
+}
+
+function cerrarDetalleGuia() {
+  document.getElementById("guias-detalle").innerHTML = "";
+  document.getElementById("guias-lista").style.display = "block";
+}
+
+/* ============================================================
+   LISTA DE COMPRAS (coleccion listas_compra)
+   Solo items de compra directa que el local pide por WhatsApp,
+   transcritos por Edison ANTES de crear el despacho.
+   { local, estado: "pendiente" | "despachada", fecha_creacion,
+     creado_por, items: [{producto_id, producto_nombre, unidad_medida,
+     cantidad_solicitada}] }
+   ============================================================ */
+
+function renderProductosCompra() {
+  const contenedor = document.getElementById("lista-productos-compra");
+  contenedor.innerHTML = "";
+
+  ORDEN_CATEGORIA.forEach(cat => {
+    const productosCategoria = PRODUCTOS.filter(p => p.categoria === cat);
+    if (productosCategoria.length === 0) return;
+
+    const catTitle = document.createElement("div");
+    catTitle.className = "categoria-title";
+    catTitle.textContent = NOMBRES_CATEGORIA[cat] || cat;
+    contenedor.appendChild(catTitle);
+
+    ORDEN_SUBCATEGORIA.forEach(sub => {
+      const productosSub = productosCategoria.filter(p => p.subcategoria === sub);
+      if (productosSub.length === 0) return;
+
+      const subTitle = document.createElement("div");
+      subTitle.className = "subcategoria-title";
+      subTitle.textContent = NOMBRES_SUBCATEGORIA[sub] || sub;
+      contenedor.appendChild(subTitle);
+
+      productosSub.forEach(p => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.dataset.id = p.id;
+        item.dataset.nombre = p.nombre.toLowerCase();
+        item.innerHTML = `
+          <div class="item-row1" onclick="if(event.target.type!=='checkbox'){document.getElementById('lc_chk_${p.id}').checked=!document.getElementById('lc_chk_${p.id}').checked; toggleItemCompra('${p.id}');}">
+            <input type="checkbox" id="lc_chk_${p.id}" onchange="toggleItemCompra('${p.id}')">
+            <div class="item-thumb">${obtenerIniciales(p.nombre)}</div>
+            <div class="item-texto">
+              <div class="item-nombre">${p.nombre}</div>
+              <div class="item-unidad">${p.unidad}</div>
+            </div>
+          </div>
+          <div class="item-detalle">
+            <div>
+              <label>Cantidad solicitada</label>
+              <input type="number" id="lc_cant_${p.id}" min="0" step="0.5" placeholder="0">
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(item);
+      });
+    });
+  });
+
+  contenedor.querySelectorAll(".item").forEach(el => el.style.display = "block");
+}
+
+function toggleItemCompra(id) {
+  const item = document.querySelector(`#lista-productos-compra .item[data-id="${id}"]`);
+  const checked = document.getElementById(`lc_chk_${id}`).checked;
+  item.classList.toggle("checked", checked);
+  actualizarContadorCompra();
+}
+
+function actualizarContadorCompra() {
+  const n = document.querySelectorAll("#lista-productos-compra .item.checked").length;
+  document.getElementById("contador-compra").textContent = `${n} item${n === 1 ? "" : "s"} seleccionado${n === 1 ? "" : "s"}`;
+}
+
+function filtrarProductosCompra() {
+  const q = document.getElementById("buscador-compra").value.toLowerCase().trim();
+  const contenedor = document.getElementById("lista-productos-compra");
+
+  contenedor.querySelectorAll(".item").forEach(el => {
+    el.style.display = el.dataset.nombre.includes(q) ? "block" : "none";
+  });
+
+  const hijos = Array.from(contenedor.children);
+  hijos.forEach((el, i) => {
+    if (el.classList.contains("categoria-title") || el.classList.contains("subcategoria-title")) {
+      let tieneItemsVisibles = false;
+      for (let j = i + 1; j < hijos.length; j++) {
+        const siguiente = hijos[j];
+        if (siguiente.classList.contains("categoria-title")) break;
+        if (el.classList.contains("subcategoria-title") && siguiente.classList.contains("subcategoria-title")) break;
+        if (siguiente.classList.contains("item") && siguiente.style.display !== "none") {
+          tieneItemsVisibles = true;
+          break;
+        }
+      }
+      el.style.display = tieneItemsVisibles ? "block" : "none";
+    }
+  });
+}
+
+async function crearListaCompra() {
+  const local = document.getElementById("local-compra").value;
+  const items = [];
+
+  document.querySelectorAll("#lista-productos-compra .item.checked").forEach(el => {
+    const id = el.dataset.id;
+    const producto = PRODUCTOS.find(p => p.id === id);
+    const cantidad = parseFloat(document.getElementById(`lc_cant_${id}`).value);
+    if (!cantidad || cantidad <= 0) return;
+
+    items.push({
+      producto_id: id,
+      producto_nombre: producto.nombre,
+      unidad_medida: producto.unidad,
+      cantidad_solicitada: cantidad,
+      comprado: false
+    });
+  });
+
+  if (items.length === 0) {
+    mostrarAviso("Selecciona al menos un producto con cantidad antes de guardar la lista.", "error");
+    return;
+  }
+
+  try {
+    await db.collection("listas_compra").add({
+      local: local,
+      estado: "pendiente",
+      fecha_creacion: firebase.firestore.FieldValue.serverTimestamp(),
+      creado_por: "Edison Pacurucu",
+      items: items
+    });
+
+    mostrarAviso(`Lista de compras guardada para ${NOMBRES_LOCAL[local]} con ${items.length} productos.`, "ok");
+
+    document.querySelectorAll("#lista-productos-compra .item.checked").forEach(el => {
+      document.getElementById(`lc_chk_${el.dataset.id}`).checked = false;
+      el.classList.remove("checked");
+    });
+    actualizarContadorCompra();
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar la lista de compras. Verifica la conexion.", "error");
+  }
+}
+
+let listasCompraCache = [];
+
+function escucharListasCompra() {
+  db.collection("listas_compra").orderBy("fecha_creacion", "desc").limit(20).onSnapshot(snapshot => {
+    listasCompraCache = [];
+    snapshot.forEach(doc => listasCompraCache.push({ id: doc.id, ...doc.data() }));
+    renderListasCompraPendientes();
+    actualizarSelectListaCompra();
+    if (listaCompraDetalleAbiertaId) verListaCompra(listaCompraDetalleAbiertaId);
+  }, err => console.error(err));
+}
+
+function renderListasCompraPendientes() {
+  const cont = document.getElementById("listas-compra-pendientes");
+  const pendientes = listasCompraCache.filter(l => l.estado === "pendiente");
+
+  if (pendientes.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">No hay listas de compras pendientes.</p>`;
+    return;
+  }
+
+  cont.innerHTML = pendientes.map(l => {
+    const fecha = l.fecha_creacion && l.fecha_creacion.toDate ? l.fecha_creacion.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+    const comprados = l.items.filter(it => it.comprado).length;
+    const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0);
+    return `
+      <div class="guia-card" onclick="verListaCompra('${l.id}')">
+        <div class="guia-card-top">
+          <div>
+            <div class="guia-local">${NOMBRES_LOCAL[l.local] || l.local}</div>
+            <div class="guia-fecha">${fecha} - ${comprados} de ${l.items.length} comprados${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
+          </div>
+          <span class="badge despachado">Ver lista</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+let listaCompraDetalleAbiertaId = null;
+
+function verListaCompra(id) {
+  listaCompraDetalleAbiertaId = id;
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista) return;
+
+  document.getElementById("vista-compra").querySelectorAll(".compra-top-grid, .buscador, #lista-productos-compra, .barra-inferior").forEach(el => el.style.display = "none");
+
+  let totalCosto = 0;
+  const filasItems = lista.items.map((it, idx) => {
+    if (it.costo) totalCosto += parseFloat(it.costo);
+    return `
+    <div class="detalle-fila" style="align-items:center;">
+      <span style="display:flex; align-items:center; gap:10px; flex:1; ${it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : ''}">
+        <input type="checkbox" ${it.comprado ? "checked" : ""} onchange="toggleComprado('${id}', ${idx})" style="width:20px; height:20px; flex-shrink:0;">
+        <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
+      </span>
+      <input type="number" class="costo-input" min="0" step="0.01" placeholder="Costo $" value="${it.costo != null ? it.costo : ''}" onchange="actualizarCosto('${id}', ${idx}, this.value)">
+    </div>
+  `;
+  }).join("");
+
+  const fecha = lista.fecha_creacion && lista.fecha_creacion.toDate ? lista.fecha_creacion.toDate().toLocaleString("es-EC") : "";
+
+  document.getElementById("lista-compra-detalle").innerHTML = `
+    <div class="detalle-panel">
+      <div class="detalle-header">
+        <div>
+          <h2>${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
+          <div class="guia-fecha">${fecha}</div>
+        </div>
+        <button class="btn-cerrar" onclick="cerrarListaCompraDetalle()">&times;</button>
+      </div>
+      ${filasItems}
+      <div class="detalle-fila" style="font-weight:600; border-top:2px solid #3c3489; margin-top:4px;">
+        <span>Total costo (para contabilidad)</span>
+        <span>$${totalCosto.toFixed(2)}</span>
+      </div>
+      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar para contabilidad</button>
+    </div>
+  `;
+}
+
+async function toggleComprado(listaId, idx) {
+  const lista = listasCompraCache.find(l => l.id === listaId);
+  if (!lista) return;
+
+  const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, comprado: !it.comprado } : it);
+
+  try {
+    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems });
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al actualizar. Verifica la conexion.", "error");
+  }
+}
+
+async function actualizarCosto(listaId, idx, valor) {
+  const lista = listasCompraCache.find(l => l.id === listaId);
+  if (!lista) return;
+
+  const costo = valor === "" ? null : parseFloat(valor);
+  const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, costo } : it);
+
+  try {
+    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems });
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar el costo. Verifica la conexion.", "error");
+  }
+}
+
+function cerrarListaCompraDetalle() {
+  listaCompraDetalleAbiertaId = null;
+  document.getElementById("lista-compra-detalle").innerHTML = "";
+  document.getElementById("vista-compra").querySelectorAll(".compra-top-grid, .buscador, #lista-productos-compra, .barra-inferior").forEach(el => el.style.display = "");
+}
+
+function actualizarSelectListaCompra() {
+  const local = document.getElementById("local").value;
+  const select = document.getElementById("cargar-lista-compra");
+  const pendientesDelLocal = listasCompraCache.filter(l => l.estado === "pendiente" && l.local === local);
+
+  select.innerHTML = `<option value="">-- Ninguna --</option>` + pendientesDelLocal.map(l => {
+    const fecha = l.fecha_creacion && l.fecha_creacion.toDate ? l.fecha_creacion.toDate().toLocaleDateString("es-EC") : "";
+    return `<option value="${l.id}">${fecha} - ${l.items.length} productos</option>`;
+  }).join("");
+}
+
+let listaCompraCargadaId = null;
+
+function cargarListaCompraEnDespacho() {
+  const id = document.getElementById("cargar-lista-compra").value;
+  listaCompraCargadaId = id || null;
+  if (!id) return;
+
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista) return;
+
+  lista.items.forEach(it => {
+    const chk = document.getElementById(`chk_${it.producto_id}`);
+    const cant = document.getElementById(`cant_${it.producto_id}`);
+    const origen = document.getElementById(`origen_${it.producto_id}`);
+    if (!chk || !cant || !origen) return;
+
+    chk.checked = true;
+    cant.value = it.cantidad_solicitada;
+    origen.value = "compra_directa";
+    toggleItem(it.producto_id);
+  });
+
+  mostrarAviso(`Se cargaron ${lista.items.length} productos de la lista de compras (marcados como compra directa).`, "ok");
+}
+
+renderProductos();
+renderProductosCompra();
+llenarSelectEntrada();
+escucharInventario();
+escucharGuias();
+escucharListasCompra();
+</script>
+
+  </main>
+</div>
+
+</body>
+</html>
