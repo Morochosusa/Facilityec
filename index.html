@@ -260,8 +260,78 @@
   .guia-imprimible {
     display: none;
   }
+  .clock-fab {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 50;
+    background: #3c3489;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .clock-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .clock-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 22px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .clock-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .clock-modal-header h2 { font-size: 17px; margin: 0; }
+  .clock-emp-btn {
+    width: 100%;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .clock-pin-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 22px;
+    text-align: center;
+    letter-spacing: 6px;
+    border-radius: 10px;
+    border: 1px solid #b4b2a9;
+    margin-bottom: 12px;
+  }
+  .clock-volver {
+    background: none;
+    border: none;
+    color: #888780;
+    font-size: 13px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .clock-resultado {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 0;
+  }
+
   @media print {
-    .sidebar, .topbar, .barra-inferior, .buscador, .panel { display: none !important; }
+    .sidebar, .topbar, .barra-inferior, .buscador, .panel, .clock-fab { display: none !important; }
     .item { display: block !important; border: none; margin: 0; padding: 4px 0; }
     .item-detalle { display: none !important; }
     .categoria-title, .subcategoria-title { margin: 10px 0 2px; }
@@ -421,7 +491,7 @@
       font-weight: 500;
     }
     #lista-compra-detalle .btn-imprimir { display: none !important; }
-    #listas-compra-pendientes, #lista-productos-compra, .compra-top-grid, .buscador { display: none !important; }
+    #listas-compra-pendientes, #lista-productos-compra, #lista-productos-proveedor, #recepciones-proveedor-lista, .compra-top-grid, .buscador { display: none !important; }
   }
 </style>
 </head>
@@ -441,6 +511,7 @@
     <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
     <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
     <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')">📦 Inventario</button>
+    <button class="nav-item" id="nav-proveedores" onclick="cambiarVista('proveedores')">📥 Recepcion proveedores</button>
     <button class="nav-item" id="nav-conteo" onclick="cambiarVista('conteo')">📅 Conteo semanal</button>
   </aside>
 
@@ -539,6 +610,57 @@
       </thead>
       <tbody id="tabla-inventario"></tbody>
     </table>
+  </div>
+</div>
+
+<!-- VISTA: RECEPCION PROVEEDORES -->
+<div class="vista" id="vista-proveedores">
+  <div class="compra-top-grid">
+    <div class="panel">
+      <label for="proveedor-nombre">Proveedor</label>
+      <input type="text" id="proveedor-nombre" list="lista-proveedores-conocidos" placeholder="Nombre del proveedor">
+      <datalist id="lista-proveedores-conocidos"></datalist>
+      <label for="recepcion-estado" style="margin-top:10px;">Estado de la entrega</label>
+      <select id="recepcion-estado">
+        <option value="completo">Completo, sin novedad</option>
+        <option value="con_novedad">Con novedad (faltante, dano, retraso)</option>
+      </select>
+      <p style="font-size:12px; color:#888780; margin:8px 0 0;">Escribe el nombre; si ya lo usaste antes, te va a sugerir autocompletarlo.</p>
+    </div>
+
+    <div class="panel">
+      <label>Recepciones recientes</label>
+      <div id="recepciones-proveedor-lista"></div>
+    </div>
+  </div>
+
+  <div id="recepcion-proveedor-detalle"></div>
+
+  <div class="panel">
+    <label>Agregar insumo recibido</label>
+    <div class="form-entrada">
+      <input type="text" id="insumo-nombre" list="lista-insumos-conocidos" placeholder="Nombre del insumo (ej: Canela al granel)">
+      <datalist id="lista-insumos-conocidos"></datalist>
+      <input type="text" id="insumo-unidad" placeholder="Unidad (ej: libras, bidon 5gal, unidades)">
+      <input type="number" id="insumo-cantidad" min="0" step="0.5" placeholder="Cantidad">
+      <input type="number" id="insumo-costo" min="0" step="0.01" placeholder="Costo $ (opcional)">
+      <select id="insumo-destino">
+        <option value="requiere_proceso">Requiere procesamiento (no entra a inventario aun)</option>
+        <option value="directo">Pasa directo a inventario (ej: desechables)</option>
+      </select>
+      <input type="text" id="insumo-observacion" placeholder="Observacion (opcional)">
+      <button class="btn-secundario" onclick="agregarLineaInsumo()">+ Agregar a esta recepcion</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <label>Insumos en esta recepcion</label>
+    <div id="lineas-insumos-cont"><p style="font-size:13px; color:#888780;">Todavia no has agregado ningun insumo.</p></div>
+  </div>
+
+  <div class="barra-inferior">
+    <span class="contador" id="contador-proveedor">0 items agregados</span>
+    <button class="btn-despachar" onclick="guardarRecepcionProveedor()">Registrar recepcion</button>
   </div>
 </div>
 
@@ -1093,6 +1215,7 @@ const TITULOS_VISTA = {
   despacho: ["Despacho", "Crea la guia digital hacia La Victoria o El Salado"],
   guias: ["Guias", "Historial de guias de despacho creadas"],
   inventario: ["Inventario de bodega", "Stock actual y registro de entradas"],
+  proveedores: ["Recepcion proveedores", "Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
   conteo: ["Conteo semanal", "Ajusta el inventario al conteo fisico real"]
 };
 
@@ -1655,15 +1778,364 @@ function cargarListaCompraEnDespacho() {
   mostrarAviso(`Se cargaron ${lista.items.length} productos de la lista de compras (marcados como compra directa).`, "ok");
 }
 
+/* ============================================================
+   RECEPCION PROVEEDORES (coleccion recepciones_proveedor)
+   Entregas formales de proveedores fijos directo a bodega:
+   producto, cantidad, costo y observacion por item.
+   { proveedor, fecha, recibido_por, items: [{producto_id,
+     producto_nombre, unidad_medida, cantidad, costo, observacion}] }
+   ============================================================ */
+
+let lineasInsumoActual = [];
+let insumosConocidos = [];
+
+function agregarLineaInsumo() {
+  const nombre = document.getElementById("insumo-nombre").value.trim();
+  const unidad = document.getElementById("insumo-unidad").value.trim();
+  const cantidad = parseFloat(document.getElementById("insumo-cantidad").value);
+  const costo = parseFloat(document.getElementById("insumo-costo").value);
+  const destino = document.getElementById("insumo-destino").value;
+  const observacion = document.getElementById("insumo-observacion").value.trim();
+
+  if (!nombre) {
+    mostrarAviso("Escribe el nombre del insumo.", "error");
+    return;
+  }
+  if (!cantidad || cantidad <= 0) {
+    mostrarAviso("Ingresa una cantidad valida.", "error");
+    return;
+  }
+
+  lineasInsumoActual.push({
+    nombre: nombre,
+    unidad: unidad || "unidades",
+    cantidad: cantidad,
+    costo: isNaN(costo) ? null : costo,
+    destino: destino,
+    observacion: observacion
+  });
+
+  document.getElementById("insumo-nombre").value = "";
+  document.getElementById("insumo-unidad").value = "";
+  document.getElementById("insumo-cantidad").value = "";
+  document.getElementById("insumo-costo").value = "";
+  document.getElementById("insumo-observacion").value = "";
+  document.getElementById("insumo-destino").value = "requiere_proceso";
+
+  renderLineasInsumo();
+}
+
+function quitarLineaInsumo(idx) {
+  lineasInsumoActual.splice(idx, 1);
+  renderLineasInsumo();
+}
+
+function renderLineasInsumo() {
+  const cont = document.getElementById("lineas-insumos-cont");
+  document.getElementById("contador-proveedor").textContent = `${lineasInsumoActual.length} item${lineasInsumoActual.length === 1 ? "" : "s"} agregado${lineasInsumoActual.length === 1 ? "" : "s"}`;
+
+  if (lineasInsumoActual.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780;">Todavia no has agregado ningun insumo.</p>`;
+    return;
+  }
+
+  cont.innerHTML = lineasInsumoActual.map((l, idx) => `
+    <div class="detalle-fila" style="align-items:center;">
+      <span>
+        <strong>${l.nombre}</strong> <span style="color:#888780;">(${l.cantidad} ${l.unidad})</span>
+        <span class="badge ${l.destino === 'directo' ? 'stock' : 'procesado'}" style="margin-left:6px;">${l.destino === 'directo' ? 'Directo' : 'Requiere proceso'}</span>
+        ${l.costo != null ? ` - $${l.costo.toFixed(2)}` : ""}
+        ${l.observacion ? `<br><span style="color:#888780; font-size:12px;">${l.observacion}</span>` : ""}
+      </span>
+      <button class="btn-cerrar" onclick="quitarLineaInsumo(${idx})">&times;</button>
+    </div>
+  `).join("");
+}
+
+function slugificarNombre(nombre) {
+  return nombre.toLowerCase().trim()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+}
+
+async function guardarRecepcionProveedor() {
+  const proveedor = document.getElementById("proveedor-nombre").value.trim();
+
+  if (!proveedor) {
+    mostrarAviso("Escribe el nombre del proveedor antes de registrar.", "error");
+    return;
+  }
+  if (lineasInsumoActual.length === 0) {
+    mostrarAviso("Agrega al menos un insumo antes de registrar.", "error");
+    return;
+  }
+
+  const estadoEntrega = document.getElementById("recepcion-estado").value;
+
+  try {
+    await db.collection("recepciones_proveedor").add({
+      proveedor: proveedor,
+      estado: estadoEntrega,
+      fecha: firebase.firestore.FieldValue.serverTimestamp(),
+      recibido_por: "Edison Pacurucu",
+      items: lineasInsumoActual
+    });
+
+    for (const item of lineasInsumoActual) {
+      const slug = slugificarNombre(item.nombre);
+      // Solo lo que NO requiere proceso entra directo al inventario de productos terminados.
+      // Lo que requiere proceso queda en un inventario de materia prima aparte, pendiente
+      // de que el modulo de Produccion lo convierta en producto terminado.
+      const coleccion = item.destino === "directo" ? "inventario_bodega" : "inventario_materia_prima";
+      const ref = db.collection(coleccion).doc(slug);
+      const snap = await ref.get();
+      const actual = snap.exists ? (snap.data().cantidad_actual || 0) : 0;
+
+      await ref.set({
+        producto_nombre: item.nombre,
+        unidad_medida: item.unidad,
+        cantidad_actual: actual + item.cantidad,
+        ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      await db.collection("movimientos_inventario_bodega").add({
+        producto_id: slug,
+        producto_nombre: item.nombre,
+        tipo: "recepcion_proveedor",
+        destino: item.destino,
+        cantidad: item.cantidad,
+        fecha: firebase.firestore.FieldValue.serverTimestamp(),
+        nota: `Proveedor: ${proveedor}${item.costo != null ? " - $" + item.costo.toFixed(2) : ""}${item.observacion ? " - " + item.observacion : ""}`
+      });
+    }
+
+    mostrarAviso(`Recepcion de ${proveedor} registrada con ${lineasInsumoActual.length} insumos.`, "ok");
+
+    lineasInsumoActual = [];
+    renderLineasInsumo();
+    document.getElementById("proveedor-nombre").value = "";
+    document.getElementById("recepcion-estado").value = "completo";
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar la recepcion. Verifica la conexion.", "error");
+  }
+}
+
+let recepcionesProveedorCache = [];
+
+function escucharRecepcionesProveedor() {
+  db.collection("recepciones_proveedor").orderBy("fecha", "desc").limit(30).onSnapshot(snapshot => {
+    recepcionesProveedorCache = [];
+    snapshot.forEach(doc => recepcionesProveedorCache.push({ id: doc.id, ...doc.data() }));
+    renderRecepcionesProveedorLista();
+    llenarDatalistProveedores();
+  }, err => console.error(err));
+}
+
+function renderRecepcionesProveedorLista() {
+  const cont = document.getElementById("recepciones-proveedor-lista");
+  if (recepcionesProveedorCache.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">Todavia no hay recepciones registradas.</p>`;
+    return;
+  }
+
+  cont.innerHTML = recepcionesProveedorCache.map(r => {
+    const fecha = r.fecha && r.fecha.toDate ? r.fecha.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+    const total = r.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0);
+    const esNovedad = r.estado === "con_novedad";
+    return `
+      <div class="guia-card" onclick="verRecepcionProveedor('${r.id}')">
+        <div class="guia-card-top">
+          <div>
+            <div class="guia-local">${r.proveedor}</div>
+            <div class="guia-fecha">${fecha} - ${r.items.length} productos${total > 0 ? " - $" + total.toFixed(2) : ""}</div>
+          </div>
+          <span class="badge ${esNovedad ? 'recibido_diferencias' : 'recibido_ok'}">${esNovedad ? 'Con novedad' : 'Completo'}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function llenarDatalistProveedores() {
+  const nombres = [...new Set(recepcionesProveedorCache.map(r => r.proveedor))];
+  document.getElementById("lista-proveedores-conocidos").innerHTML = nombres.map(n => `<option value="${n}">`).join("");
+
+  const insumos = new Set();
+  recepcionesProveedorCache.forEach(r => r.items.forEach(it => insumos.add(it.nombre)));
+  document.getElementById("lista-insumos-conocidos").innerHTML = [...insumos].map(n => `<option value="${n}">`).join("");
+}
+
+function verRecepcionProveedor(id) {
+  const rec = recepcionesProveedorCache.find(r => r.id === id);
+  if (!rec) return;
+
+  document.getElementById("vista-proveedores").querySelectorAll(".compra-top-grid, .barra-inferior").forEach(el => el.style.display = "none");
+  document.querySelectorAll("#vista-proveedores > .panel").forEach(el => el.style.display = "none");
+
+  const fecha = rec.fecha && rec.fecha.toDate ? rec.fecha.toDate().toLocaleString("es-EC") : "";
+  let total = 0;
+
+  const filas = rec.items.map(it => {
+    if (it.costo) total += parseFloat(it.costo);
+    const nombre = it.nombre || it.producto_nombre;
+    const unidad = it.unidad || it.unidad_medida;
+    const destinoLabel = it.destino === "directo" ? "Directo" : it.destino === "requiere_proceso" ? "Requiere proceso" : "";
+    return `
+      <div class="detalle-fila">
+        <span>${nombre} <span style="color:#888780;">(${it.cantidad} ${unidad})</span>${destinoLabel ? ` <span class="badge ${it.destino === 'directo' ? 'stock' : 'procesado'}">${destinoLabel}</span>` : ""}${it.observacion ? `<br><span style="color:#888780; font-size:12px;">${it.observacion}</span>` : ""}</span>
+        <span>${it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "-"}</span>
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("recepcion-proveedor-detalle").innerHTML = `
+    <div class="detalle-panel">
+      <div class="detalle-header">
+        <div>
+          <h2>${rec.proveedor}</h2>
+          <div class="guia-fecha">${fecha} - Recibido por ${rec.recibido_por || "-"}</div>
+          <span class="badge ${rec.estado === 'con_novedad' ? 'recibido_diferencias' : 'recibido_ok'}" style="margin-top:4px; display:inline-block;">${rec.estado === 'con_novedad' ? 'Con novedad' : 'Completo'}</span>
+        </div>
+        <button class="btn-cerrar" onclick="cerrarRecepcionProveedorDetalle()">&times;</button>
+      </div>
+      ${filas}
+      <div class="detalle-fila" style="font-weight:600; border-top:2px solid #3c3489; margin-top:4px;">
+        <span>Total</span>
+        <span>$${total.toFixed(2)}</span>
+      </div>
+      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar</button>
+    </div>
+  `;
+}
+
+function cerrarRecepcionProveedorDetalle() {
+  document.getElementById("recepcion-proveedor-detalle").innerHTML = "";
+  document.getElementById("vista-proveedores").querySelectorAll(".compra-top-grid, .barra-inferior").forEach(el => el.style.display = "");
+  document.querySelectorAll("#vista-proveedores > .panel").forEach(el => el.style.display = "");
+}
+
+/* ============================================================
+   CLOCK IN / OUT (coleccion clock_in_out)
+   PINS DE MUESTRA - reemplazar por los codigos reales de cada
+   empleado antes de usar en produccion.
+   { empleado_id, nombre, tipo: "entrada" | "salida", fecha }
+   ============================================================ */
+const EMPLEADOS_CLOCK = {
+  nestor: { nombre: "Nestor Santos", pin: "1111" },
+  edison: { nombre: "Edison Pacurucu", pin: "2222" }
+};
+
+let empleadoClockSeleccionado = null;
+
+function abrirClockModal() {
+  document.getElementById("clock-overlay").style.display = "flex";
+  document.getElementById("clock-paso-empleado").style.display = "block";
+  document.getElementById("clock-paso-pin").style.display = "none";
+  document.getElementById("clock-resultado").innerHTML = "";
+}
+
+function cerrarClockModal() {
+  document.getElementById("clock-overlay").style.display = "none";
+  document.getElementById("clock-pin-input").value = "";
+  empleadoClockSeleccionado = null;
+}
+
+function seleccionarEmpleadoClock(id) {
+  empleadoClockSeleccionado = id;
+  document.getElementById("clock-nombre-seleccionado").textContent = EMPLEADOS_CLOCK[id].nombre;
+  document.getElementById("clock-paso-empleado").style.display = "none";
+  document.getElementById("clock-paso-pin").style.display = "block";
+  document.getElementById("clock-pin-input").value = "";
+  document.getElementById("clock-pin-input").focus();
+}
+
+function volverSeleccionEmpleadoClock() {
+  empleadoClockSeleccionado = null;
+  document.getElementById("clock-paso-empleado").style.display = "block";
+  document.getElementById("clock-paso-pin").style.display = "none";
+}
+
+async function confirmarPinClock() {
+  const pinIngresado = document.getElementById("clock-pin-input").value.trim();
+  const empleado = EMPLEADOS_CLOCK[empleadoClockSeleccionado];
+
+  if (pinIngresado !== empleado.pin) {
+    document.getElementById("clock-resultado").innerHTML = `<div class="clock-resultado" style="color:#a53c3c;">Codigo incorrecto, intenta de nuevo.</div>`;
+    document.getElementById("clock-pin-input").value = "";
+    return;
+  }
+
+  try {
+    const ultimoSnap = await db.collection("clock_in_out")
+      .where("empleado_id", "==", empleadoClockSeleccionado)
+      .orderBy("fecha", "desc")
+      .limit(1)
+      .get();
+
+    const ultimoTipo = !ultimoSnap.empty ? ultimoSnap.docs[0].data().tipo : "salida";
+    const nuevoTipo = ultimoTipo === "entrada" ? "salida" : "entrada";
+
+    await db.collection("clock_in_out").add({
+      empleado_id: empleadoClockSeleccionado,
+      nombre: empleado.nombre,
+      tipo: nuevoTipo,
+      fecha: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const horaTexto = new Date().toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
+    document.getElementById("clock-paso-pin").style.display = "none";
+    document.getElementById("clock-resultado").innerHTML = `
+      <div class="clock-resultado" style="color:#173404;">
+        ${nuevoTipo === "entrada" ? "Entrada" : "Salida"} registrada<br>
+        <span style="font-weight:400; font-size:13px; color:#5f5e5a;">${empleado.nombre} - ${horaTexto}</span>
+      </div>
+    `;
+
+    setTimeout(() => { cerrarClockModal(); }, 2200);
+  } catch (err) {
+    console.error(err);
+    document.getElementById("clock-resultado").innerHTML = `<div class="clock-resultado" style="color:#a53c3c;">Error al registrar. Verifica la conexion.</div>`;
+  }
+}
+
 renderProductos();
 renderProductosCompra();
+renderLineasInsumo();
 llenarSelectEntrada();
 escucharInventario();
 escucharGuias();
 escucharListasCompra();
+escucharRecepcionesProveedor();
 </script>
 
   </main>
+</div>
+
+<button class="clock-fab" onclick="abrirClockModal()" title="Clock In / Out">🕐</button>
+
+<div class="clock-overlay" id="clock-overlay" style="display:none;">
+  <div class="clock-modal">
+    <div class="clock-modal-header">
+      <h2>Clock In / Out</h2>
+      <button class="btn-cerrar" onclick="cerrarClockModal()">&times;</button>
+    </div>
+
+    <div id="clock-paso-empleado">
+      <p style="font-size:13px; color:#888780; margin-top:0;">Selecciona tu nombre</p>
+      <button class="btn-secundario clock-emp-btn" onclick="seleccionarEmpleadoClock('nestor')">Nestor Santos</button>
+      <button class="btn-secundario clock-emp-btn" onclick="seleccionarEmpleadoClock('edison')">Edison Pacurucu</button>
+    </div>
+
+    <div id="clock-paso-pin" style="display:none;">
+      <p id="clock-nombre-seleccionado" style="font-weight:600; margin-top:0;"></p>
+      <input type="password" class="clock-pin-input" id="clock-pin-input" inputmode="numeric" maxlength="6" placeholder="••••">
+      <button class="btn-despachar" style="width:100%;" onclick="confirmarPinClock()">Confirmar</button>
+      <button class="clock-volver" onclick="volverSeleccionEmpleadoClock()">&laquo; Volver</button>
+    </div>
+
+    <div id="clock-resultado"></div>
+  </div>
 </div>
 
 </body>
