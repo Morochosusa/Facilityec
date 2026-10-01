@@ -885,14 +885,14 @@ async function verificarDispositivoYEntrar(user) {
         fecha_registro: firebase.firestore.FieldValue.serverTimestamp(),
         ultimo_acceso: firebase.firestore.FieldValue.serverTimestamp()
       });
-      mostrarErrorLogin(`Este dispositivo es nuevo y debe ser autorizado antes de poder entrar. Avisa a Meli con este codigo: ${deviceId}`);
+      mostrarErrorLogin(`Este dispositivo es nuevo y debe ser autorizado antes de poder entrar. Pide acceso al departamento administrativo con este codigo: ${deviceId}`);
       await auth.signOut();
       return;
     }
 
     const datos = snap.data();
     if (!datos.autorizado) {
-      mostrarErrorLogin(`Este dispositivo todavia no ha sido autorizado. Avisa a Meli con este codigo: ${deviceId}`);
+      mostrarErrorLogin(`Este dispositivo todavia no ha sido autorizado. Pide acceso al departamento administrativo con este codigo: ${deviceId}`);
       await auth.signOut();
       return;
     }
