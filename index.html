@@ -470,6 +470,30 @@
     width: 100%;
   }
 
+  .check-doble-tap {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border-radius: 7px;
+    border: 2px solid #b4b2a9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .check-doble-tap.marcado {
+    background: #3c3489;
+    border-color: #3c3489;
+  }
+  .check-doble-tap.tocado-una-vez {
+    border-color: #7f77dd;
+  }
+
   .costo-input {
     width: 90px;
     padding: 6px 8px;
@@ -531,6 +555,7 @@
       <select id="local-compra">
         <option value="la_victoria">La Victoria</option>
         <option value="el_salado">El Salado</option>
+        <option value="facility_feria_libre">Facility Feria Libre</option>
       </select>
       <p style="font-size:12px; color:#888780; margin:8px 0 0;">Transcribe aqui solo lo que el local pidio y que NO esta en stock de bodega (compra directa en mercado/tiendas).</p>
     </div>
@@ -562,6 +587,7 @@
     <select id="local" onchange="actualizarSelectListaCompra()">
       <option value="la_victoria">La Victoria</option>
       <option value="el_salado">El Salado</option>
+      <option value="facility_feria_libre">Facility Feria Libre</option>
     </select>
     <label for="cargar-lista-compra" style="margin-top:10px;">Cargar lista de compras pendiente (opcional)</label>
     <select id="cargar-lista-compra" onchange="cargarListaCompraEnDespacho()">
@@ -1015,6 +1041,8 @@ const NOMBRES_SUBCATEGORIA = {
 };
 const ORDEN_CATEGORIA = ["cocina", "cafeteria", "bebidas", "panaderia", "limpieza"];
 const ORDEN_SUBCATEGORIA = ["mercado", "facility", "bodega"];
+const ORDEN_SUBCATEGORIA_DESPACHO = ["mercado", "facility", "bodega"];
+const ORDEN_SUBCATEGORIA_MERCADO = ["mercado"];
 
 function obtenerIniciales(nombre) {
   const palabras = nombre.trim().split(/\s+/);
@@ -1035,7 +1063,7 @@ function renderProductos() {
     catTitle.textContent = NOMBRES_CATEGORIA[cat] || cat;
     contenedor.appendChild(catTitle);
 
-    ORDEN_SUBCATEGORIA.forEach(sub => {
+    ORDEN_SUBCATEGORIA_DESPACHO.forEach(sub => {
       const productosSub = productosCategoria.filter(p => p.subcategoria === sub);
       if (productosSub.length === 0) return;
 
@@ -1190,8 +1218,7 @@ async function crearGuiaDespacho() {
       listaCompraCargadaId = null;
       document.getElementById("cargar-lista-compra").value = "";
     }
-
-    mostrarAviso(`Guia de despacho creada para ${local === "la_victoria" ? "La Victoria" : "El Salado"} con ${itemsSeleccionados.length} productos.`, "ok");
+    mostrarAviso(`Guia de despacho creada para ${NOMBRES_LOCAL[local] || local} con ${itemsSeleccionados.length} productos.`, "ok");
 
     document.querySelectorAll(".item.checked").forEach(el => {
       document.getElementById(`chk_${el.dataset.id}`).checked = false;
@@ -1402,7 +1429,7 @@ async function guardarConteoSemanal() {
 /* ============================================================
    GUIAS CREADAS (coleccion pedidos)
    ============================================================ */
-const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado" };
+const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado", facility_feria_libre: "Facility Feria Libre" };
 const NOMBRES_ESTADO = {
   despachado: "Despachado",
   recibido_ok: "Recibido OK",
@@ -1502,7 +1529,7 @@ function renderProductosCompra() {
     catTitle.textContent = NOMBRES_CATEGORIA[cat] || cat;
     contenedor.appendChild(catTitle);
 
-    ORDEN_SUBCATEGORIA.forEach(sub => {
+    ORDEN_SUBCATEGORIA_MERCADO.forEach(sub => {
       const productosSub = productosCategoria.filter(p => p.subcategoria === sub);
       if (productosSub.length === 0) return;
 
@@ -1678,7 +1705,7 @@ function verListaCompra(id) {
     return `
     <div class="detalle-fila" style="align-items:center;">
       <span style="display:flex; align-items:center; gap:10px; flex:1; ${it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : ''}">
-        <input type="checkbox" ${it.comprado ? "checked" : ""} onchange="toggleComprado('${id}', ${idx})" style="width:20px; height:20px; flex-shrink:0;">
+        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="manejarTapComprado('${id}', ${idx})" title="Doble toque para marcar como comprado">${it.comprado ? "✓" : ""}</span>
         <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
       </span>
       <input type="number" class="costo-input" min="0" step="0.01" placeholder="Costo $" value="${it.costo != null ? it.costo : ''}" onchange="actualizarCosto('${id}', ${idx}, this.value)">
@@ -1705,6 +1732,29 @@ function verListaCompra(id) {
       <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar para contabilidad</button>
     </div>
   `;
+}
+
+const ultimoTapComprado = {};
+
+function manejarTapComprado(listaId, idx) {
+  const clave = `${listaId}_${idx}`;
+  const ahora = Date.now();
+  const el = event.target;
+
+  if (ultimoTapComprado[clave] && (ahora - ultimoTapComprado[clave]) < 500) {
+    delete ultimoTapComprado[clave];
+    el.classList.remove("tocado-una-vez");
+    toggleComprado(listaId, idx);
+  } else {
+    ultimoTapComprado[clave] = ahora;
+    el.classList.add("tocado-una-vez");
+    setTimeout(() => {
+      if (ultimoTapComprado[clave] === ahora) {
+        delete ultimoTapComprado[clave];
+        el.classList.remove("tocado-una-vez");
+      }
+    }, 500);
+  }
 }
 
 async function toggleComprado(listaId, idx) {
