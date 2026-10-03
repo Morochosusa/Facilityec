@@ -383,11 +383,7 @@
   }
 
   @media print {
-    .sidebar, .topbar, .barra-inferior, .buscador, .panel, .clock-fab { display: none !important; }
-    .item { display: block !important; border: none; margin: 0; padding: 4px 0; }
-    .item-detalle { display: none !important; }
-    .categoria-title, .subcategoria-title { margin: 10px 0 2px; }
-    .guia-imprimible { display: block; padding: 20px; }
+    .sidebar, .topbar, .barra-inferior, .buscador, .panel, .clock-fab, #lista-productos, #lista-productos-compra { display: none !important; }
   }
 
   .vista { display: none; }
@@ -544,6 +540,36 @@
   }
   .check-doble-tap.tocado-una-vez {
     border-color: #7f77dd;
+  }
+
+  .guia-fila-check {
+    display: grid;
+    grid-template-columns: 1.4fr 50px 50px 2fr;
+    align-items: center;
+    gap: 10px;
+  }
+  .guia-fila-nombre { font-size: 14px; }
+  .guia-check-encabezado {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #888780;
+    text-align: center;
+    border-bottom: 2px solid #2c2c2a;
+    padding-bottom: 6px;
+  }
+  .guia-check-encabezado span { text-align: center; }
+  .check-box-vacio {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #2c2c2a;
+    border-radius: 4px;
+    justify-self: center;
+  }
+  .guia-obs-columna {
+    border-bottom: 1px dotted #b4b2a9;
+    height: 18px;
+    align-self: end;
   }
 
   .costo-input {
@@ -1671,10 +1697,12 @@ function verGuia(id) {
 
   const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
 
-  const filasItems = guia.items.map(it => `
-    <div class="detalle-fila">
-      <span>${it.producto_nombre}</span>
-      <span>${it.cantidad_despachada} ${it.unidad_medida}</span>
+  const filasItems = guia.items.map((it, idx) => `
+    <div class="detalle-fila guia-fila-check">
+      <span class="guia-fila-nombre"><span style="color:#888780;">${idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_despachada} ${it.unidad_medida})</span></span>
+      <span class="check-box-vacio" title="Envia"></span>
+      <span class="check-box-vacio" title="Recibe"></span>
+      <span class="guia-obs-columna"></span>
     </div>
   `).join("");
 
@@ -1688,7 +1716,18 @@ function verGuia(id) {
         </div>
         <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
       </div>
+      <div class="guia-fila-check guia-check-encabezado">
+        <span class="guia-fila-nombre"></span>
+        <span>Envia</span>
+        <span>Recibe</span>
+        <span>Observacion</span>
+      </div>
       ${filasItems}
+      <div style="display:flex; gap:20px; margin-top:16px; font-size:12px; color:#888780; flex-wrap:wrap;">
+        <span>Envia: _________________________</span>
+        <span>Recibe: _________________________</span>
+        <span>Hora: _____________</span>
+      </div>
       <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir guia</button>
     </div>
   `;
