@@ -52,6 +52,28 @@
     color: #5f5e5a;
     cursor: pointer;
   }
+  .nav-grupo {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #b4b2a9;
+    padding: 14px 20px 4px;
+  }
+  .nav-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #eeedfe;
+    color: #3c3489;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .nav-item.activo .nav-num { background: #3c3489; color: #fff; }
   .nav-item:hover { background: #f4f2ec; }
   .nav-item.activo { background: #eeedfe; color: #3c3489; font-weight: 500; }
 
@@ -85,6 +107,7 @@
       border-bottom: 1px solid #e2e0d6;
     }
     .brand-block { display: none; }
+    .nav-grupo { display: none; }
     .nav-item {
       flex-shrink: 0;
       width: auto;
@@ -454,6 +477,41 @@
     }
   }
 
+  .compra-modo-tabs { display: flex; gap: 6px; margin-bottom: 4px; }
+  .compra-modo-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid #b4b2a9;
+    background: #fff;
+    color: #5f5e5a;
+    cursor: pointer;
+  }
+  .compra-modo-btn.activo { background: #3c3489; border-color: #3c3489; color: #fff; }
+  .card-acciones { display: flex; justify-content: flex-end; margin-top: 10px; }
+  .btn-eliminar-card {
+    background: #fcebeb;
+    color: #501313;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .btn-peligro {
+    background: #fcebeb;
+    color: #501313;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
   .guia-card {
     background: #fff;
     margin: 10px 14px;
@@ -607,7 +665,12 @@
 
     <div class="login-error" id="login-error"></div>
 
-    <div class="login-form">
+    <div class="login-form" id="login-form-nombre-dispositivo" style="display:none;">
+      <input type="text" id="dispositivo-nombre-input" placeholder="Nombre del dispositivo (ej: Celular Edison)" maxlength="40" onkeydown="if(event.key==='Enter'){solicitarAccesoDispositivo();}">
+      <button id="dispositivo-nombre-btn" onclick="solicitarAccesoDispositivo()">Solicitar acceso</button>
+    </div>
+
+    <div class="login-form" id="login-form-principal">
       <input type="email" id="login-email" placeholder="Correo electronico" autocomplete="username">
       <input type="password" id="login-password" placeholder="Contrasena" autocomplete="current-password" onkeydown="if(event.key==='Enter'){intentarLogin();}">
       <button id="login-btn" onclick="intentarLogin()">Entrar</button>
@@ -627,18 +690,22 @@
       </div>
     </div>
 
-    <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
-    <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
-    <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
+    <div class="nav-grupo">Flujo de la semana</div>
+    <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')"><span class="nav-num">1</span>🛒 Lista de compras</button>
+    <button class="nav-item" id="nav-proveedores" onclick="cambiarVista('proveedores')"><span class="nav-num">2</span>📥 Recepcion proveedores</button>
+    <button class="nav-item" id="nav-produccion" onclick="cambiarVista('produccion')"><span class="nav-num">3</span>🏭 Produccion</button>
+    <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')"><span class="nav-num">4</span>🚚 Despacho</button>
+    <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')"><span class="nav-num">5</span>📋 Guias</button>
+
+    <div class="nav-grupo">Control</div>
     <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')">📦 Inventario</button>
-    <button class="nav-item" id="nav-proveedores" onclick="cambiarVista('proveedores')">📥 Recepcion proveedores</button>
     <button class="nav-item" id="nav-conteo" onclick="cambiarVista('conteo')">📅 Conteo semanal</button>
   </aside>
 
   <main class="content">
     <header class="topbar">
       <h1 id="topbar-title">Lista de compras</h1>
-      <p id="topbar-subtitle">Transcribe aqui el pedido del local antes de despachar</p>
+      <p id="topbar-subtitle">Paso 1 de 5 - Transcribe el pedido del local: lo que se compra en el mercado</p>
     </header>
 
     <div id="aviso-container"></div>
@@ -657,7 +724,10 @@
     </div>
 
     <div class="panel">
-      <label>Listas de compras pendientes</label>
+      <div class="compra-modo-tabs">
+        <button class="compra-modo-btn activo" id="modo-pendientes" onclick="cambiarModoListasCompra('pendientes')">Pendientes</button>
+        <button class="compra-modo-btn" id="modo-historial" onclick="cambiarModoListasCompra('historial')">Historial</button>
+      </div>
       <div id="listas-compra-pendientes"></div>
     </div>
   </div>
@@ -786,6 +856,60 @@
   </div>
 </div>
 
+<!-- VISTA: PRODUCCION -->
+<div class="vista" id="vista-produccion">
+  <div class="compra-top-grid">
+    <div class="panel">
+      <label for="prod-producto">Producto que se produjo</label>
+      <input type="text" id="prod-producto" list="lista-productos-produccion" placeholder="Escribe para buscar (ej: Frijol cocido)" oninput="actualizarHintProduccion()" style="width:100%; padding:10px; font-size:14px; border-radius:8px; border:1px solid #b4b2a9;">
+      <datalist id="lista-productos-produccion"></datalist>
+      <p id="prod-hint" style="font-size:12px; color:#888780; margin:6px 0 10px;"></p>
+
+      <div class="form-entrada">
+        <input type="number" id="prod-cantidad" min="0" step="0.5" placeholder="Cantidad producida">
+        <select id="prod-responsable">
+          <option value="Edison Pacurucu">Producido por: Edison Pacurucu</option>
+          <option value="Nestor Santos">Producido por: Nestor Santos</option>
+        </select>
+        <select id="prod-destino">
+          <option value="stock_general">Para: stock general</option>
+          <option value="la_victoria">Para: La Victoria</option>
+          <option value="el_salado">Para: El Salado</option>
+          <option value="facility_feria_libre">Para: Facility Feria Libre</option>
+        </select>
+        <input type="text" id="prod-observacion" placeholder="Observacion (opcional)">
+      </div>
+    </div>
+
+    <div class="panel">
+      <label>Producciones recientes</label>
+      <div id="producciones-lista"></div>
+    </div>
+  </div>
+
+  <div id="produccion-detalle"></div>
+
+  <div class="panel">
+    <label>Materia prima usada (opcional)</label>
+    <div class="form-entrada">
+      <select id="prod-insumo-select"></select>
+      <input type="number" id="prod-insumo-cantidad" min="0" step="0.5" placeholder="Cantidad usada">
+      <button class="btn-secundario" onclick="agregarInsumoProduccion()">+ Agregar materia prima usada</button>
+    </div>
+    <div id="prod-insumos-lineas" style="margin-top:10px;"></div>
+  </div>
+
+  <div class="panel">
+    <label>Materia prima disponible</label>
+    <div id="materia-prima-tabla"></div>
+  </div>
+
+  <div class="barra-inferior">
+    <span class="contador" id="contador-produccion">Sin materia prima agregada</span>
+    <button class="btn-despachar" id="btn-produccion" onclick="guardarProduccion()">Registrar produccion</button>
+  </div>
+</div>
+
 <!-- VISTA: CONTEO SEMANAL -->
 <div class="vista" id="vista-conteo">
   <div class="panel">
@@ -832,12 +956,71 @@ const auth = firebase.auth();
    ============================================================ */
 
 function obtenerDeviceId() {
-  let id = localStorage.getItem("morochos_device_id");
-  if (!id) {
-    id = "dev_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem("morochos_device_id", id);
+  return localStorage.getItem("morochos_device_id");
+}
+
+function describirDispositivo() {
+  const ua = navigator.userAgent;
+  let so = "Otro";
+  if (/iPhone/.test(ua)) so = "iPhone";
+  else if (/iPad/.test(ua)) so = "iPad";
+  else if (/Android/.test(ua)) so = "Android";
+  else if (/Macintosh/.test(ua)) so = "Mac";
+  else if (/Windows/.test(ua)) so = "Windows";
+  let nav = "Navegador";
+  if (/Edg\//.test(ua)) nav = "Edge";
+  else if (/Chrome\//.test(ua)) nav = "Chrome";
+  else if (/Firefox\//.test(ua)) nav = "Firefox";
+  else if (/Safari\//.test(ua)) nav = "Safari";
+  return `${so} - ${nav}`;
+}
+
+let usuarioPendienteNombreDispositivo = null;
+
+function mostrarFormNombreDispositivo(user) {
+  usuarioPendienteNombreDispositivo = user;
+  document.getElementById("login-form-principal").style.display = "none";
+  document.getElementById("login-form-nombre-dispositivo").style.display = "block";
+  document.getElementById("dispositivo-nombre-input").focus();
+}
+
+async function solicitarAccesoDispositivo() {
+  const nombre = document.getElementById("dispositivo-nombre-input").value.trim();
+  const user = usuarioPendienteNombreDispositivo;
+
+  if (!nombre) {
+    mostrarErrorLogin("Escribe un nombre para este dispositivo (ej: Celular Edison).");
+    return;
   }
-  return id;
+  if (!user) return;
+
+  const btn = document.getElementById("dispositivo-nombre-btn");
+  btn.disabled = true;
+
+  try {
+    // El nombre pasa a ser parte del codigo, asi en Firestore se lee de un vistazo
+    const slug = slugificarNombre(nombre).slice(0, 24) || "dispositivo";
+    const deviceId = slug + "_" + Math.random().toString(36).slice(2, 6);
+
+    await db.collection("dispositivos_autorizados").doc(deviceId).set({
+      autorizado: false,
+      nombre_dispositivo: nombre,
+      tipo_dispositivo: describirDispositivo(),
+      usuario_email: user.email,
+      fecha_registro: firebase.firestore.FieldValue.serverTimestamp(),
+      ultimo_acceso: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    localStorage.setItem("morochos_device_id", deviceId);
+    usuarioPendienteNombreDispositivo = null;
+    mostrarErrorLogin(`Solicitud enviada para "${nombre}". Pide acceso al departamento administrativo con este codigo: ${deviceId}`);
+    await auth.signOut();
+  } catch (err) {
+    console.error(err);
+    mostrarErrorLogin("No se pudo enviar la solicitud. Revisa tu conexion.");
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 function mostrarErrorLogin(mensaje) {
@@ -858,6 +1041,8 @@ function mostrarPantallaApp() {
 function mostrarPantallaLogin() {
   document.getElementById("app-wrapper").style.display = "none";
   document.getElementById("pantalla-login").style.display = "flex";
+  document.getElementById("login-form-principal").style.display = "block";
+  document.getElementById("login-form-nombre-dispositivo").style.display = "none";
 }
 
 function traducirErrorAuth(codigo) {
@@ -899,20 +1084,15 @@ function intentarLogin() {
 
 async function verificarDispositivoYEntrar(user) {
   const deviceId = obtenerDeviceId();
-  const ref = db.collection("dispositivos_autorizados").doc(deviceId);
 
   try {
-    const snap = await ref.get();
+    const ref = deviceId ? db.collection("dispositivos_autorizados").doc(deviceId) : null;
+    const snap = ref ? await ref.get() : null;
 
-    if (!snap.exists) {
-      await ref.set({
-        autorizado: false,
-        usuario_email: user.email,
-        fecha_registro: firebase.firestore.FieldValue.serverTimestamp(),
-        ultimo_acceso: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      mostrarErrorLogin(`Este dispositivo es nuevo y debe ser autorizado antes de poder entrar. Pide acceso al departamento administrativo con este codigo: ${deviceId}`);
-      await auth.signOut();
+    if (!snap || !snap.exists) {
+      // Dispositivo nuevo: pedir un nombre antes de registrar la solicitud
+      mostrarErrorLogin("Este dispositivo es nuevo y debe ser autorizado antes de poder entrar. Ponle un nombre para identificarlo.");
+      mostrarFormNombreDispositivo(user);
       return;
     }
 
@@ -1314,7 +1494,7 @@ function renderProductos() {
               <select id="origen_${p.id}">
                 <option value="stock">Ya en stock</option>
                 <option value="compra_directa">Compra directa</option>
-                <option value="procesado">Procesado</option>
+                <option value="procesado">Producido en Facility</option>
               </select>
             </div>
           </div>
@@ -1408,6 +1588,25 @@ async function crearGuiaDespacho() {
     return;
   }
 
+  // Baja de inventario: sale todo lo que viene de stock o de produccion.
+  // La compra directa (mercado) no pasa por el inventario.
+  const sacaDeInventario = it => it.origen === "stock" || it.origen === "procesado";
+
+  const faltantes = itemsSeleccionados.filter(it => {
+    if (!sacaDeInventario(it)) return false;
+    const disponible = inventarioActual[it.producto_id] ? (inventarioActual[it.producto_id].cantidad_actual || 0) : 0;
+    return it.cantidad_despachada > disponible;
+  });
+  if (faltantes.length > 0) {
+    const detalle = faltantes.map(it => {
+      const disponible = inventarioActual[it.producto_id] ? (inventarioActual[it.producto_id].cantidad_actual || 0) : 0;
+      return `- ${it.producto_nombre} (${it.unidad_medida}): envias ${it.cantidad_despachada}, en inventario hay ${disponible}`;
+    }).join("\n");
+    if (!confirm(`Estos productos superan lo que hay en inventario:\n\n${detalle}\n\nSi no registraste la produccion o la entrada, el inventario quedara en negativo.\n\n¿Despachar de todas formas?`)) {
+      return;
+    }
+  }
+
   const btn = document.getElementById("btn-despachar");
   btn.disabled = true;
   btn.textContent = "Guardando...";
@@ -1423,9 +1622,8 @@ async function crearGuiaDespacho() {
       items: itemsSeleccionados
     });
 
-    // Descontar del inventario de bodega solo los items cuyo origen es "stock"
     for (const item of itemsSeleccionados) {
-      if (item.origen === "stock") {
+      if (sacaDeInventario(item)) {
         await descontarInventarioBodega(item.producto_id, item.producto_nombre, item.cantidad_despachada);
       }
     }
@@ -1456,12 +1654,13 @@ async function crearGuiaDespacho() {
    PESTANAS
    ============================================================ */
 const TITULOS_VISTA = {
-  compra: ["Lista de compras", "Transcribe aqui el pedido del local antes de despachar"],
-  despacho: ["Despacho", "Crea la guia digital hacia La Victoria o El Salado"],
-  guias: ["Guias", "Historial de guias de despacho creadas"],
-  inventario: ["Inventario de bodega", "Stock actual y registro de entradas"],
-  proveedores: ["Recepcion proveedores", "Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
-  conteo: ["Conteo semanal", "Ajusta el inventario al conteo fisico real"]
+  compra: ["Lista de compras", "Paso 1 de 5 - Transcribe el pedido del local: lo que se compra en el mercado"],
+  proveedores: ["Recepcion proveedores", "Paso 2 de 5 - Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
+  produccion: ["Produccion", "Paso 3 de 5 - Registra lo que se produjo; suma al inventario y descuenta la materia prima"],
+  despacho: ["Despacho", "Paso 4 de 5 - Crea la guia de envio; lo despachado baja del inventario"],
+  guias: ["Guias", "Paso 5 de 5 - Imprime y consulta las guias de despacho"],
+  inventario: ["Inventario de bodega", "Control - Stock actual y registro de entradas"],
+  conteo: ["Conteo semanal", "Control - Ajusta el inventario al conteo fisico real"]
 };
 
 function cambiarVista(nombre) {
@@ -1557,6 +1756,7 @@ function escucharInventario() {
     });
     renderTablaInventario();
     renderTablaConteo();
+    actualizarHintProduccion();
   });
 }
 
@@ -1883,39 +2083,82 @@ async function crearListaCompra() {
 }
 
 let listasCompraCache = [];
+let modoListasCompra = "pendientes";
+
+// Pendiente = todavia no enviada a contabilidad (se puede editar y eliminar).
+// Historial = ya enviada a contabilidad (bloqueada: no se edita ni se elimina).
+function esListaCompraPendiente(l) {
+  return !l.enviada_contabilidad;
+}
+function esListaCompraHistorial(l) {
+  return l.enviada_contabilidad === true;
+}
 
 function escucharListasCompra() {
-  db.collection("listas_compra").orderBy("fecha_creacion", "desc").limit(20).onSnapshot(snapshot => {
+  db.collection("listas_compra").orderBy("fecha_creacion", "desc").limit(60).onSnapshot(snapshot => {
     listasCompraCache = [];
     snapshot.forEach(doc => listasCompraCache.push({ id: doc.id, ...doc.data() }));
     renderListasCompraPendientes();
     actualizarSelectListaCompra();
-    if (listaCompraDetalleAbiertaId) verListaCompra(listaCompraDetalleAbiertaId);
+    if (listaCompraDetalleAbiertaId) {
+      // Si la lista abierta ya no existe (eliminada), cerrar el detalle
+      if (listasCompraCache.some(l => l.id === listaCompraDetalleAbiertaId)) {
+        verListaCompra(listaCompraDetalleAbiertaId);
+      } else {
+        cerrarListaCompraDetalle();
+      }
+    }
   }, err => console.error(err));
+}
+
+function cambiarModoListasCompra(modo) {
+  modoListasCompra = modo;
+  document.getElementById("modo-pendientes").classList.toggle("activo", modo === "pendientes");
+  document.getElementById("modo-historial").classList.toggle("activo", modo === "historial");
+  renderListasCompraPendientes();
 }
 
 function renderListasCompraPendientes() {
   const cont = document.getElementById("listas-compra-pendientes");
-  const pendientes = listasCompraCache.filter(l => l.estado === "pendiente");
+  const esHistorial = modoListasCompra === "historial";
+  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente);
 
-  if (pendientes.length === 0) {
-    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">No hay listas de compras pendientes.</p>`;
+  if (listas.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>`;
     return;
   }
 
-  cont.innerHTML = pendientes.map(l => {
-    const fecha = l.fecha_creacion && l.fecha_creacion.toDate ? l.fecha_creacion.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+  cont.innerHTML = listas.map(l => {
+    const fechaBase = esHistorial && l.fecha_envio_contabilidad ? l.fecha_envio_contabilidad : l.fecha_creacion;
+    const fecha = fechaBase && fechaBase.toDate ? fechaBase.toDate().toLocaleString("es-EC") : "Guardando fecha...";
     const comprados = l.items.filter(it => it.comprado).length;
     const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0);
+
+    let badge = l.estado === "despachada"
+      ? `<span class="badge procesado">Despachada</span>`
+      : `<span class="badge despachado">Ver lista</span>`;
+    let detalleTexto = `${comprados} de ${l.items.length} comprados`;
+    let filaEliminar = `
+        <div class="card-acciones">
+          <button class="btn-eliminar-card" onclick="event.stopPropagation(); eliminarListaCompra('${l.id}')">Eliminar lista</button>
+        </div>`;
+
+    if (esHistorial) {
+      badge = `<span class="badge recibido_ok">Enviada a contabilidad</span>`;
+      detalleTexto = `${l.items.length} productos`;
+      filaEliminar = "";
+    }
+
     return `
       <div class="guia-card" onclick="verListaCompra('${l.id}')">
         <div class="guia-card-top">
           <div>
             <div class="guia-local">${NOMBRES_LOCAL[l.local] || l.local}</div>
-            <div class="guia-fecha">${fecha} - ${comprados} de ${l.items.length} comprados${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
+            <div class="guia-fecha">${fecha} - ${detalleTexto}${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
           </div>
-          <span class="badge despachado">Ver lista</span>
+          ${badge}
         </div>
+        ${filaEliminar}
       </div>
     `;
   }).join("");
@@ -1930,12 +2173,30 @@ function verListaCompra(id) {
 
   document.getElementById("vista-compra").querySelectorAll(".compra-top-grid, .buscador, #lista-productos-compra, .barra-inferior").forEach(el => el.style.display = "none");
 
+  const enviada = lista.enviada_contabilidad === true;
+  const esPendiente = esListaCompraPendiente(lista);
+
   let totalCosto = 0;
   const filasItems = lista.items.map((it, idx) => {
     if (it.costo) totalCosto += parseFloat(it.costo);
+    const tachado = it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : '';
+
+    if (enviada) {
+      // Ya enviada a contabilidad: registro fijo, solo lectura
+      return `
+    <div class="detalle-fila" style="align-items:center;">
+      <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
+        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" style="cursor:default;">${it.comprado ? "✓" : ""}</span>
+        <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
+      </span>
+      <span style="font-weight:500;">${it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "-"}</span>
+    </div>
+  `;
+    }
+
     return `
     <div class="detalle-fila" style="align-items:center;">
-      <span style="display:flex; align-items:center; gap:10px; flex:1; ${it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : ''}">
+      <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
         <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="manejarTapComprado('${id}', ${idx})" title="Doble toque para marcar como comprado">${it.comprado ? "✓" : ""}</span>
         <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
       </span>
@@ -1945,6 +2206,19 @@ function verListaCompra(id) {
   }).join("");
 
   const fecha = lista.fecha_creacion && lista.fecha_creacion.toDate ? lista.fecha_creacion.toDate().toLocaleString("es-EC") : "";
+  const fechaEnvio = lista.fecha_envio_contabilidad && lista.fecha_envio_contabilidad.toDate ? lista.fecha_envio_contabilidad.toDate().toLocaleString("es-EC") : "";
+
+  const estadoEnvio = enviada
+    ? `<span class="badge recibido_ok" style="display:inline-block; margin-top:4px;">Enviada a contabilidad${fechaEnvio ? " - " + fechaEnvio : ""}</span>`
+    : "";
+
+  const botonesAccion = enviada
+    ? `<button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir</button>`
+    : `
+      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar para contabilidad</button>
+      <button class="btn-secundario btn-imprimir" onclick="marcarEnviadaContabilidad('${id}')">Marcar como enviada a contabilidad</button>
+      ${esPendiente ? `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>` : ""}
+    `;
 
   document.getElementById("lista-compra-detalle").innerHTML = `
     <div class="detalle-panel">
@@ -1952,6 +2226,7 @@ function verListaCompra(id) {
         <div>
           <h2>${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
           <div class="guia-fecha">${fecha}</div>
+          ${estadoEnvio}
         </div>
         <button class="btn-cerrar" onclick="cerrarListaCompraDetalle()">&times;</button>
       </div>
@@ -1960,9 +2235,59 @@ function verListaCompra(id) {
         <span>Total costo (para contabilidad)</span>
         <span>$${totalCosto.toFixed(2)}</span>
       </div>
-      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar para contabilidad</button>
+      ${botonesAccion}
     </div>
   `;
+}
+
+async function marcarEnviadaContabilidad(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista) return;
+
+  const sinCosto = lista.items.filter(it => it.costo == null).length;
+  let mensaje = "¿Marcar esta lista como enviada a contabilidad?\n\nPasara al Historial y ya no se podra editar.";
+  if (sinCosto > 0) {
+    mensaje = `Ojo: ${sinCosto} producto(s) todavia no tienen costo.\n\n` + mensaje;
+  }
+  if (!confirm(mensaje)) return;
+
+  try {
+    await db.collection("listas_compra").doc(id).update({
+      enviada_contabilidad: true,
+      fecha_envio_contabilidad: firebase.firestore.FieldValue.serverTimestamp(),
+      enviada_por: auth.currentUser ? auth.currentUser.email : null
+    });
+    cerrarListaCompraDetalle();
+    mostrarAviso("Lista marcada como enviada a contabilidad. La encuentras en Historial.", "ok");
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("No se pudo marcar la lista. Verifica la conexion.", "error");
+  }
+}
+
+async function eliminarListaCompra(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || !esListaCompraPendiente(lista)) return;
+
+  const nombreLocal = NOMBRES_LOCAL[lista.local] || lista.local;
+  const avisoDespacho = lista.estado === "despachada" ? "\n\nOjo: esta lista ya se uso en un despacho. La guia no se borra, pero se pierden los costos de esta lista." : "";
+  if (!confirm(`¿Eliminar la lista de ${nombreLocal} con ${lista.items.length} productos?${avisoDespacho}\n\nEsta accion no se puede deshacer.`)) return;
+
+  try {
+    await db.collection("listas_compra").doc(id).delete();
+
+    // Si estaba cargada en Despacho, soltarla para que no intente actualizarla al guardar la guia
+    if (listaCompraCargadaId === id) {
+      listaCompraCargadaId = null;
+      document.getElementById("cargar-lista-compra").value = "";
+    }
+
+    cerrarListaCompraDetalle();
+    mostrarAviso("Lista eliminada.", "ok");
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("No se pudo eliminar la lista. Verifica la conexion.", "error");
+  }
 }
 
 const ultimoTapComprado = {};
@@ -1990,7 +2315,7 @@ function manejarTapComprado(listaId, idx) {
 
 async function toggleComprado(listaId, idx) {
   const lista = listasCompraCache.find(l => l.id === listaId);
-  if (!lista) return;
+  if (!lista || lista.enviada_contabilidad) return;
 
   const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, comprado: !it.comprado } : it);
 
@@ -2004,7 +2329,7 @@ async function toggleComprado(listaId, idx) {
 
 async function actualizarCosto(listaId, idx, valor) {
   const lista = listasCompraCache.find(l => l.id === listaId);
-  if (!lista) return;
+  if (!lista || lista.enviada_contabilidad) return;
 
   const costo = valor === "" ? null : parseFloat(valor);
   const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, costo } : it);
@@ -2380,14 +2705,305 @@ async function confirmarPinClock() {
   }
 }
 
+/* ============================================================
+   PRODUCCION (coleccion producciones_facility)
+   Lo que se produce en Facility: suma al inventario del producto
+   terminado (inventario_bodega) y descuenta la materia prima usada
+   (inventario_materia_prima). Al despachar, ese stock baja solo.
+   Nota: la coleccion "producciones" ya existe en el proyecto (la usa
+   otra app), por eso esta se llama producciones_facility.
+   { producto_id, producto_nombre, unidad_medida, cantidad_producida,
+     destino_previsto, producido_por, observacion, fecha_produccion,
+     insumos: [{materia_prima_id, nombre, unidad, cantidad}] }
+   ============================================================ */
+
+// Se produce lo que no es de mercado (Facility y Bodega)
+const PRODUCTOS_PRODUCIBLES = PRODUCTOS.filter(p => p.subcategoria !== "mercado");
+const etiquetaProducto = p => `${p.nombre} (${p.unidad})`;
+
+let materiaPrimaCache = [];
+let produccionesCache = [];
+let insumosProduccionActual = [];
+
+function llenarDatalistProduccion() {
+  document.getElementById("lista-productos-produccion").innerHTML =
+    PRODUCTOS_PRODUCIBLES.map(p => `<option value="${etiquetaProducto(p).replace(/"/g, "&quot;")}">`).join("");
+}
+
+function buscarProductoProduccion(valor) {
+  const v = (valor || "").trim().toLowerCase();
+  return PRODUCTOS_PRODUCIBLES.find(p => etiquetaProducto(p).toLowerCase() === v);
+}
+
+function actualizarHintProduccion() {
+  const valor = document.getElementById("prod-producto").value;
+  const hint = document.getElementById("prod-hint");
+  if (!valor.trim()) { hint.textContent = ""; return; }
+
+  const p = buscarProductoProduccion(valor);
+  if (!p) { hint.textContent = "Elige un producto de la lista que aparece al escribir."; return; }
+
+  const disponible = inventarioActual[p.id] ? (inventarioActual[p.id].cantidad_actual || 0) : 0;
+  hint.textContent = `En inventario ahora: ${disponible} ${p.unidad}`;
+}
+
+function escucharMateriaPrima() {
+  db.collection("inventario_materia_prima").onSnapshot(snapshot => {
+    materiaPrimaCache = [];
+    snapshot.forEach(doc => materiaPrimaCache.push({ id: doc.id, ...doc.data() }));
+    materiaPrimaCache.sort((a, b) => (a.producto_nombre || "").localeCompare(b.producto_nombre || ""));
+    renderMateriaPrima();
+  }, err => console.error(err));
+}
+
+function renderMateriaPrima() {
+  const sel = document.getElementById("prod-insumo-select");
+  const previo = sel.value;
+
+  if (materiaPrimaCache.length === 0) {
+    sel.innerHTML = `<option value="">No hay materia prima registrada (primero usa Recepcion proveedores)</option>`;
+  } else {
+    sel.innerHTML = `<option value="">-- Elige la materia prima --</option>` + materiaPrimaCache.map(m =>
+      `<option value="${m.id}">${m.producto_nombre} - disponible: ${m.cantidad_actual || 0} ${m.unidad_medida || ""}</option>`
+    ).join("");
+    sel.value = previo;
+  }
+
+  const cont = document.getElementById("materia-prima-tabla");
+  if (materiaPrimaCache.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780;">Todavia no hay materia prima registrada.</p>`;
+    return;
+  }
+  cont.innerHTML = `
+    <table class="inv-tabla">
+      <thead><tr><th>Materia prima</th><th>Disponible</th></tr></thead>
+      <tbody>
+        ${materiaPrimaCache.map(m => `<tr>
+          <td>${m.producto_nombre}</td>
+          <td class="cantidad-actual" style="${(m.cantidad_actual || 0) <= 0 ? 'color:#a53c3c;' : ''}">${m.cantidad_actual || 0} <span style="color:#888780; font-weight:400;">${m.unidad_medida || ""}</span></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function agregarInsumoProduccion() {
+  const id = document.getElementById("prod-insumo-select").value;
+  const cantidad = parseFloat(document.getElementById("prod-insumo-cantidad").value);
+  const mp = materiaPrimaCache.find(m => m.id === id);
+
+  if (!mp) { mostrarAviso("Elige la materia prima que usaste.", "error"); return; }
+  if (!cantidad || cantidad <= 0) { mostrarAviso("Ingresa la cantidad de materia prima usada.", "error"); return; }
+
+  const existente = insumosProduccionActual.find(l => l.id === id);
+  if (existente) {
+    existente.cantidad += cantidad;
+  } else {
+    insumosProduccionActual.push({ id: id, nombre: mp.producto_nombre, unidad: mp.unidad_medida || "", cantidad: cantidad });
+  }
+
+  document.getElementById("prod-insumo-select").value = "";
+  document.getElementById("prod-insumo-cantidad").value = "";
+  renderInsumosProduccion();
+}
+
+function quitarInsumoProduccion(idx) {
+  insumosProduccionActual.splice(idx, 1);
+  renderInsumosProduccion();
+}
+
+function renderInsumosProduccion() {
+  const cont = document.getElementById("prod-insumos-lineas");
+  const n = insumosProduccionActual.length;
+  document.getElementById("contador-produccion").textContent =
+    n === 0 ? "Sin materia prima agregada" : `${n} materia${n === 1 ? "" : "s"} prima${n === 1 ? "" : "s"} agregada${n === 1 ? "" : "s"}`;
+
+  if (n === 0) { cont.innerHTML = ""; return; }
+
+  cont.innerHTML = insumosProduccionActual.map((l, idx) => `
+    <div class="detalle-fila" style="align-items:center;">
+      <span>${l.nombre} <span style="color:#888780;">(${l.cantidad} ${l.unidad})</span></span>
+      <button class="btn-cerrar" onclick="quitarInsumoProduccion(${idx})">&times;</button>
+    </div>
+  `).join("");
+}
+
+async function guardarProduccion() {
+  const producto = buscarProductoProduccion(document.getElementById("prod-producto").value);
+  const cantidad = parseFloat(document.getElementById("prod-cantidad").value);
+  const responsable = document.getElementById("prod-responsable").value;
+  const destino = document.getElementById("prod-destino").value;
+  const observacion = document.getElementById("prod-observacion").value.trim();
+
+  if (!producto) { mostrarAviso("Elige el producto de la lista que aparece al escribir.", "error"); return; }
+  if (!cantidad || cantidad <= 0) { mostrarAviso("Ingresa la cantidad producida.", "error"); return; }
+
+  // Avisar si se usa mas materia prima de la que hay registrada
+  const faltantes = insumosProduccionActual.filter(l => {
+    const mp = materiaPrimaCache.find(m => m.id === l.id);
+    return l.cantidad > ((mp && mp.cantidad_actual) || 0);
+  });
+  if (faltantes.length > 0) {
+    const detalle = faltantes.map(l => {
+      const mp = materiaPrimaCache.find(m => m.id === l.id);
+      return `- ${l.nombre}: usas ${l.cantidad}, registrado ${(mp && mp.cantidad_actual) || 0} ${l.unidad}`;
+    }).join("\n");
+    if (!confirm(`Estas usando mas materia prima de la registrada:\n\n${detalle}\n\nSi falta registrar una recepcion, quedara en negativo.\n\n¿Registrar de todas formas?`)) return;
+  }
+
+  const btn = document.getElementById("btn-produccion");
+  btn.disabled = true;
+  btn.textContent = "Guardando...";
+
+  try {
+    const ts = firebase.firestore.FieldValue.serverTimestamp();
+    const inc = firebase.firestore.FieldValue.increment;
+    const batch = db.batch();
+
+    // 1) Registro de la produccion
+    batch.set(db.collection("producciones_facility").doc(), {
+      producto_id: producto.id,
+      producto_nombre: producto.nombre,
+      unidad_medida: producto.unidad,
+      categoria: producto.categoria,
+      subcategoria: producto.subcategoria,
+      cantidad_producida: cantidad,
+      destino_previsto: destino,
+      producido_por: responsable,
+      observacion: observacion,
+      insumos: insumosProduccionActual.map(l => ({ materia_prima_id: l.id, nombre: l.nombre, unidad: l.unidad, cantidad: l.cantidad })),
+      registrado_por_email: auth.currentUser ? auth.currentUser.email : null,
+      fecha_produccion: ts
+    });
+
+    // 2) Suma al inventario del producto terminado (el mismo que baja al despachar)
+    batch.set(db.collection("inventario_bodega").doc(producto.id), {
+      producto_nombre: producto.nombre,
+      cantidad_actual: inc(cantidad),
+      ultima_actualizacion: ts
+    }, { merge: true });
+    batch.set(db.collection("movimientos_inventario_bodega").doc(), {
+      producto_id: producto.id,
+      producto_nombre: producto.nombre,
+      tipo: "produccion",
+      cantidad: cantidad,
+      fecha: ts,
+      nota: `Produccion - ${responsable}`
+    });
+
+    // 3) Descuenta la materia prima usada
+    insumosProduccionActual.forEach(l => {
+      batch.set(db.collection("inventario_materia_prima").doc(l.id), {
+        cantidad_actual: inc(-l.cantidad),
+        ultima_actualizacion: ts
+      }, { merge: true });
+      batch.set(db.collection("movimientos_inventario_bodega").doc(), {
+        producto_id: l.id,
+        producto_nombre: l.nombre,
+        inventario: "materia_prima",
+        tipo: "consumo_produccion",
+        cantidad: -l.cantidad,
+        fecha: ts,
+        nota: `Usado para producir ${producto.nombre}`
+      });
+    });
+
+    await batch.commit();
+
+    mostrarAviso(`Produccion registrada: ${cantidad} ${producto.unidad} de ${producto.nombre}. Ya esta disponible para despachar.`, "ok");
+    document.getElementById("prod-producto").value = "";
+    document.getElementById("prod-cantidad").value = "";
+    document.getElementById("prod-observacion").value = "";
+    document.getElementById("prod-hint").textContent = "";
+    insumosProduccionActual = [];
+    renderInsumosProduccion();
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("No se pudo registrar la produccion. Verifica la conexion.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Registrar produccion";
+  }
+}
+
+function escucharProducciones() {
+  db.collection("producciones_facility").orderBy("fecha_produccion", "desc").limit(40).onSnapshot(snapshot => {
+    produccionesCache = [];
+    snapshot.forEach(doc => produccionesCache.push({ id: doc.id, ...doc.data() }));
+    renderProduccionesLista();
+  }, err => console.error(err));
+}
+
+function renderProduccionesLista() {
+  const cont = document.getElementById("producciones-lista");
+  if (produccionesCache.length === 0) {
+    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">Todavia no hay producciones registradas.</p>`;
+    return;
+  }
+  cont.innerHTML = produccionesCache.map(p => {
+    const fecha = p.fecha_produccion && p.fecha_produccion.toDate ? p.fecha_produccion.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+    return `
+      <div class="guia-card" onclick="verProduccion('${p.id}')">
+        <div class="guia-card-top">
+          <div>
+            <div class="guia-local">${p.producto_nombre}</div>
+            <div class="guia-fecha">${fecha} - ${p.cantidad_producida} ${p.unidad_medida}</div>
+          </div>
+          <span class="badge procesado">${p.producido_por || "-"}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function verProduccion(id) {
+  const p = produccionesCache.find(x => x.id === id);
+  if (!p) return;
+
+  document.querySelectorAll("#vista-produccion > .compra-top-grid, #vista-produccion > .panel, #vista-produccion > .barra-inferior").forEach(el => el.style.display = "none");
+
+  const fecha = p.fecha_produccion && p.fecha_produccion.toDate ? p.fecha_produccion.toDate().toLocaleString("es-EC") : "";
+  const insumos = (p.insumos || []).map(i => `
+    <div class="detalle-fila">
+      <span>${i.nombre}</span>
+      <span>${i.cantidad} ${i.unidad}</span>
+    </div>
+  `).join("") || `<p style="font-size:13px; color:#888780;">No se registro materia prima usada.</p>`;
+
+  document.getElementById("produccion-detalle").innerHTML = `
+    <div class="detalle-panel">
+      <div class="detalle-header">
+        <div>
+          <h2>${p.producto_nombre}</h2>
+          <div class="guia-fecha">${fecha} - Producido por ${p.producido_por || "-"}</div>
+          <div class="guia-fecha">${p.cantidad_producida} ${p.unidad_medida} - Para: ${NOMBRES_LOCAL[p.destino_previsto] || "Stock general"}</div>
+        </div>
+        <button class="btn-cerrar" onclick="cerrarProduccionDetalle()">&times;</button>
+      </div>
+      <p style="font-size:12px; font-weight:600; color:#888780; text-transform:uppercase; margin:10px 0 0;">Materia prima usada</p>
+      ${insumos}
+      ${p.observacion ? `<p style="font-size:13px; margin-top:12px;"><strong>Observacion:</strong> ${p.observacion}</p>` : ""}
+    </div>
+  `;
+}
+
+function cerrarProduccionDetalle() {
+  document.getElementById("produccion-detalle").innerHTML = "";
+  document.querySelectorAll("#vista-produccion > .compra-top-grid, #vista-produccion > .panel, #vista-produccion > .barra-inferior").forEach(el => el.style.display = "");
+}
+
 renderProductos();
 renderProductosCompra();
 renderLineasInsumo();
+llenarDatalistProduccion();
+renderInsumosProduccion();
 llenarSelectEntrada();
 escucharInventario();
 escucharGuias();
 escucharListasCompra();
 escucharRecepcionesProveedor();
+escucharMateriaPrima();
+escucharProducciones();
 </script>
 
   </main>
