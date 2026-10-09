@@ -2,12 +2,22 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Morochos Facility OS EC</title>
+<!-- App instalable (Chrome: "Instalar app" / "Añadir a pantalla de inicio") en pantalla completa -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4285f4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Facility EC">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <style>
+  html, body { overscroll-behavior-y: none; }
   * { box-sizing: border-box; }
   body {
     font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -61,7 +71,7 @@
     padding: 14px 20px 4px;
   }
   .nav-item:hover { background: #f4f2ec; }
-  .nav-item.activo { background: #eeedfe; color: #3c3489; font-weight: 500; }
+  .nav-item.activo { background: #eeedfe; color: #4285f4; font-weight: 500; }
 
   .content { flex: 1; min-width: 0; padding-bottom: 100px; }
 
@@ -126,7 +136,7 @@
     font-size: 15px;
     font-weight: 500;
     margin: 22px 0 6px;
-    color: #3c3489;
+    color: #4285f4;
   }
   .subcategoria-title {
     font-size: 13px;
@@ -189,7 +199,7 @@
     justify-content: center;
     font-size: 13px;
     font-weight: 500;
-    color: #3c3489;
+    color: #4285f4;
     background: #eeedfe;
     overflow: hidden;
   }
@@ -247,7 +257,7 @@
   }
   .contador { font-size: 14px; color: #5f5e5a; }
   .btn-despachar {
-    background: #3c3489;
+    background: #4285f4;
     color: #fff;
     border: none;
     padding: 12px 22px;
@@ -300,7 +310,7 @@
   }
   .login-form button {
     width: 100%;
-    background: #3c3489;
+    background: #4285f4;
     color: #fff;
     border: none;
     padding: 13px;
@@ -329,7 +339,7 @@
   .paso-num {
     display: inline-flex; align-items: center; justify-content: center;
     width: 28px; height: 28px; border-radius: 50%;
-    background: #3c3489; color: #fff; font-size: 14px; font-weight: 700; flex-shrink: 0;
+    background: #4285f4; color: #fff; font-size: 14px; font-weight: 700; flex-shrink: 0;
   }
   .paso-opcional { font-size: 13px; font-weight: 400; color: #888780; }
 
@@ -349,14 +359,14 @@
     cursor: pointer; user-select: none; -webkit-user-select: none;
   }
   .tile:active { background: #f7f6fd; }
-  .tile.sel { border-color: #3c3489; background: #eeedfe; }
+  .tile.sel { border-color: #4285f4; background: #eeedfe; }
   .tile-num {
     min-width: 36px; height: 36px; padding: 0 6px; border-radius: 18px;
-    background: #eeedfe; color: #3c3489; font-weight: 700; font-size: 14px;
+    background: #eeedfe; color: #4285f4; font-weight: 700; font-size: 14px;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .tile.sel .tile-num { background: #3c3489; color: #fff; }
-  .tile-num-grande { min-width: 46px; height: 46px; border-radius: 23px; font-size: 18px; background: #3c3489; color: #fff; }
+  .tile.sel .tile-num { background: #4285f4; color: #fff; }
+  .tile-num-grande { min-width: 46px; height: 46px; border-radius: 23px; font-size: 18px; background: #4285f4; color: #fff; }
   .tile-texto { flex: 1; min-width: 0; }
   .tile-nombre { font-size: 15px; font-weight: 600; line-height: 1.25; }
   .tile-sub { font-size: 12px; color: #888780; margin-top: 2px; }
@@ -368,7 +378,7 @@
     width: 100%; padding: 22px; font-size: 28px; font-weight: 700;
     border-radius: 14px; border: 2px dashed #b4b2a9; background: #fff; color: #888780; cursor: pointer;
   }
-  .cantidad-boton.lleno { border-style: solid; border-color: #3c3489; color: #2c2c2a; background: #f7f6fd; }
+  .cantidad-boton.lleno { border-style: solid; border-color: #4285f4; color: #2c2c2a; background: #f7f6fd; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
   .chips-label { font-size: 13px; color: #888780; min-width: 64px; }
@@ -376,7 +386,7 @@
     padding: 14px 20px; border-radius: 999px; border: 2px solid #b4b2a9;
     background: #fff; color: #2c2c2a; font-size: 15px; font-weight: 600; cursor: pointer;
   }
-  .chip.sel { background: #3c3489; border-color: #3c3489; color: #fff; }
+  .chip.sel { background: #4285f4; border-color: #3c3489; color: #fff; }
 
   #btn-produccion { padding: 16px 28px; font-size: 17px; }
   #prod-insumos-lineas .detalle-fila { font-size: 15px; padding: 6px 0; }
@@ -411,7 +421,7 @@
     display: flex; align-items: center; justify-content: center;
     color: transparent; font-weight: 700; flex-shrink: 0;
   }
-  .tile.sel .tile-check { background: #3c3489; border-color: #3c3489; color: #fff; }
+  .tile.sel .tile-check { background: #4285f4; border-color: #3c3489; color: #fff; }
   @media (max-width: 760px) {
     .prod-layout { grid-template-columns: 1fr; }
     .prod-lista-col { max-height: 380px; }
@@ -429,10 +439,10 @@
     background: #fff; border: 2px solid #e2e0d6; border-radius: 14px;
     padding: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 0;
   }
-  .ptile.activo { border-color: #3c3489; background: #f7f6fd; }
+  .ptile.activo { border-color: #4285f4; background: #f7f6fd; }
   .ptile-top { display: flex; gap: 6px; align-items: flex-start; cursor: pointer; }
   .ptile .tile-num { min-width: 24px; height: 24px; font-size: 11px; padding: 0 3px; border-radius: 12px; }
-  .ptile.activo .tile-num { background: #3c3489; color: #fff; }
+  .ptile.activo .tile-num { background: #4285f4; color: #fff; }
   .ptile-nombre { font-size: 12.5px; font-weight: 700; line-height: 1.2; overflow-wrap: break-word; min-width: 0; }
   .ptile-sub { font-size: 11px; color: #888780; }
   .ptile-inv { font-size: 11px; color: #5f5e5a; }
@@ -441,13 +451,13 @@
     height: 48px; font-size: 15px; font-weight: 600; border-radius: 10px;
     border: 2px dashed #b4b2a9; background: #fff; color: #b4b2a9; cursor: pointer; padding: 0;
   }
-  .ptile.activo .ptile-cant { border-style: solid; border-color: #3c3489; color: #2c2c2a; font-size: 24px; font-weight: 700; }
+  .ptile.activo .ptile-cant { border-style: solid; border-color: #4285f4; color: #2c2c2a; font-size: 24px; font-weight: 700; }
   .ptile-quien { display: flex; gap: 6px; }
   .ptile-q {
     flex: 1; height: 40px; font-size: 12px; font-weight: 600; padding: 0;
     border-radius: 10px; border: 2px solid #b4b2a9; background: #fff; color: #5f5e5a; cursor: pointer;
   }
-  .ptile-q.sel { background: #3c3489; border-color: #3c3489; color: #fff; }
+  .ptile-q.sel { background: #4285f4; border-color: #3c3489; color: #fff; }
 
   .prod-toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .prod-toolbar .prod-input { margin: 0; flex: 1; min-width: 200px; }
@@ -468,7 +478,7 @@
   #iv-root{font-size:16px;color:#1f1f1d;max-width:1100px;margin:0 auto;padding:0 12px 12px;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   #iv-root .mu{color:#6b6a64;font-size:13px} #iv-root .mu.s{font-size:12px}
   #iv-root .ivb{min-height:48px;padding:8px 16px;border:2px solid #d6d3c8;border-radius:12px;background:#fff;font:inherit;font-weight:600;color:#1f1f1d;cursor:pointer}
-  #iv-root .ivb.on{background:#3c3489;border-color:#3c3489;color:#fff}
+  #iv-root .ivb.on{background:#4285f4;border-color:#3c3489;color:#fff}
   #iv-root .ivb.okb{background:#1d7a4d;border-color:#1d7a4d;color:#fff}
   #iv-root .ivb:disabled{opacity:.45;cursor:default}
   #iv-root .ivb.big{width:100%;min-height:68px;font-size:20px}
@@ -483,7 +493,7 @@
   #iv-root .iv-row,#iv-root .iv-cuenta,#iv-root .iv-hist{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:2px solid #e3e0d6;border-radius:14px;padding:12px 14px;font:inherit;color:inherit;cursor:pointer;min-height:64px}
   #iv-root .iv-row.bajo{border-color:#a85f00;background:#fffaf0} #iv-root .iv-row.sin{background:#faf8f3}
   #iv-root .iv-n{min-width:0;flex:1} #iv-root .nm{font-weight:700;font-size:17px}
-  #iv-root .iv-s{text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex:none} #iv-root .iv-s b{font-size:24px;line-height:1.1} #iv-root .iv-s span{font-size:12px;color:#6b6a64} #iv-root .iv-s em{font-style:normal;font-size:12px;font-weight:700;color:#a85f00;background:#fdf0d5;border-radius:8px;padding:2px 8px;margin-top:2px} #iv-root .iv-s em.al{color:#3c3489;background:#e9e7fb}
+  #iv-root .iv-s{text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex:none} #iv-root .iv-s b{font-size:24px;line-height:1.1} #iv-root .iv-s span{font-size:12px;color:#6b6a64} #iv-root .iv-s em{font-style:normal;font-size:12px;font-weight:700;color:#a85f00;background:#fdf0d5;border-radius:8px;padding:2px 8px;margin-top:2px} #iv-root .iv-s em.al{color:#4285f4;background:#e9e7fb}
   #iv-root .iv-meter{height:6px;background:#eceae2;border-radius:3px;margin:6px 0 2px;overflow:hidden} #iv-root .iv-meter i{display:block;height:100%;background:#1d7a4d} #iv-root .iv-row.bajo .iv-meter i{background:#a85f00}
   #iv-root .iv-vacio{padding:24px;text-align:center;color:#6b6a64} #iv-root .okc{color:#1d7a4d}
   #iv-root .iv-subbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:12px;position:sticky;top:0;background:#f7f5ef;padding:6px 0;z-index:2} #iv-root .iv-st{font-weight:800;font-size:18px;flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -504,7 +514,7 @@
   #iv-root .iv-hist{margin-bottom:6px} #iv-root .iv-hist .wn{color:#a85f00;font-weight:700;text-align:right}
   @media (max-width:820px){ #iv-root .iv-start{grid-template-columns:1fr} #iv-root .iv-sum b{font-size:20px} }
   body.touch #iv-root .ivb{min-height:64px;font-size:18px} body.touch #iv-root .iv-row{min-height:76px}
-  #pr-root{position:relative;display:flex;flex-direction:column;overflow:hidden;background:#f4f2ec;color:#1f1f1d;font-size:18px;line-height:1.3;--u:1;--ac:#3c3489;--acbg:#e9e7fb;--acfg:#fff;--ok:#1d7a4d;--okbg:#e2f3ea;--okfg:#fff;--wn:#a85f00;--wnbg:#fdf0d5;--wnfg:#fff;--er:#c0392b;--erbg:#fbe4e1;--erfg:#fff;--mu:#6b6a64;--bd:#d6d3c8;--s1:#fff;--s2:#eceae2;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  #pr-root{position:relative;display:flex;flex-direction:column;overflow:hidden;background:#f4f2ec;color:#1f1f1d;font-size:18px;line-height:1.3;--u:1;--ac:#4285f4;--acbg:#e9e7fb;--acfg:#fff;--ok:#1d7a4d;--okbg:#e2f3ea;--okfg:#fff;--wn:#a85f00;--wnbg:#fdf0d5;--wnfg:#fff;--er:#c0392b;--erbg:#fbe4e1;--erfg:#fff;--mu:#6b6a64;--bd:#d6d3c8;--s1:#fff;--s2:#eceae2;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   #pr-root *{box-sizing:border-box}
   #pr-root .mu{color:var(--mu)}
   #pr-root .small{font-size:14px}
@@ -681,20 +691,20 @@
   .teclado-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
   .teclado-tecla {
     height: 76px; font-size: 30px; font-weight: 600; border-radius: 16px; border: none;
-    background: #eeedfe; color: #3c3489; cursor: pointer;
+    background: #eeedfe; color: #4285f4; cursor: pointer;
   }
   .teclado-tecla:active { background: #cecbf6; }
   .teclado-acciones { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 14px; }
   .teclado-cancelar, .teclado-listo { height: 64px; border: none; border-radius: 16px; font-size: 18px; font-weight: 700; cursor: pointer; }
   .teclado-cancelar { background: #f4f2ec; color: #5f5e5a; }
-  .teclado-listo { background: #3c3489; color: #fff; }
+  .teclado-listo { background: #4285f4; color: #fff; }
 
   .clock-fab {
     position: fixed;
     bottom: 16px;
     left: 16px;
     z-index: 50;
-    background: #3c3489;
+    background: #4285f4;
     color: #fff;
     border: none;
     border-radius: 999px;
@@ -807,7 +817,7 @@
   }
   .btn-secundario {
     background: #eeedfe;
-    color: #3c3489;
+    color: #4285f4;
     border: none;
     padding: 12px;
     border-radius: 8px;
@@ -843,7 +853,7 @@
     color: #5f5e5a;
     cursor: pointer;
   }
-  .compra-modo-btn.activo { background: #3c3489; border-color: #3c3489; color: #fff; }
+  .compra-modo-btn.activo { background: #4285f4; border-color: #3c3489; color: #fff; }
   .card-acciones { display: flex; justify-content: flex-end; margin-top: 10px; }
   .btn-eliminar-card {
     background: #fcebeb;
@@ -947,8 +957,8 @@
     -webkit-tap-highlight-color: transparent;
   }
   .check-doble-tap.marcado {
-    background: #3c3489;
-    border-color: #3c3489;
+    background: #4285f4;
+    border-color: #4285f4;
   }
   .check-doble-tap.tocado-una-vez {
     border-color: #7f77dd;
@@ -1008,6 +1018,137 @@
     #listas-compra-pendientes, #lista-productos-compra, #lista-productos-proveedor, #recepciones-proveedor-lista, .compra-top-grid, .buscador { display: none !important; }
   }
   #pr-root .gsec{grid-column:1/-1;font-weight:800;font-size:calc(var(--u,1)*17px);letter-spacing:.06em;text-transform:uppercase;opacity:.7;padding:6px 4px 0}
+
+  /* ===== LISTA DE COMPRAS (tablet) ===== */
+  #lc-root{display:flex;flex-direction:column;min-height:420px;--lc:#4285f4;padding:8px 12px 0}
+  #lc-root.lc-full{overflow:hidden}
+  .lcb{font:inherit;font-weight:700;font-size:16px;min-height:56px;padding:0 18px;border-radius:14px;border:2px solid #d3d1c7;background:#fff;color:#2c2c2a;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+  .lcb:active{transform:scale(.97)}
+  .lcb.on{background:#4285f4;border-color:#3c3489;color:#fff}
+  .lcb.okb{background:#1d8a4e;border-color:#1d8a4e;color:#fff}
+  .lcb.er{background:#fff;border-color:#c0392b;color:#c0392b}
+  .lcb.pri{display:inline-flex;align-items:center;justify-content:center;background:#4285f4;border-color:#3c3489;color:#fff}
+  .lcb[disabled]{opacity:.4;pointer-events:none}
+  .lcb.big{min-height:72px;font-size:22px;padding:0 30px}
+  .lcb.ico{width:56px;padding:0;font-size:24px}
+  .lcb.sq{width:84px;min-height:84px;font-size:42px;padding:0}
+  .lcb.flash{animation:lcfl .3s 3}
+  @keyframes lcfl{50%{background:#fde8a6;border-color:#e0a800}}
+  .lcb.sw{display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:10px}
+  .lcb.val{width:100%;margin:12px 0}
+  .lc-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 0 10px}
+  .lc-locs,.lc-tabs{display:flex;gap:8px}
+  .lc-locs{flex:1 1 360px} .lc-locs .lcb{flex:1;padding:0 10px}
+  .lc-stat{font-size:13px;font-weight:700;padding:6px 10px;border-radius:99px}
+  .lc-stat.ok{background:#e1f5ea;color:#1d8a4e} .lc-stat.wn{background:#fde8a6;color:#7a5a00}
+  .lc-banner{background:#fde8a6;padding:10px 14px;border-radius:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600}
+  .lc-grid{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-content:start;padding:0 2px 12px}
+  .lc-sec{grid-column:1/-1;font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;padding:6px 4px 0}
+  .lc-card{position:relative;font:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px 14px;min-height:156px;background:#fff;border:3px solid #e2e0d6;border-radius:18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;text-align:center}
+  .lc-card:active{transform:scale(.97)}
+  .lc-card.in{border-color:#1d8a4e;background:#eaf8f0}
+  .lc-card.sel{border-color:#4285f4}
+  .lc-ph{width:72px;height:72px;border-radius:16px;background:hsl(var(--h),55%,86%) center/cover no-repeat;color:hsl(var(--h),45%,30%);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;flex-shrink:0}
+  .lc-ph.big{width:120px;height:120px;font-size:40px}
+  .lc-nm{font-weight:700;font-size:16px;line-height:1.15} .lc-nm.big{font-size:24px}
+  .lc-un{font-size:12px;color:#6b6a63}
+  .lc-q{position:absolute;top:6px;left:6px;right:44px;background:#1d8a4e;color:#fff;border-radius:10px;padding:3px 8px;font-weight:800;font-size:15px;text-align:left}
+  .lc-tick{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:50%;background:#1d8a4e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .lc-bar{display:flex;gap:10px;align-items:center;padding:10px 0 4px 76px;border-top:1px solid #e2e0d6}
+  .lc-cnt{flex:1;font-size:18px} .lc-cnt b{font-size:26px} .lc-cnt .wn{color:#c0392b;font-weight:700}
+  .lc-listas-hint{font-size:14px;color:#6b6a63;padding:4px 2px 8px}
+  #lc-listas{padding:0 12px}
+  #lc-sheet,#lc-review,#lc-snack,#lc-toast{display:none}
+  #lc-sheet.show,#lc-review.show{display:block;position:fixed;inset:0;z-index:150}
+  .lc-back{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+  .lc-sh{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:620px;max-height:92vh;overflow-y:auto;background:#fff;border-radius:24px 24px 0 0;padding:18px}
+  .lc-sh-h{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+  .lc-sh-t{font-weight:800;font-size:22px;margin-bottom:10px}
+  .lc-qrow{display:flex;gap:10px;align-items:stretch}
+  .lc-big{flex:1;font:inherit;font-weight:800;font-size:30px;background:#f4f2ec;border:2px dashed #b4b2a9;border-radius:16px;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+  .lc-big span{font-size:12px;font-weight:600;color:#6b6a63}
+  .lc-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+  .lc-quick .lcb{padding:0 4px;font-size:15px}
+  .lc-acts{display:flex;gap:10px;margin-top:8px} .lc-acts .lcb{flex:1}
+  .lc-rev{max-height:55vh;overflow-y:auto}
+  .lc-rv{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #eee} .lc-rv .lc-nm{flex:1}
+  .lc-fotorow{display:flex;gap:14px;align-items:center} .lc-col{display:flex;flex-direction:column;gap:8px;flex:1}
+  #lc-snack.show{display:block;position:fixed;left:0;right:0;bottom:90px;z-index:160;pointer-events:none}
+  .lc-sn{pointer-events:auto;margin:0 auto;max-width:520px;background:#2c2c2a;color:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .lc-sn .lcb{background:#fde8a6;border-color:#fde8a6;color:#2c2c2a;min-height:60px}
+  #lc-toast.show{display:block;position:fixed;left:50%;transform:translateX(-50%);top:90px;z-index:170;background:#2c2c2a;color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;max-width:90vw}
+  body.touch .check-doble-tap{width:52px;height:52px;border-radius:12px;font-size:28px}
+  body.touch #lista-compra-detalle .detalle-fila{min-height:70px}
+  body.touch #listas-compra-pendientes .guia-card{min-height:84px;padding:14px}
+  body.touch .compra-modo-btn{min-height:56px;font-size:17px}
+  @media (max-width:700px){.lc-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
+
+  .lc-num{position:absolute;top:6px;left:6px;min-width:30px;height:30px;padding:0 6px;border-radius:50%;background:#4285f4;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:1}
+  .lc-card .lc-q{left:42px}
+  .lc-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:20px;color:#6b6a63;padding:30px;line-height:1.5}
+  .lc-fila{flex-wrap:wrap;row-gap:8px;column-gap:10px}
+  .lc-fila > span:first-child{flex:1 1 300px !important;min-width:0}
+  .lc-fila .lc-fld{display:flex;flex-direction:column;flex:0 0 130px}
+  .lc-fila .lc-fld small{font-size:11px;color:#6b6a63;font-weight:700;margin-bottom:2px}
+  .lc-fila .costo-input{width:100%;box-sizing:border-box}
+  .lc-fila .lc-sel{flex:1 1 200px;min-height:52px;font-size:16px;padding:0 10px;border:2px solid #d3d1c7;border-radius:12px;background:#fff}
+  .lc-fila .lc-sel.vset{border-color:#4285f4;font-weight:700}
+  .lc-fila .lc-n{font-weight:800;color:#4285f4;margin-right:2px}
+
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]{-moz-appearance:textfield;appearance:textfield}
+  .lc-ref{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;background:#eef0fb;color:#4285f4;font-size:13px;font-weight:700;white-space:nowrap}
+  .lc-monto{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#f4f2ec;border-radius:14px;padding:10px 14px;margin:0 0 8px}
+  .lc-monto b{font-size:16px}
+  .lc-monto .costo-input{width:150px;min-height:56px;box-sizing:border-box;font-size:20px;font-weight:700}
+  .lc-tot{font-size:17px;font-weight:600}
+  .lc-tot.final{font-size:22px;font-weight:800;border-top:2px solid #4285f4;margin-top:4px;padding-top:12px}
+  .lc-tot.bad span:last-child{color:#c0392b} .lc-tot.good span:last-child{color:#1d8a4e}
+  .lc-impreso{font-size:13px;color:#1d8a4e;font-weight:700;margin-top:10px}
+  @media print{.lc-sel{-webkit-appearance:none;appearance:none;border:none !important;background:none !important}.lc-monto{background:none;padding:6px 0}.lc-monto .costo-input{border:none;background:none}}
+  #lista-compra-detalle .lc-fecha{font-weight:800;color:#2c2c2a;font-size:15px}
+  @media print{
+    @page{size:A4;margin:12mm}
+    html,body{background:#fff !important}
+    body #lista-compra-detalle .detalle-panel{background:#fff !important}
+    body #lista-compra-detalle .detalle-panel{box-shadow:none;border:none;padding:0;max-width:none}
+    body #lista-compra-detalle h2{font-size:20pt;margin:0 0 2px}
+    body #lista-compra-detalle .lc-fecha{font-weight:900;font-size:14pt;color:#000}
+    body #lista-compra-detalle .detalle-header{margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
+    body #lista-compra-detalle .detalle-fila{min-height:0 !important;padding:7px 0 !important;margin:0;border-bottom:1px solid #888;break-inside:avoid;font-size:12pt;line-height:1.3;gap:10px}
+    body #lista-compra-detalle .lc-sel,body #lista-compra-detalle .lc-monto,body #lista-compra-detalle .lc-fld small,body #lista-compra-detalle .lc-vend-ro,body #lista-compra-detalle .lc-ref,body #lista-compra-detalle .btn-cerrar,body .clock-fab,#lc-snack,#lc-toast{display:none !important}
+    body #lista-compra-detalle .costo-input{border:none !important;background:none !important;width:90px !important;min-height:0 !important;height:auto !important;padding:0 !important;text-align:right;font-size:12pt;font-weight:600}
+    body #lista-compra-detalle .costo-input::placeholder{color:transparent}
+    body #lista-compra-detalle .check-doble-tap{width:18px !important;height:18px !important;min-width:18px;font-size:13px;border:1.5px solid #000}
+    body #lista-compra-detalle .lc-tot{font-weight:700;border-bottom:none}
+    body #lista-compra-detalle .lc-tot.final{font-size:13pt;border-top:1px solid #000}
+  }
+
+  /* ===== PEDIDOS DE LOS LOCALES ===== */
+  #pd-root{padding:8px 12px 110px}
+  .pd-badge{display:inline-block;min-width:22px;padding:0 7px;margin-left:6px;border-radius:99px;background:#c0392b;color:#fff;font-size:13px;font-weight:800;text-align:center}
+  .pd-tabs{display:flex;gap:8px;margin-bottom:12px} .pd-tabs .lcb{flex:1}
+  .pd-empty{text-align:center;color:#6b6a63;font-size:19px;line-height:1.6;padding:50px 20px}
+  .pd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+  .pd-card{font:inherit;text-align:left;background:#fff;border:3px solid #e2e0d6;border-radius:18px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:8px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:120px}
+  .pd-card:active{transform:scale(.98)} .pd-card.nuevo{border-color:#1d8a4e;background:#eaf8f0}
+  .pd-c1{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:22px}
+  .pd-c2{font-size:14px;color:#6b6a63} .pd-c3{display:flex;gap:8px;flex-wrap:wrap}
+  .pd-chip{background:#f4f2ec;border-radius:99px;padding:6px 12px;font-size:15px;font-weight:700} .pd-chip.bad{background:#fde8a6}
+  .pd-st{font-size:13px;font-weight:800;padding:4px 10px;border-radius:99px} .pd-st.nw{background:#1d8a4e;color:#fff} .pd-st.wn{background:#fde8a6;color:#7a5a00} .pd-st.ok{background:#e1f5ea;color:#1d8a4e}
+  .pd-head{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px} .pd-h1{font-size:28px;font-weight:800}
+  .pd-banner{background:#fde8a6;border-radius:12px;padding:10px 14px;font-weight:600;margin-bottom:8px}
+  .pd-sec{font-weight:800;font-size:17px;letter-spacing:.05em;text-transform:uppercase;opacity:.75;padding:14px 4px 6px} .pd-sec.bad{color:#c0392b;opacity:1}
+  .pd-row{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid #e2e0d6;border-radius:14px;padding:8px 12px;margin-bottom:8px;min-height:72px}
+  .pd-row.off{opacity:.5} .pd-row.off .pd-nm{text-decoration:line-through}
+  .pd-nm{flex:1;font-weight:700;font-size:18px;line-height:1.2} .pd-nota{font-size:13px;color:#6b6a63;font-weight:500}
+  .pd-q{font-size:20px} .pd-qb{min-width:130px;font-size:20px}
+  .pd-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;gap:10px;padding:10px 12px 10px 84px;background:#fff;border-top:1px solid #e2e0d6} .pd-bar .lcb{flex:1}
+  .lcb.pd-done{background:#e1f5ea;border-color:#1d8a4e;color:#1d8a4e}
+  #pd-snack,#pd-toast{display:none}
+  #pd-snack.show{display:block;position:fixed;left:0;right:0;bottom:100px;z-index:160;pointer-events:none}
+  .pd-sn{pointer-events:auto;margin:0 auto;max-width:520px;background:#2c2c2a;color:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px} .pd-sn .lcb{background:#fde8a6;border-color:#fde8a6;color:#2c2c2a;min-height:60px}
+  #pd-toast.show{display:block;position:fixed;left:50%;transform:translateX(-50%);top:90px;z-index:170;background:#2c2c2a;color:#fff;padding:14px 20px;border-radius:12px;font-weight:700;font-size:17px;max-width:90vw}
 </style>
 </head>
 <body>
@@ -1046,12 +1187,14 @@
     </div>
 
     <div class="nav-grupo">Operacion</div>
+    <button class="nav-item" id="nav-pedidos" onclick="cambiarVista('pedidos')">📨 Pedidos de locales</button>
     <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
     <button class="nav-item" id="nav-proveedores" onclick="cambiarVista('proveedores')">📥 Recepcion proveedores</button>
     <button class="nav-item" id="nav-produccion" onclick="cambiarVista('produccion')">🏭 Produccion</button>
     <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')">📦 Inventario</button>
     <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
     <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
+    <button class="nav-item" id="nav-pantalla" onclick="pantallaCompletaOInstalar()" style="display:none;"></button>
 
   </aside>
 
@@ -1063,40 +1206,22 @@
 
     <div id="aviso-container"></div>
 
+<!-- VISTA: PEDIDOS DE LOS LOCALES -->
+<div class="vista" id="vista-pedidos">
+  <div id="pd-root"></div>
+</div>
+
 <!-- VISTA: LISTA DE COMPRAS -->
 <div class="vista activa" id="vista-compra">
-  <div class="compra-top-grid">
-    <div class="panel">
-      <label for="local-compra">Local que pidio (WhatsApp)</label>
-      <select id="local-compra">
-        <option value="la_victoria">La Victoria</option>
-        <option value="el_salado">El Salado</option>
-        <option value="facility_feria_libre">Facility Feria Libre</option>
-      </select>
-      <p style="font-size:12px; color:#888780; margin:8px 0 0;">Transcribe aqui solo lo que el local pidio y que NO esta en stock de bodega (compra directa en mercado/tiendas).</p>
+  <div id="lc-root"></div>
+  <div id="lc-listas" style="display:none">
+    <div class="compra-modo-tabs">
+      <button class="compra-modo-btn activo" id="modo-pendientes" onclick="cambiarModoListasCompra('pendientes')">Pendientes</button>
+      <button class="compra-modo-btn" id="modo-historial" onclick="cambiarModoListasCompra('historial')">Historial</button>
     </div>
-
-    <div class="panel">
-      <div class="compra-modo-tabs">
-        <button class="compra-modo-btn activo" id="modo-pendientes" onclick="cambiarModoListasCompra('pendientes')">Pendientes</button>
-        <button class="compra-modo-btn" id="modo-historial" onclick="cambiarModoListasCompra('historial')">Historial</button>
-      </div>
-      <div id="listas-compra-pendientes"></div>
-    </div>
+    <div id="listas-compra-pendientes"></div>
   </div>
-
   <div id="lista-compra-detalle"></div>
-
-  <div class="buscador">
-    <input type="text" id="buscador-compra" placeholder="Buscar producto..." oninput="filtrarProductosCompra()">
-  </div>
-
-  <div id="lista-productos-compra"></div>
-
-  <div class="barra-inferior">
-    <span class="contador" id="contador-compra">0 items seleccionados</span>
-    <button class="btn-despachar" onclick="crearListaCompra()">Guardar lista de compras</button>
-  </div>
 </div>
 
 <!-- VISTA: DESPACHO -->
@@ -1310,6 +1435,7 @@ function ocultarErrorLogin() {
 function mostrarPantallaApp() {
   document.getElementById("pantalla-login").style.display = "none";
   document.getElementById("app-wrapper").style.display = "block";
+  if (typeof aplicarVistaInicial === "function") aplicarVistaInicial();
 }
 
 function mostrarPantallaLogin() {
@@ -1404,302 +1530,55 @@ auth.onAuthStateChanged(user => {
    Estructura: categoria -> subcategoria -> productos
    ============================================================ */
 const PRODUCTOS = [
-  // ---------- COCINA / MERCADO ----------
-  { id: "cocina_cebolla_blanca", nombre: "Cebolla blanca", categoria: "cocina", subcategoria: "mercado", unidad: "arroba pequena" },
-  { id: "cocina_tomate_cherry", nombre: "Tomates cherry", categoria: "cocina", subcategoria: "mercado", unidad: "libras" },
-  { id: "cocina_pimiento_rojo", nombre: "Pimiento rojo", categoria: "cocina", subcategoria: "mercado", unidad: "arroba" },
-  { id: "cocina_ajo_entero", nombre: "Ajo entero", categoria: "cocina", subcategoria: "mercado", unidad: "libras" },
-  { id: "cocina_pimiento_verde", nombre: "Pimiento verde", categoria: "cocina", subcategoria: "mercado", unidad: "arroba" },
-  { id: "cocina_cebolla_roja", nombre: "Cebolla roja", categoria: "cocina", subcategoria: "mercado", unidad: "arroba x 20 lb" },
-  { id: "cocina_tomate_rinon", nombre: "Tomate rinon", categoria: "cocina", subcategoria: "mercado", unidad: "caja" },
-  { id: "cocina_aji_escabeche", nombre: "Aji escabeche", categoria: "cocina", subcategoria: "mercado", unidad: "dolar" },
-  { id: "cocina_aguacate_duro", nombre: "Aguacate duro", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_aguacate_maduro", nombre: "Aguacate maduro", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_tomate_arbol_maduro", nombre: "Tomate de arbol maduro", categoria: "cocina", subcategoria: "mercado", unidad: "carton" },
-  { id: "cocina_platano_verde_dominico", nombre: "Platano verde dominico", categoria: "cocina", subcategoria: "mercado", unidad: "racimo" },
-  { id: "cocina_platano_maduro", nombre: "Platano maduro", categoria: "cocina", subcategoria: "mercado", unidad: "dolares" },
-  { id: "cocina_cebollin", nombre: "Cebollin", categoria: "cocina", subcategoria: "mercado", unidad: "atados x 1kg" },
-  { id: "cocina_cilantro_fresco", nombre: "Cilantro fresco", categoria: "cocina", subcategoria: "mercado", unidad: "atados x 1kg" },
-  { id: "cocina_lechuga_delicia_verde", nombre: "Lechuga delicia verde", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_lechuga_delicia_morada", nombre: "Lechuga delicia morada", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_mix_lechuga", nombre: "Mix de lechuga limpia y cortada", categoria: "cocina", subcategoria: "mercado", unidad: "fundas x 1.600g" },
-  { id: "cocina_col_morada", nombre: "Col morada repollo", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_albaca_fresca", nombre: "Albaca fresca", categoria: "cocina", subcategoria: "mercado", unidad: "atados" },
-  { id: "cocina_zucchine", nombre: "Zucchine", categoria: "cocina", subcategoria: "mercado", unidad: "unidades" },
-  { id: "cocina_carbon_grueso", nombre: "Carbon grueso", categoria: "cocina", subcategoria: "mercado", unidad: "fundas" },
-
-  // ---------- COCINA / FACILITY ----------
-  { id: "cocina_azucar_300g", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 300g" },
-  { id: "cocina_azucar_600g", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 600g" },
-  { id: "cocina_queso_fresco_2kg", nombre: "Queso fresco", categoria: "cocina", subcategoria: "facility", unidad: "empaques x 2kg" },
-  { id: "cocina_base_anis", nombre: "Base de anis", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 250g" },
-  { id: "cocina_frijol_cocido", nombre: "Frijol cocido", categoria: "cocina", subcategoria: "facility", unidad: "fundas x 2 kg" },
-  { id: "cocina_papas_francesas", nombre: "Papas francesas congeladas", categoria: "cocina", subcategoria: "facility", unidad: "paquetes x 250g" },
-  { id: "cocina_filete_pechuga_pollo", nombre: "Filete pechuga pollo", categoria: "cocina", subcategoria: "facility", unidad: "unid x 120g" },
-  { id: "cocina_salchicha_papas", nombre: "Salchicha para papas", categoria: "cocina", subcategoria: "facility", unidad: "unid" },
-  { id: "cocina_jamon_laminado", nombre: "Jamon laminado", categoria: "cocina", subcategoria: "facility", unidad: "unid" },
-  { id: "cocina_tocino_premium", nombre: "Tocino premium", categoria: "cocina", subcategoria: "facility", unidad: "paquetes x 200g" },
-  { id: "cocina_filete_lomo_cerdo", nombre: "Filete lomo cerdo", categoria: "cocina", subcategoria: "facility", unidad: "unid x 120g" },
-  { id: "cocina_chuleta_mariposa", nombre: "Chuleta mariposa", categoria: "cocina", subcategoria: "facility", unidad: "unidades x 200g" },
-  { id: "cocina_presas_pollo", nombre: "Presas de pollo", categoria: "cocina", subcategoria: "facility", unidad: "unidades" },
-  { id: "cocina_trucha_adobada", nombre: "Trucha adobada", categoria: "cocina", subcategoria: "facility", unidad: "unidades" },
-  { id: "cocina_muslo_pollo_picado", nombre: "Muslo de pollo picado", categoria: "cocina", subcategoria: "facility", unidad: "empaques x 180g" },
-  { id: "cocina_hueso_pollo_fondo", nombre: "Hueso de pollo para fondo", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 5kg" },
-  { id: "cocina_chicharron_cerdo", nombre: "Chicharron cerdo", categoria: "cocina", subcategoria: "facility", unidad: "empaque de 45g" },
-  { id: "cocina_morocho_cocido", nombre: "Morocho cocido", categoria: "cocina", subcategoria: "facility", unidad: "empaque de 450g" },
-  { id: "cocina_masa_tigrillo", nombre: "Masa de tigrillo", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 2kg" },
-  { id: "cocina_hueso_chancho", nombre: "Hueso de chancho", categoria: "cocina", subcategoria: "facility", unidad: "libras" },
-  { id: "cocina_maiz_amarillo_congelado", nombre: "Maiz amarillo congelado", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 1 kg" },
-  { id: "cocina_base_pina_800", nombre: "Base de pina", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 800gr" },
-  { id: "cocina_base_pina_400", nombre: "Base de pina", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 400gr" },
-  { id: "cocina_azucar_400gr_facility", nombre: "Azucar", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 400gr" },
-  { id: "cocina_azucar_200gr_facility", nombre: "Azucar", categoria: "cocina", subcategoria: "facility", unidad: "empaque x 200gr" },
-  { id: "cocina_adobo_pollo_cerdo", nombre: "Adobo de pollo y cerdo", categoria: "cocina", subcategoria: "facility", unidad: "galon" },
-
-  // ---------- COCINA / BODEGA ----------
-  { id: "cocina_huevos_medianos", nombre: "Huevos medianos", categoria: "cocina", subcategoria: "bodega", unidad: "cubetas x 30 uds" },
-  { id: "cocina_leche_entera_nutri", nombre: "Leche entera nutri", categoria: "cocina", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "cocina_panela_molida_350", nombre: "Panela molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 350g" },
-  { id: "cocina_panela_molida_175", nombre: "Panela molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 175g" },
-  { id: "cocina_huevos_criollos", nombre: "Huevos criollos", categoria: "cocina", subcategoria: "bodega", unidad: "cubetas x 30 uds" },
-  { id: "cocina_canela_entera", nombre: "Canela entera", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 400g" },
-  { id: "cocina_mix_morocho", nombre: "Mix morocho", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 12g" },
-  { id: "cocina_maicena_220", nombre: "Maicena", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 220g" },
-  { id: "cocina_maicena_370", nombre: "Maicena", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 370g" },
-  { id: "cocina_avena_hojuelas", nombre: "Avena hojuelas", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 500g" },
-  { id: "cocina_arroz_grano", nombre: "Arroz en grano", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 1.6 kg" },
-  { id: "cocina_avena_molida_250", nombre: "Avena molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 250g" },
-  { id: "cocina_avena_molida_125", nombre: "Avena molida", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 125g" },
-  { id: "cocina_comino_molido", nombre: "Comino molido", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
-  { id: "cocina_pimienta_negra", nombre: "Pimienta negra", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
-  { id: "cocina_oregano_entero", nombre: "Oregano entero", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200g" },
-  { id: "cocina_sal_crisal", nombre: "Sal crisal", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 2 kg" },
-  { id: "cocina_sal_grano_parrilla", nombre: "Sal en grano para parrilla", categoria: "cocina", subcategoria: "bodega", unidad: "frasco x 500g" },
-  { id: "cocina_esencia_vainilla_500", nombre: "Esencia de vainilla", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 500cm3" },
-  { id: "cocina_miel_abeja", nombre: "Miel de abeja", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 500g" },
-  { id: "cocina_aceite_vegetal", nombre: "Aceite vegetal", categoria: "cocina", subcategoria: "bodega", unidad: "litros" },
-  { id: "cocina_achiote", nombre: "Achiote", categoria: "cocina", subcategoria: "bodega", unidad: "botellas x 1 litro" },
-  { id: "cocina_mantequilla_nutri", nombre: "Mantequilla nutri sin sal", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 250g" },
-  { id: "cocina_mostaza_maggi", nombre: "Mostaza maggi", categoria: "cocina", subcategoria: "bodega", unidad: "galon" },
-  { id: "cocina_aceite_oliva_500cc", nombre: "Aceite de oliva", categoria: "cocina", subcategoria: "bodega", unidad: "botella x 500cc" },
-  { id: "cocina_vinagre_blanco", nombre: "Vinagre blanco", categoria: "cocina", subcategoria: "bodega", unidad: "galones" },
-  { id: "cocina_azucar_200gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "fundas x 200gr" },
-  { id: "cocina_azucar_300gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 300gr" },
-  { id: "cocina_azucar_500gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 500gr" },
-  { id: "cocina_azucar_400gr_bodega", nombre: "Azucar blanca", categoria: "cocina", subcategoria: "bodega", unidad: "empaque x 400gr" },
-  { id: "cocina_guantes_latex_m", nombre: "Guantes latex negros talla M", categoria: "cocina", subcategoria: "bodega", unidad: "cajas x 100 unid" },
-  { id: "cocina_limpion_industrial", nombre: "Limpion industrial", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 550m" },
-  { id: "cocina_fundas_desglosables_12x18", nombre: "Fundas desglosables transparentes 12x18", categoria: "cocina", subcategoria: "bodega", unidad: "rollos" },
-  { id: "cocina_fundas_desglosables_5x10", nombre: "Fundas desglosables transparentes 5x10", categoria: "cocina", subcategoria: "bodega", unidad: "rollos" },
-  { id: "cocina_papel_aluminio", nombre: "Papel aluminio", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 200m" },
-  { id: "cocina_papel_antigrasa", nombre: "Papel antigrasa para papas", categoria: "cocina", subcategoria: "bodega", unidad: "rollos x 50 unid" },
-  { id: "cocina_contenedor_5x5", nombre: "Contenedor 5x5 ensaladas", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unidades" },
-  { id: "cocina_lonchera", nombre: "Lonchera 8 1/2 x 5 1/2", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
-  { id: "cocina_contenedores_llevar", nombre: "Contenedores para llevar", categoria: "cocina", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
-
-  // ---------- CAFETERIA / FACILITY ----------
-  { id: "cafe_tiramisu", nombre: "Tiramisu", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
-  { id: "cafe_cheesecake_mora", nombre: "Cheesecake mora", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
-  { id: "cafe_cheesecake_maracuya", nombre: "Cheesecake maracuya", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
-  { id: "cafe_cheesecake_oreo", nombre: "Cheesecake oreo", categoria: "cafeteria", subcategoria: "facility", unidad: "unidades" },
-
-  // ---------- CAFETERIA / BODEGA ----------
-  { id: "cafe_cuchara_sopera", nombre: "Cuchara sopera grande plasti util", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_cuchara_negra_pequena", nombre: "Cuchara negra pequena HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_removedor", nombre: "Removedor de cafe", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
-  { id: "cafe_tenedores_grandes", nombre: "Tenedores grandes HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_mini_tenedor_papas", nombre: "Mini tenedor para papas", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_cubiertos_desechables", nombre: "Cubiertos desechables negros", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_palillos_dientes", nombre: "Palillos de dientes pequenos", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidad x 30g" },
-  { id: "cafe_sorbete_eco", nombre: "Sorbete eco organico cafetero negro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
-  { id: "cafe_funda_papel_6", nombre: "Funda de papel #6", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
-  { id: "cafe_funda_papel_3", nombre: "Funda de papel #3", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
-  { id: "cafe_funda_papel_12", nombre: "Funda papel #12", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 100 unid" },
-  { id: "cafe_papel_despacho", nombre: "Papel de despacho", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 75 unidades" },
-  { id: "cafe_fundas_dina_hg4", nombre: "Fundas dina HG #4", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 90 unid" },
-  { id: "cafe_fundas_dina_hg5", nombre: "Fundas dina blancas HG #5", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 90 unid" },
-  { id: "cafe_fundas_transparentes_8x12", nombre: "Fundas transparente 8x12", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollo" },
-  { id: "cafe_servilleta_fantasia", nombre: "Servilleta fantasia 24x24", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 300 unid" },
-  { id: "cafe_tarrina_litro", nombre: "Tarrina transparente de litro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_vasos_10oz", nombre: "Vasos bebidas calientes 10oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 20 uds" },
-  { id: "cafe_vasos_14oz", nombre: "Vasos bebidas calientes 14oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
-  { id: "cafe_vaso_7oz_opal", nombre: "Vaso 7 oz Opal HG", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_vaso_1oz_opal", nombre: "Vaso 1 oz Opal vacan", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_vasitos_salsas", nombre: "Vasitos salsas negros 2 oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
-  { id: "cafe_tapas_14oz", nombre: "Tapas bebidas calientes 14oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "tiras x 100 unid" },
-  { id: "cafe_tapas_10oz", nombre: "Tapas bebidas calientes 10oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "tiras x 100 unid" },
-  { id: "cafe_tapas_salseros", nombre: "Tapas salseros 2oz", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes" },
-  { id: "cafe_tapas_tarrina", nombre: "Tapas para tarrina litro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_bowl_negro", nombre: "Bowl negro con tapa", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 50 unid" },
-  { id: "cafe_portacomida", nombre: "Portacomida negro", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 25 unid" },
-  { id: "cafe_guantes_handy", nombre: "Guantes multiuso Handy", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 100 unid" },
-  { id: "cafe_plastico_film", nombre: "Plastico film industrial", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollos x 2.000 ft" },
-  { id: "cafe_filtros_cafe", nombre: "Filtros de cafe", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquete x 250 unidades" },
-  { id: "cafe_papel_termico", nombre: "Papel termico de impresora", categoria: "cafeteria", subcategoria: "bodega", unidad: "rollos x 5 uds" },
-  { id: "cafe_leche_semidescremada", nombre: "Leche semidescremada", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades x 1 litro" },
-  { id: "cafe_leche_entera_nutri", nombre: "Leche entera nutri", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "cafe_crema_leche_nutri", nombre: "Crema de leche nutri", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "cafe_leche_almendras", nombre: "Leche de almendras", categoria: "cafeteria", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "cafe_azucar_1_5kg", nombre: "Azucar blanca", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 1.5kg" },
-  { id: "cafe_stevia_gotas", nombre: "Stevia en gotas", categoria: "cafeteria", subcategoria: "bodega", unidad: "frasco x 30 ml" },
-  { id: "cafe_splenda", nombre: "Endulzante Splenda", categoria: "cafeteria", subcategoria: "bodega", unidad: "caja x 120 unidades" },
-  { id: "cafe_mix_frutos_secos", nombre: "Mix frutos secos", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades x 70g" },
-  { id: "cafe_nuez", nombre: "Nuez", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90 gr" },
-  { id: "cafe_almendras", nombre: "Almendras", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90gr" },
-  { id: "cafe_arandanos", nombre: "Arandanos", categoria: "cafeteria", subcategoria: "bodega", unidad: "vasos x 90gr" },
-  { id: "cafe_blend_grano_filtrado", nombre: "Cafe blend grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 160gr" },
-  { id: "cafe_nabon_grano_filtrado", nombre: "Cafe nabon grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 200gr" },
-  { id: "cafe_ibarra_grano_filtrado", nombre: "Cafe ibarra grano (filtrado)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 1kg" },
-  { id: "cafe_nabon_grano_venta", nombre: "Cafe nabon grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
-  { id: "cafe_blend_grano_venta", nombre: "Cafe blend grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
-  { id: "cafe_ibarra_grano_venta", nombre: "Cafe ibarra grano (venta)", categoria: "cafeteria", subcategoria: "bodega", unidad: "fundas x 340g" },
-  { id: "cafe_porta_vaso", nombre: "Porta vaso para llevar", categoria: "cafeteria", subcategoria: "bodega", unidad: "unidades" },
-  { id: "cafe_servilleta_z", nombre: "Servilleta en Z Blanchy 14x23 cm", categoria: "cafeteria", subcategoria: "bodega", unidad: "paquetes x 100 unidades" },
-
-  // ---------- BEBIDAS / MERCADO ----------
-  { id: "beb_perejil", nombre: "Perejil", categoria: "bebidas", subcategoria: "mercado", unidad: "tongos" },
-  { id: "beb_apio", nombre: "Apio tallo grueso", categoria: "bebidas", subcategoria: "mercado", unidad: "atados" },
-  { id: "beb_espinaca", nombre: "Espinaca americana", categoria: "bebidas", subcategoria: "mercado", unidad: "tongos" },
-  { id: "beb_limon", nombre: "Limon", categoria: "bebidas", subcategoria: "mercado", unidad: "empaques x 100 uds" },
-  { id: "beb_naranja_colombiana", nombre: "Naranja colombiana grande", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 100 uds" },
-  { id: "beb_pina_hawaiana", nombre: "Pina hawaiana", categoria: "bebidas", subcategoria: "mercado", unidad: "cajas x 5 unid" },
-  { id: "beb_pepino", nombre: "Pepino", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 50lb" },
-  { id: "beb_zanahoria", nombre: "Zanahoria", categoria: "bebidas", subcategoria: "mercado", unidad: "saco x 50 lb" },
-  { id: "beb_remolacha", nombre: "Remolacha", categoria: "bebidas", subcategoria: "mercado", unidad: "dolares" },
-  { id: "beb_curcuma", nombre: "Curcuma", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
-  { id: "beb_jengibre", nombre: "Jengibre", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
-  { id: "beb_sandia", nombre: "Sandia pequena", categoria: "bebidas", subcategoria: "mercado", unidad: "unidades" },
-  { id: "beb_manzana_roja", nombre: "Manzana roja americana", categoria: "bebidas", subcategoria: "mercado", unidad: "caja" },
-  { id: "beb_manzana_verde", nombre: "Manzana verde", categoria: "bebidas", subcategoria: "mercado", unidad: "caja" },
-  { id: "beb_uvas", nombre: "Uvas sin papa", categoria: "bebidas", subcategoria: "mercado", unidad: "libras" },
-  { id: "beb_papaya_hawaiana", nombre: "Papaya hawaiana", categoria: "bebidas", subcategoria: "mercado", unidad: "unidad" },
-  { id: "beb_banana_fresca", nombre: "Banana fresca", categoria: "bebidas", subcategoria: "mercado", unidad: "dolares" },
-  { id: "beb_chocolate_milano", nombre: "Chocolate milano", categoria: "bebidas", subcategoria: "mercado", unidad: "unidades x 650g" },
-
-  // ---------- BEBIDAS / FACILITY ----------
-  { id: "beb_mora_congelada", nombre: "Mora congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_fresa_congelada", nombre: "Fresa congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_mango_congelado", nombre: "Mango congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_melon_congelado", nombre: "Melon congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_banana_congelada", nombre: "Banana congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_pina_congelada", nombre: "Pina congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-  { id: "beb_tomate_arbol_congelado", nombre: "Tomate de arbol congelado", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 100g" },
-  { id: "beb_papaya_congelada", nombre: "Papaya congelada", categoria: "bebidas", subcategoria: "facility", unidad: "empaque x 1.500g" },
-
-  // ---------- BEBIDAS / BODEGA ----------
-  { id: "beb_vasos_domo_16oz", nombre: "Vasos domo 16 oz", categoria: "bebidas", subcategoria: "bodega", unidad: "tiras x 50 unid" },
-  { id: "beb_tapas_domo", nombre: "Tapas domo Perf 12-16oz", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 25 uds" },
-  { id: "beb_sorbetes_biodeg", nombre: "Sorbetes biodegradables empacado", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
-  { id: "beb_sorbete_ninos", nombre: "Sorbete flexible ninos", categoria: "bebidas", subcategoria: "bodega", unidad: "paquetes x 100 unid" },
-  { id: "beb_crema_chantilly", nombre: "Crema chantilly", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "beb_pasas", nombre: "Pasas", categoria: "bebidas", subcategoria: "bodega", unidad: "libra" },
-  { id: "beb_canela_rama", nombre: "Canela en rama", categoria: "bebidas", subcategoria: "bodega", unidad: "funda x 200gr" },
-  { id: "beb_laurel", nombre: "Laurel", categoria: "bebidas", subcategoria: "bodega", unidad: "funda x 200gr" },
-  { id: "beb_canela_polvo", nombre: "Canela en polvo", categoria: "bebidas", subcategoria: "bodega", unidad: "fundas x 200g" },
-  { id: "beb_cacao_molido", nombre: "Cacao molido munai", categoria: "bebidas", subcategoria: "bodega", unidad: "libras x 454g" },
-  { id: "beb_cacao_polvo", nombre: "Cacao en polvo natures heart", categoria: "bebidas", subcategoria: "bodega", unidad: "unidad x 100g" },
-  { id: "beb_marshmellows_fundas", nombre: "Marshmellows", categoria: "bebidas", subcategoria: "bodega", unidad: "fundas x 250g" },
-  { id: "beb_gas_crema", nombre: "Gas para crema", categoria: "bebidas", subcategoria: "bodega", unidad: "caja" },
-  { id: "beb_marshmallows_unid", nombre: "Marshmallows", categoria: "bebidas", subcategoria: "bodega", unidad: "unidades x 200g" },
-  { id: "beb_crema_leche_nutri", nombre: "Crema de leche nutri", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "beb_leche_almendras", nombre: "Leche de almendras", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 1 litro" },
-  { id: "beb_te_natures_heart", nombre: "Te natures heart (manzanilla)", categoria: "bebidas", subcategoria: "bodega", unidad: "cajas x 20 sobres" },
-
-  // ---------- PANADERIA / FACILITY ----------
-  { id: "pan_arepa_masa", nombre: "Arepa masa", categoria: "panaderia", subcategoria: "facility", unidad: "orden" },
-  { id: "pan_pure_camote", nombre: "Pure de camote", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 600g" },
-  { id: "pan_pure_zapallo", nombre: "Pure de zapallo", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 600g" },
-  { id: "pan_jamon_laminado", nombre: "Jamon laminado", categoria: "panaderia", subcategoria: "facility", unidad: "unidades" },
-  { id: "pan_queso_fresco_pan", nombre: "Queso fresco para pan", categoria: "panaderia", subcategoria: "facility", unidad: "empaques x 6 kg" },
-
-  // ---------- PANADERIA / BODEGA ----------
-  { id: "pan_harina_blanca", nombre: "Harina blanca", categoria: "panaderia", subcategoria: "bodega", unidad: "quintales x 50kg" },
-  { id: "pan_harina_mollete", nombre: "Harina de mollete", categoria: "panaderia", subcategoria: "bodega", unidad: "quintales x 50kg" },
-  { id: "pan_levadura", nombre: "Levadura activa seca", categoria: "panaderia", subcategoria: "bodega", unidad: "unidades x 500g" },
-  { id: "pan_polvo_hornear", nombre: "Polvo de hornear", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
-  { id: "pan_margarina_vegetal", nombre: "Margarina vegetal", categoria: "panaderia", subcategoria: "bodega", unidad: "caja x 27.5kg" },
-  { id: "pan_mermelada_mora", nombre: "Mermelada de mora", categoria: "panaderia", subcategoria: "bodega", unidad: "galon" },
-  { id: "pan_azucar_2_5kg", nombre: "Azucar blanca", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 2.5kg" },
-  { id: "pan_ajonjoli_blanco", nombre: "Ajonjoli blanco", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 1500gr" },
-  { id: "pan_nuez", nombre: "Nuez", categoria: "panaderia", subcategoria: "bodega", unidad: "libra" },
-  { id: "pan_esencia_banana", nombre: "Esencia de banana", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
-  { id: "pan_esencia_vainilla", nombre: "Esencia vainilla", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
-  { id: "pan_canela_polvo", nombre: "Canela en polvo", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad x 200g" },
-  { id: "pan_crema_pastelera", nombre: "Crema pastelera", categoria: "panaderia", subcategoria: "bodega", unidad: "funda" },
-  { id: "pan_gragea", nombre: "Gragea", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
-  { id: "pan_azucar_impalpable", nombre: "Azucar impalpable", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 4kg" },
-  { id: "pan_avena_hojuelas", nombre: "Avena en hojuelas", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 500g" },
-  { id: "pan_harina_maiz_amarillo", nombre: "Harina de maiz amarillo", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
-  { id: "pan_color_caramelo", nombre: "Color caramelo", categoria: "panaderia", subcategoria: "bodega", unidad: "unidad" },
-  { id: "pan_huevos_medianos", nombre: "Huevos medianos", categoria: "panaderia", subcategoria: "bodega", unidad: "cubetas x 30 unid" },
-  { id: "pan_chispas_chocolate", nombre: "Chispas de chocolate", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 1kg" },
-  { id: "pan_parmesano_rallado", nombre: "Parmesano rallado", categoria: "panaderia", subcategoria: "bodega", unidad: "x 500g" },
-  { id: "pan_panela_molida", nombre: "Panela molida", categoria: "panaderia", subcategoria: "bodega", unidad: "empaques x 2.5 kg" },
-  { id: "pan_esencia_vainilla_500", nombre: "Esencia de vainilla", categoria: "panaderia", subcategoria: "bodega", unidad: "botellas x 500cm3" },
-  { id: "pan_sal_crisal", nombre: "Sal crisal", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 2 kg" },
-  { id: "pan_mantequilla_nutri", nombre: "Mantequilla nutri", categoria: "panaderia", subcategoria: "bodega", unidad: "paquetes x 250g" },
-  { id: "pan_achiote", nombre: "Achiote", categoria: "panaderia", subcategoria: "bodega", unidad: "botella x 1 litro" },
-  { id: "pan_aceite_oliva_espanola", nombre: "Aceite oliva la espanola", categoria: "panaderia", subcategoria: "bodega", unidad: "botella x 500ml" },
-  { id: "pan_pirutines", nombre: "Pirutines para cupcake #12", categoria: "panaderia", subcategoria: "bodega", unidad: "paquete x 50 unidades" },
-  { id: "pan_coco_rallado", nombre: "Coco rallado", categoria: "panaderia", subcategoria: "bodega", unidad: "paquete x 250gr" },
-  { id: "pan_salvado_trigo", nombre: "Salvado de trigo", categoria: "panaderia", subcategoria: "bodega", unidad: "libras" },
-  { id: "pan_azucar_morena", nombre: "Azucar morena", categoria: "panaderia", subcategoria: "bodega", unidad: "empaque x 1kg" },
-
-  // ---------- LIMPIEZA / BODEGA ----------
-  { id: "lim_desinfectante", nombre: "Desinfectante", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_foaming_caustic", nombre: "Foaming caustic cleaner", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_metaquat", nombre: "Metaquat", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_cloro", nombre: "Cloro 100%", categoria: "limpieza", subcategoria: "bodega", unidad: "galones" },
-  { id: "lim_lava_vajillas_maquina", nombre: "Lava vajillas maquina", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_limpia_vidrios", nombre: "Limpia vidrios", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_vinagre_blanco", nombre: "Vinagre blanco para limpieza", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_alcohol_antibacterial", nombre: "Alcohol antibacterial", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_gel_antibacterial", nombre: "Gel antibacterial", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_detergente_polvo", nombre: "Detergente en polvo", categoria: "limpieza", subcategoria: "bodega", unidad: "fundas x 500g" },
-  { id: "lim_jabon_liquido_manos", nombre: "Jabon liquido para manos", categoria: "limpieza", subcategoria: "bodega", unidad: "galon" },
-  { id: "lim_atomizadores", nombre: "Atomizadores", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_raid", nombre: "Raid doble accion azul", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_brizze", nombre: "Brizze ambientador aerosol", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_esponja_amarilla_verde", nombre: "Esponja amarilla con verde", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_esponja_negra", nombre: "Esponja lava platos negra", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_esponja_rosada", nombre: "Esponja lava platos rosada", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_estropajo_industrial", nombre: "Estropajo industrial", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_lija_plancha", nombre: "Lija para limpieza de plancha", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_funda_basura_negra_5070", nombre: "Funda basura negra 50x70", categoria: "limpieza", subcategoria: "bodega", unidad: "rollos x 10 unid" },
-  { id: "lim_fundas_basura_celeste", nombre: "Fundas de basura celeste 30x36", categoria: "limpieza", subcategoria: "bodega", unidad: "paquetes x 10 unid" },
-  { id: "lim_fundas_basura_negra_3036", nombre: "Fundas de basura negra 30x36", categoria: "limpieza", subcategoria: "bodega", unidad: "paquetes x 10 unid" },
-  { id: "lim_guantes_caucho_9", nombre: "Guantes de caucho talla 9", categoria: "limpieza", subcategoria: "bodega", unidad: "pares" },
-  { id: "lim_guantes_caucho_8", nombre: "Guantes de caucho talla 8", categoria: "limpieza", subcategoria: "bodega", unidad: "pares" },
-  { id: "lim_guantes_negros", nombre: "Guantes negros", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
-  { id: "lim_mascarillas", nombre: "Mascarillas", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
-  { id: "lim_pano_blanco", nombre: "Pano blanco", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_pano_cafe", nombre: "Pano cafe", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_pano_celeste", nombre: "Pano celeste", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_pano_rojo", nombre: "Pano rojo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_panos_amarillo", nombre: "Panos amarillo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_panos_verde", nombre: "Panos verde", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_panos_verde_limon", nombre: "Panos verde limon", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_jabon_lava_todo", nombre: "Jabon lava todo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_escoba_plastico", nombre: "Escoba de plastico para salon con palo", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_escoba_madera", nombre: "Escoba de madera grande", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_recogedor_metal", nombre: "Recogedor de metal", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_filtros_luz_uv", nombre: "Filtros para luz UV", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_gel_cabello", nombre: "Gel para cabello", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_curitas", nombre: "Curitas", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
-  { id: "lim_paracetamol", nombre: "Paracetamol", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_buscapina", nombre: "Buscapina", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_papel_higienico_tork", nombre: "Papel higienico industrial Tork", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_guantes_latex_m", nombre: "Guantes latex negros talla M", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_guante_tela", nombre: "Guante de tela", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_malla_cabello", nombre: "Malla para cabello", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" },
-  { id: "lim_toalla_mano", nombre: "Toalla de mano para flujo central", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_fosforera", nombre: "Fosforera", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_cepillo_acero", nombre: "Cepillo de acero", categoria: "limpieza", subcategoria: "bodega", unidad: "unidad" },
-  { id: "lim_pilas_aaa", nombre: "Pilas triple A", categoria: "limpieza", subcategoria: "bodega", unidad: "unidades" },
-  { id: "lim_guillet", nombre: "Guillet", categoria: "limpieza", subcategoria: "bodega", unidad: "caja" }
+  // Catalogo de despacho: SOLO Empacado y Procesado (hecho en Facility).
+  // El resto del catalogo (cocina, bebidas, etc.) se administra en Morochos OS EC.
+  { id: "prod_arroz_en_grano_1_6_kg", nombre: "Arroz en grano", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 1.6 kg" },
+  { id: "prod_avena_molida_125_g", nombre: "Avena molida 125 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 125 g" },
+  { id: "prod_avena_molida_250_g", nombre: "Avena molida 250 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 250 g" },
+  { id: "prod_avena_en_hojuelas_500_g", nombre: "Avena en hojuelas", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 500 g" },
+  { id: "cocina_azucar_200gr_facility", nombre: "Azucar blanca 200 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 200 g" },
+  { id: "cocina_azucar_400gr_facility", nombre: "Azucar blanca 400 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 400 g" },
+  { id: "cocina_azucar_300g", nombre: "Azucar blanca 300 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 300 g" },
+  { id: "prod_azucar_blanca_500_g", nombre: "Azucar blanca 500 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 500 g" },
+  { id: "prod_azucar_blanca_2_5_kg", nombre: "Azucar blanca 2.5 kg", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 2.5 kg" },
+  { id: "prod_cacao_molido_munai_454_g", nombre: "Cacao molido munai", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 454 g" },
+  { id: "prod_canela_en_polvo_200_g", nombre: "Canela en polvo", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 200 g" },
+  { id: "prod_cornstarch_220_g", nombre: "Cornstarch 220 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 220 g" },
+  { id: "prod_cornstarch_370_g", nombre: "Cornstarch 370 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 370 g" },
+  { id: "prod_panela_molida_350_g", nombre: "Panela molida 350 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 350 g" },
+  { id: "prod_panela_molida_175_g", nombre: "Panela molida 175 g", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 175 g" },
+  { id: "prod_panela_molida_2_5_kg", nombre: "Panela molida 2.5 kg", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 2.5 kg" },
+  { id: "prod_mix_morocho_12_g", nombre: "Mix morocho", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 12 g" },
+  { id: "prod_pasas_lb", nombre: "Pasas", categoria: "empacado", subcategoria: "facility", unidad: "unidad x ½ lb" },
+  { id: "prod_comino_molido_200_g", nombre: "Comino molido", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 200 g" },
+  { id: "prod_oregano_entero_200_g", nombre: "Oregano entero", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 200 g" },
+  { id: "prod_pimienta_negra_200_g", nombre: "Pimienta negra", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 200 g" },
+  { id: "prod_salvado_de_trigo_400_g", nombre: "Salvado de trigo", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 400 g" },
+  { id: "prod_polvo_de_hornear_1_lb", nombre: "Polvo de hornear", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 1 lb" },
+  { id: "prod_ajonjoli_blanco_500_g", nombre: "Ajonjoli blanco", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 500 g" },
+  { id: "prod_nuez_454_g", nombre: "Nuez", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 454 g" },
+  { id: "cocina_papas_francesas", nombre: "Papas francesas congeladas", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 250 g" },
+  { id: "cocina_salchicha_papas", nombre: "Salchicha para papas", categoria: "empacado", subcategoria: "facility", unidad: "paquete x 20 uds" },
+  { id: "cocina_jamon_laminado", nombre: "Jamon laminado", categoria: "empacado", subcategoria: "facility", unidad: "paquete x 10 uds" },
+  { id: "prod_queso_fresco_pan_bloque_1_kg", nombre: "Queso fresco pan bloque", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 1 kg" },
+  { id: "prod_queso_fresco_pan_molido_2_kg", nombre: "Queso fresco pan molido", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 2 kg" },
+  { id: "prod_queso_cocina_bloque_6_kg", nombre: "Queso cocina bloque", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 6 kg" },
+  { id: "prod_queso_cocina_molido_2_kg", nombre: "Queso cocina molido", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 2 kg" },
+  { id: "prod_queso_tortilla_molido_2_kg", nombre: "Queso tortilla molido", categoria: "empacado", subcategoria: "facility", unidad: "unidad x 2 kg" },
+  { id: "beb_banana_congelada", nombre: "Banana congelada", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_fresa_congelada", nombre: "Fresa congelada", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_mango_congelado", nombre: "Mango congelado", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_melon_congelado", nombre: "Melon congelado", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_pina_congelada", nombre: "Pina congelada", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_papaya_congelada", nombre: "Papaya congelada", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_mora_congelada", nombre: "Mora congelada", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 1500 g" },
+  { id: "beb_tomate_arbol_congelado", nombre: "Tomate de arbol", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 100 g" },
+  { id: "cocina_base_pina_400", nombre: "Base de pina", categoria: "procesado", subcategoria: "facility", unidad: "unidad x 400 g" },
 ];
 
 const NOMBRES_CATEGORIA = {
+  empacado: "Empacado",
+  procesado: "Procesado",
   cocina: "Cocina",
   cafeteria: "Cafeteria",
   bebidas: "Bebidas",
@@ -1711,7 +1590,7 @@ const NOMBRES_SUBCATEGORIA = {
   facility: "Facility",
   bodega: "Bodega"
 };
-const ORDEN_CATEGORIA = ["cocina", "cafeteria", "bebidas", "panaderia", "limpieza"];
+const ORDEN_CATEGORIA = ["empacado", "procesado"];
 const ORDEN_SUBCATEGORIA = ["mercado", "facility", "bodega"];
 const ORDEN_SUBCATEGORIA_DESPACHO = ["mercado", "facility", "bodega"];
 const ORDEN_SUBCATEGORIA_MERCADO = ["mercado"];
@@ -1886,7 +1765,7 @@ async function crearGuiaDespacho() {
   btn.textContent = "Guardando...";
 
   try {
-    await db.collection("pedidos").add({
+    const refGuia = await db.collection("pedidos").add({
       local: local,
       estado: "despachado",
       fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1908,6 +1787,7 @@ async function crearGuiaDespacho() {
       listaCompraCargadaId = null;
       document.getElementById("cargar-lista-compra").value = "";
     }
+    if (window.PD_CARGADO && window.pdDespachado) pdDespachado(window.PD_CARGADO, refGuia.id, local);
     mostrarAviso(`Guia de despacho creada para ${NOMBRES_LOCAL[local] || local} con ${itemsSeleccionados.length} productos.`, "ok");
 
     document.querySelectorAll(".item.checked").forEach(el => {
@@ -1928,7 +1808,8 @@ async function crearGuiaDespacho() {
    PESTANAS
    ============================================================ */
 const TITULOS_VISTA = {
-  compra: ["Lista de compras", "Transcribe el pedido del local: lo que se compra en el mercado"],
+  pedidos: ["Pedidos de locales", "Lo que piden los locales: el mercado pasa a compras y la bodega a despacho"],
+  compra: ["Lista de compras", "Toca lo que hay que comprar en el mercado y guarda la lista"],
   proveedores: ["Recepcion proveedores", "Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
   produccion: ["Produccion", "Registra lo producido: suma al inventario, descuenta materia prima y saca la etiqueta"],
   despacho: ["Despacho", "Crea la guia de envio; lo despachado baja del inventario"],
@@ -1946,6 +1827,8 @@ function cambiarVista(nombre) {
   document.getElementById("topbar-subtitle").textContent = TITULOS_VISTA[nombre][1];
   if (typeof prView === 'function') prView(nombre);
   if (typeof ivView === 'function') ivView(nombre);
+  if (typeof lcView === 'function') lcView(nombre);
+  try { localStorage.setItem('ultima_vista', nombre); } catch (e) {}
 }
 
 /* ============================================================
@@ -2049,9 +1932,11 @@ function verGuia(id) {
       <span class="guia-fila-nombre"><span style="color:#888780;">${idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_despachada} ${it.unidad_medida})</span></span>
       <span class="check-box-vacio" title="Envia"></span>
       <span class="check-box-vacio" title="Recibe"></span>
-      <span class="guia-obs-columna"></span>
+      <span class="guia-obs-columna">${it.cantidad_recibida != null ? `<b style="color:${(it.diferencia || 0) !== 0 ? '#c0392b' : '#1d7a4d'};">Recibido: ${it.cantidad_recibida}${(it.diferencia || 0) !== 0 ? ` (${it.diferencia > 0 ? '+' : ''}${it.diferencia})` : ' ✓'}</b>${it.nota_diferencia ? `<br><small>${it.nota_diferencia}</small>` : ''}` : ''}</span>
     </div>
   `).join("");
+  const fechaRec = guia.fecha_recepcion && guia.fecha_recepcion.toDate ? guia.fecha_recepcion.toDate().toLocaleString("es-EC") : "";
+  const lineaRecepcion = guia.estado === "despachado" ? "" : `<div class="guia-fecha">${guia.estado === "recibido_diferencias" ? "Recibida con diferencias" : "Recibida OK"}${guia.recibido_por ? " por " + guia.recibido_por : ""}${fechaRec ? " - " + fechaRec : ""}</div>`;
 
   document.getElementById("guias-detalle").innerHTML = `
     <div class="detalle-panel">
@@ -2060,6 +1945,7 @@ function verGuia(id) {
           <h2>${NOMBRES_LOCAL[guia.local] || guia.local}</h2>
           <div class="guia-fecha">${fecha}</div>
           <div class="guia-fecha">Despachado por: ${guia.despachado_por || "-"}</div>
+          ${lineaRecepcion}
         </div>
         <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
       </div>
@@ -2094,140 +1980,7 @@ function cerrarDetalleGuia() {
      cantidad_solicitada}] }
    ============================================================ */
 
-function renderProductosCompra() {
-  const contenedor = document.getElementById("lista-productos-compra");
-  contenedor.innerHTML = "";
-
-  ORDEN_CATEGORIA.forEach(cat => {
-    const productosCategoria = PRODUCTOS.filter(p => p.categoria === cat);
-    if (productosCategoria.length === 0) return;
-
-    const catTitle = document.createElement("div");
-    catTitle.className = "categoria-title";
-    catTitle.textContent = NOMBRES_CATEGORIA[cat] || cat;
-    contenedor.appendChild(catTitle);
-
-    ORDEN_SUBCATEGORIA_MERCADO.forEach(sub => {
-      const productosSub = productosCategoria.filter(p => p.subcategoria === sub);
-      if (productosSub.length === 0) return;
-
-      const subTitle = document.createElement("div");
-      subTitle.className = "subcategoria-title";
-      subTitle.textContent = NOMBRES_SUBCATEGORIA[sub] || sub;
-      contenedor.appendChild(subTitle);
-
-      productosSub.forEach(p => {
-        const item = document.createElement("div");
-        item.className = "item";
-        item.dataset.id = p.id;
-        item.dataset.nombre = p.nombre.toLowerCase();
-        item.innerHTML = `
-          <div class="item-row1" onclick="if(event.target.type!=='checkbox'){document.getElementById('lc_chk_${p.id}').checked=!document.getElementById('lc_chk_${p.id}').checked; toggleItemCompra('${p.id}');}">
-            <input type="checkbox" id="lc_chk_${p.id}" onchange="toggleItemCompra('${p.id}')">
-            <div class="item-thumb">${obtenerIniciales(p.nombre)}</div>
-            <div class="item-texto">
-              <div class="item-nombre">${p.nombre}</div>
-              <div class="item-unidad">${p.unidad}</div>
-            </div>
-          </div>
-          <div class="item-detalle">
-            <div>
-              <label>Cantidad solicitada</label>
-              <input type="number" id="lc_cant_${p.id}" min="0" step="0.5" placeholder="0">
-            </div>
-          </div>
-        `;
-        contenedor.appendChild(item);
-      });
-    });
-  });
-
-  contenedor.querySelectorAll(".item").forEach(el => el.style.display = "block");
-}
-
-function toggleItemCompra(id) {
-  const item = document.querySelector(`#lista-productos-compra .item[data-id="${id}"]`);
-  const checked = document.getElementById(`lc_chk_${id}`).checked;
-  item.classList.toggle("checked", checked);
-  actualizarContadorCompra();
-}
-
-function actualizarContadorCompra() {
-  const n = document.querySelectorAll("#lista-productos-compra .item.checked").length;
-  document.getElementById("contador-compra").textContent = `${n} item${n === 1 ? "" : "s"} seleccionado${n === 1 ? "" : "s"}`;
-}
-
-function filtrarProductosCompra() {
-  const q = document.getElementById("buscador-compra").value.toLowerCase().trim();
-  const contenedor = document.getElementById("lista-productos-compra");
-
-  contenedor.querySelectorAll(".item").forEach(el => {
-    el.style.display = el.dataset.nombre.includes(q) ? "block" : "none";
-  });
-
-  const hijos = Array.from(contenedor.children);
-  hijos.forEach((el, i) => {
-    if (el.classList.contains("categoria-title") || el.classList.contains("subcategoria-title")) {
-      let tieneItemsVisibles = false;
-      for (let j = i + 1; j < hijos.length; j++) {
-        const siguiente = hijos[j];
-        if (siguiente.classList.contains("categoria-title")) break;
-        if (el.classList.contains("subcategoria-title") && siguiente.classList.contains("subcategoria-title")) break;
-        if (siguiente.classList.contains("item") && siguiente.style.display !== "none") {
-          tieneItemsVisibles = true;
-          break;
-        }
-      }
-      el.style.display = tieneItemsVisibles ? "block" : "none";
-    }
-  });
-}
-
-async function crearListaCompra() {
-  const local = document.getElementById("local-compra").value;
-  const items = [];
-
-  document.querySelectorAll("#lista-productos-compra .item.checked").forEach(el => {
-    const id = el.dataset.id;
-    const producto = PRODUCTOS.find(p => p.id === id);
-    const cantidad = parseFloat(document.getElementById(`lc_cant_${id}`).value);
-    if (!cantidad || cantidad <= 0) return;
-
-    items.push({
-      producto_id: id,
-      producto_nombre: producto.nombre,
-      unidad_medida: producto.unidad,
-      cantidad_solicitada: cantidad,
-      comprado: false
-    });
-  });
-
-  if (items.length === 0) {
-    mostrarAviso("Selecciona al menos un producto con cantidad antes de guardar la lista.", "error");
-    return;
-  }
-
-  try {
-    await db.collection("listas_compra").add({
-      local: local,
-      estado: "pendiente",
-      fecha_creacion: firebase.firestore.FieldValue.serverTimestamp(),
-      creado_por: "Edison Pacurucu",
-      items: items
-    });
-
-    mostrarAviso(`Lista de compras guardada para ${NOMBRES_LOCAL[local]} con ${items.length} productos.`, "ok");
-
-    document.querySelectorAll("#lista-productos-compra .item.checked").forEach(el => {
-      document.getElementById(`lc_chk_${el.dataset.id}`).checked = false;
-      el.classList.remove("checked");
-    });
-    actualizarContadorCompra();
-  } catch (err) {
-    console.error(err);
-    mostrarAviso("Error al guardar la lista de compras. Verifica la conexion.", "error");
-  }
-}
+/* La pantalla de pedir (tarjetas) esta en el modulo lc- mas abajo. */
 
 let listasCompraCache = [];
 let modoListasCompra = "pendientes";
@@ -2247,6 +2000,7 @@ function escucharListasCompra() {
     snapshot.forEach(doc => listasCompraCache.push({ id: doc.id, ...doc.data() }));
     renderListasCompraPendientes();
     actualizarSelectListaCompra();
+    if (window.lcRefresh) lcRefresh();
     if (listaCompraDetalleAbiertaId) {
       // Si la lista abierta ya no existe (eliminada), cerrar el detalle
       if (listasCompraCache.some(l => l.id === listaCompraDetalleAbiertaId)) {
@@ -2318,7 +2072,7 @@ function verListaCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista) return;
 
-  document.getElementById("vista-compra").querySelectorAll(".compra-top-grid, .buscador, #lista-productos-compra, .barra-inferior").forEach(el => el.style.display = "none");
+  if (window.lcDetalle) lcDetalle(true);
 
   const enviada = lista.enviada_contabilidad === true;
   const esPendiente = esListaCompraPendiente(lista);
@@ -2331,27 +2085,37 @@ function verListaCompra(id) {
     if (enviada) {
       // Ya enviada a contabilidad: registro fijo, solo lectura
       return `
-    <div class="detalle-fila" style="align-items:center;">
+    <div class="detalle-fila lc-fila" style="align-items:center;">
       <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
         <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" style="cursor:default;">${it.comprado ? "✓" : ""}</span>
-        <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
+        <span><span class="lc-n">${it.numero || idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${lcEtq(it)})</span>${it.precio_sugerido != null ? `<span class="lc-ref">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</span>
       </span>
       <span style="font-weight:500;">${it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "-"}</span>
+      ${it.vendedor ? `<span class="lc-vend-ro" style="flex-basis:100%; font-size:13px; color:#6b6a63;">Vendedor/local: ${it.vendedor}</span>` : ""}
     </div>
   `;
     }
 
     return `
-    <div class="detalle-fila" style="align-items:center;">
+    <div class="detalle-fila lc-fila" style="align-items:center;">
       <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
-        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="manejarTapComprado('${id}', ${idx})" title="Doble toque para marcar como comprado">${it.comprado ? "✓" : ""}</span>
-        <span>${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_solicitada} ${it.unidad_medida})</span></span>
+        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="manejarTapComprado('${id}', ${idx})" title="Toca para marcar como comprado">${it.comprado ? "✓" : ""}</span>
+        <span><span class="lc-n">${it.numero || idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${lcEtq(it)})</span>${it.precio_sugerido != null ? `<span class="lc-ref" title="Precio de referencia para el comprador">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</span>
       </span>
-      <input type="number" class="costo-input" min="0" step="0.01" placeholder="Costo $" value="${it.costo != null ? it.costo : ''}" onchange="actualizarCosto('${id}', ${idx}, this.value)">
+      <label class="lc-fld"><small>Costo pagado $</small><input type="number" class="costo-input" min="0" step="0.01" placeholder="Pagado $" value="${it.costo != null ? it.costo : ''}" onchange="actualizarCosto('${id}', ${idx}, this.value)"></label>
+      <select class="lc-sel lc-vend ${it.vendedor ? 'vset' : ''}" data-prev="${(it.vendedor || '').replace(/"/g, '&quot;')}" onchange="lcVendChange('${id}', ${idx}, this)">
+        <option value="">Vendedor/local...</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
+        <option value="__nuevo__">+ Registrar nuevo vendedor/local</option>
+      </select>
     </div>
   `;
   }).join("");
 
+  const monto = lista.monto_asignado != null && !isNaN(parseFloat(lista.monto_asignado)) ? parseFloat(lista.monto_asignado) : null;
+  const saldo = monto != null ? Math.round((monto - totalCosto) * 100) / 100 : null;
+  const montoHtml = enviada
+    ? ""
+    : `<div class="lc-monto"><b>Monto asignado (dinero entregado para comprar)</b><input type="number" class="costo-input" min="0" step="0.01" placeholder="Monto $" value="${monto != null ? monto : ''}" onchange="actualizarMontoAsignado('${id}', this.value)"></div>`;
   const fecha = lista.fecha_creacion && lista.fecha_creacion.toDate ? lista.fecha_creacion.toDate().toLocaleString("es-EC") : "";
   const fechaEnvio = lista.fecha_envio_contabilidad && lista.fecha_envio_contabilidad.toDate ? lista.fecha_envio_contabilidad.toDate().toLocaleString("es-EC") : "";
 
@@ -2362,8 +2126,11 @@ function verListaCompra(id) {
   const botonesAccion = enviada
     ? `<button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir</button>`
     : `
-      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir / exportar para contabilidad</button>
-      <button class="btn-secundario btn-imprimir" onclick="marcarEnviadaContabilidad('${id}')">Marcar como enviada a contabilidad</button>
+      <button class="btn-despachar btn-imprimir" onclick="imprimirListaCompra('${id}')">${lista.impresa ? "Imprimir otra vez" : "Imprimir / exportar para contabilidad"}</button>
+      ${lista.impresa
+        ? `<div class="lc-impreso btn-imprimir">Lista impresa. Ya puedes enviarla a contabilidad.</div>
+           <button class="btn-despachar btn-imprimir" style="background:#1d8a4e;" onclick="marcarEnviadaContabilidad('${id}')">Enviar a contabilidad</button>`
+        : `<p class="btn-imprimir" style="font-size:13px; color:#888780; margin:8px 0 0;">Después de imprimir aparece el botón para enviar a contabilidad.</p>`}
       ${esPendiente ? `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>` : ""}
     `;
 
@@ -2372,15 +2139,24 @@ function verListaCompra(id) {
       <div class="detalle-header">
         <div>
           <h2>${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
-          <div class="guia-fecha">${fecha}</div>
+          <div class="guia-fecha lc-fecha">${fecha}</div>
           ${estadoEnvio}
         </div>
         <button class="btn-cerrar" onclick="cerrarListaCompraDetalle()">&times;</button>
       </div>
+      ${montoHtml}
       ${filasItems}
-      <div class="detalle-fila" style="font-weight:600; border-top:2px solid #3c3489; margin-top:4px;">
-        <span>Total costo (para contabilidad)</span>
+      <div class="detalle-fila lc-tot" style="border-top:2px solid #4285f4; margin-top:4px;">
+        <span>Total gastado (costo pagado)</span>
         <span>$${totalCosto.toFixed(2)}</span>
+      </div>
+      <div class="detalle-fila lc-tot">
+        <span>Monto asignado</span>
+        <span>${monto != null ? "$" + monto.toFixed(2) : "-"}</span>
+      </div>
+      <div class="detalle-fila lc-tot final ${saldo == null ? "" : saldo < 0 ? "bad" : "good"}">
+        <span>${saldo != null && saldo < 0 ? "Excedido (faltó dinero)" : "Saldo (vuelto)"}</span>
+        <span>${saldo != null ? (saldo < 0 ? "-$" + Math.abs(saldo).toFixed(2) : "$" + saldo.toFixed(2)) : "-"}</span>
       </div>
       ${botonesAccion}
     </div>
@@ -2437,27 +2213,8 @@ async function eliminarListaCompra(id) {
   }
 }
 
-const ultimoTapComprado = {};
-
 function manejarTapComprado(listaId, idx) {
-  const clave = `${listaId}_${idx}`;
-  const ahora = Date.now();
-  const el = event.target;
-
-  if (ultimoTapComprado[clave] && (ahora - ultimoTapComprado[clave]) < 500) {
-    delete ultimoTapComprado[clave];
-    el.classList.remove("tocado-una-vez");
-    toggleComprado(listaId, idx);
-  } else {
-    ultimoTapComprado[clave] = ahora;
-    el.classList.add("tocado-una-vez");
-    setTimeout(() => {
-      if (ultimoTapComprado[clave] === ahora) {
-        delete ultimoTapComprado[clave];
-        el.classList.remove("tocado-una-vez");
-      }
-    }, 500);
-  }
+  toggleComprado(listaId, idx);
 }
 
 async function toggleComprado(listaId, idx) {
@@ -2482,17 +2239,45 @@ async function actualizarCosto(listaId, idx, valor) {
   const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, costo } : it);
 
   try {
-    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems });
+    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems, ...totalesLista(nuevosItems, lista.monto_asignado) });
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar el costo. Verifica la conexion.", "error");
   }
 }
 
+// total_costo y saldo se guardan en la lista para tabularlos desde otra app
+function totalesLista(items, monto) {
+  const total = Math.round(items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) * 100) / 100;
+  const m = monto != null && !isNaN(parseFloat(monto)) ? parseFloat(monto) : null;
+  return { total_costo: total, saldo: m != null ? Math.round((m - total) * 100) / 100 : null };
+}
+
+async function actualizarMontoAsignado(listaId, valor) {
+  const lista = listasCompraCache.find(l => l.id === listaId);
+  if (!lista || lista.enviada_contabilidad) return;
+  const monto = valor === "" || isNaN(parseFloat(valor)) ? null : parseFloat(valor);
+  try {
+    await db.collection("listas_compra").doc(listaId).update({ monto_asignado: monto, ...totalesLista(lista.items, monto) });
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("Error al guardar el monto. Verifica la conexion.", "error");
+  }
+}
+
+function imprimirListaCompra(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (lista && !lista.enviada_contabilidad && !lista.impresa) {
+    db.collection("listas_compra").doc(id).update({ impresa: true, fecha_impresion: firebase.firestore.FieldValue.serverTimestamp() })
+      .catch(err => console.error(err));
+  }
+  window.print();
+}
+
 function cerrarListaCompraDetalle() {
   listaCompraDetalleAbiertaId = null;
   document.getElementById("lista-compra-detalle").innerHTML = "";
-  document.getElementById("vista-compra").querySelectorAll(".compra-top-grid, .buscador, #lista-productos-compra, .barra-inferior").forEach(el => el.style.display = "");
+  if (window.lcDetalle) lcDetalle(false);
 }
 
 function actualizarSelectListaCompra() {
@@ -2753,7 +2538,7 @@ function verRecepcionProveedor(id) {
         <button class="btn-cerrar" onclick="cerrarRecepcionProveedorDetalle()">&times;</button>
       </div>
       ${filas}
-      <div class="detalle-fila" style="font-weight:600; border-top:2px solid #3c3489; margin-top:4px;">
+      <div class="detalle-fila" style="font-weight:600; border-top:2px solid #4285f4; margin-top:4px;">
         <span>Total</span>
         <span>$${total.toFixed(2)}</span>
       </div>
@@ -4289,7 +4074,7 @@ window.IVS = IV;
 })();
 
 renderProductos();
-renderProductosCompra();
+if (window.lcInit) lcInit();
 renderLineasInsumo();
 escucharInventario();
 escucharGuias();
@@ -4343,6 +4128,608 @@ ivInit();
   }, true);
 })();
 
+
+/* ============================================================
+   LISTA DE COMPRAS - tablet fija en la pared (vertical u horizontal)
+   Un toque en la tarjeta la agrega con su cantidad habitual; otro toque la ajusta.
+   Sin teclado del sistema: botones grandes y el teclado numerico gigante.
+   Guarda en listas_compra (misma estructura de siempre).
+   Fotos y cantidades habituales: fichas_compra/{id}
+   ============================================================ */
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const nfm = new Intl.NumberFormat('es-EC', {maximumFractionDigits:2});
+const fmt = n => nfm.format(n);
+const SV = () => firebase.firestore.FieldValue.serverTimestamp();
+const LSg = (k, d) => { try { const v = localStorage.getItem('lc_' + k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
+const LSs = (k, v) => { try { localStorage.setItem('lc_' + k, JSON.stringify(v)); } catch(e){} };
+
+/* [seccion, id (el mismo de Despacho), nombre, cantidad habitual, unidad] */
+const COMPRA_CAT = [
+  ['MERCADO','cocina_tomate_cherry','Tomates cherry',5,'1 lb'],
+  ['MERCADO','cocina_tomate_rinon','Tomate riñón',1,'½ caja'],
+  ['MERCADO','cocina_pimiento_verde','Pimiento verde',1,'1 arroba'],
+  ['MERCADO','cocina_pimiento_rojo','Pimiento rojo',1,'½ arroba'],
+  ['MERCADO','cocina_ajo_entero','Ajo entero',2,'1 lb'],
+  ['MERCADO','cocina_cebolla_blanca','Cebolla blanca',1,'½ arroba'],
+  ['MERCADO','cocina_cebolla_roja','Cebolla roja',2,'1 arroba'],
+  ['MERCADO','cocina_aji_escabeche','Ají escabeche rojo',1,'1 dólar'],
+  ['MERCADO','cocina_platano_maduro','Plátano maduro',2,'1 dólar'],
+  ['MERCADO','cocina_tomate_arbol_maduro','Tomate de árbol maduro',1,'½ caja'],
+  ['MERCADO','cocina_lechuga_delicia_verde','Lechuga delicia verde',12,'uds'],
+  ['MERCADO','cocina_col_morada','Col morada repollo grande',3,'uds'],
+  ['MERCADO','cocina_lechuga_delicia_morada','Lechuga delicia morada',12,'uds'],
+  ['MERCADO','cocina_aguacate_duro','Aguacate duro',12,'uds'],
+  ['MERCADO','cocina_aguacate_maduro','Aguacate maduro',10,'uds'],
+  ['MERCADO','cocina_zucchine','Zucchine verde',3,'uds'],
+  ['MERCADO','cocina_carbon_grueso','Carbón grueso',8,'fundas'],
+  ['BEBIDAS','beb_perejil','Perejil',1,'1 atado'],
+  ['BEBIDAS','beb_apio','Apio tallo grueso',2,'1 atado'],
+  ['BEBIDAS','beb_espinaca','Espinaca americana',1,'1 atado'],
+  ['BEBIDAS','beb_remolacha','Remolacha',1,'1 atado'],
+  ['BEBIDAS','beb_limon','Limón 100',1,'saco × 50 uds'],
+  ['BEBIDAS','beb_naranja_colombiana','Naranja colombiana grande',2,'saco × 100 uds'],
+  ['BEBIDAS','beb_pepino','Pepino saco',1,'saco × 40 uds'],
+  ['BEBIDAS','beb_zanahoria','Zanahoria',1,'saco × 50 lb'],
+  ['BEBIDAS','beb_pina_hawaiana','Piña hawaiana',1,'caja × 15 uds'],
+  ['BEBIDAS','beb_manzana_verde','Manzana verde',1,'caja × 210 uds'],
+  ['BEBIDAS','beb_manzana_roja','Manzana roja americana',1,'caja × 220 uds'],
+  ['BEBIDAS','beb_banana_fresca','Banana fresca',1,'caja × 20 uds'],
+  ['BEBIDAS','beb_curcuma','Cúrcuma',1,'½ lb'],
+  ['BEBIDAS','beb_jengibre','Jengibre',1,'½ lb'],
+  ['BEBIDAS','beb_sandia','Sandía pequeña',1,'uds'],
+  ['BEBIDAS','beb_papaya_hawaiana','Papaya hawaiana',1,'uds']
+].map((r, i) => ({numero:i + 1, sec:r[0], id:r[1], nombre:r[2], cant:r[3], unidad:r[4]}));
+/* Cada local tiene su propia lista numerada. Pendiente de cargar: El Salado y Facility Feria Libre. */
+const LISTAS = {la_victoria: COMPRA_CAT, el_salado: [], facility_feria_libre: []};
+const SEC_NOMBRE = {MERCADO:'Mercado', BEBIDAS:'Bebidas · Mercado'};
+const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre']];
+// "5" + "1 lb" -> "5 × 1 lb";  "12" + "uds" -> "12 uds";  "1" + "saco × 50 uds" -> "1 saco × 50 uds"
+const etq = (n, u) => /^[\d½¼¾]/.test(u || '') ? fmt(n) + ' × ' + u : fmt(n) + ' ' + (u || '');
+window.lcEtq = it => etq(it.cantidad_solicitada, it.unidad_medida);
+
+const L = {tab:'pedir', local:LSg('local', ''), draft:{}, vendors:[], sel:null, edit:false, fichas:{}, undo:null, ed:null, busy:false, sound:LSg('sound', true), ready:false};
+const lista = () => LISTAS[L.local] || [];
+const cat = id => lista().filter(p => p.id === id)[0] || null;
+function saveDraft(){ if(L.local) LSs('draft_' + L.local, L.draft); }
+function loadDraft(){
+  L.draft = L.local ? LSg('draft_' + L.local, null) : {};
+  if(L.draft == null){ const old = L.local === 'la_victoria' ? LSg('draft', {}) : {}; L.draft = old || {}; }
+}
+loadDraft();
+const ficha = id => L.fichas[id] || {};
+const habitual = p => ficha(p.id).cant > 0 ? ficha(p.id).cant : p.cant;
+const total = () => Object.keys(L.draft).length;
+
+/* ---------- sonido y vibracion ---------- */
+let actx = null;
+function beep(kind){
+  if(navigator.vibrate){ try { navigator.vibrate(kind === 'err' ? [80, 60, 80] : kind === 'ok' ? 60 : 20); } catch(e){} }
+  if(!L.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain(); o.connect(g); g.connect(actx.destination);
+    o.frequency.value = kind === 'err' ? 180 : kind === 'ok' ? 880 : 520; g.gain.value = 0.08; o.start(); o.stop(actx.currentTime + (kind === 'tap' ? 0.05 : 0.14));
+  } catch(e){}
+}
+
+/* ---------- pantalla ---------- */
+function iniciales(n){ return n.split(' ').slice(0, 2).map(w => w.charAt(0)).join('').toUpperCase(); }
+function hue(id){ let h = 0; for(let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 360; return h; }
+const foto = p => '<div class="lc-ph" style="--h:' + hue(p.id) + ';' + (ficha(p.id).foto ? 'background-image:url(' + ficha(p.id).foto + ')' : '') + '">' + (ficha(p.id).foto ? '' : esc(iniciales(p.nombre))) + '</div>';
+
+function render(){
+  const r = $('#lc-root'); if(!r) return;
+  const nPend = (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => !l.enviada_contabilidad).length;
+  const online = navigator.onLine;
+  let h = '<div class="lc-top"><div class="lc-locs">' + LOCALES.map(l => '<button class="lcb ' + (L.local === l[0] ? 'on' : '') + '" data-lc="local" data-v="' + l[0] + '">' + esc(l[1]) + '</button>').join('') + '</div>' +
+    '<div class="lc-tabs"><button class="lcb ' + (L.tab === 'pedir' ? 'on' : '') + '" data-lc="tab" data-v="pedir">Pedir</button>' +
+    '<button class="lcb ' + (L.tab === 'listas' ? 'on' : '') + '" data-lc="tab" data-v="listas">Guardadas' + (nPend ? ' (' + nPend + ')' : '') + '</button></div>' +
+    '<div class="lc-stat ' + (online ? 'ok' : 'wn') + '">' + (online ? 'En línea' : 'Sin conexión') + '</div>' +
+    '<button class="lcb ico" data-lc="menu" aria-label="Opciones">⚙</button></div>';
+  if(L.edit) h += '<div class="lc-banner">Modo fotos: toca un producto para cambiar su foto o su cantidad habitual. <button class="lcb" data-lc="edit-off">Terminar</button></div>';
+  if(L.tab === 'pedir'){
+    let sec = '';
+    if(!L.local) h += '<div class="lc-empty"><b>Elige el local</b><br>Cada local tiene su propia lista de compras.</div>';
+    else if(!lista().length) h += '<div class="lc-empty"><b>La lista de ' + esc((LOCALES.filter(l => l[0] === L.local)[0] || [0, ''])[1]) + ' todavía no está cargada.</b><br>Cuando tengamos sus productos aparecerán aquí, numerados.</div>';
+    else h += '<div class="lc-grid">' + lista().map(p => {
+      const hd = p.sec !== sec ? '<div class="lc-sec">' + esc(SEC_NOMBRE[p.sec]) + '</div>' : ''; sec = p.sec;
+      const q = L.draft[p.id];
+      return hd + '<button class="lc-card ' + (q ? 'in' : '') + (L.sel === p.id ? ' sel' : '') + '" data-lc="card" data-id="' + p.id + '"><span class="lc-num">' + p.numero + '</span>' + (q ? '<span class="lc-q">' + esc(etq(q, p.unidad)) + '</span><span class="lc-tick">✓</span>' : '') + foto(p) +
+        '<div class="lc-nm">' + esc(p.nombre) + '</div><div class="lc-un">Habitual: ' + esc(etq(habitual(p), p.unidad)) + '</div></button>';
+    }).join('') + '</div>';
+    const n = total();
+    h += '<div class="lc-bar"><div class="lc-cnt"><b>' + n + '</b> ' + (n === 1 ? 'producto' : 'productos') + (L.local ? '' : ' · <span class="wn">Elige el local</span>') + '</div>' +
+      '<button class="lcb" data-lc="revisar"' + (n ? '' : ' disabled') + '>Ver lista</button>' +
+      '<button class="lcb okb big" data-lc="guardar"' + (n ? '' : ' disabled') + '>Guardar lista</button></div>';
+  } else {
+    h += '<div class="lc-listas-hint">Listas guardadas: toca una para marcar lo comprado, poner costos o enviarla a contabilidad.</div>';
+  }
+  r.innerHTML = h;
+  const lv = $('#lc-listas'); if(lv) lv.style.display = L.tab === 'listas' ? '' : 'none';
+  sheet(); fit();
+}
+function fit(){
+  const r = $('#lc-root'); if(!r) return;
+  if(L.tab !== 'pedir'){ r.style.height = ''; r.style.minHeight = '0'; r.classList.remove('lc-full'); return; }
+  r.style.minHeight = '';
+  const top = r.getBoundingClientRect().top + window.scrollY;
+  r.classList.add('lc-full'); r.style.height = Math.max(420, window.innerHeight - top - 8) + 'px';
+}
+window.addEventListener('resize', () => { if($('#lc-root') && $('#lc-root').offsetParent) fit(); });
+
+/* ---------- hoja de cantidad (al tocar una tarjeta ya agregada) ---------- */
+function sheet(){
+  let s = $('#lc-sheet'); if(!s){ s = document.createElement('div'); s.id = 'lc-sheet'; document.body.appendChild(s); }
+  if(!L.sel){ s.className = ''; s.innerHTML = ''; return; }
+  const p = cat(L.sel); if(!p){ L.sel = null; return; }
+  const q = L.draft[p.id] || 0;
+  s.className = 'show';
+  s.innerHTML = '<div class="lc-back" data-lc="sheet-x"></div><div class="lc-sh">' +
+    '<div class="lc-sh-h">' + foto(p) + '<div><div class="lc-nm big">' + p.numero + '. ' + esc(p.nombre) + '</div><div class="lc-un">' + esc(p.unidad) + '</div></div></div>' +
+    '<div class="lc-qrow"><button class="lcb sq" data-lc="menos" aria-label="Menos">−</button><button class="lc-big" data-lc="teclado">' + esc(etq(q, p.unidad)) + '<span>toca para escribir</span></button><button class="lcb sq" data-lc="mas" aria-label="Más">+</button></div>' +
+    '<div class="lc-quick"><button class="lcb" data-lc="sum" data-v="1">+1</button><button class="lcb" data-lc="sum" data-v="5">+5</button><button class="lcb" data-lc="sum" data-v="10">+10</button><button class="lcb" data-lc="hab">Habitual (' + esc(fmt(habitual(p))) + ')</button></div>' +
+    '<div class="lc-acts"><button class="lcb er" data-lc="quitar">Quitar de la lista</button><button class="lcb okb" data-lc="listo">Listo</button></div></div>';
+}
+function setQty(id, q){
+  q = Math.round(q * 100) / 100;
+  if(q <= 0){ delete L.draft[id]; } else L.draft[id] = q;
+  saveDraft();
+}
+
+/* ---------- guardar ---------- */
+function guardar(){
+  if(L.busy) return;
+  const ids = lista().filter(p => L.draft[p.id]).map(p => p.id);
+  if(!ids.length){ beep('err'); toast('No hay productos en la lista'); return; }
+  if(!L.local){ beep('err'); toast('Primero elige el local (arriba)'); flashLocal(); return; }
+  L.busy = true; setTimeout(() => { L.busy = false; }, 1500);
+  const items = ids.map(id => { const p = cat(id); return {numero:p.numero, seccion:p.sec, producto_id:id, producto_nombre:p.nombre, unidad_medida:p.unidad, cantidad_solicitada:L.draft[id], comprado:false, costo:null, precio_sugerido:(ficha(id).precio > 0 ? ficha(id).precio : null), vendedor:null}; });
+  const ref = db.collection('listas_compra').doc();
+  ref.set({local:L.local, estado:'pendiente', monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:(auth.currentUser && auth.currentUser.email) || 'Tablet cocina', items:items})
+    .catch(e => { console.error(e); beep('err'); toast('No se pudo guardar la lista. Revisa la conexión.'); });
+  const n = items.length, local = L.local, snapDraft = Object.assign({}, L.draft);
+  L.draft = {}; saveDraft(); L.sel = null;
+  L.undo = {ref:ref, n:n, local:local, draft:Object.assign({}, snapDraft)}; beep('ok'); render(); snack();
+}
+function snack(){
+  let s = $('#lc-snack'); if(!s){ s = document.createElement('div'); s.id = 'lc-snack'; document.body.appendChild(s); }
+  const u = L.undo; if(!u){ s.className = ''; return; }
+  const nom = (LOCALES.filter(l => l[0] === u.local)[0] || [0, u.local])[1];
+  s.innerHTML = '<div class="lc-sn"><div><b>Lista guardada</b><br>' + u.n + ' productos · ' + esc(nom) + '</div><button class="lcb" data-lc="deshacer">Deshacer</button></div>';
+  s.className = 'show'; clearTimeout(snack.t); snack.t = setTimeout(() => { s.className = ''; L.undo = null; }, 10000);
+}
+function deshacer(){
+  const u = L.undo; if(!u) return;
+  u.ref.delete().catch(e => console.error(e));
+  // devolver los productos al borrador
+  if(u.local === L.local){ L.draft = Object.assign({}, u.draft, L.draft); saveDraft(); }
+  else LSs('draft_' + u.local, Object.assign({}, u.draft, LSg('draft_' + u.local, {})));
+  L.undo = null; const s = $('#lc-snack'); if(s) s.className = '';
+  beep('tap'); render(); toast('Lista deshecha: los productos volvieron');
+}
+function toast(m){
+  let t = $('#lc-toast'); if(!t){ t = document.createElement('div'); t.id = 'lc-toast'; document.body.appendChild(t); }
+  t.textContent = m; t.className = 'show'; clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = ''; }, 2600);
+}
+function flashLocal(){ const b = document.querySelectorAll('#lc-root .lc-locs .lcb'); b.forEach(x => x.classList.add('flash')); setTimeout(() => b.forEach(x => x.classList.remove('flash')), 900); }
+
+/* ---------- revisar lista ---------- */
+function revisar(){
+  const ids = lista().filter(p => L.draft[p.id]).map(p => p.id); if(!ids.length) return;
+  let s = $('#lc-review'); if(!s){ s = document.createElement('div'); s.id = 'lc-review'; document.body.appendChild(s); }
+  s.className = 'show';
+  s.innerHTML = '<div class="lc-back" data-lc="rev-x"></div><div class="lc-sh"><div class="lc-sh-t">Lista de hoy (' + ids.length + ')</div><div class="lc-rev">' +
+    ids.map(id => { const p = cat(id); return '<div class="lc-rv"><div class="lc-nm">' + p.numero + '. ' + esc(p.nombre) + '</div><b>' + esc(etq(L.draft[id], p.unidad)) + '</b><button class="lcb" data-lc="rv-edit" data-id="' + id + '">Cambiar</button></div>'; }).join('') +
+    '</div><div class="lc-acts"><button class="lcb er" data-lc="vaciar">Vaciar lista</button><button class="lcb" data-lc="rev-x">Cerrar</button></div></div>';
+}
+function cerrarRev(){ const s = $('#lc-review'); if(s){ s.className = ''; s.innerHTML = ''; } }
+
+/* ---------- menu y fotos ---------- */
+function menu(){
+  let s = $('#lc-review'); if(!s){ s = document.createElement('div'); s.id = 'lc-review'; document.body.appendChild(s); }
+  s.className = 'show';
+  s.innerHTML = '<div class="lc-back" data-lc="rev-x"></div><div class="lc-sh"><div class="lc-sh-t">Opciones</div>' +
+    '<button class="lcb sw ' + (L.sound ? 'on' : '') + '" data-lc="sonido"><span>Sonido</span><b>' + (L.sound ? 'Sí' : 'No') + '</b></button>' +
+    '<button class="lcb" data-lc="edit-on">Cambiar fotos y cantidades habituales</button>' +
+    '<button class="lcb" data-lc="vendedores">Vendedores</button>' +
+    '<button class="lcb" data-lc="rev-x">Cerrar</button></div>';
+}
+function abrirEd(id){
+  const p = cat(id); if(!p) return; const f = ficha(id);
+  L.ed = {id:id, foto:f.foto || null, cant:habitual(p), precio:f.precio > 0 ? f.precio : null}; renderEd();
+}
+function renderEd(){
+  let s = $('#lc-review'); if(!s){ s = document.createElement('div'); s.id = 'lc-review'; document.body.appendChild(s); }
+  if(!L.ed){ s.className = ''; s.innerHTML = ''; return; }
+  const p = cat(L.ed.id);
+  s.className = 'show';
+  s.innerHTML = '<div class="lc-back" data-lc="ed-x"></div><div class="lc-sh"><div class="lc-sh-t">' + esc(p.nombre) + '</div>' +
+    '<div class="lc-fotorow"><div class="lc-ph big" style="--h:' + hue(p.id) + ';' + (L.ed.foto ? 'background-image:url(' + L.ed.foto + ')' : '') + '">' + (L.ed.foto ? '' : esc(iniciales(p.nombre))) + '</div><div class="lc-col">' +
+    '<label class="lcb pri" for="lc-file">📷 Tomar o elegir foto</label><input id="lc-file" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px">' +
+    (L.ed.foto ? '<button class="lcb" data-lc="ed-nofoto">Quitar foto</button>' : '') + '</div></div>' +
+    '<button class="lcb val" data-lc="ed-cant">Cantidad habitual: ' + esc(etq(L.ed.cant, p.unidad)) + '</button>' +
+    '<button class="lcb val" data-lc="ed-precio">Precio sugerido: ' + (L.ed.precio ? '$' + esc(fmt(L.ed.precio)) : 'sin precio') + '</button>' +
+    '<div class="lc-acts"><button class="lcb" data-lc="ed-x">Cancelar</button><button class="lcb okb" data-lc="ed-save">Guardar</button></div></div>';
+  const fi = $('#lc-file'); if(fi) fi.onchange = () => { if(fi.files && fi.files[0]) leerFoto(fi.files[0]); };
+}
+function leerFoto(file){
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = () => {
+    const sc = Math.min(1, 520 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    L.ed.foto = c.toDataURL('image/jpeg', 0.72); URL.revokeObjectURL(url); renderEd();
+  };
+  img.onerror = () => toast('No se pudo leer esa foto'); img.src = url;
+}
+
+/* ---------- eventos ---------- */
+function pedirNumero(titulo, unidad, ini, cb){
+  abrirTeclado({titulo:titulo, unidad:unidad || '', inicial:ini > 0 ? ini : '', permitirVacio:true, permitirCero:true, decimales:true, onListo:v => cb(v == null ? 0 : v)});
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest ? e.target.closest('[data-lc]') : null; if(!t) return;
+  if(!(t.closest('#lc-root') || t.closest('#lc-sheet') || t.closest('#lc-review') || t.closest('#lc-snack'))) return;
+  const a = t.getAttribute('data-lc'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
+  switch(a){
+    case 'local': saveDraft(); L.local = v; LSs('local', v); L.sel = null; loadDraft(); beep('tap'); render(); break;
+    case 'tab': L.tab = v; L.sel = null; render(); if(v === 'listas' && typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
+    case 'card': {
+      if(L.edit){ abrirEd(id); break; }
+      const p = cat(id); if(!p) break;
+      if(L.draft[id]){ L.sel = id; beep('tap'); render(); }                          // ya estaba: abrir ajuste
+      else { setQty(id, habitual(p)); beep('ok'); render(); }                       // primer toque: agrega con la cantidad habitual
+      break;
+    }
+    case 'sheet-x': case 'listo': L.sel = null; beep('tap'); render(); break;
+    case 'mas': L.draft[L.sel] = (L.draft[L.sel] || 0); setQty(L.sel, L.draft[L.sel] + 1); beep('tap'); sheet(); renderSoft(); break;
+    case 'menos': { const q = (L.draft[L.sel] || 0) - 1; if(q <= 0){ setQty(L.sel, 0); L.sel = null; beep('tap'); render(); } else { setQty(L.sel, q); beep('tap'); sheet(); renderSoft(); } break; }
+    case 'sum': setQty(L.sel, (L.draft[L.sel] || 0) + parseFloat(v)); beep('tap'); sheet(); renderSoft(); break;
+    case 'hab': setQty(L.sel, habitual(cat(L.sel))); beep('tap'); sheet(); renderSoft(); break;
+    case 'quitar': setQty(L.sel, 0); L.sel = null; beep('tap'); render(); break;
+    case 'teclado': { const p = cat(L.sel); pedirNumero(p.nombre, p.unidad, L.draft[L.sel], n => { setQty(L.sel, n); if(!L.draft[L.sel]) L.sel = null; render(); }); break; }
+    case 'guardar': guardar(); break;
+    case 'deshacer': deshacer(); break;
+    case 'revisar': revisar(); break;
+    case 'rev-x': cerrarRev(); break;
+    case 'rv-edit': cerrarRev(); L.sel = id; render(); break;
+    case 'vaciar': L.draft = {}; saveDraft(); L.sel = null; cerrarRev(); beep('tap'); render(); break;
+    case 'menu': menu(); break;
+    case 'vendedores': vendMenu(); break;
+    case 'nv-ok': { const i = $('#lc-vnew'), n = i ? i.value.trim() : ''; if(!n){ beep('err'); break; }
+      db.collection('vendedores_compra').doc(n.toLowerCase().replace(/[^a-z0-9ñ]+/g, '_').replace(/^_+|_+$/g, '') || ('v' + Date.now())).set({nombre:n, activo:true}).catch(er => { console.error(er); toast('No se pudo guardar'); });
+      if(L.vendors.indexOf(n) < 0) L.vendors.push(n);
+      if(L.pend){ lcSetItem(L.pend.id, L.pend.idx, 'vendedor', n); L.pend = null; }
+      cerrarRev(); beep('ok'); break; }
+    case 'vend-add': { const i = $('#lc-vnew'), n = i ? i.value.trim() : ''; if(!n) break;
+      db.collection('vendedores_compra').doc(n.toLowerCase().replace(/[^a-z0-9ñ]+/g, '_').replace(/^_+|_+$/g, '') || ('v' + Date.now())).set({nombre:n, activo:true}).catch(er => { console.error(er); toast('No se pudo guardar'); });
+      if(L.vendors.indexOf(n) < 0) L.vendors.push(n); vendMenu(); break; }
+    case 'vend-del': { const n = v; db.collection('vendedores_compra').get().then(q => q.forEach(d => { if(d.data().nombre === n) d.ref.delete(); })).catch(er => console.error(er)); L.vendors = L.vendors.filter(x => x !== n); vendMenu(); break; }
+    case 'sonido': L.sound = !L.sound; LSs('sound', L.sound); menu(); break;
+    case 'edit-on': L.edit = true; cerrarRev(); L.tab = 'pedir'; render(); break;
+    case 'edit-off': L.edit = false; render(); break;
+    case 'ed-x': L.ed = null; renderEd(); break;
+    case 'ed-nofoto': L.ed.foto = null; renderEd(); break;
+    case 'ed-cant': { const p = cat(L.ed.id); pedirNumero('Cantidad habitual: ' + p.nombre, p.unidad, L.ed.cant, n => { if(n > 0) L.ed.cant = n; renderEd(); }); break; }
+    case 'ed-precio': { const p = cat(L.ed.id); pedirNumero('Precio sugerido: ' + p.nombre, '$', L.ed.precio, n => { L.ed.precio = n > 0 ? n : null; renderEd(); }); break; }
+    case 'ed-save': {
+      const p = cat(L.ed.id), doc = {foto:L.ed.foto || null, cant:L.ed.cant, precio:L.ed.precio || null, actualizado:SV()};
+      db.collection('fichas_compra').doc(L.ed.id).set(doc).catch(er => { console.error(er); toast('No se pudo guardar'); });
+      L.fichas[L.ed.id] = {foto:doc.foto, cant:doc.cant, precio:doc.precio}; L.ed = null; renderEd(); render(); toast('Guardado'); break;
+    }
+  }
+});
+function renderSoft(){ // actualiza la tarjeta y la barra sin cerrar la hoja
+  const g = $('#lc-root .lc-grid'); if(!g){ render(); return; }
+  const sc = g.scrollTop; render(); const g2 = $('#lc-root .lc-grid'); if(g2) g2.scrollTop = sc;
+}
+window.addEventListener('online', () => { if($('#lc-root')) render(); }); window.addEventListener('offline', () => { if($('#lc-root')) render(); });
+
+window.lcInit = function(){
+  if(L.ready) return; L.ready = true;
+  db.collection('vendedores_compra').onSnapshot(snap => { const a = []; snap.forEach(d => { const v = d.data(); if(v && v.nombre && v.activo !== false) a.push(v.nombre); }); L.vendors = a.sort((x, y) => x.localeCompare(y, 'es')); window.lcVendedores = vend; if(typeof verListaCompra === 'function' && typeof listaCompraDetalleAbiertaId !== 'undefined' && listaCompraDetalleAbiertaId) verListaCompra(listaCompraDetalleAbiertaId); }, e => console.error(e));
+  db.collection('fichas_compra').onSnapshot(snap => { L.fichas = {}; snap.forEach(d => { L.fichas[d.id] = d.data(); }); if(!L.sel && !L.ed) render(); }, e => console.error(e));
+  render();
+};
+window.lcRefresh = function(){ if(!L.ready) return; const g = $('#lc-root .lc-grid'); const sc = g ? g.scrollTop : 0; if(!L.sel && !L.ed) render(); const g2 = $('#lc-root .lc-grid'); if(g2) g2.scrollTop = sc; };
+window.lcView = function(n){ if(n === 'compra') setTimeout(() => { render(); }, 0); };
+function vend(){
+  const set = {}; L.vendors.forEach(n => { set[n] = 1; });
+  (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).forEach(l => (l.items || []).forEach(it => { if(it.vendedor) set[it.vendedor] = 1; }));
+  return Object.keys(set).sort((a, b) => a.localeCompare(b, 'es'));
+}
+window.lcVendedores = vend;
+window.lcSetItem = function(listaId, idx, campo, valor){
+  const l = listasCompraCache.filter(x => x.id === listaId)[0]; if(!l || l.enviada_contabilidad) return;
+  if(campo !== 'vendedor' && campo !== 'precio_sugerido') return;
+  if(campo === 'precio_sugerido'){ const f = parseFloat(valor); valor = isNaN(f) || f < 0 ? null : f; }
+  const items = l.items.map((it, i) => { if(i !== idx) return it; const n = Object.assign({}, it); n[campo] = (valor === '' || valor === undefined) ? null : valor; return n; });
+  db.collection('listas_compra').doc(listaId).update({items:items}).catch(e => { console.error(e); beep('err'); toast('No se pudo guardar. Revisa la conexión.'); });
+};
+window.lcVendChange = function(listaId, idx, sel){
+  if(sel.value !== '__nuevo__'){ lcSetItem(listaId, idx, 'vendedor', sel.value); return; }
+  const prev = sel.getAttribute('data-prev') || ''; sel.value = prev;
+  L.pend = {id:listaId, idx:idx}; nuevoVend();
+};
+function nuevoVend(){
+  let s = $('#lc-review'); if(!s){ s = document.createElement('div'); s.id = 'lc-review'; document.body.appendChild(s); }
+  s.className = 'show';
+  const ex = L.vendors.slice(0, 0);
+  s.innerHTML = '<div class="lc-back" data-lc="rev-x"></div><div class="lc-sh"><div class="lc-sh-t">Nuevo vendedor / local</div>' +
+    '<input id="lc-vnew" type="text" placeholder="Nombre del vendedor o del puesto" style="width:100%;min-height:64px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box">' +
+    '<div class="lc-acts"><button class="lcb" data-lc="rev-x">Cancelar</button><button class="lcb okb" data-lc="nv-ok">Guardar y usar</button></div></div>';
+  setTimeout(() => { const i = $('#lc-vnew'); if(i) i.focus(); }, 80);
+}
+function vendMenu(){
+  let s = $('#lc-review'); if(!s){ s = document.createElement('div'); s.id = 'lc-review'; document.body.appendChild(s); }
+  s.className = 'show';
+  s.innerHTML = '<div class="lc-back" data-lc="rev-x"></div><div class="lc-sh"><div class="lc-sh-t">Vendedores / locales</div><div class="lc-rev">' +
+    (L.vendors.length ? L.vendors.map(n => '<div class="lc-rv"><div class="lc-nm">' + esc(n) + '</div><button class="lcb er" data-lc="vend-del" data-v="' + esc(n) + '">Quitar</button></div>').join('') : '<div class="lc-un" style="padding:10px 0">Todavía no hay vendedores. Agrega el primero.</div>') +
+    '</div><div class="lc-acts"><input id="lc-vnew" type="text" placeholder="Nombre del vendedor o puesto" style="flex:2;min-height:56px;font-size:18px;padding:0 12px;border:2px solid #d3d1c7;border-radius:14px"><button class="lcb okb" data-lc="vend-add">Agregar</button></div>' +
+    '<div class="lc-acts"><button class="lcb" data-lc="rev-x">Cerrar</button></div></div>';
+}
+window.lcDetalle = function(abierto){
+  const r = $('#lc-root'), l = $('#lc-listas');
+  if(r) r.style.display = abierto ? 'none' : '';
+  if(l) l.style.display = abierto ? 'none' : (L.tab === 'listas' ? '' : 'none');
+  if(!abierto) render();
+};
+window.LCS = L; window.LC_CAT = COMPRA_CAT; window.LC_LISTAS = LISTAS;
+if(window.firebase && typeof db !== 'undefined') lcInit();
+})();
+
+
+/* ============================================================
+   PEDIDOS DE LOS LOCALES (bandeja)
+   Los iPads de los locales (Morochos OS EC) escriben en `pedidos_locales`.
+   Aqui Edison los revisa y con un toque:
+     - lo de MERCADO pasa a una Lista de compras pendiente del local
+     - lo de BODEGA se carga en Despacho
+   { local, estado: "enviado" | "en_proceso" | "procesado", fecha_envio, enviado_por, nota,
+     items: [{producto_id, producto_nombre, unidad_medida, cantidad, nota?}],
+     ajustes: {producto_id: cantidad (0 = quitado)},   // cambios de Edison, el pedido original no se toca
+     compra_lista_id, despacho_id, fecha_proceso }
+   ============================================================ */
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const nf = new Intl.NumberFormat('es-EC', {maximumFractionDigits:2});
+const SV = () => firebase.firestore.FieldValue.serverTimestamp();
+const LOCNOM = {la_victoria:'La Victoria', el_salado:'El Salado', facility_feria_libre:'Facility Feria Libre'};
+const P = {lista:[], tab:'nuevos', open:null, ready:false, vistos:null, undo:null, busy:false};
+const prod = id => PRODUCTOS.filter(p => p.id === id)[0] || null;
+const tipo = it => { const p = prod(it.producto_id); const sc = p ? p.subcategoria : it.subcategoria; return !sc ? 'revisar' : (sc === 'mercado' ? 'mercado' : 'bodega'); };
+const qty = (ped, it) => { const a = ped.ajustes || {}; return a[it.producto_id] !== undefined ? a[it.producto_id] : it.cantidad; };
+const efectivos = (ped, t) => (ped.items || []).filter(it => tipo(it) === t && qty(ped, it) > 0);
+const etq = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unidad_medida:u}) : nf.format(n) + ' ' + (u || ''));
+function fechaTxt(ts){
+  const d = ts && ts.toDate ? ts.toDate() : null; if(!d) return 'Enviando...';
+  const min = Math.round((Date.now() - d.getTime()) / 60000);
+  if(min < 1) return 'ahora mismo'; if(min < 60) return 'hace ' + min + ' min';
+  return d.toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+}
+function estadoDe(ped){
+  const m = efectivos(ped, 'mercado').length > 0, b = efectivos(ped, 'bodega').length > 0;
+  const hecho = (!m || ped.compra_lista_id) && (!b || ped.despacho_id);
+  if(hecho && (ped.compra_lista_id || ped.despacho_id || (!m && !b))) return 'procesado';
+  return (ped.compra_lista_id || ped.despacho_id) ? 'en_proceso' : 'enviado';
+}
+const pend = () => P.lista.filter(p => p.estado !== 'procesado');
+function badge(){
+  const n = pend().length, b = $('#nav-pedidos');
+  if(b) b.innerHTML = '📨 Pedidos de locales' + (n ? ' <span class="pd-badge">' + n + '</span>' : '');
+}
+function toast(m){
+  let t = $('#pd-toast'); if(!t){ t = document.createElement('div'); t.id = 'pd-toast'; document.body.appendChild(t); }
+  t.textContent = m; t.className = 'show'; clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = ''; }, 3200);
+}
+let actx = null;
+function beep(){ try { if(navigator.vibrate) navigator.vibrate([120, 80, 120]); actx = actx || new (window.AudioContext || window.webkitAudioContext)(); const o = actx.createOscillator(), g = actx.createGain(); o.connect(g); g.connect(actx.destination); o.frequency.value = 760; g.gain.value = 0.08; o.start(); o.stop(actx.currentTime + 0.25); } catch(e){} }
+
+/* ---------- pantallas ---------- */
+function render(){
+  const r = $('#pd-root'); if(!r) return;
+  badge();
+  const ped = P.open ? P.lista.filter(p => p.id === P.open)[0] : null;
+  if(P.open && !ped){ P.open = null; }
+  r.innerHTML = ped ? detalle(ped) : lista();
+}
+function lista(){
+  const nuevos = pend(), hechos = P.lista.filter(p => p.estado === 'procesado').slice(0, 30);
+  const show = P.tab === 'nuevos' ? nuevos : hechos;
+  let h = '<div class="pd-tabs"><button class="lcb ' + (P.tab === 'nuevos' ? 'on' : '') + '" data-pd="tab" data-v="nuevos">Por revisar' + (nuevos.length ? ' (' + nuevos.length + ')' : '') + '</button>' +
+    '<button class="lcb ' + (P.tab === 'hechos' ? 'on' : '') + '" data-pd="tab" data-v="hechos">Procesados</button></div>';
+  if(!show.length) h += '<div class="pd-empty"><b>' + (P.tab === 'nuevos' ? 'No hay pedidos nuevos' : 'Todavía no hay pedidos procesados') + '</b><br>' + (P.tab === 'nuevos' ? 'Cuando un local envíe su lista, aparece aquí con un aviso.' : '') + '</div>';
+  h += '<div class="pd-cards">' + show.map(p => {
+    const m = efectivos(p, 'mercado').length, b = efectivos(p, 'bodega').length, rv = (p.items || []).filter(it => tipo(it) === 'revisar').length;
+    const st = p.estado === 'procesado' ? '<span class="pd-st ok">Procesado</span>' : p.estado === 'en_proceso' ? '<span class="pd-st wn">En proceso</span>' : '<span class="pd-st nw">Nuevo</span>';
+    return '<button class="pd-card ' + (p.estado === 'enviado' ? 'nuevo' : '') + '" data-pd="abrir" data-id="' + p.id + '"><div class="pd-c1"><b>' + esc(LOCNOM[p.local] || p.local) + '</b>' + st + '</div>' +
+      '<div class="pd-c2">' + esc(fechaTxt(p.fecha_envio)) + (p.enviado_por ? ' · ' + esc(p.enviado_por) : '') + '</div>' +
+      '<div class="pd-c3"><span class="pd-chip">🛒 ' + m + ' de mercado</span><span class="pd-chip">📦 ' + b + ' de bodega</span>' + (rv ? '<span class="pd-chip bad">⚠ ' + rv + ' por revisar</span>' : '') + '</div></button>';
+  }).join('') + '</div>';
+  return h;
+}
+function filas(ped, t){
+  const its = (ped.items || []).filter(it => tipo(it) === t);
+  return its.map(it => {
+    const q = qty(ped, it), quitado = !(q > 0), cerrado = ped.estado === 'procesado' || (t === 'mercado' && ped.compra_lista_id) || (t === 'bodega' && ped.despacho_id);
+    return '<div class="pd-row ' + (quitado ? 'off' : '') + '"><div class="pd-nm">' + esc(it.producto_nombre || (prod(it.producto_id) || {}).nombre || it.producto_id) + (it.nota ? '<div class="pd-nota">' + esc(it.nota) + '</div>' : '') +
+      (t === 'revisar' ? '<div class="pd-nota">Código no reconocido: ' + esc(it.producto_id) + '</div>' : '') + '</div>' +
+      (cerrado || t === 'revisar'
+        ? '<b class="pd-q">' + esc(etq(q, it.unidad_medida)) + '</b>'
+        : '<button class="lcb pd-qb" data-pd="cant" data-id="' + esc(it.producto_id) + '">' + (quitado ? 'Quitado' : esc(etq(q, it.unidad_medida))) + '</button>' +
+          '<button class="lcb ' + (quitado ? '' : 'er') + '" data-pd="quitar" data-id="' + esc(it.producto_id) + '">' + (quitado ? 'Restaurar' : 'Quitar') + '</button>') + '</div>';
+  }).join('');
+}
+function detalle(ped){
+  const m = efectivos(ped, 'mercado').length, b = efectivos(ped, 'bodega').length;
+  const hayM = (ped.items || []).some(it => tipo(it) === 'mercado'), hayB = (ped.items || []).some(it => tipo(it) === 'bodega'), hayR = (ped.items || []).some(it => tipo(it) === 'revisar');
+  let h = '<button class="lcb" data-pd="volver">← Volver a pedidos</button>' +
+    '<div class="pd-head"><div><div class="pd-h1">' + esc(LOCNOM[ped.local] || ped.local) + '</div><div class="pd-c2">' + esc(fechaTxt(ped.fecha_envio)) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + '</div></div></div>' +
+    (ped.nota ? '<div class="pd-banner">📝 ' + esc(ped.nota) + '</div>' : '');
+  if(hayM) h += '<div class="pd-sec">🛒 Mercado · se compra</div>' + filas(ped, 'mercado');
+  if(hayB) h += '<div class="pd-sec">📦 Bodega · se despacha</div>' + filas(ped, 'bodega');
+  if(hayR) h += '<div class="pd-sec bad">⚠ Por revisar · producto no reconocido</div>' + filas(ped, 'revisar') + '<div class="pd-nota" style="padding:6px 4px">Estos productos no están en el catálogo. Agrégalos a mano en Compras o Despacho.</div>';
+  h += '<div class="pd-bar">';
+  if(!m && !b) h += '<button class="lcb okb big" data-pd="archivar">Cerrar pedido (no hay nada que procesar)</button>';
+  else {
+    if(m || ped.compra_lista_id) h += ped.compra_lista_id ? '<button class="lcb pd-done" data-pd="ver-compra">✓ En Lista de compras · ver</button>' : '<button class="lcb okb big" data-pd="compra">Pasar a Lista de compras (' + m + ')</button>';
+    if(b || ped.despacho_id) h += ped.despacho_id ? '<div class="lcb pd-done" style="display:flex;align-items:center;justify-content:center">✓ Despachado</div>' : '<button class="lcb pri big" data-pd="despacho">Cargar en Despacho (' + b + ')</button>';
+  }
+  return h + '</div>';
+}
+
+/* ---------- acciones ---------- */
+function guardarAjustes(ped, aj){
+  ped.ajustes = aj;
+  db.collection('pedidos_locales').doc(ped.id).update({ajustes:aj}).catch(e => { console.error(e); toast('No se pudo guardar el cambio'); });
+  render();
+}
+function actualizarEstado(ped, extra){
+  Object.assign(ped, extra || {});
+  const est = estadoDe(ped); const upd = Object.assign({estado:est}, extra || {});
+  if(est === 'procesado') upd.fecha_proceso = SV();
+  ped.estado = est;
+  return db.collection('pedidos_locales').doc(ped.id).update(upd).catch(e => { console.error(e); toast('No se pudo guardar. Revisa la conexión.'); });
+}
+function aCompra(ped){
+  if(P.busy || ped.compra_lista_id) return; P.busy = true; setTimeout(() => { P.busy = false; }, 1200);
+  const cat = (window.LC_LISTAS && window.LC_LISTAS[ped.local]) || [], fich = (window.LCS && window.LCS.fichas) || {};
+  const items = efectivos(ped, 'mercado').map(it => {
+    const c = cat.filter(x => x.id === it.producto_id)[0], f = fich[it.producto_id] || {};
+    return {numero:c ? c.numero : null, seccion:c ? c.sec : 'MERCADO', producto_id:it.producto_id, producto_nombre:it.producto_nombre || (prod(it.producto_id) || {}).nombre,
+      unidad_medida:c ? c.unidad : (it.unidad_medida || (prod(it.producto_id) || {}).unidad || ''), cantidad_solicitada:qty(ped, it), comprado:false, costo:null, precio_sugerido:(f.precio > 0 ? f.precio : null), vendedor:null};
+  });
+  const ref = db.collection('listas_compra').doc();
+  ref.set({local:ped.local, estado:'pendiente', pedido_id:ped.id, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido de ' + (LOCNOM[ped.local] || ped.local), items:items})
+    .catch(e => { console.error(e); toast('No se pudo crear la lista de compras'); });
+  actualizarEstado(ped, {compra_lista_id:ref.id});
+  P.undo = {ped:ped, ref:ref}; render(); snack(items.length);
+}
+function snack(n){
+  let s = $('#pd-snack'); if(!s){ s = document.createElement('div'); s.id = 'pd-snack'; document.body.appendChild(s); }
+  s.innerHTML = '<div class="pd-sn"><div><b>Pasó a Lista de compras</b><br>' + n + ' productos · pendiente de comprar</div><button class="lcb" data-pd="deshacer">Deshacer</button></div>';
+  s.className = 'show'; clearTimeout(snack.t); snack.t = setTimeout(() => { s.className = ''; P.undo = null; }, 10000);
+}
+function deshacer(){
+  const u = P.undo; if(!u) return;
+  u.ref.delete().catch(e => console.error(e));
+  u.ped.compra_lista_id = null; u.ped.estado = estadoDe(u.ped);
+  db.collection('pedidos_locales').doc(u.ped.id).update({compra_lista_id:null, estado:u.ped.estado, fecha_proceso:null}).catch(e => console.error(e));
+  P.undo = null; const s = $('#pd-snack'); if(s) s.className = ''; render(); toast('Deshecho');
+}
+window.PD_CARGADO = null;
+function aDespacho(ped){
+  const its = efectivos(ped, 'bodega'); if(!its.length) return;
+  cambiarVista('despacho');
+  document.querySelectorAll('.item.checked').forEach(el => { const c = document.getElementById('chk_' + el.dataset.id); if(c) c.checked = false; el.classList.remove('checked'); });
+  const sel = document.getElementById('local'); if(sel){ sel.value = ped.local; if(typeof actualizarSelectListaCompra === 'function') actualizarSelectListaCompra(); }
+  let n = 0;
+  its.forEach(it => {
+    const chk = document.getElementById('chk_' + it.producto_id), cant = document.getElementById('cant_' + it.producto_id);
+    if(!chk || !cant) return;
+    chk.checked = true; cant.value = qty(ped, it); toggleItem(it.producto_id); n++;
+  });
+  window.PD_CARGADO = ped.id;
+  mostrarAviso('Se cargaron ' + n + ' productos del pedido de ' + (LOCNOM[ped.local] || ped.local) + '. Revisa el origen de cada uno y crea la guía.', 'ok');
+}
+// lo llama crearGuiaDespacho cuando termina bien
+window.pdDespachado = function(pedidoId, guiaId, local){
+  const ped = P.lista.filter(p => p.id === pedidoId)[0]; if(!ped || (local && ped.local !== local)) return;
+  actualizarEstado(ped, {despacho_id:guiaId}); window.PD_CARGADO = null; if(ped.estado === 'procesado') P.open = null; render();
+};
+
+document.addEventListener('click', e => {
+  const t = e.target.closest ? e.target.closest('[data-pd]') : null; if(!t) return;
+  const a = t.getAttribute('data-pd'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
+  const ped = P.open ? P.lista.filter(p => p.id === P.open)[0] : null;
+  switch(a){
+    case 'tab': P.tab = v; render(); break;
+    case 'abrir': P.open = id; render(); window.scrollTo(0, 0); break;
+    case 'volver': P.open = null; render(); break;
+    case 'cant': { if(!ped) break; const it = ped.items.filter(x => x.producto_id === id)[0]; if(!it) break;
+      abrirTeclado({titulo:it.producto_nombre, subtitulo:'Pidió ' + etq(it.cantidad, it.unidad_medida), unidad:it.unidad_medida || '', inicial:qty(ped, it) > 0 ? qty(ped, it) : '', permitirVacio:true, permitirCero:true, decimales:true,
+        onListo:n => { const aj = Object.assign({}, ped.ajustes || {}); aj[id] = n == null ? 0 : n; guardarAjustes(ped, aj); }}); break; }
+    case 'quitar': { if(!ped) break; const it = ped.items.filter(x => x.producto_id === id)[0]; const aj = Object.assign({}, ped.ajustes || {});
+      if(qty(ped, it) > 0) aj[id] = 0; else delete aj[id]; guardarAjustes(ped, aj); break; }
+    case 'compra': if(ped) aCompra(ped); break;
+    case 'despacho': if(ped) aDespacho(ped); break;
+    case 'ver-compra': cambiarVista('compra'); if(window.LCS){ window.LCS.tab = 'listas'; } if(window.lcRefresh) lcRefresh(); { const b = document.querySelector('#lc-root [data-lc="tab"][data-v="listas"]'); if(b) b.click(); } break;
+    case 'archivar': if(ped){ ped.estado = 'procesado'; db.collection('pedidos_locales').doc(ped.id).update({estado:'procesado', fecha_proceso:SV()}).catch(er => console.error(er)); P.open = null; render(); } break;
+    case 'deshacer': deshacer(); break;
+  }
+});
+
+window.pdInit = function(){
+  if(P.ready) return; P.ready = true;
+  db.collection('pedidos_locales').orderBy('fecha_envio', 'desc').limit(60).onSnapshot(snap => {
+    const arr = []; snap.forEach(d => arr.push(Object.assign({id:d.id}, d.data())));
+    P.lista = arr;
+    if(P.vistos){
+      const nuevos = arr.filter(p => !P.vistos[p.id] && p.estado === 'enviado');
+      if(nuevos.length){ beep(); toast('📨 Pedido nuevo de ' + nuevos.map(p => LOCNOM[p.local] || p.local).join(', ')); }
+    }
+    P.vistos = {}; arr.forEach(p => { P.vistos[p.id] = 1; });
+    render();
+  }, e => console.error(e));
+  render();
+};
+window.PDS = P;
+if(window.firebase && typeof db !== 'undefined') pdInit();
+})();
+
+
+/* ============================================================
+   APP INSTALABLE + PANTALLA COMPLETA
+   - Chrome ofrece "Instalar app" (manifest.webmanifest + sw.js).
+   - Ya instalada, abre en pantalla completa desde el icono.
+   - Mientras no este instalada, el boton del menu activa la pantalla completa.
+   - ?vista=produccion|pedidos|compra|despacho|... abre directo en ese modulo.
+   ============================================================ */
+(function(){
+  let instalar = null, vistaAplicada = false;
+  const instalada = () => (window.matchMedia && (matchMedia('(display-mode: standalone)').matches || (matchMedia('(display-mode: fullscreen)').matches && !(document.fullscreenElement || document.webkitFullscreenElement)))) || window.navigator.standalone === true;
+  const enPantallaCompleta = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  const puedeFS = () => !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  function pintar(){
+    const b = document.getElementById('nav-pantalla'); if(!b) return;
+    if(instalada()){ b.style.display = 'none'; return; }
+    if(instalar){ b.style.display = ''; b.textContent = '📲 Instalar app'; return; }
+    if(puedeFS()){ b.style.display = ''; b.textContent = enPantallaCompleta() ? '⛶ Salir de pantalla completa' : '⛶ Pantalla completa'; return; }
+    b.style.display = '';
+    b.textContent = '📲 Instalar app';
+  }
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); instalar = e; pintar(); });
+  window.addEventListener('appinstalled', () => { instalar = null; pintar(); if(typeof mostrarAviso === 'function') mostrarAviso('App instalada. Ábrela desde el icono de la pantalla de inicio: abre en pantalla completa.', 'ok'); });
+  document.addEventListener('fullscreenchange', pintar); document.addEventListener('webkitfullscreenchange', pintar);
+  window.pantallaCompletaOInstalar = async function(){
+    if(instalar){
+      instalar.prompt();
+      try { await instalar.userChoice; } catch(e){}
+      instalar = null; pintar(); return;
+    }
+    if(puedeFS()){
+      try {
+        if(enPantallaCompleta()){ (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+        else { await (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); }
+      } catch(e){ console.error(e); }
+      pintar(); return;
+    }
+    if(typeof mostrarAviso === 'function') mostrarAviso('En Chrome toca los tres puntos (⋮) y elige "Instalar app" o "Añadir a pantalla de inicio".', 'ok');
+  };
+  window.aplicarVistaInicial = function(){
+    if(vistaAplicada) return; vistaAplicada = true;
+    const m = /[?&]vista=([a-z]+)/.exec(location.search);
+    let v = m ? m[1] : null;
+    if(!v){ try { v = localStorage.getItem('ultima_vista'); } catch(e){} }   // sin parametro: abre donde se quedo la tablet
+    if(v && typeof TITULOS_VISTA !== 'undefined' && TITULOS_VISTA[v] && document.getElementById('vista-' + v)) cambiarVista(v);
+  };
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(e => console.warn('sw', e)); });
+  }
+  pintar();
+})();
 </script>
 
   </main>
