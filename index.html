@@ -1076,7 +1076,7 @@
   #lc-snack.show{display:block;position:fixed;left:0;right:0;bottom:90px;z-index:160;pointer-events:none}
   .lc-sn{pointer-events:auto;margin:0 auto;max-width:520px;background:#2c2c2a;color:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
   .lc-sn .lcb{background:#fde8a6;border-color:#fde8a6;color:#2c2c2a;min-height:60px}
-  #lc-toast.show{display:block;position:fixed;left:50%;transform:translateX(-50%);top:90px;z-index:170;background:#2c2c2a;color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;max-width:90vw}
+  #lc-toast.show{display:block;position:fixed;left:50%;transform:translateX(-50%);top:70px;z-index:170;background:#2c2c2a;color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;max-width:90vw}
   body.touch .check-doble-tap{width:52px;height:52px;border-radius:12px;font-size:28px}
   body.touch #lista-compra-detalle .detalle-fila{min-height:70px}
   body.touch #listas-compra-pendientes .guia-card{min-height:84px;padding:14px}
@@ -1105,6 +1105,44 @@
   .lc-tot.final{font-size:22px;font-weight:800;border-top:2px solid #4285f4;margin-top:4px;padding-top:12px}
   .lc-tot.bad span:last-child{color:#c0392b} .lc-tot.good span:last-child{color:#1d8a4e}
   .lc-impreso{font-size:13px;color:#1d8a4e;font-weight:700;margin-top:10px}
+  /* ===== Lista guardada: formato lista, pensado para celular ===== */
+  body #lista-compra-detalle .detalle-panel{padding:10px 8px;max-width:560px;margin:0 auto}
+  body #lista-compra-detalle .detalle-header{margin-bottom:6px}
+  body #lista-compra-detalle .detalle-header h2{font-size:20px}
+  body #lista-compra-detalle .lc-fecha{font-weight:900;color:#2c2c2a;font-size:15px}
+  .lcr{display:flex;align-items:center;gap:8px;padding:5px 2px;border-bottom:1px solid #e2e0d6;min-height:0;position:relative}
+  .lcr .lcr-mid{flex:1;min-width:0}
+  .lcr .lcr-t{font-size:15px;line-height:1.25;font-weight:600;color:#2c2c2a}
+  .lcr .lcr-q{font-weight:400;color:#6b6a63;font-size:13px;white-space:nowrap}
+  .lcr .lcr-s{font-size:12px;color:#6b6a63}
+  .lcr .lc-n{font-weight:800;color:#4285f4}
+  body #lista-compra-detalle .lcr .check-doble-tap{width:34px;height:34px;min-width:34px;border-radius:9px;font-size:20px}
+  .lcr .lc-ref{margin-left:6px;padding:0 6px;font-size:11px}
+  body #lista-compra-detalle .lcr .lc-sel{width:100%;min-height:28px;height:28px;font-size:12px;padding:0 6px;margin-top:2px;border:1px solid #d3d1c7;border-radius:8px;background:#fff;color:#6b6a63}
+  body #lista-compra-detalle .lcr .lc-sel.vset{border-color:#4285f4;color:#2c2c2a;font-weight:600}
+  .lcr .lcr-p{min-width:68px;height:38px;padding:0 8px;border-radius:10px;border:1.5px dashed #b4b2a9;background:#fff;font:700 16px inherit;font-family:inherit;color:#888780;flex-shrink:0}
+  .lcr .lcr-p.set{border:1.5px solid #4285f4;color:#2c2c2a;background:#f4f7ff}
+  .lcr .lcr-p.fijo{display:inline-flex;align-items:center;justify-content:center;border:none;background:none;color:#2c2c2a}
+  .lcr.done .lcr-t{color:#8a8880}
+  .lcr.lock{background:#f6f5f0}
+  .lcr.lock .lc-sel{pointer-events:none;opacity:.7}
+  .lcr.lock .lcr-p, .lcr.lock .check-doble-tap{pointer-events:none}
+  .lcr .lcr-cand{position:absolute;right:2px;top:1px;font-size:9px;opacity:.5}
+  .lcr.edit{background:#fff8e1;outline:2px solid #f2c94c;border-radius:8px}
+  body #lista-compra-detalle .lc-tot{font-size:15px;min-height:0;padding:7px 2px}
+  body #lista-compra-detalle .lc-tot.final{font-size:18px}
+  body #lista-compra-detalle .lc-monto{padding:8px 10px;margin:0 0 6px}
+  body #lista-compra-detalle .lc-monto b{font-size:13px}
+  body #lista-compra-detalle .lc-monto .costo-input{width:110px;min-height:40px;font-size:17px}
+  @media print{
+    body #lista-compra-detalle .lcr{min-height:0 !important;padding:7px 0 !important;border-bottom:1px solid #888;break-inside:avoid;background:#fff !important;outline:none}
+    body #lista-compra-detalle .lcr .lcr-t{font-size:12pt;font-weight:500}
+    body #lista-compra-detalle .lcr .lcr-q{font-size:11pt}
+    body #lista-compra-detalle .lcr .lc-sel,body #lista-compra-detalle .lcr .lcr-cand,body #lista-compra-detalle .lcr .lcr-s{display:none !important}
+    body #lista-compra-detalle .lcr .lcr-p{border:none !important;background:none !important;font-size:12pt;font-weight:600;color:#000;min-width:0}
+    body #lista-compra-detalle .lcr .lcr-p.vacio{color:transparent !important}
+    body #lista-compra-detalle .lcr .check-doble-tap{width:18px !important;height:18px !important;min-width:18px;font-size:13px;border:1.5px solid #000}
+  }
   @media print{.lc-sel{-webkit-appearance:none;appearance:none;border:none !important;background:none !important}.lc-monto{background:none;padding:6px 0}.lc-monto .costo-input{border:none;background:none}}
   #lista-compra-detalle .lc-fecha{font-weight:800;color:#2c2c2a;font-size:15px}
   @media print{
@@ -1516,6 +1554,14 @@ async function verificarDispositivoYEntrar(user) {
   }
 }
 
+/* MODO DESARROLLO: sin login (solo en el archivo -dev) */
+if (window.LOGIN_DESACTIVADO) {
+  mostrarPantallaApp();
+  var _b = document.createElement('div');
+  _b.textContent = 'SIN LOGIN · desarrollo';
+  _b.style.cssText = 'position:fixed;top:0;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;font:700 11px sans-serif;padding:2px 10px;border-radius:0 0 8px 8px;z-index:99999;pointer-events:none';
+  document.body.appendChild(_b);
+} else
 auth.onAuthStateChanged(user => {
   if (user) {
     verificarDispositivoYEntrar(user);
@@ -2082,34 +2128,33 @@ function verListaCompra(id) {
     if (it.costo) totalCosto += parseFloat(it.costo);
     const tachado = it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : '';
 
+    const nom = `<span class="lc-n">${it.numero || idx + 1}.</span> ${it.producto_nombre} <span class="lcr-q">${lcEtq(it)}</span>`;
+    const precio = it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "$ ‒";
     if (enviada) {
       // Ya enviada a contabilidad: registro fijo, solo lectura
       return `
-    <div class="detalle-fila lc-fila" style="align-items:center;">
-      <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
-        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" style="cursor:default;">${it.comprado ? "✓" : ""}</span>
-        <span><span class="lc-n">${it.numero || idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${lcEtq(it)})</span>${it.precio_sugerido != null ? `<span class="lc-ref">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</span>
-      </span>
-      <span style="font-weight:500;">${it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "-"}</span>
-      ${it.vendedor ? `<span class="lc-vend-ro" style="flex-basis:100%; font-size:13px; color:#6b6a63;">Vendedor/local: ${it.vendedor}</span>` : ""}
-    </div>
-  `;
+    <div class="lcr lock ${it.comprado ? 'done' : ''}">
+      <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}">${it.comprado ? "✓" : ""}</span>
+      <div class="lcr-mid"><div class="lcr-t">${nom}</div>${it.vendedor ? `<div class="lcr-s lc-vend-ro">${it.vendedor}</div>` : ""}</div>
+      <span class="lcr-p fijo">${precio}</span>
+    </div>`;
     }
-
+    const bloq = lcBloqueada(id, idx, it);
+    const ed = lcEditando.has(id + ':' + idx);
     return `
-    <div class="detalle-fila lc-fila" style="align-items:center;">
-      <span style="display:flex; align-items:center; gap:10px; flex:1; ${tachado}">
-        <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="manejarTapComprado('${id}', ${idx})" title="Toca para marcar como comprado">${it.comprado ? "✓" : ""}</span>
-        <span><span class="lc-n">${it.numero || idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${lcEtq(it)})</span>${it.precio_sugerido != null ? `<span class="lc-ref" title="Precio de referencia para el comprador">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</span>
-      </span>
-      <label class="lc-fld"><small>Costo pagado $</small><input type="number" class="costo-input" min="0" step="0.01" placeholder="Pagado $" value="${it.costo != null ? it.costo : ''}" onchange="actualizarCosto('${id}', ${idx}, this.value)"></label>
-      <select class="lc-sel lc-vend ${it.vendedor ? 'vset' : ''}" data-prev="${(it.vendedor || '').replace(/"/g, '&quot;')}" onchange="lcVendChange('${id}', ${idx}, this)">
-        <option value="">Vendedor/local...</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
-        <option value="__nuevo__">+ Registrar nuevo vendedor/local</option>
-      </select>
-    </div>
-  `;
-  }).join("");
+    <div class="lcr ${it.comprado ? 'done' : ''} ${bloq ? 'lock' : ''} ${ed ? 'edit' : ''}" onclick="lcTapFila('${id}', ${idx})">
+      <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="event.stopPropagation(); lcCheck('${id}', ${idx})">${it.comprado ? "✓" : ""}</span>
+      <div class="lcr-mid">
+        <div class="lcr-t">${nom}${it.precio_sugerido != null ? `<span class="lc-ref" title="Precio de referencia">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</div>
+        <select class="lc-sel lc-vend ${it.vendedor ? 'vset' : ''}" onclick="event.stopPropagation()" data-prev="${(it.vendedor || '').replace(/"/g, '&quot;')}" onchange="lcVendChange('${id}', ${idx}, this)">
+          <option value="">Vendedor/local...</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
+          <option value="__nuevo__">+ Registrar nuevo vendedor/local</option>
+        </select>
+      </div>
+      <button class="lcr-p ${it.costo != null ? 'set' : 'vacio'}" onclick="event.stopPropagation(); lcPrecio('${id}', ${idx})">${precio}</button>
+      ${bloq ? '<span class="lcr-cand" title="Doble toque para editar">🔒</span>' : ''}
+    </div>`;
+    }).join("");
 
   const monto = lista.monto_asignado != null && !isNaN(parseFloat(lista.monto_asignado)) ? parseFloat(lista.monto_asignado) : null;
   const saldo = monto != null ? Math.round((monto - totalCosto) * 100) / 100 : null;
@@ -2211,6 +2256,40 @@ async function eliminarListaCompra(id) {
     console.error(err);
     mostrarAviso("No se pudo eliminar la lista. Verifica la conexion.", "error");
   }
+}
+
+/* Fila de la lista de compras (pensada para el celular en el mercado).
+   Ya comprada y con precio = BLOQUEADA: solo se cambia con doble toque en la fila. */
+const lcEditando = new Set();
+let lcUltimoToque = {k:null, t:0};
+function lcBloqueada(id, idx, it) { return !!(it.comprado && it.costo != null) && !lcEditando.has(id + ':' + idx); }
+function lcRefrescar(id) { if (listaCompraDetalleAbiertaId === id) verListaCompra(id); }
+function lcTapFila(id, idx) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  const it = lista.items[idx], k = id + ':' + idx;
+  if (!lcBloqueada(id, idx, it)) return;
+  const ahora = Date.now();
+  if (lcUltimoToque.k === k && ahora - lcUltimoToque.t < 450) {
+    lcEditando.add(k); lcUltimoToque = {k:null, t:0}; lcRefrescar(id);
+    setTimeout(() => { if (lcEditando.delete(k)) lcRefrescar(id); }, 12000);  // se vuelve a bloquear sola
+  } else {
+    lcUltimoToque = {k:k, t:ahora};
+    if (window.lcToast) lcToast("Ya comprado. Doble toque para editar");
+  }
+}
+function lcCheck(id, idx) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad || lcBloqueada(id, idx, lista.items[idx])) return;
+  toggleComprado(id, idx);
+}
+function lcPrecio(id, idx) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  const it = lista.items[idx];
+  if (lcBloqueada(id, idx, it)) return;
+  abrirTeclado({titulo: it.producto_nombre, subtitulo: "Precio pagado", unidad: "$", inicial: it.costo != null ? it.costo : "", permitirVacio: true, permitirCero: true,
+    onListo: v => { actualizarCosto(id, idx, v == null ? "" : String(v)); lcEditando.delete(id + ':' + idx); }});
 }
 
 function manejarTapComprado(listaId, idx) {
@@ -2916,6 +2995,7 @@ function fichaDe(pid){
 }
 const tieneVida = f => f.vida.ref > 0 || f.vida.con > 0 || f.vida.amb > 0;
 const maxOf = f => f.max > 0 ? f.max : f.batch * 3;
+const qEtq = r => r.cpe > 0 ? r.cpe : r.cant;  // cantidad que dice CADA etiqueta (paquete) o el total
 const etqOf = (f, q) => f.por_etiqueta > 0 ? Math.max(1, Math.ceil(q / f.por_etiqueta - 1e-9)) : 1;
 const modosDe = f => ['ref', 'con', 'amb'].filter(m => f.vida[m] > 0);
 function venceDe(from, dias){ const d = new Date(from); d.setDate(d.getDate() + dias); return d; }
@@ -2970,7 +3050,7 @@ function escuchar(){
       snap.forEach(d => {
         const x = d.data({serverTimestamps:'estimate'});
         out.push({id:d.id, col:col, prueba:col === 'pruebas_produccion', pend:!!(d.metadata && d.metadata.hasPendingWrites),
-          pid:x.producto_id, nombre:x.producto_nombre, unidad:x.unidad_medida, cant:x.cantidad_producida, batches:x.batches, modo:x.conservacion_modo,
+          pid:x.producto_id, nombre:x.producto_nombre, unidad:x.unidad_medida, cant:x.cantidad_producida, cpe:x.cantidad_por_etiqueta || 0, batches:x.batches, modo:x.conservacion_modo,
           ts:tsMs(x.fecha_produccion), vence:tsMs(x.vence), dias:x.dias_vida || 0, lote:x.lote || '', etq:x.etiquetas || 1, op:x.operador || '',
           anulado:!!x.anulado, inv:x.inventario !== false, receta:x.insumos || []});
       });
@@ -3102,7 +3182,7 @@ function qrSim(seed){
 }
 function labelHTML(r, mini){
   const ini = (r.op || '').charAt(0) + '.';
-  return '<div class="label' + (mini ? ' mini' : '') + '"><div class="l1">' + esc(r.nombre) + '</div><div class="l2">' + fmt(r.cant) + ' ' + esc(r.unidad) + '</div><div class="l3">Elab.: ' + fd(new Date(r.ts), true) + '</div>' + qrSim(r.lote) +
+  return '<div class="label' + (mini ? ' mini' : '') + '"><div class="l1">' + esc(r.nombre) + '</div><div class="l2">' + fmt(qEtq(r)) + ' ' + esc(r.unidad) + '</div><div class="l3">Elab.: ' + fd(new Date(r.ts), true) + '</div>' + qrSim(r.lote) +
     '<div class="l4">VENCE: ' + (r.vence ? fd(new Date(r.vence), r.dias <= 3) : '—') + '</div><div class="l5"><span>' + esc(r.lote) + '</span><span>' + (MODOS[r.modo] || '') + ' · ' + ini + '</span></div></div>';
 }
 
@@ -3120,7 +3200,7 @@ function renderPanel(){
   const regTxt = g ? (S.guard.kind === 'max' ? 'Cantidad alta · toca otra vez' : 'Ya registrado · toca otra vez') : 'Registrar';
   const lote = nextLote(f, now);
   const keys = ['7','8','9','4','5','6','1','2','3', f.decimales ? ',' : 'C', '0', 'back'];
-  const pseudo = {nombre:f.nombre, unidad:f.unidad, cant:S.qty, ts:now.getTime(), vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, modo:S.modo, op:S.op};
+  const pseudo = {nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, ts:now.getTime(), vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, modo:S.modo, op:S.op};
   const cant = S.mode === 'typing' ? (S.buf ? fmt(parseFloat(S.buf)) + (S.buf.slice(-1) === '.' ? ',' : '') : '0') : fmt(S.qty);
   const chip = vida
     ? '<div class="chipv ' + cls + '">' + ic('clock', 26) + '<span>Vence ' + fd(vence, dias <= 3) + '<br><small>' + dias + ' días · ' + MODOS[S.modo] + '</small></span></div>'
@@ -3142,6 +3222,7 @@ function renderPanel(){
     '<div class="regwrap">' +
       '<div class="vrow">' + chip + (vida ? '<div class="etq"><button class="btn" data-act="etq" data-d="-1" aria-label="Menos etiquetas">−</button><span>' + etq + ' etiq.</span><button class="btn" data-act="etq" data-d="1" aria-label="Más etiquetas">+</button></div>' : '') + '</div>' +
       '<div class="mu small lotetx">Lote ' + lote + '</div>' +
+      (f.por_etiqueta > 0 && S.qty > 0 ? '<div class="mu small">' + etq + ' paquete' + (etq === 1 ? '' : 's') + ' de ' + fmt(f.por_etiqueta) + ' ' + esc(f.unidad) + ' · 1 etiqueta cada uno' + (S.etqOv == null && !eq(S.qty % f.por_etiqueta, 0) ? ' · sobran ' + fmt(round2(S.qty % f.por_etiqueta)) + ' (último paquete incompleto)' : '') + '. Al inventario entran ' + fmt(S.qty) + '.</div>' : '') +
       '<button class="btn regbtn ' + (g ? 'wnb' : 'okb') + '" data-act="reg">' + (g ? '' : ic('check', 30) + ' ') + regTxt + '</button>' +
     '</div></div>';
 }
@@ -3206,7 +3287,7 @@ function registrar(){
   const batch = db.batch();
   batch.set(regRef, {
     producto_id:f.id, producto_nombre:f.nombre, unidad_medida:f.unidad, presentacion:f.presentacion, estacion:S.op, inventario:!!f.inv,
-    cantidad_producida:S.qty, batches:round2(ratio), conservacion_modo:S.modo, dias_vida:dias, vence:vence ? TS().fromDate(vence) : null,
+    cantidad_producida:S.qty, cantidad_por_etiqueta:f.por_etiqueta > 0 ? f.por_etiqueta : 0, batches:round2(ratio), conservacion_modo:S.modo, dias_vida:dias, vence:vence ? TS().fromDate(vence) : null,
     lote:lote, etiquetas:vida ? etq : 0, operador:opNombre, insumos:insumos, anulado:false, prueba:prueba,
     registrado_por_email:email, fecha_produccion:SV()
   });
@@ -3225,12 +3306,12 @@ function registrar(){
   let jobRef = null;
   if(vida){
     jobRef = db.collection('cola_impresion').doc();
-    batch.set(jobRef, trabajoEtiqueta({id:regRef.id, nombre:f.nombre, cant:S.qty, unidad:f.unidad, ts:now.getTime(), vence:vence.getTime(), dias:dias, modo:S.modo, lote:lote, op:opNombre, etq:etq, prueba:prueba}, U.directo ? {estado:'directo', directo:true} : null));
+    batch.set(jobRef, trabajoEtiqueta({id:regRef.id, nombre:f.nombre, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, unidad:f.unidad, ts:now.getTime(), vence:vence.getTime(), dias:dias, modo:S.modo, lote:lote, op:opNombre, etq:etq, prueba:prueba}, U.directo ? {estado:'directo', directo:true} : null));
   }
   batch.commit().catch(err => { console.error(err); flash('er', 'No se guardó'); snd('err'); toast('No se pudo guardar. Revisa la conexión.'); });
 
   S.ultima[f.id] = S.qty; LS.set('ultima', S.ultima);
-  const r = {id:regRef.id, col:prueba ? 'pruebas_produccion' : 'producciones_facility', prueba:prueba, pid:f.id, nombre:f.nombre, unidad:f.unidad, cant:S.qty, modo:S.modo, ts:now.getTime(),
+  const r = {id:regRef.id, col:prueba ? 'pruebas_produccion' : 'producciones_facility', prueba:prueba, pid:f.id, nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, modo:S.modo, ts:now.getTime(),
              vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, etq:vida ? etq : 0, op:opNombre, inv:!!f.inv, jobId:jobRef ? jobRef.id : null, insumos:insumos};
   S.undo = r;
   if(vida && U.directo) imprimirDirectoReg(r, jobRef.id);
@@ -3243,7 +3324,7 @@ function registrar(){
 }
 function trabajoEtiqueta(r, extra){
   return Object.assign({
-    tipo:'etiqueta', registro_id:r.id, producto:r.nombre, cantidad:r.cant, unidad:r.unidad,
+    tipo:'etiqueta', registro_id:r.id, producto:r.nombre, cantidad:qEtq(r), unidad:r.unidad,
     elaborado:TS().fromDate(new Date(r.ts)), vence:TS().fromDate(new Date(r.vence)), dias:r.dias, conservacion:MODOS[r.modo] || '',
     lote:r.lote, operador:r.op, copias:r.etq, impresas:0, estado:'pendiente', intentos:0, prueba:!!r.prueba, cancelada:false, creado:SV()
   }, extra || {});
@@ -3298,7 +3379,7 @@ function lbEPL(j, cfg){
   L.push('A' + m + ',' + y + ',0,2,1,1,N,"' + e.pie2 + '"'); L.push('P' + e.copias); return L.join('\n') + '\n';
 }
 const lbConstruir = j => U.cfg.lenguaje === 'EPL' ? lbEPL(j, U.cfg) : lbZPL(j, U.cfg);
-const lbDeReg = r => ({tipo:'etiqueta', producto:r.nombre, cantidad:r.cant, unidad:r.unidad, elaboradoMs:r.ts, venceMs:r.vence, dias:r.dias, conservacion:MODOS[r.modo] || '', lote:r.lote, operador:r.op, copias:r.etq, prueba:!!r.prueba});
+const lbDeReg = r => ({tipo:'etiqueta', producto:r.nombre, cantidad:qEtq(r), unidad:r.unidad, elaboradoMs:r.ts, venceMs:r.vence, dias:r.dias, conservacion:MODOS[r.modo] || '', lote:r.lote, operador:r.op, copias:r.etq, prueba:!!r.prueba});
 
 const usbSoportado = () => !!(navigator.usb && window.isSecureContext !== false);
 function usbBuscarSalida(dev){
@@ -3453,7 +3534,7 @@ function renderFichaEdit(){
     '<div class="sec"><h3>Cantidades (' + esc(p.unidad) + ')</h3>' +
       row('Batch estándar', 'batch', fmt(p.batch), p.unidad) +
       row('Avisar si pasa de', 'max', p.max > 0 ? fmt(p.max) : '3 batches', p.max > 0 ? p.unidad : '') +
-      row('Cantidad por etiqueta', 'por_etiqueta', p.por_etiqueta > 0 ? fmt(p.por_etiqueta) : '1 etiqueta', p.por_etiqueta > 0 ? p.unidad : '') +
+      row('Unidades por paquete (1 etiqueta por paquete)', 'por_etiqueta', p.por_etiqueta > 0 ? fmt(p.por_etiqueta) : 'Sin paquete: 1 etiqueta', p.por_etiqueta > 0 ? p.unidad : '') +
       '<button class="btn sw ' + (p.solo_batch ? 'on' : '') + '" data-act="ftog" data-f="solo_batch"><span>Solo se produce por batch</span><b>' + (p.solo_batch ? 'Sí' : 'No') + '</b></button>' +
       '<button class="btn sw ' + (p.decimales ? 'on' : '') + '" data-act="ftog" data-f="decimales"><span>Permite decimales</span><b>' + (p.decimales ? 'Sí' : 'No') + '</b></button></div>' +
     '<div class="sec"><h3>Vida útil</h3>' +
@@ -3737,7 +3818,7 @@ function onClick(e){
     case 'label': { const r = regsActuales().filter(x => x.id === d.id)[0]; if(r) openModal('<div class="mt">Etiqueta</div>' + labelHTML(r) + '<div class="mu small" style="text-align:center">Vista previa. El diseño real lo define el programa de impresión; el QR aquí es simulado.</div><button class="btn" data-act="mclose">Cerrar</button>'); break; }
     case 'reprint': {
       const r = regsActuales().filter(x => x.id === d.id)[0];
-      if(r && r.vence){ const jr = db.collection('cola_impresion').doc(); const base = {id:r.id, nombre:r.nombre, cant:r.cant, unidad:r.unidad, ts:r.ts, vence:r.vence, dias:r.dias, modo:r.modo, lote:r.lote, op:r.op, etq:r.etq, prueba:r.prueba};
+      if(r && r.vence){ const jr = db.collection('cola_impresion').doc(); const base = {id:r.id, nombre:r.nombre, cant:r.cant, cpe:r.cpe || 0, unidad:r.unidad, ts:r.ts, vence:r.vence, dias:r.dias, modo:r.modo, lote:r.lote, op:r.op, etq:r.etq, prueba:r.prueba};
         jr.set(trabajoEtiqueta(base, U.directo ? {reimpresion:true, estado:'directo', directo:true} : {reimpresion:true})).catch(er => console.error(er));
         if(U.directo) imprimirDirectoReg(Object.assign({}, base), jr.id).then(ok => { if(ok) toast('Etiquetas impresas otra vez'); }); else toast('Etiquetas enviadas otra vez'); }
       break;
@@ -3751,7 +3832,7 @@ function onClick(e){
     case 'fdef': S.fd.draft.modo_defecto = d.v; render(); break;
     case 'fnum': {
       const dr = S.fd.draft, f2 = d.f, cero = f2 !== 'batch', esDias = f2.indexOf('vida.') === 0;
-      const lbl = {batch:'Batch estándar', max:'Avisar si pasa de', por_etiqueta:'Cantidad por etiqueta', 'vida.ref':'Días refrigerado', 'vida.con':'Días congelado', 'vida.amb':'Días ambiente'}[f2];
+      const lbl = {batch:'Batch estándar', max:'Avisar si pasa de', por_etiqueta:'Unidades por paquete', 'vida.ref':'Días refrigerado', 'vida.con':'Días congelado', 'vida.amb':'Días ambiente'}[f2];
       pedirNumero({titulo:lbl + (cero ? ' (0 = no aplica o automático)' : ''), unidad:esDias ? 'días' : dr.unidad, valor:getField(dr, f2) || '', cero:cero, dec:!esDias && !!dr.decimales,
         onOk:v => { setField(dr, f2, v); if(esDias && dr.vida[dr.modo_defecto] <= 0){ const m = ['ref', 'con', 'amb'].filter(x => dr.vida[x] > 0)[0]; if(m) dr.modo_defecto = m; } render(); }});
       break;
@@ -4313,6 +4394,7 @@ function toast(m){
   let t = $('#lc-toast'); if(!t){ t = document.createElement('div'); t.id = 'lc-toast'; document.body.appendChild(t); }
   t.textContent = m; t.className = 'show'; clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = ''; }, 2600);
 }
+window.lcToast = toast;
 function flashLocal(){ const b = document.querySelectorAll('#lc-root .lc-locs .lcb'); b.forEach(x => x.classList.add('flash')); setTimeout(() => b.forEach(x => x.classList.remove('flash')), 900); }
 
 /* ---------- revisar lista ---------- */
