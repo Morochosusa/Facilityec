@@ -1623,8 +1623,10 @@ function intentarLogin() {
   btn.disabled = true;
   btn.textContent = "Entrando...";
 
+  loginManual = true;
   auth.signInWithEmailAndPassword(email, password)
     .catch(err => {
+      loginManual = false;
       console.error(err);
       mostrarErrorLogin(traducirErrorAuth(err.code));
     })
@@ -1634,8 +1636,31 @@ function intentarLogin() {
     });
 }
 
+let loginManual = false;
 async function verificarDispositivoYEntrar(user) {
   const deviceId = obtenerDeviceId();
+  const restaurada = !loginManual;
+  loginManual = false;
+  if (restaurada && deviceId) {
+    // Sesion que ya estaba guardada en un equipo ya registrado: se entra YA, sin esperar a internet.
+    // La autorizacion se comprueba por detras y, si el equipo fue desautorizado, se cierra la sesion.
+    mostrarPantallaApp();
+    try {
+      const sn = await db.collection("dispositivos_autorizados").doc(deviceId).get();
+      const fromCache = sn && sn.metadata && sn.metadata.fromCache;
+      if (sn && sn.exists && sn.data().autorizado === true) {
+        try { localStorage.setItem("morochos_device_ok", deviceId); } catch (e) {}
+        sn.ref && sn.ref.update ? sn.ref.update({ ultimo_acceso: firebase.firestore.FieldValue.serverTimestamp(), usuario_email: user.email }).catch(() => {}) : null;
+      } else if (sn && !fromCache) {
+        // Respuesta del servidor: el equipo ya no esta autorizado o fue borrado
+        try { localStorage.removeItem("morochos_device_ok"); } catch (e) {}
+        mostrarPantallaLogin();
+        mostrarErrorLogin(sn.exists ? "Este equipo ya no esta autorizado. Pide acceso al departamento administrativo con este codigo: " + deviceId : "Este equipo ya no esta registrado. Entra de nuevo para pedir autorizacion.");
+        await auth.signOut();
+      }
+    } catch (err) { console.error(err); }
+    return;
+  }
 
   try {
     const ref = deviceId ? db.collection("dispositivos_autorizados").doc(deviceId) : null;
