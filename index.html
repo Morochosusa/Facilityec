@@ -320,6 +320,9 @@
     cursor: pointer;
   }
   .login-form button:disabled { background: #b4b2a9; cursor: not-allowed; }
+  .login-pw { position: relative; }
+  .login-pw input { padding-right: 52px; font-size: 15px; margin-bottom: 12px; }
+  .login-form .login-ver { position: absolute; right: 4px; top: 2px; width: 46px; height: 42px; padding: 0; background: none; color: #444; font-size: 20px; border-radius: 8px; }
   .login-error {
     background: #fcebeb;
     color: #501313;
@@ -1298,8 +1301,11 @@
     </div>
 
     <div class="login-form" id="login-form-principal">
-      <input type="email" id="login-email" placeholder="Correo electronico" autocomplete="username">
-      <input type="password" id="login-password" placeholder="Contrasena" autocomplete="current-password" onkeydown="if(event.key==='Enter'){intentarLogin();}">
+      <input type="email" id="login-email" placeholder="Correo electronico" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="email">
+      <div class="login-pw">
+        <input type="password" id="login-password" placeholder="Contrasena" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter'){intentarLogin();}">
+        <button type="button" id="login-ver" class="login-ver" onclick="verContrasena()" aria-label="Ver contrasena">👁</button>
+      </div>
       <button id="login-btn" onclick="intentarLogin()">Entrar</button>
     </div>
   </div>
@@ -1481,6 +1487,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch (e) {}
 const auth = firebase.auth();
+// La sesion se queda guardada en este equipo: una vez que entra y esta autorizado, no vuelve a pedir correo y contrasena.
+try { if (auth.setPersistence) auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {}); } catch (e) {}
 
 /* ============================================================
    LOGIN + AUTORIZACION POR DISPOSITIVO
@@ -1586,15 +1594,23 @@ function traducirErrorAuth(codigo) {
     "auth/invalid-email": "El correo no es valido.",
     "auth/user-not-found": "No existe una cuenta con ese correo.",
     "auth/wrong-password": "Contrasena incorrecta.",
-    "auth/invalid-credential": "Correo o contrasena incorrectos.",
+    "auth/invalid-credential": "Correo o contrasena incorrectos. Revisa mayusculas y espacios; toca el ojo para ver lo que escribes.",
+    "auth/network-request-failed": "Sin conexion. Revisa el internet e intenta de nuevo.",
     "auth/too-many-requests": "Demasiados intentos. Espera unos minutos e intenta de nuevo.",
     "auth/user-disabled": "Esta cuenta esta deshabilitada."
   };
   return mapa[codigo] || "No se pudo iniciar sesion. Intenta de nuevo.";
 }
 
+function verContrasena() {
+  const i = document.getElementById("login-password"), b = document.getElementById("login-ver");
+  const ver = i.type === "password";
+  i.type = ver ? "text" : "password";
+  b.textContent = ver ? "🙈" : "👁";
+}
+
 function intentarLogin() {
-  const email = document.getElementById("login-email").value.trim();
+  const email = document.getElementById("login-email").value.trim().toLowerCase();
   const password = document.getElementById("login-password").value;
   ocultarErrorLogin();
 
@@ -1625,6 +1641,12 @@ async function verificarDispositivoYEntrar(user) {
     const ref = deviceId ? db.collection("dispositivos_autorizados").doc(deviceId) : null;
     const snap = ref ? await ref.get() : null;
 
+    const okLocal = deviceId && localStorage.getItem("morochos_device_ok") === deviceId;
+    if (snap && !snap.exists && okLocal && snap.metadata && snap.metadata.fromCache) {
+      // Sin internet y sin copia local del registro: este equipo ya fue autorizado antes, se deja entrar
+      mostrarPantallaApp();
+      return;
+    }
     if (!snap || !snap.exists) {
       // Dispositivo nuevo: pedir un nombre antes de registrar la solicitud
       mostrarErrorLogin("Este dispositivo es nuevo y debe ser autorizado antes de poder entrar. Ponle un nombre para identificarlo.");
@@ -1639,14 +1661,19 @@ async function verificarDispositivoYEntrar(user) {
       return;
     }
 
-    await ref.update({
+    try { localStorage.setItem("morochos_device_ok", deviceId); } catch (e) {}
+    mostrarPantallaApp();
+    ref.update({
       ultimo_acceso: firebase.firestore.FieldValue.serverTimestamp(),
       usuario_email: user.email
-    });
-
-    mostrarPantallaApp();
+    }).catch(e => console.error(e));
   } catch (err) {
     console.error(err);
+    if (deviceId && localStorage.getItem("morochos_device_ok") === deviceId) {
+      // Fallo de red al verificar: el equipo ya estaba autorizado, no se cierra la sesion
+      mostrarPantallaApp();
+      return;
+    }
     mostrarErrorLogin("Error verificando el dispositivo. Revisa tu conexion.");
     await auth.signOut();
   }
@@ -4554,15 +4581,15 @@ const CODIGO_CONFIG = '2468';  // código para modificar listas. Cámbialo aquí
 const SEC_NOMBRE = {MERCADO:'Mercado', BEBIDAS:'Bebidas · Mercado', BODEGA:'Bodega'};
 const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío']];
 const LOCALES_SEL = LOCALES.filter(l => EST_LOCALES.indexOf(l[0]) < 0);
-// Solo se muestran los locales con trabajo hoy: La Victoria siempre; otro local aparece cuando tenga listas guardadas.
+// Siempre: La Victoria, El Salado y Cocina Producción (su propio cajón). Feria Libre y Cuarto frío aparecen cuando tengan listas guardadas.
 const listasDe = lc => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => l.local === lc);
-const localesVis = () => LOCALES_SEL.filter(l => l[0] === 'la_victoria' || listasDe(l[0]).length);
+const FIJOS = ['la_victoria', 'el_salado', 'cocina_produccion'];
+const localesVis = () => LOCALES.filter(l => FIJOS.indexOf(l[0]) >= 0 || listasDe(l[0]).length);
 // "5" + "1 lb" -> "5 × 1 lb";  "12" + "uds" -> "12 uds";  "1" + "saco × 50 uds" -> "1 saco × 50 uds"
 const etq = (n, u) => /^[\d½¼¾]/.test(u || '') ? fmt(n) + ' × ' + u : fmt(n) + ' ' + (u || '');
 window.lcEtq = it => etq(it.cantidad_solicitada, it.unidad_medida);
 
 const L = {tab:'listas', local:LSg('local', '') || 'la_victoria', draft:{}, vendors:[], sel:null, edit:false, fichas:{}, undo:null, ed:null, busy:false, sound:LSg('sound', true), ready:false};
-if(EST_LOCALES.indexOf(L.local) >= 0) L.local = '';
 const lista = () => LISTAS[(L.cfg ? L.cfg.local : L.local)] || [];
 const cat = id => lista().filter(p => p.id === id)[0] || null;
 function saveDraft(){ if(L.local) LSs('draft_' + L.local, L.draft); }
