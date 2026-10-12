@@ -1139,7 +1139,7 @@
   .lcr .lc-n{font-weight:800;color:#4285f4}
   body #lista-compra-detalle .lcr .check-doble-tap{width:34px;height:34px;min-width:34px;border-radius:9px;font-size:20px}
   .lcr .lc-ref{margin-left:6px;padding:0 6px;font-size:11px}
-  body #lista-compra-detalle .lcr .lc-sel{width:100%;min-height:28px;height:28px;font-size:12px;padding:0 6px;margin-top:2px;border:1px solid #d3d1c7;border-radius:8px;background:#fff;color:#6b6a63}
+  body #lista-compra-detalle .lcr .lc-sel{display:inline-block;width:auto;max-width:132px;min-height:0;height:20px;line-height:18px;font-size:11px;padding:0 2px;margin-top:2px;border:1px solid #e2e0d6;border-radius:6px;background:#fff;color:#8a8880;text-overflow:ellipsis}
   body #lista-compra-detalle .lcr .lc-sel.vset{border-color:#4285f4;color:#2c2c2a;font-weight:600}
   .lcr .lcr-p{min-width:68px;height:38px;padding:0 8px;border-radius:10px;border:1.5px dashed #b4b2a9;background:#fff;font:700 16px inherit;font-family:inherit;color:#888780;flex-shrink:0}
   .lcr .lcr-p.set{border:1.5px solid #4285f4;color:#2c2c2a;background:#f4f7ff}
@@ -1152,6 +1152,12 @@
   .lcr.edit{background:#fff8e1;outline:2px solid #f2c94c;border-radius:8px}
   body #lista-compra-detalle .lc-tot{font-size:15px;min-height:0;padding:7px 2px}
   body #lista-compra-detalle .lc-tot.final{font-size:18px}
+  body #lista-compra-detalle .lc-carreta{align-items:center}
+  body #lista-compra-detalle .lc-carreta .lcr-p{min-width:96px;height:42px;font-size:18px}
+  body #lista-compra-detalle .lc-gastado{font-weight:800;border-top:1px solid #d3d1c7}
+  body #lista-compra-detalle .lc-hecha{background:#1d8a4e;width:100%;min-height:58px;font-size:19px;margin-top:10px}
+  body #lista-compra-detalle .lc-reabrir{background:none;border:none;color:#6b6a63;text-decoration:underline;font:600 14px inherit;font-family:inherit;padding:10px;cursor:pointer;width:100%}
+  .lc-pnum{display:inline-block;background:#4285f4;color:#fff;border-radius:8px;padding:0 8px;font-size:.8em;font-weight:800;margin-right:4px}
   body #lista-compra-detalle .lc-monto{padding:8px 10px;margin:0 0 6px}
   body #lista-compra-detalle .lc-monto b{font-size:13px}
   body #lista-compra-detalle .lc-monto .costo-input{width:110px;min-height:40px;font-size:17px}
@@ -1162,6 +1168,8 @@
     body #lista-compra-detalle .lcr .lc-sel,body #lista-compra-detalle .lcr .lcr-cand,body #lista-compra-detalle .lcr .lcr-s{display:none !important}
     body #lista-compra-detalle .lcr .lcr-p{border:none !important;background:none !important;font-size:12pt;font-weight:600;color:#000;min-width:0}
     body #lista-compra-detalle .lcr .lcr-p.vacio{color:transparent !important}
+    body #lista-compra-detalle .lc-carreta .lcr-p{border:none !important;background:none !important;font-size:inherit;min-width:0;height:auto;color:#000}
+    .lc-pnum,.pd-num{background:none !important;color:#000 !important;padding:0}
     body #lista-compra-detalle .lcr .check-doble-tap{width:18px !important;height:18px !important;min-width:18px;font-size:13px;border:1.5px solid #000}
   }
   @media print{.lc-sel{-webkit-appearance:none;appearance:none;border:none !important;background:none !important}.lc-monto{background:none;padding:6px 0}.lc-monto .costo-input{border:none;background:none}}
@@ -1191,6 +1199,7 @@
   .pd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
   .pd-card{font:inherit;text-align:left;background:#fff;border:3px solid #e2e0d6;border-radius:18px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:8px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:120px}
   .pd-card:active{transform:scale(.98)} .pd-card.nuevo{border-color:#1d8a4e;background:#eaf8f0}
+  .pd-num{display:inline-block;background:#4285f4;color:#fff;border-radius:10px;padding:2px 10px;font-weight:800;margin-right:8px;font-size:.85em}
   .pd-c1{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:22px}
   .pd-c2{font-size:14px;color:#6b6a63} .pd-c3{display:flex;gap:8px;flex-wrap:wrap}
   .pd-chip{background:#f4f2ec;border-radius:99px;padding:6px 12px;font-size:15px;font-weight:700} .pd-chip.bad{background:#fde8a6}
@@ -1944,7 +1953,7 @@ async function crearGuiaDespacho() {
    ============================================================ */
 const TITULOS_VISTA = {
   pedidos: ["Pedidos de locales", "Acepta el pedido: el mercado va a Guardadas y la bodega a Guías para despachar"],
-  compra: ["Lista de compras", "Toca lo que hay que comprar en el mercado y guarda la lista"],
+  compra: ["Lista de compras", "Las listas de los pedidos aceptados: marca lo comprado, pon costos y la carreta"],
   proveedores: ["Recepcion proveedores", "Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
   estaciones: ["Producción · Lista", "Toca lo que necesita la estación y envía el pedido a Facility"],
   produccion: ["Producción · Registro", "Registra lo producido: suma al inventario, descuenta materia prima y saca la etiqueta"],
@@ -2249,7 +2258,8 @@ function cambiarModoListasCompra(modo) {
 function renderListasCompraPendientes() {
   const cont = document.getElementById("listas-compra-pendientes");
   const esHistorial = modoListasCompra === "historial";
-  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente);
+  const lcLocal = window.LCS ? window.LCS.local : '';
+  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente).filter(l => !lcLocal || l.local === lcLocal);
 
   if (listas.length === 0) {
     cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>`;
@@ -2260,11 +2270,11 @@ function renderListasCompraPendientes() {
     const fechaBase = esHistorial && l.fecha_envio_contabilidad ? l.fecha_envio_contabilidad : l.fecha_creacion;
     const fecha = fechaBase && fechaBase.toDate ? fechaBase.toDate().toLocaleString("es-EC") : "Guardando fecha...";
     const comprados = l.items.filter(it => it.comprado).length;
-    const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0);
+    const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(l.carreta) || 0);
 
     let badge = l.estado === "despachada"
       ? `<span class="badge procesado">Despachada</span>`
-      : `<span class="badge despachado">Ver lista</span>`;
+      : l.compra_realizada ? `<span class="badge recibido_ok">Compra realizada</span>` : `<span class="badge despachado">Ver lista</span>`;
     let detalleTexto = `${comprados} de ${l.items.length} comprados`;
     let filaEliminar = `
         <div class="card-acciones">
@@ -2281,7 +2291,7 @@ function renderListasCompraPendientes() {
       <div class="guia-card" onclick="verListaCompra('${l.id}')">
         <div class="guia-card-top">
           <div>
-            <div class="guia-local">${NOMBRES_LOCAL[l.local] || l.local}</div>
+            <div class="guia-local">${l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : ''}${NOMBRES_LOCAL[l.local] || l.local}</div>
             <div class="guia-fecha">${fecha} - ${detalleTexto}${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
           </div>
           ${badge}
@@ -2329,7 +2339,7 @@ function verListaCompra(id) {
         <div class="lcr-t">${nom}${it.precio_sugerido != null ? `<span class="lc-ref" title="Precio de referencia">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</div>
         ${it.nota ? `<div class="lcr-s lcr-nota">${it.nota}</div>` : ""}
         <select class="lc-sel lc-vend ${it.vendedor ? 'vset' : ''}" onclick="event.stopPropagation()" data-prev="${(it.vendedor || '').replace(/"/g, '&quot;')}" onchange="lcVendChange('${id}', ${idx}, this)">
-          <option value="">Vendedor/local...</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
+          <option value="">Vendedor…</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
           <option value="__nuevo__">+ Registrar nuevo vendedor/local</option>
         </select>
       </div>
@@ -2338,6 +2348,10 @@ function verListaCompra(id) {
     </div>`;
     }).join("");
 
+  const subtotal = totalCosto;
+  const carreta = parseFloat(lista.carreta) || 0;
+  totalCosto = Math.round((totalCosto + carreta) * 100) / 100;
+  const realizada = lista.compra_realizada === true;
   const monto = lista.monto_asignado != null && !isNaN(parseFloat(lista.monto_asignado)) ? parseFloat(lista.monto_asignado) : null;
   const saldo = monto != null ? Math.round((monto - totalCosto) * 100) / 100 : null;
   const montoHtml = enviada
@@ -2350,22 +2364,24 @@ function verListaCompra(id) {
     ? `<span class="badge recibido_ok" style="display:inline-block; margin-top:4px;">Enviada a contabilidad${fechaEnvio ? " - " + fechaEnvio : ""}</span>`
     : "";
 
+  const botonElim = esPendiente ? `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>` : "";
   const botonesAccion = enviada
     ? `<button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir</button>`
-    : `
-      <button class="btn-despachar btn-imprimir" onclick="imprimirListaCompra('${id}')">${lista.impresa ? "Imprimir otra vez" : "Imprimir / exportar para contabilidad"}</button>
-      ${lista.impresa
-        ? `<div class="lc-impreso btn-imprimir">Lista impresa. Ya puedes enviarla a contabilidad.</div>
-           <button class="btn-despachar btn-imprimir" style="background:#1d8a4e;" onclick="marcarEnviadaContabilidad('${id}')">Enviar a contabilidad</button>`
-        : `<p class="btn-imprimir" style="font-size:13px; color:#888780; margin:8px 0 0;">Después de imprimir aparece el botón para enviar a contabilidad.</p>`}
-      ${esPendiente ? `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>` : ""}
-    `;
+    : !realizada
+      ? `<button class="btn-despachar btn-imprimir lc-hecha" onclick="marcarCompraRealizada('${id}')">✓ Compra realizada</button>
+         <p class="btn-imprimir" style="font-size:13px; color:#888780; margin:8px 0 0;">Al terminar de comprar, toca Compra realizada: ahí aparece enviar a contabilidad o imprimir.</p>
+         ${botonElim}`
+      : `<div class="lc-impreso btn-imprimir">✓ Compra realizada. Envíala a contabilidad o imprímela.</div>
+         <button class="btn-despachar btn-imprimir" style="background:#1d8a4e;" onclick="marcarEnviadaContabilidad('${id}')">Enviar a contabilidad</button>
+         <button class="btn-despachar btn-imprimir" onclick="imprimirListaCompra('${id}')">${lista.impresa ? "Imprimir otra vez" : "Imprimir"}</button>
+         <button class="btn-imprimir lc-reabrir" onclick="reabrirCompra('${id}')">Reabrir compra (seguir editando)</button>
+         ${botonElim}`;
 
   document.getElementById("lista-compra-detalle").innerHTML = `
     <div class="detalle-panel">
       <div class="detalle-header">
         <div>
-          <h2>${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
+          <h2>${lista.pedido_numero ? '<span class="lc-pnum">Pedido #' + lista.pedido_numero + '</span> ' : ''}${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
           <div class="guia-fecha lc-fecha">${fecha}</div>
           ${estadoEnvio}
         </div>
@@ -2373,7 +2389,15 @@ function verListaCompra(id) {
       </div>
       ${montoHtml}
       ${filasItems}
-      <div class="detalle-fila lc-tot" style="border-top:2px solid #4285f4; margin-top:4px;">
+      <div class="detalle-fila lc-tot lc-sub" style="border-top:2px solid #4285f4; margin-top:4px;">
+        <span>Productos</span>
+        <span>$${subtotal.toFixed(2)}</span>
+      </div>
+      <div class="detalle-fila lc-tot lc-carreta">
+        <span>Carreta</span>
+        ${enviada ? `<span>$${carreta.toFixed(2)}</span>` : `<button class="lcr-p ${carreta ? 'set' : 'vacio'}" onclick="lcCarreta('${id}')">${carreta ? '$' + carreta.toFixed(2) : '$ ‒'}</button>`}
+      </div>
+      <div class="detalle-fila lc-tot lc-gastado">
         <span>Total gastado (costo pagado)</span>
         <span>$${totalCosto.toFixed(2)}</span>
       </div>
@@ -2500,7 +2524,7 @@ async function actualizarCosto(listaId, idx, valor) {
   const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, costo } : it);
 
   try {
-    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems, ...totalesLista(nuevosItems, lista.monto_asignado) });
+    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems, ...totalesLista(nuevosItems, lista.monto_asignado, lista.carreta) });
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar el costo. Verifica la conexion.", "error");
@@ -2508,8 +2532,8 @@ async function actualizarCosto(listaId, idx, valor) {
 }
 
 // total_costo y saldo se guardan en la lista para tabularlos desde otra app
-function totalesLista(items, monto) {
-  const total = Math.round(items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) * 100) / 100;
+function totalesLista(items, monto, carreta) {
+  const total = Math.round((items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(carreta) || 0)) * 100) / 100;
   const m = monto != null && !isNaN(parseFloat(monto)) ? parseFloat(monto) : null;
   return { total_costo: total, saldo: m != null ? Math.round((m - total) * 100) / 100 : null };
 }
@@ -2519,11 +2543,42 @@ async function actualizarMontoAsignado(listaId, valor) {
   if (!lista || lista.enviada_contabilidad) return;
   const monto = valor === "" || isNaN(parseFloat(valor)) ? null : parseFloat(valor);
   try {
-    await db.collection("listas_compra").doc(listaId).update({ monto_asignado: monto, ...totalesLista(lista.items, monto) });
+    await db.collection("listas_compra").doc(listaId).update({ monto_asignado: monto, ...totalesLista(lista.items, monto, lista.carreta) });
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar el monto. Verifica la conexion.", "error");
   }
+}
+
+function lcCarreta(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  abrirTeclado({titulo: "Carreta", subtitulo: "Lo que se pagó por la carreta", unidad: "$", inicial: lista.carreta != null ? lista.carreta : "", permitirVacio: true, permitirCero: true,
+    onListo: async v => {
+      const carreta = v == null || isNaN(v) || v <= 0 ? null : v;
+      try { await db.collection("listas_compra").doc(id).update({ carreta: carreta, ...totalesLista(lista.items, lista.monto_asignado, carreta) }); }
+      catch (err) { console.error(err); mostrarAviso("Error al guardar la carreta. Verifica la conexion.", "error"); }
+    }});
+}
+
+async function marcarCompraRealizada(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  const sinCosto = lista.items.filter(it => it.costo == null).length;
+  try {
+    await db.collection("listas_compra").doc(id).update({ compra_realizada: true, fecha_compra_realizada: firebase.firestore.FieldValue.serverTimestamp(), ...totalesLista(lista.items, lista.monto_asignado, lista.carreta) });
+    mostrarAviso(sinCosto ? `Compra realizada. Ojo: ${sinCosto} producto(s) sin costo.` : "Compra realizada. Ya puedes enviarla a contabilidad o imprimirla.", sinCosto ? "error" : "ok");
+  } catch (err) {
+    console.error(err);
+    mostrarAviso("No se pudo marcar la compra. Verifica la conexion.", "error");
+  }
+}
+
+async function reabrirCompra(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  try { await db.collection("listas_compra").doc(id).update({ compra_realizada: false, fecha_compra_realizada: null }); }
+  catch (err) { console.error(err); mostrarAviso("No se pudo reabrir. Verifica la conexion.", "error"); }
 }
 
 function imprimirListaCompra(id) {
@@ -4499,11 +4554,14 @@ const CODIGO_CONFIG = '2468';  // código para modificar listas. Cámbialo aquí
 const SEC_NOMBRE = {MERCADO:'Mercado', BEBIDAS:'Bebidas · Mercado', BODEGA:'Bodega'};
 const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío']];
 const LOCALES_SEL = LOCALES.filter(l => EST_LOCALES.indexOf(l[0]) < 0);
+// Solo se muestran los locales con trabajo hoy: La Victoria siempre; otro local aparece cuando tenga listas guardadas.
+const listasDe = lc => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => l.local === lc);
+const localesVis = () => LOCALES_SEL.filter(l => l[0] === 'la_victoria' || listasDe(l[0]).length);
 // "5" + "1 lb" -> "5 × 1 lb";  "12" + "uds" -> "12 uds";  "1" + "saco × 50 uds" -> "1 saco × 50 uds"
 const etq = (n, u) => /^[\d½¼¾]/.test(u || '') ? fmt(n) + ' × ' + u : fmt(n) + ' ' + (u || '');
 window.lcEtq = it => etq(it.cantidad_solicitada, it.unidad_medida);
 
-const L = {tab:'pedir', local:LSg('local', ''), draft:{}, vendors:[], sel:null, edit:false, fichas:{}, undo:null, ed:null, busy:false, sound:LSg('sound', true), ready:false};
+const L = {tab:'listas', local:LSg('local', '') || 'la_victoria', draft:{}, vendors:[], sel:null, edit:false, fichas:{}, undo:null, ed:null, busy:false, sound:LSg('sound', true), ready:false};
 if(EST_LOCALES.indexOf(L.local) >= 0) L.local = '';
 const lista = () => LISTAS[(L.cfg ? L.cfg.local : L.local)] || [];
 const cat = id => lista().filter(p => p.id === id)[0] || null;
@@ -4536,11 +4594,10 @@ const foto = p => '<div class="lc-ph" style="--h:' + hue(p.id) + ';' + (ficha(p.
 
 function render(){
   const r = $('#lc-root'); if(!r) return;
-  const nPend = (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => !l.enviada_contabilidad).length;
+  const vis = localesVis(); if(!vis.some(l => l[0] === L.local)){ saveDraft(); L.local = vis[0][0]; LSs('local', L.local); loadDraft(); }
+  L.tab = 'listas';
   const online = navigator.onLine;
-  let h = '<div class="lc-top"><div class="lc-locs">' + LOCALES_SEL.map(l => '<button class="lcb ' + (L.local === l[0] ? 'on' : '') + '" data-lc="local" data-v="' + l[0] + '">' + esc(l[1]) + '</button>').join('') + '</div>' +
-    '<div class="lc-tabs"><button class="lcb ' + (L.tab === 'pedir' ? 'on' : '') + '" data-lc="tab" data-v="pedir">Pedir</button>' +
-    '<button class="lcb ' + (L.tab === 'listas' ? 'on' : '') + '" data-lc="tab" data-v="listas">Guardadas' + (nPend ? ' (' + nPend + ')' : '') + '</button></div>' +
+  let h = '<div class="lc-top"><div class="lc-locs">' + vis.map(l => { const n = listasDe(l[0]).filter(x => !x.enviada_contabilidad).length; return '<button class="lcb ' + (L.local === l[0] ? 'on' : '') + '" data-lc="local" data-v="' + l[0] + '">' + esc(l[1]) + (n ? ' (' + n + ')' : '') + '</button>'; }).join('') + '</div>' +
     '<div class="lc-stat ' + (online ? 'ok' : 'wn') + '">' + (online ? 'En línea' : 'Sin conexión') + '</div>' +
     '<button class="lcb ico" data-lc="menu" aria-label="Opciones">⚙</button></div>';
   if(L.edit) h += '<div class="lc-banner">Modo fotos: toca un producto para cambiar su foto o su cantidad habitual. <button class="lcb" data-lc="edit-off">Terminar</button></div>';
@@ -4559,11 +4616,12 @@ function render(){
       '<button class="lcb" data-lc="revisar"' + (n ? '' : ' disabled') + '>Ver lista</button>' +
       '<button class="lcb okb big" data-lc="guardar"' + (n ? '' : ' disabled') + '>Guardar lista</button></div>';
   } else {
-    h += '<div class="lc-listas-hint">Listas guardadas: toca una para marcar lo comprado, poner costos o enviarla a contabilidad.</div>';
+    h += '<div class="lc-listas-hint">Cuando aceptas un pedido en Pedidos de locales, su lista aparece aquí. Toca una para marcar lo comprado, poner costos y la carreta, y cerrarla con Compra realizada.</div>';
   }
   r.innerHTML = h;
   const lv = $('#lc-listas'); if(lv) lv.style.display = L.tab === 'listas' ? '' : 'none';
   sheet(); fit();
+  if(typeof renderListasCompraPendientes === 'function' && typeof listasCompraCache !== 'undefined') renderListasCompraPendientes();
 }
 function fit(){
   const r = $('#lc-root'); if(!r) return;
@@ -4649,7 +4707,6 @@ function menu(){
   s.innerHTML = '<div class="lc-back" data-lc="rev-x"></div><div class="lc-sh"><div class="lc-sh-t">Opciones</div>' +
     '<button class="lcb sw ' + (L.sound ? 'on' : '') + '" data-lc="sonido"><span>Sonido</span><b>' + (L.sound ? 'Sí' : 'No') + '</b></button>' +
     '<button class="lcb" data-lc="cfg-abrir">Configurar lista de ' + esc((LOCALES.filter(l => l[0] === L.local)[0] || [0, 'este local'])[1]) + ' 🔒</button>' +
-    '<button class="lcb" data-lc="edit-pin">Cambiar fotos y cantidades habituales 🔒</button>' +
     '<button class="lcb" data-lc="vendedores">Vendedores</button>' +
     '<button class="lcb" data-lc="rev-x">Cerrar</button></div>';
 }
@@ -4753,7 +4810,7 @@ document.addEventListener('click', e => {
   if(!(t.closest('#lc-root') || t.closest('#lc-sheet') || t.closest('#lc-review') || t.closest('#lc-snack'))) return;
   const a = t.getAttribute('data-lc'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
   switch(a){
-    case 'local': saveDraft(); L.local = v; LSs('local', v); L.sel = null; loadDraft(); beep('tap'); render(); break;
+    case 'local': saveDraft(); L.local = v; LSs('local', v); L.sel = null; loadDraft(); beep('tap'); render(); if(typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
     case 'tab': L.tab = v; L.sel = null; render(); if(v === 'listas' && typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
     case 'card': {
       if(L.edit){ abrirEd(id); break; }
@@ -4922,6 +4979,22 @@ function estadoDe(ped){
   return (ped.compra_lista_id || ped.despacho_id) ? 'en_proceso' : 'enviado';
 }
 const pend = () => P.lista.filter(p => p.estado !== 'procesado');
+const numTxt = p => p.numero ? '#' + p.numero : '#…';
+const msDe = ts => ts && ts.toMillis ? ts.toMillis() : 0;
+/* Cada pedido recibe su numero consecutivo (contadores/pedidos_locales). Lo asigna Facility, una vez, con transaccion. */
+const numerando = {}; let cadenaNum = Promise.resolve();
+function asignarNumeros(arr){
+  arr.filter(p => !p.numero && !numerando[p.id] && msDe(p.fecha_envio)).sort((a, b) => msDe(a.fecha_envio) - msDe(b.fecha_envio)).forEach(p => {
+    numerando[p.id] = 1;
+    cadenaNum = cadenaNum.then(() => db.runTransaction(async t => {
+      const cr = db.collection('contadores').doc('pedidos_locales'), pr = db.collection('pedidos_locales').doc(p.id);
+      const c = await t.get(cr), d = await t.get(pr);
+      if(!d.exists || (d.data() || {}).numero) return;
+      const n = ((c.exists && (c.data() || {}).n) || 0) + 1;
+      t.set(cr, {n:n}); t.update(pr, {numero:n});
+    })).catch(e => { console.error(e); delete numerando[p.id]; });
+  });
+}
 function badge(){
   const n = pend().length, b = $('#nav-pedidos');
   if(b) b.innerHTML = '📨 Pedidos de locales' + (n ? ' <span class="pd-badge">' + n + '</span>' : '');
@@ -4950,9 +5023,9 @@ function lista(){
   h += '<div class="pd-cards">' + show.map(p => {
     const m = efectivos(p, 'mercado').length, b = efectivos(p, 'bodega').length, rv = (p.items || []).filter(it => tipo(it) === 'revisar').length;
     const st = p.estado === 'procesado' ? '<span class="pd-st ok">Procesado</span>' : p.estado === 'en_proceso' ? '<span class="pd-st wn">En proceso</span>' : '<span class="pd-st nw">Nuevo</span>';
-    return '<button class="pd-card ' + (p.estado === 'enviado' ? 'nuevo' : '') + '" data-pd="abrir" data-id="' + p.id + '"><div class="pd-c1"><b>' + esc(LOCNOM[p.local] || p.local) + '</b>' + st + '</div>' +
+    return '<button class="pd-card ' + (p.estado === 'enviado' ? 'nuevo' : '') + '" data-pd="abrir" data-id="' + p.id + '"><div class="pd-c1"><span><span class="pd-num">' + numTxt(p) + '</span><b>' + esc(LOCNOM[p.local] || p.local) + '</b></span>' + st + '</div>' +
       '<div class="pd-c2">' + esc(fechaTxt(p.fecha_envio)) + (p.enviado_por ? ' · ' + esc(p.enviado_por) : '') + '</div>' +
-      '<div class="pd-c3"><span class="pd-chip">🛒 ' + m + ' de mercado</span><span class="pd-chip">📦 ' + b + ' de bodega</span>' + (rv ? '<span class="pd-chip bad">⚠ ' + rv + ' por revisar</span>' : '') + '</div></button>';
+      '<div class="pd-c3">' + (m || !b ? '<span class="pd-chip">🛒 ' + m + ' de mercado</span>' : '') + (b || !m ? '<span class="pd-chip">📦 ' + b + ' de bodega</span>' : '') + (rv ? '<span class="pd-chip bad">⚠ ' + rv + ' por revisar</span>' : '') + '</div></button>';
   }).join('') + '</div>';
   return h;
 }
@@ -4972,7 +5045,7 @@ function detalle(ped){
   const m = efectivos(ped, 'mercado').length, b = efectivos(ped, 'bodega').length;
   const hayM = (ped.items || []).some(it => tipo(it) === 'mercado'), hayB = (ped.items || []).some(it => tipo(it) === 'bodega'), hayR = (ped.items || []).some(it => tipo(it) === 'revisar');
   let h = '<button class="lcb" data-pd="volver">← Volver a pedidos</button>' +
-    '<div class="pd-head"><div><div class="pd-h1">' + esc(LOCNOM[ped.local] || ped.local) + '</div><div class="pd-c2">' + esc(fechaTxt(ped.fecha_envio)) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + '</div></div></div>' +
+    '<div class="pd-head"><div><div class="pd-h1"><span class="pd-num">Pedido ' + numTxt(ped) + '</span>' + esc(LOCNOM[ped.local] || ped.local) + '</div><div class="pd-c2">' + esc(fechaTxt(ped.fecha_envio)) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + '</div></div></div>' +
     (ped.nota ? '<div class="pd-banner">📝 ' + esc(ped.nota) + '</div>' : '');
   if(hayM) h += '<div class="pd-sec">🛒 Mercado · pasa a Guardadas</div>' + filas(ped, 'mercado');
   if(hayB) h += '<div class="pd-sec">📦 Bodega · pasa a Guías para despachar</div>' + filas(ped, 'bodega');
@@ -5011,7 +5084,7 @@ function crearLista(ped, its){
       unidad_medida:c ? c.unidad : (it.unidad_medida || (prod(it.producto_id) || {}).unidad || ''), cantidad_solicitada:qty(ped, it), comprado:false, costo:null, nota:(c && c.nota) || '', precio_sugerido:(f.precio > 0 ? f.precio : ((c && c.precio > 0) ? c.precio : null)), vendedor:null};
   });
   const ref = db.collection('listas_compra').doc();
-  ref.set({local:ped.local, estado:'pendiente', pedido_id:ped.id, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido de ' + (LOCNOM[ped.local] || ped.local), items:items})
+  ref.set({local:ped.local, estado:'pendiente', pedido_id:ped.id, pedido_numero:ped.numero || null, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido de ' + (LOCNOM[ped.local] || ped.local), items:items})
     .catch(e => { console.error(e); toast('No se pudo crear la lista de compras'); });
   return ref;
 }
@@ -5023,7 +5096,7 @@ function crearGuia(ped, its){
       unidad_medida:it.unidad_medida || p.unidad || '', cantidad_pedida:q, cantidad_despachada:q, origen:'stock', cantidad_recibida:null, diferencia:null, nota_diferencia:''};
   });
   const ref = db.collection('pedidos').doc();
-  ref.set({local:ped.local, estado:'por_despachar', pedido_local_id:ped.id, fecha_despacho:SV(), fecha_recepcion:null, despachado_por:null, recibido_por:null, items:items})
+  ref.set({local:ped.local, estado:'por_despachar', pedido_local_id:ped.id, pedido_local_numero:ped.numero || null, fecha_despacho:SV(), fecha_recepcion:null, despachado_por:null, recibido_por:null, items:items})
     .catch(e => { console.error(e); toast('No se pudo crear la guía de despacho'); });
   return ref;
 }
@@ -5087,7 +5160,7 @@ document.addEventListener('click', e => {
       if(qty(ped, it) > 0) aj[id] = 0; else delete aj[id]; guardarAjustes(ped, aj); break; }
     case 'aceptar': if(ped) aceptar(ped); break;
     case 'ir-guia': if(ped && ped.despacho_id){ const gid = ped.despacho_id; P.open = null; render(); cambiarVista('guias'); setTimeout(() => verGuia(gid), 60); } break;
-    case 'ver-compra': cambiarVista('compra'); if(window.LCS){ window.LCS.tab = 'listas'; } if(window.lcRefresh) lcRefresh(); { const b = document.querySelector('#lc-root [data-lc="tab"][data-v="listas"]'); if(b) b.click(); } break;
+    case 'ver-compra': cambiarVista('compra'); if(window.LCS){ window.LCS.tab = 'listas'; if(ped) window.LCS.local = ped.local; } if(window.lcRefresh) lcRefresh(); { const b = document.querySelector('#lc-root [data-lc="tab"][data-v="listas"]'); if(b) b.click(); } break;
     case 'archivar': if(ped){ ped.estado = 'procesado'; db.collection('pedidos_locales').doc(ped.id).update({estado:'procesado', fecha_proceso:SV()}).catch(er => console.error(er)); P.open = null; render(); } break;
     case 'deshacer': deshacer(); break;
   }
@@ -5097,7 +5170,7 @@ window.pdInit = function(){
   if(P.ready) return; P.ready = true;
   db.collection('pedidos_locales').orderBy('fecha_envio', 'desc').limit(60).onSnapshot(snap => {
     const arr = []; snap.forEach(d => arr.push(Object.assign({id:d.id}, d.data())));
-    P.lista = arr;
+    P.lista = arr; asignarNumeros(arr);
     if(P.vistos){
       const nuevos = arr.filter(p => !P.vistos[p.id] && p.estado === 'enviado' && p.enviado_por !== 'Tablet Facility');
       if(nuevos.length){ beep(); toast('📨 Pedido nuevo de ' + nuevos.map(p => LOCNOM[p.local] || p.local).join(', ')); }
