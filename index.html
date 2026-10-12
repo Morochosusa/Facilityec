@@ -1502,6 +1502,10 @@ function obtenerDeviceId() {
   return localStorage.getItem("morochos_device_id");
 }
 
+function esAppInstalada() {
+  try { return !!(navigator.standalone || (window.matchMedia && (matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches))); } catch (e) { return false; }
+}
+
 function describirDispositivo() {
   const ua = navigator.userAgent;
   let so = "Otro";
@@ -1515,7 +1519,7 @@ function describirDispositivo() {
   else if (/Chrome\//.test(ua)) nav = "Chrome";
   else if (/Firefox\//.test(ua)) nav = "Firefox";
   else if (/Safari\//.test(ua)) nav = "Safari";
-  return `${so} - ${nav}`;
+  return `${so} - ${nav}` + (esAppInstalada() ? " (app instalada)" : "");
 }
 
 let usuarioPendienteNombreDispositivo = null;
@@ -1524,7 +1528,9 @@ function mostrarFormNombreDispositivo(user) {
   usuarioPendienteNombreDispositivo = user;
   document.getElementById("login-form-principal").style.display = "none";
   document.getElementById("login-form-nombre-dispositivo").style.display = "block";
-  document.getElementById("dispositivo-nombre-input").focus();
+  const inp = document.getElementById("dispositivo-nombre-input");
+  if (esAppInstalada() && !inp.value) inp.value = describirDispositivo().split(" - ")[0] + " app";
+  inp.focus();
 }
 
 async function solicitarAccesoDispositivo() {
