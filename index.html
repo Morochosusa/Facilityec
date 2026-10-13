@@ -619,6 +619,7 @@
   #pr-root .pr-flash.ok{background:rgba(29,122,77,.93)}
   #pr-root .pr-flash.er{background:rgba(192,57,43,.94)}
   #pr-root .pr-flash .ft{font-size:48px;font-weight:800}
+  #pr-root .bajasrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0} #pr-root .bajasrow .btn{min-height:48px}
   #pr-root #pr-snack{position:absolute;left:50%;transform:translateX(-50%);top:calc(var(--hh,90px) + 8px);z-index:40;display:none;width:min(560px,94%)}
   #pr-root #pr-snack.show{display:block}
   #pr-root .snackbox{background:#26261f;color:#fff;border-radius:16px;padding:10px 10px 16px 18px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
@@ -1194,9 +1195,103 @@
     body #lista-compra-detalle .lc-tot.final{font-size:13pt;border-top:1px solid #000}
   }
 
+
+  /* ===== BODEGA: mismo diseño que Inventario ===== */
+  #bg-root,#bg-sheet,#bg-snack{font-size:16px;color:#1f1f1d;max-width:1100px;margin:0 auto;padding:0 12px 12px;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  #bg-root .mu,#bg-sheet .mu,#bg-snack .mu{color:#6b6a64;font-size:13px} #bg-root .mu.s,#bg-sheet .mu.s,#bg-snack .mu.s{font-size:12px}
+  #bg-root .ivb,#bg-sheet .ivb,#bg-snack .ivb{min-height:48px;padding:8px 16px;border:2px solid #d6d3c8;border-radius:12px;background:#fff;font:inherit;font-weight:600;color:#1f1f1d;cursor:pointer}
+  #bg-root .ivb.on,#bg-sheet .ivb.on,#bg-snack .ivb.on{background:#4285f4;border-color:#3c3489;color:#fff}
+  #bg-root .ivb.okb,#bg-sheet .ivb.okb,#bg-snack .ivb.okb{background:#1d7a4d;border-color:#1d7a4d;color:#fff}
+  #bg-root .ivb:disabled,#bg-sheet .ivb:disabled,#bg-snack .ivb:disabled{opacity:.45;cursor:default}
+  #bg-root .ivb.big,#bg-sheet .ivb.big,#bg-snack .ivb.big{width:100%;min-height:68px;font-size:20px}
+  #bg-root .ivb.val,#bg-sheet .ivb.val,#bg-snack .ivb.val{width:100%;text-align:left;min-height:56px;font-size:18px}
+  #bg-root .iv-tabs,#bg-sheet .iv-tabs,#bg-snack .iv-tabs{display:flex;gap:8px;margin-bottom:12px} #bg-root .iv-tabs .ivb,#bg-sheet .iv-tabs .ivb,#bg-snack .iv-tabs .ivb{flex:1;min-height:56px;font-size:18px}
+  #bg-root .iv-sum,#bg-sheet .iv-sum,#bg-snack .iv-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  #bg-root .iv-sum>div,#bg-sheet .iv-sum>div,#bg-snack .iv-sum>div{background:#fff;border:2px solid #e3e0d6;border-radius:12px;padding:10px 12px} #bg-root .iv-sum b,#bg-sheet .iv-sum b,#bg-snack .iv-sum b{display:block;font-size:24px} #bg-root .iv-sum span,#bg-sheet .iv-sum span,#bg-snack .iv-sum span{font-size:12px;color:#6b6a64} #bg-root .iv-sum .wn,#bg-sheet .iv-sum .wn,#bg-snack .iv-sum .wn{border-color:#a85f00;background:#fdf0d5}
+  #bg-root .iv-bar,#bg-sheet .iv-bar,#bg-snack .iv-bar{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  #bg-root .iv-bar input,#bg-sheet .iv-bar input,#bg-snack .iv-bar input{min-height:52px;font-size:17px;padding:8px 14px;border:2px solid #d6d3c8;border-radius:12px;width:100%;box-sizing:border-box}
+  #bg-root .iv-chips,#bg-sheet .iv-chips,#bg-snack .iv-chips{display:flex;flex-wrap:wrap;gap:8px}
+  #bg-root .iv-list,#bg-sheet .iv-list,#bg-snack .iv-list{display:flex;flex-direction:column;gap:8px}
+  #bg-root .iv-row,#bg-root .iv-cuenta,#bg-root .iv-hist,#bg-sheet .iv-row,#bg-sheet .iv-cuenta,#bg-sheet .iv-hist,#bg-snack .iv-row,#bg-snack .iv-cuenta,#bg-snack .iv-hist{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:2px solid #e3e0d6;border-radius:14px;padding:12px 14px;font:inherit;color:inherit;cursor:pointer;min-height:64px}
+  #bg-root .iv-row.bajo,#bg-sheet .iv-row.bajo,#bg-snack .iv-row.bajo{border-color:#a85f00;background:#fffaf0} #bg-root .iv-row.sin,#bg-sheet .iv-row.sin,#bg-snack .iv-row.sin{background:#faf8f3}
+  #bg-root .iv-n,#bg-sheet .iv-n,#bg-snack .iv-n{min-width:0;flex:1} #bg-root .nm,#bg-sheet .nm,#bg-snack .nm{font-weight:700;font-size:17px}
+  #bg-root .iv-s,#bg-sheet .iv-s,#bg-snack .iv-s{text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex:none} #bg-root .iv-s b,#bg-sheet .iv-s b,#bg-snack .iv-s b{font-size:24px;line-height:1.1} #bg-root .iv-s span,#bg-sheet .iv-s span,#bg-snack .iv-s span{font-size:12px;color:#6b6a64} #bg-root .iv-s em,#bg-sheet .iv-s em,#bg-snack .iv-s em{font-style:normal;font-size:12px;font-weight:700;color:#a85f00;background:#fdf0d5;border-radius:8px;padding:2px 8px;margin-top:2px} #bg-root .iv-s em.al,#bg-sheet .iv-s em.al,#bg-snack .iv-s em.al{color:#4285f4;background:#e9e7fb}
+  #bg-root .iv-meter,#bg-sheet .iv-meter,#bg-snack .iv-meter{height:6px;background:#eceae2;border-radius:3px;margin:6px 0 2px;overflow:hidden} #bg-root .iv-meter i,#bg-sheet .iv-meter i,#bg-snack .iv-meter i{display:block;height:100%;background:#1d7a4d} #bg-root .iv-row.bajo .iv-meter i,#bg-sheet .iv-row.bajo .iv-meter i,#bg-snack .iv-row.bajo .iv-meter i{background:#a85f00}
+  #bg-root .iv-vacio,#bg-sheet .iv-vacio,#bg-snack .iv-vacio{padding:24px;text-align:center;color:#6b6a64} #bg-root .okc,#bg-sheet .okc,#bg-snack .okc{color:#1d7a4d}
+  #bg-root .iv-subbar,#bg-sheet .iv-subbar,#bg-snack .iv-subbar{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:12px;position:sticky;top:0;background:#f7f5ef;padding:6px 0;z-index:2} #bg-root .iv-st,#bg-sheet .iv-st,#bg-snack .iv-st{font-weight:800;font-size:18px;flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #bg-root .iv-card,#bg-sheet .iv-card,#bg-snack .iv-card{background:#fff;border:2px solid #e3e0d6;border-radius:14px;padding:14px;margin-bottom:12px} #bg-root .iv-card h3,#bg-sheet .iv-card h3,#bg-snack .iv-card h3{margin:0 0 8px;font-size:16px}
+  #bg-root .iv-big,#bg-sheet .iv-big,#bg-snack .iv-big{font-size:34px;font-weight:800} #bg-root .iv-big span,#bg-sheet .iv-big span,#bg-snack .iv-big span{font-size:16px;font-weight:600;color:#6b6a64}
+  #bg-root .iv-f,#bg-sheet .iv-f,#bg-snack .iv-f{margin-bottom:10px} #bg-root .iv-f label,#bg-sheet .iv-f label,#bg-snack .iv-f label{display:block;font-weight:600;font-size:14px;margin-bottom:4px}
+  #bg-root .iv-f input,#bg-sheet .iv-f input,#bg-snack .iv-f input{width:100%;box-sizing:border-box;min-height:52px;font-size:17px;padding:8px 14px;border:2px solid #d6d3c8;border-radius:12px}
+  #bg-root .iv-pie,#bg-sheet .iv-pie,#bg-snack .iv-pie{position:sticky;bottom:0;padding:10px 0;background:linear-gradient(transparent,#f7f5ef 30%)}
+  #bg-root .iv-start,#bg-sheet .iv-start,#bg-snack .iv-start{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+  #bg-root .ivb.start,#bg-sheet .ivb.start,#bg-snack .ivb.start{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:120px;text-align:left;padding:14px} #bg-root .ivb.start b,#bg-sheet .ivb.start b,#bg-snack .ivb.start b{font-size:20px} #bg-root .ivb.start span,#bg-sheet .ivb.start span,#bg-snack .ivb.start span{font-weight:500;font-size:13px;color:#6b6a64} #bg-root .ivb.start .wn,#bg-sheet .ivb.start .wn,#bg-snack .ivb.start .wn{color:#a85f00}
+  #bg-root .iv-prog,#bg-sheet .iv-prog,#bg-snack .iv-prog{height:8px;background:#eceae2;border-radius:4px;margin-bottom:10px;overflow:hidden} #bg-root .iv-prog i,#bg-sheet .iv-prog i,#bg-snack .iv-prog i{display:block;height:100%;background:#1d7a4d}
+  #bg-root .iv-zona,#bg-sheet .iv-zona,#bg-snack .iv-zona{font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:#6b6a64;margin-top:8px}
+  #bg-root .iv-cuenta,#bg-sheet .iv-cuenta,#bg-snack .iv-cuenta{min-height:76px} #bg-root .iv-cuenta.hecho,#bg-sheet .iv-cuenta.hecho,#bg-snack .iv-cuenta.hecho{border-color:#1d7a4d;background:#effaf4}
+  #bg-root .iv-cant,#bg-sheet .iv-cant,#bg-snack .iv-cant{text-align:right;flex:none} #bg-root .iv-cant span,#bg-sheet .iv-cant span,#bg-snack .iv-cant span{display:block;font-size:12px;color:#6b6a64} #bg-root .iv-cant b,#bg-sheet .iv-cant b,#bg-snack .iv-cant b{font-size:26px}
+  #bg-root .iv-dif,#bg-sheet .iv-dif,#bg-snack .iv-dif{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #e3e0d6;border-radius:14px;padding:10px 12px} #bg-root .iv-dif.grande,#bg-sheet .iv-dif.grande,#bg-snack .iv-dif.grande{border-color:#c0392b;background:#fdf1ef}
+  #bg-root .iv-d,#bg-sheet .iv-d,#bg-snack .iv-d{text-align:right;flex:none} #bg-root .iv-d b,#bg-sheet .iv-d b,#bg-snack .iv-d b{font-size:22px;display:block} #bg-root .iv-d span,#bg-sheet .iv-d span,#bg-snack .iv-d span{font-size:12px;color:#6b6a64} #bg-root .iv-d.neg b,#bg-sheet .iv-d.neg b,#bg-snack .iv-d.neg b{color:#c0392b} #bg-root .iv-d.pos b,#bg-sheet .iv-d.pos b,#bg-snack .iv-d.pos b{color:#1d7a4d}
+  #bg-root .iv-aviso,#bg-sheet .iv-aviso,#bg-snack .iv-aviso{background:#fdf0d5;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-weight:600}
+  #bg-root .iv-hist,#bg-sheet .iv-hist,#bg-snack .iv-hist{margin-bottom:6px} #bg-root .iv-hist .wn,#bg-sheet .iv-hist .wn,#bg-snack .iv-hist .wn{color:#a85f00;font-weight:700;text-align:right}
+  body.touch #bg-root .ivb,body.touch #bg-sheet .ivb,body.touch #bg-snack .ivb{min-height:64px;font-size:18px} body.touch #bg-root .iv-row,body.touch #bg-sheet .iv-row,body.touch #bg-snack .iv-row{min-height:76px}
+  #bg-root{padding-bottom:110px} #bg-root .iv-pie{padding-left:70px}
+  #bg-host-prod #pr-root{height:calc(100vh - 215px);min-height:380px}
+  #bg-host-conteo .iv-tabs{display:none}
+  #vista-proveedores.bg-host{padding-bottom:90px}
+  #bg-root .bg-flow{display:flex;gap:6px;margin:0 0 6px}
+  #bg-root .bg-flow .ivb{flex:1;min-height:60px;font-size:16px;flex-direction:column;gap:2px;line-height:1.15;position:relative;padding:4px 6px}
+  #bg-root .bg-flow .ivb small{font-size:12px;font-weight:600;opacity:.75}
+  #bg-root .bg-flow .ivb.on small{opacity:.9}
+  #bg-root .bg-flow .bg-sep{align-self:center;color:#b4b2a9;font-weight:800;margin:0 -2px}
+  #bg-root .bg-flow .bg-n.warn{background:#b8741a}
+  #bg-root.bg-solo{padding-bottom:6px}
+  #bg-root .bg-flow{margin-top:8px}
+  @media (max-width:900px){#bg-root .bg-flow{overflow-x:auto;flex-wrap:nowrap}#bg-root .bg-flow .ivb{font-size:13px;min-height:54px;min-width:112px}#bg-root .bg-flow .bg-sep{display:none}}
+  #bg-root .bg-seg .ivb{min-height:50px;font-size:15px}
+  #bg-root .bg-hint{font-size:13px;color:#6b6a63;margin:0 2px 8px}
+  #bg-root .bg-mpstrip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+  #bg-root .bg-mpl{font-weight:800;font-size:14px}
+  #bg-root .bg-mpc{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 12px;font-size:15px}
+  #bg-root .bg-mpc span{font-size:13px;opacity:.8}
+  #bg-root .bg-resp{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px} #bg-root .bg-resp>span{font-weight:700;color:#6b6a64}
+  #bg-root .bg-resp input{min-height:48px;font-size:16px;padding:6px 12px;border:2px solid #d6d3c8;border-radius:12px;max-width:180px}
+  #bg-root .bg-tabs{flex-wrap:wrap} #bg-root .bg-tabs .ivb{flex:1 1 150px;min-height:56px;font-size:16px}
+  #bg-root .bg-n{display:inline-block;background:#c0392b;color:#fff;border-radius:10px;padding:0 7px;font-size:12px;margin-left:6px}
+  #bg-root .bg-it,#bg-root .bg-inv,#bg-root .bg-card{background:#fff;border:2px solid #e3e0d6;border-radius:14px;padding:12px;margin-bottom:10px}
+  #bg-root .bg-it.dif,#bg-root .bg-inv.bajo{border-color:#a85f00;background:#fffaf0}
+  #bg-root .bg-it-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start} #bg-root .bg-it-top .mu{text-align:right}
+  #bg-root .bg-it-q{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+  #bg-root .bg-it-q .ivb.val{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:64px;padding:6px 14px}
+  #bg-root .bg-it-q .ivb.val span,#bg-root .bg-acts .ivb.val span{font-size:12px;font-weight:600;color:#6b6a64} #bg-root .bg-it-q .ivb.val b{font-size:24px} #bg-root .bg-acts .ivb.val{display:flex;flex-direction:column;align-items:flex-start;text-align:left;flex:2} #bg-root .bg-acts .ivb.val b{font-size:22px}
+  #bg-root .ivb.mal{border-color:#c0392b;background:#fdf1ef}
+  #bg-root .bg-entra{border:2px dashed #cfcbbd;border-radius:12px;padding:6px 12px;display:flex;flex-direction:column;justify-content:center} #bg-root .bg-entra span{font-size:12px;color:#6b6a64} #bg-root .bg-entra b{font-size:24px;color:#1d7a4d}
+  #bg-root .bg-dest{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px} #bg-root .bg-dest .ivb{min-height:56px}
+  #bg-root .bg-obs{width:100%;box-sizing:border-box;min-height:48px;font-size:16px;padding:8px 12px;border:2px solid #d6d3c8;border-radius:12px;margin-top:8px}
+  #bg-root .bg-tag{display:inline-block;font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;margin:4px 6px 0 0;background:#eceae2;color:#444}
+  #bg-root .bg-tag.am{background:#fdf0d5;color:#a85f00} #bg-root .bg-tag.az{background:#e4eefe;color:#2a55b0} #bg-root .bg-tag.mo{background:#efe4fb;color:#6a2fa3} #bg-root .bg-tag.ok{background:#e3f5ea;color:#1d7a4d}
+  #bg-root .bg-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px} #bg-root .bg-acts .ivb{flex:1;min-height:56px}
+  #bg-root .bg-line{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #eceae2} #bg-root .bg-line:last-child{border-bottom:0}
+  #bg-root .bg-line.dif{background:#fffaf0;margin:0 -6px;padding:8px 6px;border-radius:8px} #bg-root .bg-line.tot{border-top:2px solid #4285f4;font-size:18px}
+  #bg-root .bg-baja{text-align:right;flex:none} #bg-root .bg-baja b{display:block;font-size:17px} #bg-root .bg-baja span{font-size:12px;color:#6b6a64}
+  #bg-sheet{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;font-size:16px;color:#1f1f1d} #bg-sheet.show{display:flex}
+  #bg-sheet .bg-sh-box{background:#fff;width:min(560px,100%);border-radius:18px 18px 0 0;padding:16px;max-height:88vh;overflow:auto;box-sizing:border-box} #bg-sheet h3{margin:0 0 4px;font-size:20px}
+  #bg-sheet .bg-sh-op{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0} #bg-sheet .bg-sh-op .ivb{min-height:64px} #bg-sheet .bg-sh-x{width:100%;min-height:56px}
+  #bg-snack,#bg-toast{display:none} #bg-snack.show{display:block;position:fixed;left:0;right:0;bottom:100px;z-index:160;pointer-events:none}
+  .bg-sn{pointer-events:auto;margin:0 auto;max-width:520px;background:#2c2c2a;color:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px}
+  #bg-snack .ivb{background:#fde8a6;border-color:#fde8a6;color:#2c2c2a;min-height:60px}
+  #bg-toast.show{display:block;position:fixed;left:50%;transform:translateX(-50%);bottom:110px;z-index:170;background:#2c2c2a;color:#fff;border-radius:14px;padding:12px 18px;max-width:92%;font-size:16px;font-weight:600;text-align:center}
+  @media (max-width:820px){ #bg-root .bg-it-q{grid-template-columns:1fr 1fr} #bg-root .bg-entra{grid-column:1/3} #bg-sheet .bg-sh-op{grid-template-columns:1fr} }
+
   /* ===== PEDIDOS DE LOS LOCALES ===== */
   #pd-root{padding:8px 12px 110px}
   .pd-badge{display:inline-block;min-width:22px;padding:0 7px;margin-left:6px;border-radius:99px;background:#c0392b;color:#fff;font-size:13px;font-weight:800;text-align:center}
+  .pd-pm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;padding:16px} .pd-pm.show{display:flex}
+  .pd-pm-box{background:#fff;border-radius:22px;padding:20px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
+  .pd-pm-box h3{margin:0 0 4px;font-size:20px} .pd-pm-sub{font-size:13px;color:#6b6a63;margin-bottom:10px}
+  .pd-pm-l{font-size:12px;font-weight:800;text-transform:uppercase;color:#6b6a63;margin:12px 0 6px} .pd-pm-ch{display:flex;flex-wrap:wrap;gap:8px}
+  .pd-pm .lcb.on{background:#4285f4;border-color:#3c3489;color:#fff} .pd-pm .lcb span{font-weight:500;opacity:.8}
+  .pd-pm-ac{display:flex;gap:10px;margin-top:18px} .pd-pm-ac .lcb{flex:1} .pd-pm-ac .lcb[disabled]{opacity:.4}
   .pd-tabs{display:flex;gap:8px;margin-bottom:12px} .pd-tabs .lcb{flex:1}
   .pd-empty{text-align:center;color:#6b6a63;font-size:19px;line-height:1.6;padding:50px 20px}
   .pd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
@@ -1326,9 +1421,8 @@
     <div class="nav-grupo">Operacion</div>
     <button class="nav-item" id="nav-pedidos" onclick="cambiarVista('pedidos')">📨 Pedidos de locales</button>
     <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
-    <button class="nav-item" id="nav-proveedores" onclick="cambiarVista('proveedores')">📥 Recepcion proveedores</button>
-    <button class="nav-item" id="nav-produccion" onclick="esMenu(event)">🏭 Producción ▾</button>
-    <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')">📦 Inventario</button>
+    <button class="nav-item" id="nav-bodega" onclick="cambiarVista('bodega')">🏬 Bodega</button>
+    <button class="nav-item" id="nav-estaciones" onclick="cambiarVista('estaciones')">📋 Lista de estaciones</button>
     <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
     <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
     <button class="nav-item" id="nav-pantalla" onclick="pantallaCompletaOInstalar()" style="display:none;"></button>
@@ -1394,13 +1488,22 @@
   <div id="guias-detalle"></div>
 </div>
 
-<!-- VISTA: INVENTARIO -->
-<div class="vista" id="vista-inventario">
-  <div id="iv-root"></div>
-</div>
-
-<!-- VISTA: RECEPCION PROVEEDORES -->
-<div class="vista" id="vista-proveedores">
+<!-- VISTA: BODEGA (recepción de compras, por procesar, inventario, requerimientos, contabilidad) -->
+<div class="vista" id="vista-bodega">
+  <div id="bg-root"></div>
+  <!-- Todo el recorrido en un solo lugar: estas tres piezas se muestran dentro de Bodega -->
+  <div id="bg-host-prod" style="display:none">
+  <div id="pr-root">
+    <header id="pr-top"></header>
+    <div id="pr-testbar"></div>
+    <main id="pr-main"></main>
+    <div id="pr-flash" class="pr-flash"></div>
+    <div id="pr-snack"></div>
+    <div id="pr-toast"></div>
+    <div id="pr-modal-root"></div>
+  </div>
+  </div>
+  <div id="vista-proveedores" class="bg-host" style="display:none">
   <div class="compra-top-grid">
     <div class="panel">
       <label for="proveedor-nombre">Proveedor</label>
@@ -1448,24 +1551,16 @@
     <span class="contador" id="contador-proveedor">0 items agregados</span>
     <button class="btn-despachar" onclick="guardarRecepcionProveedor()">Registrar recepcion</button>
   </div>
+  </div>
+  <div id="bg-host-conteo" style="display:none">
+    <div id="iv-root"></div>
+  </div>
 </div>
 
 <!-- VISTA: PRODUCCION (modo tablet) -->
 <!-- VISTA: ESTACIONES (Cocina Producción / Cuarto frío) -->
 <div class="vista" id="vista-estaciones">
   <div id="es-root"></div>
-</div>
-
-<div class="vista" id="vista-produccion">
-  <div id="pr-root">
-    <header id="pr-top"></header>
-    <div id="pr-testbar"></div>
-    <main id="pr-main"></main>
-    <div id="pr-flash" class="pr-flash"></div>
-    <div id="pr-snack"></div>
-    <div id="pr-toast"></div>
-    <div id="pr-modal-root"></div>
-  </div>
 </div>
 
 <script>
@@ -2017,14 +2112,18 @@ const TITULOS_VISTA = {
   produccion: ["Producción · Registro", "Registra lo producido: suma al inventario, descuenta materia prima y saca la etiqueta"],
   despacho: ["Despacho manual", "Para enviar algo SIN pedido del local. Lo que piden los locales se despacha desde Guías"],
   guias: ["Guias", "Despacha lo aceptado (Por despachar), imprime y consulta las guias"],
+  bodega: ["Bodega", "Recibir → producción o bodega → inventario → pedir a Compras → recibir"],
   inventario: ["Inventario", "Qué hay en bodega ahora, dónde está y conteos físicos"]
 };
 
+const HUB_TAB = {produccion:'produccion', inventario:'inventario', proveedores:'prov'};
 function cambiarVista(nombre) {
+  /* Producción, Inventario y Recepción de proveedores viven dentro de Bodega */
+  const hubTab = HUB_TAB[nombre]; if (hubTab) nombre = 'bodega';
   document.querySelectorAll(".vista").forEach(v => v.classList.remove("activa"));
   document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("activo"));
   document.getElementById(`vista-${nombre}`).classList.add("activa");
-  const navB = document.getElementById(`nav-${nombre === 'estaciones' ? 'produccion' : nombre}`); if (navB) navB.classList.add("activo");
+  const navB = document.getElementById(`nav-${nombre}`); if (navB) navB.classList.add("activo");
 
   document.getElementById("topbar-title").textContent = TITULOS_VISTA[nombre][0];
   document.getElementById("topbar-subtitle").textContent = TITULOS_VISTA[nombre][1];
@@ -2032,6 +2131,8 @@ function cambiarVista(nombre) {
   if (typeof ivView === 'function') ivView(nombre);
   if (typeof lcView === 'function') lcView(nombre);
   if (typeof esView === 'function') esView(nombre);
+  if (typeof bgView === 'function') bgView(nombre);
+  if (hubTab && typeof bgIr === 'function') bgIr(hubTab);
   try { localStorage.setItem('ultima_vista', nombre); } catch (e) {}
 }
 
@@ -2075,13 +2176,14 @@ function escucharInventario() {
     });
     if (typeof ivRefresh === 'function') ivRefresh();
     if (typeof prActualizarStock === 'function') prActualizarStock();
+    if (typeof bgRefresh === 'function') bgRefresh();
   });
 }
 
 /* ============================================================
    GUIAS CREADAS (coleccion pedidos)
    ============================================================ */
-const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado", facility_feria_libre: "Facility Feria Libre", cocina_produccion: "Cocina Producción", cuarto_frio: "Cuarto frío" };
+const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado", facility_feria_libre: "Facility Feria Libre", cocina_produccion: "Cocina Producción", cuarto_frio: "Cuarto frío", bodega: "Bodega" };
 const NOMBRES_ESTADO = {
   despachado: "Despachado",
   recibido_ok: "Recibido OK",
@@ -2295,6 +2397,7 @@ function escucharListasCompra() {
     renderListasCompraPendientes();
     actualizarSelectListaCompra();
     if (window.lcRefresh) lcRefresh();
+    if (window.bgRefresh) bgRefresh();
     if (listaCompraDetalleAbiertaId) {
       // Si la lista abierta ya no existe (eliminada), cerrar el detalle
       if (listasCompraCache.some(l => l.id === listaCompraDetalleAbiertaId)) {
@@ -2332,7 +2435,7 @@ function renderListasCompraPendientes() {
 
     let badge = l.estado === "despachada"
       ? `<span class="badge procesado">Despachada</span>`
-      : l.compra_realizada ? `<span class="badge recibido_ok">Compra realizada</span>` : `<span class="badge despachado">Ver lista</span>`;
+      : l.compra_realizada ? `<span class="badge recibido_ok">Compra realizada${l.recepcion_id ? " · Recibida" : ""}</span>` : `<span class="badge despachado">Ver lista</span>`;
     let detalleTexto = `${comprados} de ${l.items.length} comprados`;
     let filaEliminar = `
         <div class="card-acciones">
@@ -2349,8 +2452,8 @@ function renderListasCompraPendientes() {
       <div class="guia-card" onclick="verListaCompra('${l.id}')">
         <div class="guia-card-top">
           <div>
-            <div class="guia-local">${l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : ''}${NOMBRES_LOCAL[l.local] || l.local}</div>
-            <div class="guia-fecha">${fecha} - ${detalleTexto}${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
+            <div class="guia-local">${l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')}${NOMBRES_LOCAL[l.local] || l.local}</div>
+            <div class="guia-fecha">${fecha} - ${detalleTexto}${l.fecha_necesaria ? " - para el " + l.fecha_necesaria.split("-").reverse().join("/") : ""}${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
           </div>
           ${badge}
         </div>
@@ -2439,8 +2542,8 @@ function verListaCompra(id) {
     <div class="detalle-panel">
       <div class="detalle-header">
         <div>
-          <h2>${lista.pedido_numero ? '<span class="lc-pnum">Pedido #' + lista.pedido_numero + '</span> ' : ''}${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
-          <div class="guia-fecha lc-fecha">${fecha}</div>
+          <h2>${lista.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (lista.pedido_numero ? '<span class="lc-pnum">Pedido #' + lista.pedido_numero + '</span> ' : '')}${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
+          <div class="guia-fecha lc-fecha">${fecha}${lista.fecha_necesaria ? " · necesario para el " + lista.fecha_necesaria.split("-").reverse().join("/") : ""}${lista.recepcion_id ? " · ✓ recibida en bodega" : ""}</div>
           ${estadoEnvio}
         </div>
         <button class="btn-cerrar" onclick="cerrarListaCompraDetalle()">&times;</button>
@@ -2500,6 +2603,7 @@ async function marcarEnviadaContabilidad(id) {
 async function eliminarListaCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || !esListaCompraPendiente(lista)) return;
+  if (lista.recepcion_id) { mostrarAviso("Esta compra ya se recibió en Bodega: no se puede eliminar.", "error"); return; }
 
   const nombreLocal = NOMBRES_LOCAL[lista.local] || lista.local;
   const avisoDespacho = lista.estado === "despachada" ? "\n\nOjo: esta lista ya se uso en un despacho. La guia no se borra, pero se pierden los costos de esta lista." : "";
@@ -2635,6 +2739,7 @@ async function marcarCompraRealizada(id) {
 async function reabrirCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || lista.enviada_contabilidad) return;
+  if (lista.recepcion_id) { mostrarAviso("Esta compra ya se recibió en Bodega. Deshaz la recepción antes de reabrirla.", "error"); return; }
   try { await db.collection("listas_compra").doc(id).update({ compra_realizada: false, fecha_compra_realizada: null }); }
   catch (err) { console.error(err); mostrarAviso("No se pudo reabrir. Verifica la conexion.", "error"); }
 }
@@ -3312,7 +3417,7 @@ const S = {
   fichas:{}, listaIds:DEFAULT_LIST.slice(), mp:[], regsPor:{producciones_facility:[], pruebas_produccion:[]}, cola:[], hb:{n:null, lastSeen:0, imp:'', msg:''},
   online:navigator.onLine, pendientes:0,
   pid:null, qty:0, mode:'preload', buf:'', modo:'ref', etqOv:null, guard:null, kbd:false, undo:null, ultima:LS.get('ultima', {}),
-  fd:null, filtroFalta:false, lt:new Set(), audit:null, T:null, tcond:'Con guantes', top:opInicial(LS.get('op', '')), lastRun:null, pruebas:LS.get('pruebas_ux', []), ready:false
+  bajas:[], fd:null, filtroFalta:false, lt:new Set(), audit:null, T:null, tcond:'Con guantes', top:opInicial(LS.get('op', '')), lastRun:null, pruebas:LS.get('pruebas_ux', []), ready:false
 };
 const modoPrueba = () => S.prueba || S.forzarPrueba;
 const colReg = () => modoPrueba() ? 'pruebas_produccion' : 'producciones_facility';
@@ -3347,7 +3452,7 @@ function escuchar(){
         out.push({id:d.id, col:col, prueba:col === 'pruebas_produccion', pend:!!(d.metadata && d.metadata.hasPendingWrites),
           pid:x.producto_id, nombre:x.producto_nombre, unidad:x.unidad_medida, cant:x.cantidad_producida, cpe:x.cantidad_por_etiqueta || 0, batches:x.batches, modo:x.conservacion_modo,
           ts:tsMs(x.fecha_produccion), vence:tsMs(x.vence), dias:x.dias_vida || 0, lote:x.lote || '', etq:x.etiquetas || 1, op:x.operador || '',
-          anulado:!!x.anulado, inv:x.inventario !== false, receta:x.insumos || []});
+          anulado:!!x.anulado, inv:x.inventario !== false, receta:x.insumos || [], bajas:x.bajas || []});
       });
       S.regsPor[col] = out;
       contarPendientes(); renderTop();
@@ -3512,6 +3617,7 @@ function renderPanel(){
     '<div class="pc2">' +
       (modos.length > 1 ? '<div class="modos">' + modos.map(m => '<button class="btn ' + (S.modo === m ? 'on' : '') + '" data-act="modo" data-v="' + m + '"><span>' + MODOS[m] + '</span><span class="small">' + f.vida[m] + ' días</span></button>').join('') + '</div>' : '') +
       '<div class="mu small">Descuenta de bodega: ' + rec + '</div>' +
+      (f.receta.length ? '<div class="bajasrow">' + S.bajas.map((b, i) => '<span class="pill wn">Baja ' + fmt(b.cantidad) + ' ' + esc(b.unidad) + ' ' + esc(b.nombre) + ' · ' + esc(b.motivo) + ' <button class="btn" data-act="baja-x" data-i="' + i + '" aria-label="Quitar baja">✕</button></span>').join(' ') + '<button class="btn" data-act="baja">＋ Baja / merma</button></div>' : '') +
       (vida ? '<div class="only-land"><div class="mu small" style="margin-bottom:4px">Así saldrá la etiqueta</div>' + labelHTML(pseudo, true) + '</div>' : '') +
     '</div>' +
     '<div class="regwrap">' +
@@ -3526,7 +3632,7 @@ function popQty(){ const q = $('#pr-pq'); if(q){ q.classList.remove('pop'); void
 
 function selectProduct(pid){
   const f = fichaDe(pid); if(!f) return;
-  S.pid = pid; S.guard = null; S.etqOv = null; S.mode = 'preload';
+  S.pid = pid; S.guard = null; S.etqOv = null; S.mode = 'preload'; S.bajas = [];
   S.qty = (!S.T && S.ultima[pid]) ? S.ultima[pid] : f.batch; S.buf = '';
   const ms = modosDe(f);
   S.modo = ms.indexOf(f.modo_defecto) >= 0 ? f.modo_defecto : (ms[0] || 'ref');
@@ -3583,7 +3689,7 @@ function registrar(){
   batch.set(regRef, {
     producto_id:f.id, producto_nombre:f.nombre, unidad_medida:f.unidad, presentacion:f.presentacion, estacion:S.op, inventario:!!f.inv,
     cantidad_producida:S.qty, cantidad_por_etiqueta:f.por_etiqueta > 0 ? f.por_etiqueta : 0, batches:round2(ratio), conservacion_modo:S.modo, dias_vida:dias, vence:vence ? TS().fromDate(vence) : null,
-    lote:lote, etiquetas:vida ? etq : 0, operador:opNombre, insumos:insumos, anulado:false, prueba:prueba,
+    lote:lote, etiquetas:vida ? etq : 0, operador:opNombre, insumos:insumos, bajas:S.bajas.slice(), anulado:false, prueba:prueba,
     registrado_por_email:email, fecha_produccion:SV()
   });
   if(!prueba){
@@ -3597,6 +3703,12 @@ function registrar(){
       batch.set(db.collection('inventario_materia_prima').doc(l.materia_prima_id), {cantidad_actual:INC(-l.cantidad), ultima_actualizacion:ts}, {merge:true});
       batch.set(db.collection('movimientos_inventario_bodega').doc(), {producto_id:l.materia_prima_id, producto_nombre:l.nombre, inventario:'materia_prima', tipo:'consumo_produccion', cantidad:-l.cantidad, lote:lote, registro_id:regRef.id, fecha:ts, nota:'Usado para producir ' + f.nombre});
     });
+    S.bajas.forEach((b, i) => {
+      batch.set(db.collection('inventario_materia_prima').doc(b.materia_prima_id), {cantidad_actual:INC(-b.cantidad), ultima_actualizacion:ts}, {merge:true});
+      batch.set(db.collection('bajas_bodega').doc('baja_' + regRef.id + '_' + i), {empresa:'morochos_ec', bodega:'bodega_central', origen:'procesamiento', registro_id:regRef.id, producto_origen:f.nombre, inventario:'materia_prima',
+        producto_id:b.materia_prima_id, producto_nombre:b.nombre, unidad:b.unidad, cantidad:b.cantidad, motivo:b.motivo, responsable:opNombre, anulada:false, fecha:ts});
+      batch.set(db.collection('movimientos_inventario_bodega').doc(), {producto_id:b.materia_prima_id, producto_nombre:b.nombre, inventario:'materia_prima', tipo:'baja_produccion', cantidad:-b.cantidad, motivo:b.motivo, lote:lote, registro_id:regRef.id, empresa:'morochos_ec', bodega:'bodega_central', fecha:ts, nota:'Baja al producir ' + f.nombre + ' · ' + b.motivo});
+    });
   }
   let jobRef = null;
   if(vida){
@@ -3607,7 +3719,8 @@ function registrar(){
 
   S.ultima[f.id] = S.qty; LS.set('ultima', S.ultima);
   const r = {id:regRef.id, col:prueba ? 'pruebas_produccion' : 'producciones_facility', prueba:prueba, pid:f.id, nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, modo:S.modo, ts:now.getTime(),
-             vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, etq:vida ? etq : 0, op:opNombre, inv:!!f.inv, jobId:jobRef ? jobRef.id : null, insumos:insumos};
+             vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, etq:vida ? etq : 0, op:opNombre, inv:!!f.inv, jobId:jobRef ? jobRef.id : null, insumos:insumos, bajas:S.bajas.slice()};
+  S.bajas = [];
   S.undo = r;
   if(vida && U.directo) imprimirDirectoReg(r, jobRef.id);
   flash('ok', 'Guardado'); snd('ok'); showSnack(r);
@@ -3757,6 +3870,11 @@ function deshacer(id){
       batch.set(db.collection('inventario_materia_prima').doc(l.materia_prima_id), {cantidad_actual:INC(l.cantidad), ultima_actualizacion:ts}, {merge:true});
       batch.set(db.collection('movimientos_inventario_bodega').doc(), {producto_id:l.materia_prima_id, producto_nombre:l.nombre, inventario:'materia_prima', tipo:'anulacion_consumo', cantidad:l.cantidad, lote:r.lote, registro_id:r.id, fecha:ts, nota:'Deshacer produccion'});
     });
+    (r.bajas || []).forEach((b, i) => {
+      batch.set(db.collection('inventario_materia_prima').doc(b.materia_prima_id), {cantidad_actual:INC(b.cantidad), ultima_actualizacion:ts}, {merge:true});
+      batch.set(db.collection('bajas_bodega').doc('baja_' + r.id + '_' + i), {anulada:true, anulada_ts:ts}, {merge:true});
+      batch.set(db.collection('movimientos_inventario_bodega').doc(), {producto_id:b.materia_prima_id, producto_nombre:b.nombre, inventario:'materia_prima', tipo:'anulacion_baja', cantidad:b.cantidad, lote:r.lote, registro_id:r.id, fecha:ts, nota:'Deshacer produccion (baja)'});
+    });
   }
   const job = S.cola.filter(j => j.registro_id === r.id)[0];
   const jid = (job && job.id) || r.jobId;
@@ -3780,7 +3898,8 @@ function toast(msg){
 }
 function showSnack(r){
   const s = $('#pr-snack'); if(!s) return;
-  s.innerHTML = '<div class="snackbox"><div class="st">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + esc(r.nombre) + '</div><button class="btn" data-act="undo" data-id="' + r.id + '">Deshacer</button><div class="snackbar"></div></div>';
+  const donde = r.prueba ? '⚠ MODO PRUEBA: no suma al inventario' : (r.inv !== false ? '✓ Suma a Inventario → Existencias' : '✓ Guardado en Hoy');
+  s.innerHTML = '<div class="snackbox"><div class="st">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + esc(r.nombre) + '<div style="font-size:13px;font-weight:500;opacity:.85;margin-top:2px">' + donde + '</div></div>' + (!r.prueba && r.inv !== false ? '<button class="btn" data-act="verinv">Ver en inventario</button>' : '') + '<button class="btn" data-act="undo" data-id="' + r.id + '">Deshacer</button><div class="snackbar"></div></div>';
   s.classList.add('show');
   clearTimeout(showSnack.t); showSnack.t = setTimeout(() => s.classList.remove('show'), 10000);
 }
@@ -3801,7 +3920,7 @@ function renderHoy(){
       else if(job.estado === 'error') pc = '<span class="pill er">Sin imprimir</span>';
       else pc = '<span class="pill wn">Imprimiendo</span>';
       return '<div class="reg-item"><div class="top"><div><div class="nm">' + esc(r.nombre) + '</div><div class="mu">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + tf.format(new Date(r.ts)) + ' · ' + esc(r.op) + '</div></div>' + pc + '</div>' +
-        '<div>' + (r.vence ? '<span class="pill ' + cls + '">Vence ' + fd(new Date(r.vence), r.dias <= 3) + '</span> ' : '') + '<span class="pill">' + esc(r.lote) + '</span> ' + (r.pend ? '<span class="pill wn">Pendiente de enviar</span>' : '') + '</div>' +
+        '<div>' + (r.vence ? '<span class="pill ' + cls + '">Vence ' + fd(new Date(r.vence), r.dias <= 3) + '</span> ' : '') + '<span class="pill">' + esc(r.lote) + '</span> ' + (r.pend ? '<span class="pill wn">Pendiente de enviar</span>' : '') + (r.bajas || []).map(b => ' <span class="pill wn">Baja ' + fmt(b.cantidad) + ' ' + esc(b.unidad || '') + ' ' + esc(b.nombre) + ' · ' + esc(b.motivo) + '</span>').join('') + '</div>' +
         (r.vence ? '<div class="acts"><button class="btn" data-act="label" data-id="' + r.id + '">Ver etiqueta</button><button class="btn" data-act="reprint" data-id="' + r.id + '">' + ic('printer', 22) + ' Reimprimir</button></div>' : '') + '</div>';
     }).join('') : '<div class="hint"><div class="big">Todavía no hay registros hoy</div></div>') + '</div>';
 }
@@ -4093,6 +4212,10 @@ function onClick(e){
     case 'etq': { const f = cur(); if(f){ const e0 = S.etqOv != null ? S.etqOv : etqOf(f, S.qty); S.etqOv = Math.max(1, Math.min(99, e0 + parseInt(d.d, 10))); renderPanel(); } break; }
     case 'reg': audio(); registrar(); break;
     case 'undo': deshacer(d.id); break;
+    case 'baja': { const f = cur(); if(!f || !f.receta.length || !window.bgPedirBaja) break;
+      window.bgPedirBaja({subtitulo:'Se descuenta de la materia prima, además de lo que lleva la receta', insumos:f.receta.filter(l => l.mp_id).map(l => ({id:l.mp_id, nombre:l.nombre, unidad:l.unidad})), onListo:b => { S.bajas.push(b); renderPanel(); }}); break; }
+    case 'baja-x': S.bajas.splice(parseInt(d.i, 10), 1); renderPanel(); break;
+    case 'verinv': hideSnack(); cambiarVista('inventario'); break;
     case 'menu': openMenu(); break;
     case 'mclose': closeModal(); break;
     case 'opt': {
@@ -4443,8 +4566,10 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('input', e => { if(e.target && e.target.id === 'iv-q'){ IV.q = e.target.value; const pos = e.target.selectionStart; render(); const q = $('#iv-q'); if(q){ q.focus(); try { q.setSelectionRange(pos, pos); } catch(x){} } } });
 
+window.ivItems = items;
 window.ivInit = function(){ if(IV.ready) return; IV.ready = true; escuchar(); };
 window.ivView = function(n){ if(n === 'inventario'){ render(); } };
+window.ivMostrar = function(tab){ IV.tab = tab; IV.detalle = null; render(); };
 window.ivRefresh = refrescar;
 window.IVS = IV;
 })();
@@ -4605,12 +4730,12 @@ const CP_CAT = [
   ['BODEGA','cp_maiz_sabrosa','Maíz Sabrosa',2,'uds',null,'']
 ];
 /* Cada local tiene su propia lista numerada. Se puede cambiar desde ⚙ → Configurar lista (con código); lo cambiado se guarda en config_listas_compra/{local}. Pendiente: El Salado y Facility Feria Libre. */
-const LISTAS_BASE = {la_victoria: COMPRA_BASE, cocina_produccion: numerar(CP_CAT), cuarto_frio: [], el_salado: [], facility_feria_libre: []};
+const LISTAS_BASE = {la_victoria: COMPRA_BASE, cocina_produccion: numerar(CP_CAT), cuarto_frio: [], el_salado: [], facility_feria_libre: [], bodega: []};
 const LISTAS = Object.assign({}, LISTAS_BASE);
 const EST_LOCALES = ['cocina_produccion', 'cuarto_frio'];   // las estaciones tienen su propia pestaña (Estaciones), no salen en Lista de compras
 const CODIGO_CONFIG = '2468';  // código para modificar listas. Cámbialo aquí (solo números, sin cero al inicio).
 const SEC_NOMBRE = {MERCADO:'Mercado', BEBIDAS:'Bebidas · Mercado', BODEGA:'Bodega'};
-const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío']];
+const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío'], ['bodega', 'Bodega']];
 const LOCALES_SEL = LOCALES.filter(l => EST_LOCALES.indexOf(l[0]) < 0);
 // Siempre: La Victoria, El Salado y Cocina Producción (su propio cajón). Feria Libre y Cuarto frío aparecen cuando tengan listas guardadas.
 const listasDe = lc => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => l.local === lc);
@@ -4799,6 +4924,7 @@ function leerFoto(file){
 
 /* ---------- código y configuración de la lista ---------- */
 let desbloqueadoHasta = 0;
+window.lcPedirCodigo = function(cb){ pedirCodigo(cb); };
 function pedirCodigo(cb){
   if(Date.now() < desbloqueadoHasta){ cb(); return; }
   abrirTeclado({titulo:'Código para modificar', subtitulo:'Solo personal autorizado', unidad:'', inicial:'', decimales:false, onListo:v => {
@@ -5018,7 +5144,9 @@ const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'
 const nf = new Intl.NumberFormat('es-EC', {maximumFractionDigits:2});
 const SV = () => firebase.firestore.FieldValue.serverTimestamp();
 const LOCNOM = {la_victoria:'La Victoria', el_salado:'El Salado', facility_feria_libre:'Facility Feria Libre', cocina_produccion:'Cocina Producción', cuarto_frio:'Cuarto frío'};
-const P = {lista:[], tab:'nuevos', open:null, ready:false, vistos:null, undo:null, busy:false};
+/* PRUEBAS: con true, un pedido que sigue en "Por revisar" se puede eliminar (botón rojo, con Deshacer). Cuando termines las pruebas, cámbialo a false y desaparece el botón. */
+const PD_PERMITIR_ELIMINAR = true;
+const P = {lista:[], tab:'nuevos', open:null, ready:false, vistos:null, undo:null, undoElim:null, busy:false};
 const prod = id => PRODUCTOS.filter(p => p.id === id)[0] || null;
 const tipo = it => { const p = prod(it.producto_id); const sc = p ? p.subcategoria : it.subcategoria; return !sc ? 'revisar' : (sc === 'mercado' ? 'mercado' : 'bodega'); };
 const qty = (ped, it) => { const a = ped.ajustes || {}; return a[it.producto_id] !== undefined ? a[it.producto_id] : it.cantidad; };
@@ -5103,13 +5231,14 @@ function detalle(ped){
   const m = efectivos(ped, 'mercado').length, b = efectivos(ped, 'bodega').length;
   const hayM = (ped.items || []).some(it => tipo(it) === 'mercado'), hayB = (ped.items || []).some(it => tipo(it) === 'bodega'), hayR = (ped.items || []).some(it => tipo(it) === 'revisar');
   let h = '<button class="lcb" data-pd="volver">← Volver a pedidos</button>' +
-    '<div class="pd-head"><div><div class="pd-h1"><span class="pd-num">Pedido ' + numTxt(ped) + '</span>' + esc(LOCNOM[ped.local] || ped.local) + '</div><div class="pd-c2">' + esc(fechaTxt(ped.fecha_envio)) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + '</div></div></div>' +
+    '<div class="pd-head"><div><div class="pd-h1"><span class="pd-num">Pedido ' + numTxt(ped) + '</span>' + esc(LOCNOM[ped.local] || ped.local) + '</div><div class="pd-c2">' + esc(fechaTxt(ped.fecha_envio)) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + '</div></div><button class="lcb pri" data-pd="imprimir">🖨 Imprimir hoja</button></div>' +
     (ped.nota ? '<div class="pd-banner">📝 ' + esc(ped.nota) + '</div>' : '');
   if(hayM) h += '<div class="pd-sec">🛒 Mercado · pasa a Guardadas</div>' + filas(ped, 'mercado');
   if(hayB) h += '<div class="pd-sec">📦 Bodega · pasa a Guías para despachar</div>' + filas(ped, 'bodega');
   if(hayR) h += '<div class="pd-sec bad">⚠ Por revisar · producto no reconocido</div>' + filas(ped, 'revisar') + '<div class="pd-nota" style="padding:6px 4px">Estos productos no traen mercado/bodega ni están en el catálogo. Agrégalos a mano en Compras o Despacho.</div>';
   h += '<div class="pd-bar">';
   const aceptado = !!(ped.compra_lista_id || ped.despacho_id);
+  if(PD_PERMITIR_ELIMINAR && !aceptado && ped.estado !== 'procesado') h += '<button class="lcb er" data-pd="eliminar" style="flex:0 0 auto;min-width:160px">🗑 Eliminar pedido</button>';
   if(!m && !b) h += '<button class="lcb okb big" data-pd="archivar">Cerrar pedido (no hay nada que procesar)</button>';
   else if(!aceptado) h += '<div class="pd-resumen">Al aceptar: ' + (m ? '🛒 ' + m + ' van a <b>Guardadas</b> (Lista de compras)' : '') + (m && b ? ' · ' : '') + (b ? '📦 ' + b + ' van a <b>Guías</b> (por despachar)' : '') + '</div>' +
     '<button class="lcb okb big" data-pd="aceptar">Aceptar pedido</button>';
@@ -5120,6 +5249,99 @@ function detalle(ped){
   }
   return h + '</div>';
 }
+
+/* ---------- hoja imprimible del pedido ----------
+   Lista completa numerada: Mercado / Facility / Bodega, y dentro de cada una por categoría.
+   Cada producto trae un cuadro para marcar lo que ya se produjo / alistó. */
+const NOM_SUB = {mercado:'Mercado', facility:'Facility', bodega:'Bodega', revisar:'Por revisar'};
+const NOM_CAT = {empacado:'Empacado', procesado:'Procesado', cocina:'Cocina', cafeteria:'Cafetería', bebidas:'Bebidas', panaderia:'Panadería', limpieza:'Limpieza'};
+function hojaHtml(ped, f){
+  f = f || {};
+  const grupos = {};
+  (ped.items || []).forEach(it => {
+    const q = qty(ped, it); if(!(q > 0)) return;
+    const p = prod(it.producto_id), sc = (p && p.subcategoria) || it.subcategoria || 'revisar';
+    const sub = NOM_SUB[sc] ? sc : 'revisar', cat = (p && p.categoria) || it.categoria || '';
+    if(f.subs && f.subs.length && f.subs.indexOf(sub) < 0) return;
+    if(f.cats && f.cats.length && f.cats.indexOf(cat) < 0) return;
+    ((grupos[sub] = grupos[sub] || {})[cat] = grupos[sub][cat] || []).push({it:it, q:q});
+  });
+  let n = 0, filasH = '';
+  ['mercado', 'facility', 'bodega', 'revisar'].forEach(sub => {
+    const cats = grupos[sub]; if(!cats) return;
+    const total = Object.keys(cats).reduce((a, c) => a + cats[c].length, 0);
+    filasH += '<tr class="sub"><td colspan="4">' + esc(NOM_SUB[sub]) + ' <span>(' + total + ')</span></td></tr>';
+    Object.keys(cats).sort().forEach(cat => {
+      if(cat) filasH += '<tr class="cat"><td colspan="4">' + esc(NOM_CAT[cat] || cat) + '</td></tr>';
+      cats[cat].forEach(x => {
+        n++;
+        const nom = x.it.producto_nombre || (prod(x.it.producto_id) || {}).nombre || x.it.producto_id;
+        filasH += '<tr><td class="n">' + n + '</td><td class="ck"><i></i></td><td class="nm">' + esc(nom) + (x.it.nota ? '<small>' + esc(x.it.nota) + '</small>' : '') + '</td><td class="q">' + esc(etq(x.q, x.it.unidad_medida)) + '</td></tr>';
+      });
+    });
+  });
+  if(!n) filasH = '<tr><td colspan="4" style="padding:20px;text-align:center">Este pedido no tiene productos.</td></tr>';
+  const fe = ped.fecha_envio && ped.fecha_envio.toDate ? ped.fecha_envio.toDate().toLocaleString('es-EC', {weekday:'long', day:'2-digit', month:'long', hour:'2-digit', minute:'2-digit'}) : '';
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Pedido ' + esc(numTxt(ped)) + '</title><style>' +
+    '@page{size:letter portrait;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#000;margin:0;font-size:13px}' +
+    'h1{font-size:22px;margin:0 0 2px}.meta{font-size:12px;color:#333;margin-bottom:6px}.nota{border:1px solid #000;padding:5px 8px;margin:6px 0;font-size:12px}' +
+    'table{width:100%;border-collapse:collapse;margin-top:6px}td{border-bottom:1px solid #bbb;padding:5px 6px;vertical-align:middle}' +
+    'tr{page-break-inside:avoid}tr.sub td{background:none;color:#000;font-weight:800;font-size:15px;letter-spacing:.5px;text-transform:uppercase;padding:10px 4px 3px;border-bottom:2px solid #000}tr.sub span{font-weight:400}' +
+    'tr.cat td{background:none;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#444;padding:6px 4px 2px}' +
+    'td.n{width:28px;text-align:right;color:#444;font-size:12px}td.ck{width:34px;text-align:center}td.ck i{display:inline-block;width:20px;height:20px;border:2px solid #000;border-radius:3px}' +
+    'td.nm{font-size:14px;font-weight:600}td.nm small{display:block;font-weight:400;font-size:11px;color:#444}td.q{width:150px;text-align:right;font-size:14px;font-weight:700;white-space:nowrap}' +
+    '.pie{margin-top:16px;display:flex;gap:24px;font-size:12px}.pie div{flex:1;border-top:1px solid #000;padding-top:3px}' +
+    '.tot{margin-top:8px;font-size:12px;text-align:right}</style></head><body>' +
+    '<h1>Pedido ' + esc(numTxt(ped)) + ' · ' + esc(LOCNOM[ped.local] || ped.local) + '</h1>' +
+    '<div class="meta">' + esc(fe) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + ' · impreso ' + esc(new Date().toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'})) + '</div>' +
+    ((f.subs && f.subs.length) || (f.cats && f.cats.length) ? '<div class="nota"><b>Solo:</b> ' + esc((f.subs || []).map(x => NOM_SUB[x]).concat((f.cats || []).map(c => NOM_CAT[c] || c || 'Sin categoría')).join(' · ')) + '</div>' : '') +
+    (ped.nota ? '<div class="nota"><b>Nota:</b> ' + esc(ped.nota) + '</div>' : '') +
+    '<table>' + filasH + '</table><div class="tot">' + n + ' producto' + (n === 1 ? '' : 's') + '</div>' +
+    '<div class="pie"><div>Producido / alistado por</div><div>Revisado por</div><div>Fecha y hora</div></div></body></html>';
+}
+function imprimirHoja(ped, filtro){
+  const f = document.createElement('iframe');
+  f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  document.body.appendChild(f);
+  const d = f.contentDocument || f.contentWindow.document;
+  d.open(); d.write(hojaHtml(ped, filtro)); d.close();
+  window.PD_ULTIMA_HOJA = hojaHtml(ped, filtro);
+  setTimeout(() => {
+    try { f.contentWindow.focus(); f.contentWindow.print(); } catch(e){ console.error(e); toast('No se pudo abrir la impresión'); }
+    setTimeout(() => { if(f.parentNode) f.parentNode.removeChild(f); }, 60000);
+  }, 250);
+}
+
+/* ---------- elegir qué imprimir: por sección y/o categoría ---------- */
+function gruposHoja(ped){
+  const subs = {}, cats = {}, items = [];
+  (ped.items || []).forEach(it => {
+    const q = qty(ped, it); if(!(q > 0)) return;
+    const p = prod(it.producto_id), sc = (p && p.subcategoria) || it.subcategoria || 'revisar';
+    const sub = NOM_SUB[sc] ? sc : 'revisar', cat = (p && p.categoria) || it.categoria || '';
+    subs[sub] = (subs[sub] || 0) + 1; cats[cat] = (cats[cat] || 0) + 1; items.push({sub:sub, cat:cat});
+  });
+  return {subs:subs, cats:cats, items:items};
+}
+function pmFiltro(){ return {subs:Object.keys(P.pm.subs), cats:Object.keys(P.pm.cats)}; }
+function pmPintar(){
+  const m = document.getElementById('pd-pm'), ped = P.lista.filter(p => p.id === P.pm.id)[0]; if(!m || !ped) return;
+  const g = gruposHoja(ped), f = pmFiltro();
+  const n = g.items.filter(x => (!f.subs.length || f.subs.indexOf(x.sub) >= 0) && (!f.cats.length || f.cats.indexOf(x.cat) >= 0)).length;
+  const chip = (tipo, k, nom, c, on) => '<button class="lcb ' + (on ? 'on' : '') + '" data-pd="pm-' + tipo + '" data-v="' + esc(k) + '">' + esc(nom) + ' <span>(' + c + ')</span></button>';
+  m.innerHTML = '<div class="pd-pm-box"><h3>🖨 Imprimir hoja</h3><div class="pd-pm-sub">Marca lo que quieres imprimir. Si no marcas nada, se imprime todo el pedido.</div>' +
+    '<div class="pd-pm-l">Sección</div><div class="pd-pm-ch">' + ['mercado', 'facility', 'bodega', 'revisar'].filter(k => g.subs[k]).map(k => chip('sub', k, NOM_SUB[k], g.subs[k], !!P.pm.subs[k])).join('') + '</div>' +
+    '<div class="pd-pm-l">Categoría</div><div class="pd-pm-ch">' + Object.keys(g.cats).sort().map(k => chip('cat', k, NOM_CAT[k] || k || 'Sin categoría', g.cats[k], !!P.pm.cats[k])).join('') + '</div>' +
+    '<div class="pd-pm-ac"><button class="lcb" data-pd="pm-x">Cancelar</button><button class="lcb pri" data-pd="pm-go"' + (n ? '' : ' disabled') + '>🖨 Imprimir ' + (f.subs.length || f.cats.length ? n + ' producto' + (n === 1 ? '' : 's') : 'todo (' + n + ')') + '</button></div></div>';
+  m.className = 'pd-pm show';
+}
+function abrirImpresion(ped){
+  const g = gruposHoja(ped);
+  if(Object.keys(g.subs).length <= 1 && Object.keys(g.cats).length <= 1){ imprimirHoja(ped); return; }
+  let m = document.getElementById('pd-pm'); if(!m){ m = document.createElement('div'); m.id = 'pd-pm'; document.body.appendChild(m); }
+  P.pm = {id:ped.id, subs:{}, cats:{}}; pmPintar();
+}
+function cerrarImpresion(){ const m = document.getElementById('pd-pm'); if(m) m.className = 'pd-pm'; P.pm = null; }
 
 /* ---------- acciones ---------- */
 function guardarAjustes(ped, aj){
@@ -5182,6 +5404,23 @@ function deshacer(){
   db.collection('pedidos_locales').doc(u.ped.id).update(upd).catch(e => console.error(e));
   P.undo = null; const s = $('#pd-snack'); if(s) s.className = ''; render(); toast('Deshecho');
 }
+/* ---------- eliminar un pedido (solo mientras esta en Por revisar) ---------- */
+function eliminarPedido(ped){
+  if(!PD_PERMITIR_ELIMINAR || ped.compra_lista_id || ped.despacho_id || P.busyElim) return;
+  P.busyElim = true; setTimeout(() => { P.busyElim = false; }, 800);
+  const data = Object.assign({}, ped); delete data.id;
+  P.undoElim = {id:ped.id, data:data, num:ped.numero, local:ped.local};
+  db.collection('pedidos_locales').doc(ped.id).delete().catch(e => { console.error(e); toast('No se pudo eliminar. Revisa la conexión.'); P.undoElim = null; });
+  P.lista = P.lista.filter(x => x.id !== ped.id); P.open = null; render();
+  let sn = $('#pd-snack'); if(!sn){ sn = document.createElement('div'); sn.id = 'pd-snack'; document.body.appendChild(sn); }
+  sn.innerHTML = '<div class="pd-sn"><div><b>Pedido eliminado</b><br>' + (ped.numero ? '#' + ped.numero + ' · ' : '') + esc(LOCNOM[ped.local] || ped.local) + '</div><button class="lcb" data-pd="deshacer-elim">Deshacer</button></div>';
+  sn.className = 'show'; clearTimeout(snack.t); snack.t = setTimeout(() => { sn.className = ''; P.undoElim = null; }, 10000);
+}
+function deshacerEliminar(){
+  const u = P.undoElim; if(!u) return; P.undoElim = null;
+  db.collection('pedidos_locales').doc(u.id).set(u.data).then(() => toast('Pedido restaurado')).catch(e => { console.error(e); toast('No se pudo restaurar'); });
+  const sn = $('#pd-snack'); if(sn) sn.className = '';
+}
 window.PD_CARGADO = null;
 function aDespacho(ped){
   const its = efectivos(ped, 'bodega'); if(!its.length) return;
@@ -5221,6 +5460,13 @@ document.addEventListener('click', e => {
     case 'ver-compra': cambiarVista('compra'); if(window.LCS){ window.LCS.tab = 'listas'; if(ped) window.LCS.local = ped.local; } if(window.lcRefresh) lcRefresh(); { const b = document.querySelector('#lc-root [data-lc="tab"][data-v="listas"]'); if(b) b.click(); } break;
     case 'archivar': if(ped){ ped.estado = 'procesado'; db.collection('pedidos_locales').doc(ped.id).update({estado:'procesado', fecha_proceso:SV()}).catch(er => console.error(er)); P.open = null; render(); } break;
     case 'deshacer': deshacer(); break;
+    case 'eliminar': if(ped) eliminarPedido(ped); break;
+    case 'deshacer-elim': deshacerEliminar(); break;
+    case 'imprimir': if(ped) abrirImpresion(ped); break;
+    case 'pm-sub': if(P.pm){ if(P.pm.subs[v]) delete P.pm.subs[v]; else P.pm.subs[v] = true; pmPintar(); } break;
+    case 'pm-cat': if(P.pm){ if(P.pm.cats[v]) delete P.pm.cats[v]; else P.pm.cats[v] = true; pmPintar(); } break;
+    case 'pm-x': cerrarImpresion(); break;
+    case 'pm-go': if(P.pm){ const pp = P.lista.filter(p => p.id === P.pm.id)[0], f = pmFiltro(); cerrarImpresion(); if(pp) imprimirHoja(pp, f); } break;
   }
 });
 
@@ -5462,6 +5708,521 @@ document.addEventListener('click', e => {
   }
   pintar();
 })();
+
+/* ============================================================
+   BODEGA  (recepción de compras · por procesar · inventario · requerimientos · contabilidad)
+   Reutiliza: Lista de compras (listas_compra), Registro de producción (procesamiento + bajas),
+   inventario_bodega / inventario_materia_prima / inventario_fichas, teclado en pantalla.
+
+   Empresa y bodega: todo lo nuevo se guarda con { empresa:'morochos_ec', bodega:'bodega_central' }.
+   (Lo anterior a este módulo no tiene esos campos y se toma como de esta empresa y bodega.)
+
+   recepciones_bodega/rec_{compraId}      una recepción por compra (el id evita ingresos duplicados)
+     { empresa, bodega, compra_id, pedido_numero, local, fecha, responsable, estado:'completa'|'con_diferencias',
+       items:[{producto_id, nombre, unidad, solicitado, recibido, rechazado, entra, diferencia, observacion,
+               destino:'directo'|'procesamiento', inventario:'inventario_bodega'|'inventario_materia_prima'}] }
+     SIN PRECIOS: el bodeguero solo registra cantidades. Los precios viven en listas_compra (Compras).
+   listas_compra/{id}  + recepcion_id, recepcion_estado, fecha_recepcion, recibido_por, comprobante
+   bajas_bodega/{id}   { origen:'bodega'|'procesamiento', producto_id, producto_nombre, unidad, cantidad, motivo, responsable, fecha, anulada }
+   Requerimiento a Compras = una listas_compra con local:'bodega', requerimiento:true, fecha_necesaria.
+   ============================================================ */
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const nf = new Intl.NumberFormat('es-EC', {maximumFractionDigits:2});
+const fmt = n => nf.format(n);
+const money = n => '$' + (Math.round(n * 100) / 100).toFixed(2);
+const r3 = n => Math.round(n * 1000) / 1000;
+const SV = () => firebase.firestore.FieldValue.serverTimestamp();
+const INC = n => firebase.firestore.FieldValue.increment(n);
+const LSg = (k, d) => { try { const v = localStorage.getItem('bg_' + k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
+const LSs = (k, v) => { try { localStorage.setItem('bg_' + k, JSON.stringify(v)); } catch(e){} };
+const EMPRESA = 'morochos_ec', BODEGA = 'bodega_central';
+const MOTIVOS_BAJA = ['Merma', 'Dañado', 'Vencido', 'Hueso / desecho', 'Otro'];
+const MOTIVOS_AJUSTE = ['Conteo físico', 'Error de registro', 'Dañado', 'Vencido', 'Otro'];
+const DESTINOS = [['produccion', 'Producción'], ['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['otro', 'Otro']];
+const NOM_LOCAL = n => (typeof NOMBRES_LOCAL !== 'undefined' && NOMBRES_LOCAL[n]) || n;
+const ms = ts => ts && ts.toMillis ? ts.toMillis() : (ts && ts.seconds ? ts.seconds * 1000 : 0);
+const fechaTxt = ts => { const m = ms(ts); return m ? new Date(m).toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : 'Guardando…'; };
+const fechaCorta = iso => { const p = String(iso || '').split('-'); return p.length < 3 ? '' : new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('es-EC', {day:'2-digit', month:'short'}); };
+const hoyMas = d => { const x = new Date(Date.now() + d * 86400000); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
+const etqU = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unidad_medida:u}) : fmt(n) + ' ' + (u || ''));
+
+const B = {tab:LSg('tab', 'recepcion'), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
+  sel:{}, q:'', filtro:'todos', reqEd:null, cont:null, contaOk:false, undo:null, busy:false, ready:false, shCb:null};
+if(B.tab === 'procesar') B.tab = 'produccion';
+if(['recepcion', 'produccion', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = 'recepcion';
+const compras = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []);
+const porRecibir = () => compras().filter(l => l.compra_realizada && !l.recepcion_id);
+const recDe = l => B.recs.filter(r => r.id === l.recepcion_id)[0] || null;
+const itemInv = id => (window.ivItems ? window.ivItems() : []).filter(x => x.id === id)[0] || null;
+const mpPend = () => B.mp.filter(m => (m.cantidad_actual || 0) > 0.0001);
+
+/* ---------- avisos, hoja de opciones y deshacer ---------- */
+function toast(m){
+  let t = $('#bg-toast'); if(!t){ t = document.createElement('div'); t.id = 'bg-toast'; document.body.appendChild(t); }
+  t.textContent = m; t.className = 'show'; clearTimeout(toast.t); toast.t = setTimeout(() => { t.className = ''; }, 3200);
+}
+function snack(html, undoFn){
+  let s = $('#bg-snack'); if(!s){ s = document.createElement('div'); s.id = 'bg-snack'; document.body.appendChild(s); }
+  B.undo = undoFn || null;
+  s.innerHTML = '<div class="bg-sn"><div>' + html + '</div>' + (undoFn ? '<button class="ivb" data-bg="undo">Deshacer</button>' : '') + '</div>';
+  s.className = 'show'; clearTimeout(snack.t); snack.t = setTimeout(() => { s.className = ''; B.undo = null; }, 10000);
+}
+function sheet(titulo, sub, opciones, cb){
+  let s = $('#bg-sheet'); if(!s){ s = document.createElement('div'); s.id = 'bg-sheet'; document.body.appendChild(s); }
+  B.shCb = cb;
+  s.innerHTML = '<div class="bg-sh-box"><h3>' + esc(titulo) + '</h3>' + (sub ? '<div class="mu">' + esc(sub) + '</div>' : '') +
+    '<div class="bg-sh-op">' + opciones.map((o, i) => '<button class="ivb" data-bg="sh" data-i="' + i + '">' + esc(o) + '</button>').join('') + '</div>' +
+    '<button class="ivb bg-sh-x" data-bg="sh-x">Cancelar</button></div>';
+  s.className = 'show';
+}
+function cerrarSheet(){ const s = $('#bg-sheet'); if(s) s.className = ''; B.shCb = null; }
+function resp(){
+  if(B.resp) return B.resp;
+  toast('Primero elige el responsable (arriba)'); const r = $('#bg-root'); if(r) r.scrollIntoView({block:'start'});
+  return null;
+}
+const errTxt = e => (e && (e.code === 'unavailable' || /offline|network|unavailable/i.test(String(e.message || e)))) ? 'Sin conexión. No se guardó; vuelve a intentar cuando haya internet.' : 'No se pudo guardar. Revisa la conexión.';
+
+/* ---------- pantalla ---------- */
+function barraResp(){
+  const nombres = Object.keys(EMPLEADOS_CLOCK).map(k => EMPLEADOS_CLOCK[k].nombre);
+  const otro = B.otro || (B.resp && nombres.indexOf(B.resp) < 0);
+  return '<div class="bg-resp"><span>Responsable:</span>' + nombres.map(n => '<button class="ivb ' + (B.resp === n ? 'on' : '') + '" data-bg="resp" data-v="' + esc(n) + '">' + esc(n) + '</button>').join('') +
+    '<button class="ivb ' + (otro ? 'on' : '') + '" data-bg="resp-otro">Otro</button>' +
+    (otro ? '<input id="bg-resp-in" placeholder="Nombre" autocomplete="off" value="' + esc(nombres.indexOf(B.resp) < 0 ? B.resp : '') + '">' : '') + '</div>';
+}
+const PASOS = [['recepcion', '1', '📥', 'Recibir'], ['produccion', '2', '🏭', 'Producción'], ['inventario', '3', '📦', 'Inventario'], ['req', '4', '📝', 'Pedir a Compras'], ['conta', '', '🧾', 'Contabilidad']];
+const HINTS = {
+  recepcion: 'Llega la compra o la entrega del proveedor: anota lo recibido y elige si va directo a bodega o a producción.',
+  produccion: 'Procesa aquí lo que llegó para producción. Al registrar, la materia prima se descuenta y lo obtenido entra al inventario.',
+  inventario: 'Lo que hay disponible. Lo que esté bajo el mínimo, pídelo a Compras.',
+  req: 'Lo que ya pediste a Compras. Cuando lo compren, aparece en Recibir y el ciclo vuelve a empezar.',
+  conta: ''
+};
+const paso = () => B.tab === 'prov' ? 'recepcion' : B.tab === 'conteo' ? 'inventario' : B.tab;
+function segInv(){
+  const on = B.tab === 'inventario' ? 'disp' : (B.ivTab || 'exist');
+  return '<div class="iv-tabs bg-seg">' + [['disp', '📦 Disponible y pedidos'], ['exist', '📍 Ubicación y fichas'], ['conteos', '📋 Conteo físico']].map(t => '<button class="ivb ' + (on === t[0] ? 'on' : '') + '" data-bg="seg" data-v="' + t[0] + '">' + t[1] + '</button>').join('') + '</div>';
+}
+function barraPasos(){
+  const all = window.ivItems ? window.ivItems() : [];
+  const cnt = {recepcion:porRecibir().length, produccion:mpPend().length, inventario:all.filter(it => it.min > 0 && it.stock < it.min).length, req:compras().filter(l => l.requerimiento && !l.recepcion_id).length, conta:0};
+  const k = paso();
+  return '<div class="iv-tabs bg-tabs bg-flow">' + PASOS.map((t, i) => (i === 4 ? '<span class="bg-sep"></span>' : (i ? '<span class="bg-sep">›</span>' : '')) +
+    '<button class="ivb ' + (k === t[0] ? 'on' : '') + '" data-bg="tab" data-v="' + t[0] + '"><span>' + t[2] + ' ' + (t[1] ? t[1] + '. ' : '') + t[3] + '</span>' +
+    (cnt[t[0]] ? '<span class="bg-n ' + (t[0] === 'inventario' ? 'warn' : '') + '">' + cnt[t[0]] + '</span>' : '') + '</button>').join('') + '</div>' +
+    (HINTS[k] ? '<div class="bg-hint">' + HINTS[k] + '</div>' : '');
+}
+function render(){
+  const r = $('#bg-root'); if(!r) return;
+  const k = B.tab;
+  let h = barraPasos();
+  if(k === 'produccion') h += vProcesar();
+  else {
+    h += barraResp();
+    if(k === 'prov') h += '<div class="iv-subbar"><button class="ivb" data-bg="tab" data-v="recepcion">← Volver a Recibir</button><div class="iv-st">Entrega de proveedor sin compra</div><span></span></div>';
+    else if(k === 'conteo') h += segInv();
+    else h += k === 'recepcion' ? vRecepcion() : k === 'inventario' ? (B.reqEd ? '' : segInv()) + vInventario() : k === 'req' ? vReq() : vConta();
+  }
+  r.innerHTML = h;
+  r.classList.toggle('bg-solo', k === 'produccion' || k === 'prov' || k === 'conteo');
+  syncHosts();
+}
+/* Producción (Registro), entrega de proveedor y conteo físico se muestran dentro de Bodega */
+function syncHosts(){
+  const v = $('#vista-bodega'), act = !!(v && v.classList.contains('activa')), k = B.tab;
+  const show = (sel, on) => { const e = $(sel); if(e) e.style.display = on ? '' : 'none'; };
+  show('#bg-host-prod', act && k === 'produccion'); show('#vista-proveedores', act && k === 'prov'); show('#bg-host-conteo', act && k === 'conteo');
+  const wantPr = act && k === 'produccion';
+  if(wantPr !== !!B.prOn){ B.prOn = wantPr; if(typeof prView === 'function') prView(wantPr ? 'produccion' : 'bodega'); }
+  const wantCo = act && k === 'conteo';
+  if(wantCo && (!B.coOn || B.coTab !== B.ivTab) && window.ivMostrar) window.ivMostrar(B.ivTab || 'exist');
+  B.coOn = wantCo; B.coTab = B.ivTab;
+}
+function refrescar(){
+  const r = $('#bg-root'); if(!r || !r.offsetParent) return;
+  const a = document.activeElement; if(a && a.tagName === 'INPUT' && a.closest && a.closest('#bg-root')) return;
+  render();
+}
+
+/* ============ 1. RECEPCIÓN ============ */
+function vRecepcion(){
+  if(B.abierta) return vRecDetalle();
+  const pend = porRecibir().sort((a, b) => ms(b.fecha_compra_realizada) - ms(a.fecha_compra_realizada));
+  let h = '<div class="iv-card"><h3>Compras por recibir</h3><div class="mu">Aquí salen las compras que ya se marcaron como “Compra realizada” (incluidos tus pedidos a Compras). Toca una para recibirla: los productos ya vienen cargados.</div></div>';
+  if(!pend.length) h += '<div class="iv-vacio">No hay compras por recibir.</div>';
+  h += '<div class="iv-list">' + pend.map(l => '<button class="iv-row" data-bg="abrir" data-id="' + esc(l.id) + '"><div class="iv-n"><div class="nm">' +
+    (l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')) + esc(NOM_LOCAL(l.local)) + '</div>' +
+    '<div class="mu">Compra del ' + esc(fechaTxt(l.fecha_compra_realizada)) + ' · ' + (l.items || []).length + ' productos' + (B.draft[l.id] ? ' · <b>recepción empezada</b>' : '') + '</div></div><div class="iv-s"><b>Recibir</b><span>›</span></div></button>').join('') + '</div>';
+  h += '<div class="bg-acts"><button class="ivb" data-bg="ir-proveedores">📥 Entrega de proveedor sin compra</button></div>';
+  const rec = B.recs.slice(0, 8);
+  if(rec.length) h += '<div class="iv-card" style="margin-top:12px"><h3>Recibidas recientemente</h3>' + rec.map(r => '<div class="bg-line"><div><b>' + (r.pedido_numero ? 'Pedido #' + r.pedido_numero + ' · ' : '') + esc(NOM_LOCAL(r.local)) + '</b><div class="mu">' +
+    esc(fechaTxt(r.fecha)) + ' · ' + esc(r.responsable || '') + '</div></div>' + (r.estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Completa</span>') + '</div>').join('') + '</div>';
+  return h;
+}
+function draftDe(l){
+  let d = B.draft[l.id];
+  if(!d){
+    d = {items:{}};
+    (l.items || []).forEach(it => { d.items[it.producto_id] = {rec:(it.comprado === false ? 0 : (it.cantidad_solicitada || 0)), rech:0, obs:'', dest:B.dest[it.producto_id] || 'directo'}; });
+    B.draft[l.id] = d; LSs('draft', B.draft);
+  }
+  return d;
+}
+function vRecDetalle(){
+  const l = compras().filter(x => x.id === B.abierta)[0];
+  if(!l){ B.abierta = null; return vRecepcion(); }
+  const d = draftDe(l);
+  let nDif = 0, nProc = 0;
+  const filas = (l.items || []).map(it => {
+    const x = d.items[it.producto_id] || (d.items[it.producto_id] = {rec:it.cantidad_solicitada || 0, rech:0, obs:'', dest:'directo'});
+    const sol = it.cantidad_solicitada || 0, esp = it.comprado === false ? 0 : sol, entra = r3(Math.max(0, x.rec - x.rech)), dif = r3(x.rec - esp);
+    if(dif !== 0 || x.rech > 0) nDif++; if(x.dest === 'procesamiento') nProc++;
+    const pid = esc(it.producto_id);
+    return '<div class="bg-it ' + (dif < 0 || x.rech > 0 ? 'dif' : '') + '"><div class="bg-it-top"><div class="nm">' + esc(it.producto_nombre) + '</div><div class="mu">Pidió <b>' + esc(etqU(sol, it.unidad_medida)) + '</b>' + (it.comprado === false ? ' · <span class="bg-tag am">no se compró</span>' : '') + '</div></div>' +
+      '<div class="bg-it-q"><button class="ivb val" data-bg="cant" data-k="rec" data-id="' + pid + '"><span>Recibido</span><b>' + fmt(x.rec) + '</b></button>' +
+      '<button class="ivb val ' + (x.rech > 0 ? 'mal' : '') + '" data-bg="cant" data-k="rech" data-id="' + pid + '"><span>Rechazado</span><b>' + fmt(x.rech) + '</b></button>' +
+      '<div class="bg-entra"><span>Entra</span><b>' + fmt(entra) + '</b></div></div>' +
+      (dif < 0 ? '<div class="bg-tag am">Faltan ' + fmt(-dif) + '</div>' : dif > 0 ? '<div class="bg-tag az">Llegaron ' + fmt(dif) + ' de más</div>' : '') +
+      '<div class="bg-dest"><button class="ivb ' + (x.dest === 'directo' ? 'on' : '') + '" data-bg="dest" data-v="directo" data-id="' + pid + '">📦 Directo a bodega</button>' +
+      '<button class="ivb ' + (x.dest === 'procesamiento' ? 'on' : '') + '" data-bg="dest" data-v="procesamiento" data-id="' + pid + '">⚙ Procesamiento</button></div>' +
+      '<input class="bg-obs" data-bgobs="' + pid + '" placeholder="Observación (opcional)" autocomplete="off" value="' + esc(x.obs) + '"></div>';
+  }).join('');
+  return '<div class="iv-subbar"><button class="ivb" data-bg="cerrar">← Volver</button><div class="iv-st">' + (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra')) + ' · ' + esc(NOM_LOCAL(l.local)) + '</div><span></span></div>' +
+    '<div class="iv-aviso">Anota lo que llegó. “Entra” es lo recibido menos lo rechazado. No se piden precios aquí.</div>' + filas +
+    '<div class="iv-pie"><div class="mu" style="text-align:center;margin-bottom:6px">' + (l.items || []).length + ' productos' + (nDif ? ' · ⚠ ' + nDif + ' con diferencia' : '') + (nProc ? ' · ⚙ ' + nProc + ' a procesamiento' : '') + '</div>' +
+    '<button class="ivb okb big" data-bg="confirmar">Confirmar recepción</button></div>';
+}
+function setDraft(pid, campo, val){
+  const l = compras().filter(x => x.id === B.abierta)[0]; if(!l) return;
+  const d = draftDe(l); if(!d.items[pid]) return;
+  d.items[pid][campo] = val;
+  if(campo === 'rec' && d.items[pid].rech > val) d.items[pid].rech = val;
+  if(campo === 'dest') { B.dest[pid] = val; LSs('dest', B.dest); }
+  LSs('draft', B.draft);
+}
+async function confirmarRecepcion(){
+  const l = compras().filter(x => x.id === B.abierta)[0]; if(!l || B.busy) return;
+  const quien = resp(); if(!quien) return;
+  const d = draftDe(l), recId = 'rec_' + l.id;
+  const items = (l.items || []).map(it => {
+    const x = d.items[it.producto_id] || {rec:0, rech:0, obs:'', dest:'directo'};
+    const sol = it.cantidad_solicitada || 0, esp = it.comprado === false ? 0 : sol, rec = x.rec || 0, rech = Math.min(x.rech || 0, rec), entra = r3(rec - rech);
+    return {producto_id:it.producto_id, nombre:it.producto_nombre, unidad:it.unidad_medida || '', solicitado:sol, esperado:esp, comprado:it.comprado !== false, recibido:rec, rechazado:rech, entra:entra, diferencia:r3(rec - esp), observacion:x.obs || '',
+      destino:x.dest, inventario:x.dest === 'procesamiento' ? 'inventario_materia_prima' : 'inventario_bodega'};
+  });
+  const hayDif = items.some(i => i.diferencia !== 0 || i.rechazado > 0);
+  B.busy = true; setTimeout(() => { B.busy = false; }, 2500);
+  try {
+    await db.runTransaction(async t => {
+      const rr = db.collection('recepciones_bodega').doc(recId), lr = db.collection('listas_compra').doc(l.id);
+      const s1 = await t.get(rr), s2 = await t.get(lr);
+      if(s1.exists || (s2.exists && (s2.data() || {}).recepcion_id)) throw new Error('DUP');
+      if(!s2.exists) throw new Error('NOLISTA');
+      const ts = SV();
+      t.set(rr, {empresa:EMPRESA, bodega:BODEGA, compra_id:l.id, pedido_numero:l.pedido_numero || null, local:l.local, requerimiento:!!l.requerimiento, fecha:ts, responsable:quien, estado:hayDif ? 'con_diferencias' : 'completa', items:items});
+      items.forEach(i => {
+        if(!(i.entra > 0)) return;
+        t.set(db.collection(i.inventario).doc(i.producto_id), {producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_actual:INC(i.entra), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
+        t.set(db.collection('movimientos_inventario_bodega').doc(recId + '_' + i.producto_id), {producto_id:i.producto_id, producto_nombre:i.nombre, tipo:'recepcion_compra', destino:i.destino,
+          inventario:i.inventario === 'inventario_materia_prima' ? 'materia_prima' : 'terminado', cantidad:i.entra, recepcion_id:recId, compra_id:l.id, responsable:quien, empresa:EMPRESA, bodega:BODEGA, fecha:ts,
+          nota:'Recepción de compra' + (l.pedido_numero ? ' · Pedido #' + l.pedido_numero : '') + (i.observacion ? ' · ' + i.observacion : '')});
+      });
+      t.update(lr, {recepcion_id:recId, recepcion_estado:hayDif ? 'con_diferencias' : 'completa', fecha_recepcion:ts, recibido_por:quien});
+    });
+  } catch(e){
+    if(String(e && e.message) !== 'DUP') console.error(e);
+    B.busy = false;
+    toast(String(e && e.message) === 'DUP' ? 'Esta compra ya fue recibida. No se ingresó de nuevo.' : errTxt(e));
+    return;
+  }
+  const copia = JSON.parse(JSON.stringify(d));
+  delete B.draft[l.id]; LSs('draft', B.draft); B.abierta = null; B.busy = false;
+  const nD = items.filter(i => i.entra > 0 && i.destino === 'directo').length, nP = items.filter(i => i.entra > 0 && i.destino === 'procesamiento').length;
+  render(); window.scrollTo(0, 0);
+  snack('<b>Recepción guardada</b><br>' + (nD ? '📦 ' + nD + ' a bodega' : '') + (nD && nP ? ' · ' : '') + (nP ? '⚙ ' + nP + ' por procesar' : '') + (hayDif ? ' · ⚠ con diferencias' : ''), () => deshacerRecepcion(recId, l.id, copia));
+}
+async function deshacerRecepcion(recId, compraId, copia){
+  try {
+    await db.runTransaction(async t => {
+      const rr = db.collection('recepciones_bodega').doc(recId), s = await t.get(rr); if(!s.exists) return;
+      const ts = SV();
+      ((s.data() || {}).items || []).forEach(i => {
+        if(!(i.entra > 0)) return;
+        t.set(db.collection(i.inventario).doc(i.producto_id), {cantidad_actual:INC(-i.entra), ultima_actualizacion:ts}, {merge:true});
+        t.delete(db.collection('movimientos_inventario_bodega').doc(recId + '_' + i.producto_id));
+      });
+      t.delete(rr);
+      t.update(db.collection('listas_compra').doc(compraId), {recepcion_id:null, recepcion_estado:null, fecha_recepcion:null, recibido_por:null});
+    });
+    if(copia){ B.draft[compraId] = copia; LSs('draft', B.draft); }
+    toast('Recepción deshecha: lo que anotaste sigue ahí'); refrescar();
+  } catch(e){ console.error(e); toast(errTxt(e)); }
+}
+
+/* ============ 2. POR PROCESAR ============ */
+function vProcesar(){
+  const mps = mpPend();
+  return '<div class="bg-mpstrip"><span class="bg-mpl">⚙ Por procesar:</span>' + (mps.length ? mps.map(m => '<div class="ivb bg-mpc"><b>' + esc(m.producto_nombre || m.id) + '</b> ' + fmt(m.cantidad_actual || 0) + ' ' + esc(m.unidad_medida || '') +
+    ' <button class="ivb" data-bg="baja" data-id="' + esc(m.id) + '"><span>➖ Baja</span></button></div>').join('') : '<span class="mu">nada pendiente 🎉</span>') + '</div>';
+}
+function bajasRecientes(){
+  if(!B.bajas.length) return '';
+  return '<div class="iv-card" style="margin-top:12px"><h3>Últimas bajas</h3>' + B.bajas.filter(b => !b.anulada).slice(0, 10).map(b => '<div class="bg-line"><div><b>' + esc(b.producto_nombre) + '</b><div class="mu">' + esc(fechaTxt(b.fecha)) + ' · ' + esc(b.responsable || '') + ' · ' + (b.origen === 'procesamiento' ? 'al procesar' : 'en bodega') + '</div></div><div class="bg-baja"><b>−' + fmt(b.cantidad) + ' ' + esc(b.unidad || '') + '</b><span>' + esc(b.motivo || '') + '</span></div></div>').join('') + '</div>';
+}
+/* Captura de una baja: sirve para Por procesar y para el Registro de producción. */
+function pedirBaja(o){
+  const paso2 = ins => abrirTeclado({titulo:'Baja · ' + ins.nombre, subtitulo:o.subtitulo || 'Cantidad que se pierde', unidad:ins.unidad || '', inicial:'', decimales:true, onListo:n => {
+    if(!(n > 0)) return;
+    setTimeout(() => sheet('Motivo de la baja', ins.nombre + ' · ' + fmt(n) + ' ' + (ins.unidad || ''), MOTIVOS_BAJA, i => { cerrarSheet(); o.onListo({materia_prima_id:ins.id, nombre:ins.nombre, unidad:ins.unidad || '', cantidad:r3(n), motivo:MOTIVOS_BAJA[i]}); }), 60);
+  }});
+  if(!o.insumos || !o.insumos.length) return;
+  if(o.insumos.length === 1) paso2(o.insumos[0]);
+  else sheet('¿De qué materia prima es la baja?', '', o.insumos.map(x => x.nombre), i => { cerrarSheet(); setTimeout(() => paso2(o.insumos[i]), 60); });
+}
+window.bgPedirBaja = pedirBaja;
+function pedirResp(cb){
+  if(B.resp){ cb(B.resp); return; }
+  const nombres = Object.keys(EMPLEADOS_CLOCK).map(k => EMPLEADOS_CLOCK[k].nombre);
+  sheet('¿Quién registra?', '', nombres, i => { B.resp = nombres[i]; LSs('resp', B.resp); cerrarSheet(); cb(B.resp); });
+}
+function bajaBodega(id){
+  const m = B.mp.filter(x => x.id === id)[0]; if(!m) return;
+  if(!B.resp){ pedirResp(() => bajaBodega(id)); return; }
+  const quien = B.resp;
+  pedirBaja({subtitulo:'Pendiente: ' + fmt(m.cantidad_actual || 0) + ' ' + (m.unidad_medida || ''), insumos:[{id:m.id, nombre:m.producto_nombre || m.id, unidad:m.unidad_medida || ''}], onListo:b => {
+    const bid = db.collection('bajas_bodega').doc(), mid = db.collection('movimientos_inventario_bodega').doc(), ts = SV(), batch = db.batch();
+    batch.set(db.collection('inventario_materia_prima').doc(b.materia_prima_id), {cantidad_actual:INC(-b.cantidad), ultima_actualizacion:ts}, {merge:true});
+    batch.set(bid, {empresa:EMPRESA, bodega:BODEGA, origen:'bodega', inventario:'materia_prima', producto_id:b.materia_prima_id, producto_nombre:b.nombre, unidad:b.unidad, cantidad:b.cantidad, motivo:b.motivo, responsable:quien, anulada:false, fecha:ts});
+    batch.set(mid, {producto_id:b.materia_prima_id, producto_nombre:b.nombre, inventario:'materia_prima', tipo:'baja', cantidad:-b.cantidad, motivo:b.motivo, responsable:quien, empresa:EMPRESA, bodega:BODEGA, baja_id:bid.id, fecha:ts, nota:'Baja: ' + b.motivo});
+    batch.commit().catch(e => { console.error(e); toast(errTxt(e)); });
+    snack('<b>Baja guardada</b><br>' + fmt(b.cantidad) + ' ' + esc(b.unidad) + ' · ' + esc(b.nombre) + ' · ' + esc(b.motivo), () => {
+      const u = db.batch(); u.set(db.collection('inventario_materia_prima').doc(b.materia_prima_id), {cantidad_actual:INC(b.cantidad), ultima_actualizacion:SV()}, {merge:true});
+      u.delete(bid); u.delete(mid); u.commit().then(() => toast('Baja deshecha')).catch(e => { console.error(e); toast(errTxt(e)); });
+    });
+  }});
+}
+
+/* ============ 3. INVENTARIO (salidas, ajustes, requerimientos) ============ */
+function pedidosPend(){
+  const m = {};
+  compras().filter(l => l.requerimiento && !l.recepcion_id).forEach(l => (l.items || []).forEach(it => {
+    const e = m[it.producto_id] || (m[it.producto_id] = {cant:0, fecha:''}); e.cant += it.cantidad_solicitada || 0; if(!e.fecha) e.fecha = l.fecha_necesaria || '';
+  }));
+  return m;
+}
+function vInventario(){
+  if(B.reqEd) return vReqEd();
+  const all = window.ivItems ? window.ivItems() : [], mpIdx = {}; B.mp.forEach(m => { mpIdx[m.id] = m; });
+  const act = it => it.stock !== 0 || it.ficha || (mpIdx[it.id] && (mpIdx[it.id].cantidad_actual || 0) > 0);
+  const bajo = it => it.min > 0 && it.stock < it.min;
+  const nSel = Object.keys(B.sel).length;
+  let h = '<div class="iv-sum"><div><b>' + all.filter(act).length + '</b><span>productos en bodega</span></div><div class="' + (all.filter(bajo).length ? 'wn' : '') + '"><b>' + all.filter(bajo).length + '</b><span>bajo el mínimo</span></div><div><b>' + mpPend().length + '</b><span>pendientes de procesar</span></div></div>' +
+    '<div class="iv-bar"><input id="bg-q" type="search" placeholder="Buscar producto" value="' + esc(B.q) + '" autocomplete="off"><div class="iv-chips">' +
+    [['todos', 'Todos'], ['bajo', 'Bajo mínimo']].map(f => '<button class="ivb ' + (B.filtro === f[0] ? 'on' : '') + '" data-bg="filtro" data-v="' + f[0] + '">' + f[1] + '</button>').join('') +
+    '<button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button><button class="ivb" data-bg="ir-conteo">📋 Conteo físico completo</button></div></div>' +
+    '<div id="bg-inv-lista">' + invFilas() + '</div>';
+  h += bajasRecientes();
+  if(nSel) h += '<div class="iv-pie"><button class="ivb okb big" data-bg="req-abrir">Enviar requerimiento a Compras (' + nSel + ')</button></div>';
+  return h;
+}
+function invFilas(){
+  const all = window.ivItems ? window.ivItems() : [], mpIdx = {}; B.mp.forEach(m => { mpIdx[m.id] = m; });
+  const pend = pedidosPend(), q = B.q.trim().toLowerCase();
+  const act = it => it.stock !== 0 || it.ficha || (mpIdx[it.id] && (mpIdx[it.id].cantidad_actual || 0) > 0);
+  let list = all.filter(it => act(it) && (!q || it.nombre.toLowerCase().indexOf(q) >= 0));
+  if(B.filtro === 'bajo') list = list.filter(it => it.min > 0 && it.stock < it.min);
+  if(!list.length) return '<div class="iv-vacio">No hay productos con ese filtro.</div>';
+  return '<div class="iv-list">' + list.slice(0, 200).map(it => {
+    const bajo = it.min > 0 && it.stock < it.min, m = mpIdx[it.id], p = pend[it.id], sel = !!B.sel[it.id], id = esc(it.id);
+    return '<div class="bg-inv ' + (bajo ? 'bajo' : '') + '"><div class="bg-it-top"><div style="min-width:0"><div class="nm">' + esc(it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen || it.unidad || '') + ' · mínimo ' + (it.min ? fmt(it.min) : '—') + '</div>' +
+      (bajo ? '<span class="bg-tag am">Bajo el mínimo</span>' : '') + (m && (m.cantidad_actual || 0) > 0 ? '<span class="bg-tag az">Pendiente de procesar: ' + fmt(m.cantidad_actual) + ' ' + esc(m.unidad_medida || '') + '</span>' : '') +
+      (p ? '<span class="bg-tag mo">Requerimiento pendiente: ' + fmt(p.cant) + (p.fecha ? ' · para ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') + '</div>' +
+      '<div class="iv-s"><b>' + fmt(it.stock) + '</b><span>disponible</span></div></div>' +
+      '<div class="bg-acts"><button class="ivb" data-bg="salida" data-id="' + id + '">➡ Salida</button><button class="ivb" data-bg="ajuste" data-id="' + id + '">✎ Ajustar</button><button class="ivb ' + (sel ? 'on' : '') + '" data-bg="pedir" data-id="' + id + '">' + (sel ? '✓ En requerimiento' : '＋ Pedir') + '</button></div></div>';
+  }).join('') + '</div>';
+}
+function salida(id){
+  const it = itemInv(id); if(!it) return; if(!resp()) return;
+  sheet('Salida de ' + it.nombre, 'Disponible: ' + fmt(it.stock) + ' ' + (it.uAlmacen || it.unidad || '') + ' · ¿A dónde va?', DESTINOS.map(x => x[1]), i => {
+    cerrarSheet(); const dst = DESTINOS[i];
+    setTimeout(() => abrirTeclado({titulo:'Salida · ' + it.nombre, subtitulo:'Va a ' + dst[1] + ' · disponible ' + fmt(it.stock), unidad:it.uAlmacen || it.unidad || '', inicial:'', decimales:true, onListo:n => {
+      if(!(n > 0)) return;
+      if(n > it.stock){ toast('Solo hay ' + fmt(it.stock) + ' disponibles'); return; }
+      const mid = db.collection('movimientos_inventario_bodega').doc(), ts = SV(), b = db.batch();
+      b.set(db.collection('inventario_bodega').doc(id), {producto_nombre:it.nombre, cantidad_actual:INC(-n), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
+      b.set(mid, {producto_id:id, producto_nombre:it.nombre, tipo:'salida', destino_id:dst[0], destino:dst[1], cantidad:-n, responsable:B.resp, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Salida a ' + dst[1]});
+      b.commit().catch(e => { console.error(e); toast(errTxt(e)); });
+      snack('<b>Salida registrada</b><br>' + fmt(n) + ' ' + esc(it.uAlmacen || it.unidad || '') + ' · ' + esc(it.nombre) + ' → ' + esc(dst[1]), () => {
+        const u = db.batch(); u.set(db.collection('inventario_bodega').doc(id), {cantidad_actual:INC(n), ultima_actualizacion:SV()}, {merge:true}); u.delete(mid);
+        u.commit().then(() => toast('Salida deshecha')).catch(e => { console.error(e); toast(errTxt(e)); });
+      });
+    }}), 60);
+  });
+}
+function ajuste(id){
+  const it = itemInv(id); if(!it) return; if(!resp()) return;
+  abrirTeclado({titulo:'Conteo físico · ' + it.nombre, subtitulo:'¿Cuánto hay realmente? (sistema: ' + fmt(it.stock) + ')', unidad:it.uAlmacen || it.unidad || '', inicial:'', decimales:true, permitirCero:true, onListo:n => {
+    if(n == null) return;
+    const dif = r3(n - it.stock);
+    if(dif === 0){ toast('Coincide con el sistema. Sin cambios.'); return; }
+    setTimeout(() => sheet('Motivo del ajuste', it.nombre + ': sistema ' + fmt(it.stock) + ' → contado ' + fmt(n) + ' (' + (dif > 0 ? '+' : '') + fmt(dif) + ')', MOTIVOS_AJUSTE, i => {
+      cerrarSheet(); const mot = MOTIVOS_AJUSTE[i];
+      const mid = db.collection('movimientos_inventario_bodega').doc(), ts = SV(), b = db.batch();
+      b.set(db.collection('inventario_bodega').doc(id), {producto_nombre:it.nombre, cantidad_actual:INC(dif), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
+      b.set(mid, {producto_id:id, producto_nombre:it.nombre, tipo:'ajuste_conteo', cantidad:dif, sistema:it.stock, contado:n, motivo:mot, responsable:B.resp, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Ajuste: sistema ' + it.stock + ', contado ' + n + ' · ' + mot});
+      b.commit().catch(e => { console.error(e); toast(errTxt(e)); });
+      snack('<b>Ajuste guardado</b><br>' + esc(it.nombre) + ': ' + fmt(it.stock) + ' → ' + fmt(n) + ' · ' + esc(mot), () => {
+        const u = db.batch(); u.set(db.collection('inventario_bodega').doc(id), {cantidad_actual:INC(-dif), ultima_actualizacion:SV()}, {merge:true}); u.delete(mid);
+        u.commit().then(() => toast('Ajuste deshecho')).catch(e => { console.error(e); toast(errTxt(e)); });
+      });
+    }), 60);
+  }});
+}
+
+/* ---------- requerimiento a Compras ---------- */
+function sugerida(it){ if(it.max > 0) return Math.max(1, Math.ceil(it.max - it.stock)); if(it.min > 0) return Math.max(1, Math.ceil(it.min * 2 - it.stock)); return 1; }
+function abrirReq(ids){
+  const items = ids.map(id => itemInv(id)).filter(Boolean).map(it => ({id:it.id, nombre:it.nombre, unidad:it.uCompra || it.uAlmacen || it.unidad || '', cant:sugerida(it), stock:it.stock, min:it.min}));
+  if(!items.length){ toast('No hay nada que pedir'); return; }
+  B.tab = 'inventario'; B.reqEd = {items:items, fecha:hoyMas(2), dupOk:false}; render(); window.scrollTo(0, 0);
+}
+function vReqEd(){
+  const E = B.reqEd, pend = pedidosPend(), dups = E.items.filter(i => pend[i.id]).length;
+  let h = '<div class="iv-subbar"><button class="ivb" data-bg="req-volver">← Volver</button><div class="iv-st">Requerimiento a Compras</div><span></span></div>' +
+    '<div class="iv-card"><div class="iv-f"><label>¿Para qué fecha lo necesitas?</label><input type="date" id="bg-fecha" value="' + esc(E.fecha) + '" min="' + hoyMas(0) + '"></div><div class="mu">Compras lo verá en Lista de compras → Bodega, con esa fecha.</div></div>';
+  h += E.items.map(i => { const p = pend[i.id], id = esc(i.id);
+    return '<div class="bg-card"><div class="bg-it-top"><div class="nm">' + esc(i.nombre) + '</div><div class="mu">En bodega ' + fmt(i.stock) + (i.min ? ' · mínimo ' + fmt(i.min) : '') + '</div></div>' +
+      (p ? '<span class="bg-tag mo">Ya hay un requerimiento pendiente: ' + fmt(p.cant) + (p.fecha ? ' · para ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') +
+      '<div class="bg-acts"><button class="ivb val" data-bg="req-cant" data-id="' + id + '"><span>Cantidad a pedir</span><b>' + fmt(i.cant) + ' ' + esc(i.unidad) + '</b></button><button class="ivb" data-bg="req-quitar" data-id="' + id + '">Quitar</button></div></div>'; }).join('');
+  return h + '<div class="iv-pie"><button class="ivb okb big" data-bg="req-enviar">' + (dups && E.dupOk ? 'Toca otra vez: ya hay ' + dups + ' pendiente' + (dups > 1 ? 's' : '') : 'Enviar requerimiento a Compras') + '</button></div>';
+}
+function enviarReq(){
+  const E = B.reqEd; if(!E || B.busy) return;
+  const quien = resp(); if(!quien) return;
+  if(!E.items.length){ toast('No hay productos'); return; }
+  const pend = pedidosPend(), dups = E.items.filter(i => pend[i.id]).length;
+  if(dups && !E.dupOk){ E.dupOk = true; render(); setTimeout(() => { if(B.reqEd) { B.reqEd.dupOk = false; refrescar(); } }, 6000); return; }
+  B.busy = true; setTimeout(() => { B.busy = false; }, 2500);
+  const ref = db.collection('listas_compra').doc();
+  const items = E.items.map(i => ({numero:null, seccion:'MERCADO', producto_id:i.id, producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_solicitada:i.cant, comprado:false, costo:null, nota:'', precio_sugerido:null, vendedor:null}));
+  ref.set({local:'bodega', estado:'pendiente', requerimiento:true, fecha_necesaria:E.fecha, solicitado_por:quien, empresa:EMPRESA, bodega:BODEGA, pedido_id:null, pedido_numero:null,
+    monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Requerimiento de Bodega', items:items}).catch(e => { console.error(e); toast(errTxt(e)); });
+  B.sel = {}; B.reqEd = null; B.tab = 'req'; B.busy = false; render(); window.scrollTo(0, 0);
+  snack('<b>Requerimiento enviado a Compras</b><br>' + items.length + ' productos · para ' + esc(fechaCorta(E.fecha)), () => { ref.delete().then(() => toast('Requerimiento cancelado')).catch(e => { console.error(e); toast(errTxt(e)); }); });
+}
+function estadoReq(l){
+  if(l.recepcion_id) return ['ok', '✓ Recibido'];
+  if(l.compra_realizada) return ['az', '🛒 Comprado · por recibir'];
+  return ['am', '⏳ Esperando compra'];
+}
+function vReq(){
+  const reqs = compras().filter(l => l.requerimiento).sort((a, b) => ms(b.fecha_creacion) - ms(a.fecha_creacion));
+  let h = '<div class="iv-card"><h3>Requerimientos a Compras</h3><div class="mu">Los productos que Bodega pide. Compras los ve en <b>Lista de compras → Bodega</b>; al marcar “Compra realizada” aparecen en Recepción.</div><div class="bg-acts"><button class="ivb on" data-bg="nuevo-req">＋ Nuevo requerimiento</button><button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button></div></div>';
+  if(!reqs.length) return h + '<div class="iv-vacio">Todavía no hay requerimientos.</div>';
+  return h + reqs.slice(0, 30).map(l => { const e = estadoReq(l); return '<div class="bg-card"><div class="bg-it-top"><div><div class="nm">' + esc(fechaTxt(l.fecha_creacion)) + ' · ' + (l.items || []).length + ' productos</div><div class="mu">Pedido por ' + esc(l.solicitado_por || '') + (l.fecha_necesaria ? ' · necesario para ' + esc(fechaCorta(l.fecha_necesaria)) : '') + '</div></div><span class="bg-tag ' + e[0] + '">' + e[1] + '</span></div>' +
+    '<div class="mu" style="margin-top:6px">' + (l.items || []).slice(0, 6).map(i => esc(i.producto_nombre) + ' ' + fmt(i.cantidad_solicitada)).join(' · ') + ((l.items || []).length > 6 ? ' · +' + ((l.items || []).length - 6) + ' más' : '') + '</div></div>'; }).join('');
+}
+
+/* ============ 4. CONTABILIDAD (solo consulta) ============ */
+function vConta(){
+  if(!B.contaOk) return '<div class="iv-card"><h3>Contabilidad</h3><div class="mu">Aquí se consulta cada compra con su precio, su comprobante y lo que se recibió, incluidas las diferencias. Solo personal autorizado.</div><div class="bg-acts"><button class="ivb on big" data-bg="conta-codigo">🔒 Ingresar código</button></div></div>';
+  if(B.cont) return vContaDetalle();
+  const ls = compras().filter(l => l.compra_realizada || l.enviada_contabilidad).sort((a, b) => ms(b.fecha_compra_realizada || b.fecha_creacion) - ms(a.fecha_compra_realizada || a.fecha_creacion));
+  let h = '<div class="iv-card"><h3>Compras y recepciones</h3><div class="mu">Solo consulta. Las diferencias de recepción son informativas: <b>no cambian lo pagado</b>.</div></div>';
+  if(!ls.length) return h + '<div class="iv-vacio">Todavía no hay compras realizadas.</div>';
+  return h + '<div class="iv-list">' + ls.slice(0, 60).map(l => { const r = recDe(l), tot = l.total_costo || 0;
+    const rb = !l.recepcion_id ? '<span class="bg-tag am">⏳ Sin recibir</span>' : (l.recepcion_estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Recibida completa</span>');
+    return '<button class="iv-row" data-bg="conta-abrir" data-id="' + esc(l.id) + '"><div class="iv-n"><div class="nm">' + (l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')) + esc(NOM_LOCAL(l.local)) + '</div>' +
+      '<div class="mu">Compra del ' + esc(fechaTxt(l.fecha_compra_realizada || l.fecha_creacion)) + ' · comprobante: ' + (l.comprobante ? esc(l.comprobante) : '<i>sin anotar</i>') + '</div>' + rb + '</div><div class="iv-s"><b>' + money(tot) + '</b><span>total gastado</span></div></button>'; }).join('') + '</div>';
+}
+function vContaDetalle(){
+  const l = compras().filter(x => x.id === B.cont)[0]; if(!l){ B.cont = null; return vConta(); }
+  const r = recDe(l), tot = l.total_costo || 0;
+  const filas = (l.items || []).map(it => '<div class="bg-line"><div><b>' + esc(it.producto_nombre) + '</b><div class="mu">Pidió ' + esc(etqU(it.cantidad_solicitada || 0, it.unidad_medida)) + (it.vendedor ? ' · ' + esc(it.vendedor) : '') + (it.comprado === false ? ' · no comprado' : '') + '</div></div><b>' + (it.costo != null ? money(it.costo) : '—') + '</b></div>').join('');
+  let faltaVal = 0;
+  const filasRec = r ? (r.items || []).map(i => {
+    const li = (l.items || []).filter(x => x.producto_id === i.producto_id)[0], costo = li && li.costo != null ? li.costo : 0;
+    const esp = i.esperado != null ? i.esperado : (i.solicitado || 0); const noEntra = Math.max(0, esp - (i.entra || 0)); const val = esp > 0 ? costo * noEntra / esp : 0; faltaVal += val;
+    const marca = (i.diferencia || 0) !== 0 || (i.rechazado || 0) > 0;
+    return '<div class="bg-line ' + (marca ? 'dif' : '') + '"><div><b>' + esc(i.nombre) + '</b><div class="mu">' + (i.comprado === false ? 'No se compró' : 'Pidió ' + fmt(i.solicitado)) + ' · recibió ' + fmt(i.recibido) + (i.rechazado ? ' · rechazó ' + fmt(i.rechazado) : '') + ' · entró ' + fmt(i.entra) + ' ' + esc(i.unidad || '') + ' → ' + (i.destino === 'procesamiento' ? 'procesamiento' : 'bodega') + '</div>' + (i.observacion ? '<div class="mu">“' + esc(i.observacion) + '”</div>' : '') + '</div>' +
+      '<div class="bg-baja">' + (marca ? '<b>' + (i.diferencia > 0 ? '+' : '') + fmt(i.diferencia) + '</b><span>' + (val > 0.005 ? '≈ ' + money(val) : 'diferencia') + '</span>' : '<b class="okc">✓</b>') + '</div></div>';
+  }).join('') : '';
+  return '<div class="iv-subbar"><button class="ivb" data-bg="conta-volver">← Volver</button><div class="iv-st">' + (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra')) + ' · ' + esc(NOM_LOCAL(l.local)) + '</div><span></span></div>' +
+    '<div class="iv-card"><h3>Compra</h3>' + filas + (l.carreta ? '<div class="bg-line"><div><b>Carreta</b></div><b>' + money(l.carreta) + '</b></div>' : '') +
+    '<div class="bg-line tot"><div><b>Total gastado</b></div><b>' + money(tot) + '</b></div>' + (l.monto_asignado != null ? '<div class="mu">Monto asignado ' + money(l.monto_asignado) + (l.saldo != null ? ' · saldo ' + money(l.saldo) : '') + '</div>' : '') + '</div>' +
+    '<div class="iv-card"><h3>Comprobante</h3><div class="iv-f"><label>Factura o nota de venta (número)</label><input id="bg-comp" data-bgin="comp" placeholder="Ej: 001-001-000123" autocomplete="off" value="' + esc(l.comprobante || '') + '"></div><button class="ivb" data-bg="comp-guardar" data-id="' + esc(l.id) + '">Guardar comprobante</button></div>' +
+    '<div class="iv-card"><h3>Recepción en bodega</h3>' + (r ? '<div class="mu">' + esc(fechaTxt(r.fecha)) + ' · recibió ' + esc(r.responsable || '') + ' · ' + (r.estado === 'con_diferencias' ? '<b>con diferencias</b>' : 'completa') + '</div>' + filasRec +
+      (faltaVal > 0.005 ? '<div class="iv-aviso" style="margin-top:8px">Valor estimado de lo no recibido o rechazado: <b>≈ ' + money(faltaVal) + '</b>. Es informativo: lo pagado no se modifica automáticamente.</div>' : '') : '<div class="iv-vacio">Esta compra todavía no se recibe en bodega.</div>') + '</div>';
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest ? e.target.closest('[data-bg]') : null; if(!t) return;
+  const a = t.getAttribute('data-bg'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
+  switch(a){
+    case 'tab': B.tab = v; LSs('tab', v); B.abierta = null; B.cont = null; B.reqEd = null; render(); window.scrollTo(0, 0); break;
+    case 'resp': B.resp = v; B.otro = false; LSs('resp', v); render(); break;
+    case 'resp-otro': B.otro = true; B.resp = ''; LSs('resp', ''); render(); setTimeout(() => { const i = $('#bg-resp-in'); if(i) i.focus(); }, 50); break;
+    case 'abrir': B.abierta = id; render(); window.scrollTo(0, 0); break;
+    case 'cerrar': B.abierta = null; render(); break;
+    case 'cant': { const l = compras().filter(x => x.id === B.abierta)[0]; if(!l) break; const it = (l.items || []).filter(x => x.producto_id === id)[0], x = draftDe(l).items[id]; if(!it || !x) break;
+      const k = t.getAttribute('data-k');
+      abrirTeclado({titulo:it.producto_nombre, subtitulo:(k === 'rec' ? 'Cantidad recibida' : 'Cantidad rechazada') + ' · pidió ' + etqU(it.cantidad_solicitada || 0, it.unidad_medida), unidad:'', inicial:x[k] > 0 ? x[k] : '', decimales:true, permitirVacio:true, permitirCero:true,
+        onListo:n => { n = n == null ? 0 : n; if(k === 'rech' && n > x.rec){ toast('Lo rechazado no puede ser más que lo recibido'); return; } setDraft(id, k, n); render(); }}); break; }
+    case 'dest': setDraft(id, 'dest', v); render(); break;
+    case 'confirmar': confirmarRecepcion(); break;
+    case 'ir-proveedores': B.tab = 'prov'; B.abierta = null; render(); window.scrollTo(0, 0); break;
+    case 'ir-registro': B.tab = 'produccion'; LSs('tab', 'produccion'); render(); window.scrollTo(0, 0); break;
+    case 'seg': if(v === 'disp'){ B.tab = 'inventario'; } else { B.tab = 'conteo'; B.ivTab = v; B.reqEd = null; } render(); window.scrollTo(0, 0); break;
+    case 'ir-conteo': B.tab = 'conteo'; B.ivTab = 'conteos'; B.reqEd = null; render(); window.scrollTo(0, 0); break;
+    case 'baja': bajaBodega(id); break;
+    case 'filtro': B.filtro = v; render(); break;
+    case 'pedir': if(B.sel[id]) delete B.sel[id]; else B.sel[id] = true; render(); break;
+    case 'pedir-bajos': { const all = window.ivItems ? window.ivItems() : [], pend = pedidosPend(); const ids = all.filter(it => it.min > 0 && it.stock < it.min && !pend[it.id]).map(it => it.id); if(!ids.length){ toast('No hay productos bajo mínimo sin pedir'); break; } abrirReq(ids); break; }
+    case 'nuevo-req': B.tab = 'inventario'; B.filtro = 'todos'; LSs('tab', 'inventario'); render(); toast('Toca “＋ Pedir” en cada producto y luego “Enviar requerimiento”.'); break;
+    case 'salida': salida(id); break;
+    case 'ajuste': ajuste(id); break;
+    case 'req-abrir': abrirReq(Object.keys(B.sel)); break;
+    case 'req-volver': B.reqEd = null; render(); break;
+    case 'req-quitar': if(B.reqEd){ B.reqEd.items = B.reqEd.items.filter(i => i.id !== id); if(!B.reqEd.items.length) B.reqEd = null; render(); } break;
+    case 'req-cant': { const i = B.reqEd && B.reqEd.items.filter(x => x.id === id)[0]; if(!i) break;
+      abrirTeclado({titulo:i.nombre, subtitulo:'Cantidad a pedir', unidad:i.unidad, inicial:i.cant > 0 ? i.cant : '', decimales:true, onListo:n => { if(n > 0){ i.cant = n; render(); } }}); break; }
+    case 'req-enviar': enviarReq(); break;
+    case 'conta-codigo': if(window.lcPedirCodigo) window.lcPedirCodigo(() => { B.contaOk = true; render(); }); break;
+    case 'conta-abrir': B.cont = id; render(); window.scrollTo(0, 0); break;
+    case 'conta-volver': B.cont = null; render(); break;
+    case 'comp-guardar': { const i = $('#bg-comp'); if(!i) break; const val = i.value.trim();
+      db.collection('listas_compra').doc(id).update({comprobante:val, comprobante_por:(auth.currentUser && auth.currentUser.email) || null, fecha_comprobante:SV()}).then(() => toast('Comprobante guardado')).catch(er => { console.error(er); toast(errTxt(er)); }); break; }
+    case 'sh': { const cb = B.shCb; if(cb) cb(parseInt(t.getAttribute('data-i'), 10)); break; }
+    case 'sh-x': cerrarSheet(); break;
+    case 'undo': { const f = B.undo; B.undo = null; const s = $('#bg-snack'); if(s) s.className = ''; if(f) f(); break; }
+  }
+});
+document.addEventListener('input', e => {
+  const i = e.target; if(!i || !i.closest || !i.closest('#bg-root')) return;
+  if(i.id === 'bg-resp-in'){ B.resp = i.value.trim(); LSs('resp', B.resp); }
+  else if(i.id === 'bg-q'){ B.q = i.value; const c = $('#bg-inv-lista'); if(c) c.innerHTML = invFilas(); }
+  else if(i.id === 'bg-fecha'){ if(B.reqEd) B.reqEd.fecha = i.value || hoyMas(2); }
+  else if(i.getAttribute('data-bgobs')){ setDraft(i.getAttribute('data-bgobs'), 'obs', i.value); }
+});
+
+/* ---------- datos ---------- */
+function escuchar(){
+  db.collection('inventario_materia_prima').onSnapshot(snap => { B.mp = []; snap.forEach(d => B.mp.push(Object.assign({id:d.id}, d.data()))); B.mp.sort((a, b) => (a.producto_nombre || '').localeCompare(b.producto_nombre || '')); refrescar(); }, e => console.error(e));
+  db.collection('recepciones_bodega').orderBy('fecha', 'desc').limit(60).onSnapshot(snap => { B.recs = []; snap.forEach(d => B.recs.push(Object.assign({id:d.id}, d.data({serverTimestamps:'estimate'})))); refrescar(); }, e => console.error(e));
+  db.collection('bajas_bodega').orderBy('fecha', 'desc').limit(20).onSnapshot(snap => { B.bajas = []; snap.forEach(d => B.bajas.push(Object.assign({id:d.id}, d.data({serverTimestamps:'estimate'})))); refrescar(); }, e => console.error(e));
+}
+window.bgInit = function(){ if(B.ready) return; B.ready = true; escuchar(); };
+window.bgView = function(n){ B.prOn = false; B.coOn = false; B.coTab = null; if(n === 'bodega'){ bgInit(); render(); } };
+window.bgIr = function(t){ B.tab = t; B.abierta = null; B.cont = null; B.reqEd = null; if(t !== 'prov' && t !== 'conteo') LSs('tab', t); render(); window.scrollTo(0, 0); };
+window.bgRefresh = refrescar;
+window.BGS = B;
+if(window.firebase && typeof db !== 'undefined') bgInit();
+})();
+
 </script>
 
   </main>
