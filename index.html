@@ -1248,6 +1248,7 @@
   #bg-root.bg-solo{padding-bottom:6px}
   #bg-root .bg-flow{margin-top:8px}
   @media (max-width:900px){#bg-root .bg-flow{overflow-x:auto;flex-wrap:nowrap}#bg-root .bg-flow .ivb{font-size:13px;min-height:54px;min-width:112px}#bg-root .bg-flow .bg-sep{display:none}}
+  .pres{font-weight:700;font-size:.85em;white-space:nowrap;color:#3c3489;background:#eeedfe;border-radius:8px;padding:1px 7px;margin-left:2px}
   #bg-root .bg-seg .ivb{min-height:50px;font-size:15px}
   #bg-root .bg-hint{font-size:13px;color:#6b6a63;margin:0 2px 8px}
   #bg-root .bg-mpstrip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
@@ -2116,6 +2117,13 @@ const TITULOS_VISTA = {
   inventario: ["Inventario", "Qué hay en bodega ahora, dónde está y conteos físicos"]
 };
 
+/* Nombre del producto con su presentación justo después (ej. "Pure de zapallo 600 g"). Sirve en Producción y en Bodega. */
+function presHtml(id, nombre){
+  const e = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let pres = ''; try { pres = (window.PR && window.PR.presDe) ? window.PR.presDe(id) : ''; } catch(er){}
+  if(!pres || String(nombre || '').toLowerCase().indexOf(pres.toLowerCase()) >= 0) return e(nombre);
+  return e(nombre) + ' <span class="pres">' + e(pres) + '</span>';
+}
 const HUB_TAB = {produccion:'produccion', inventario:'inventario', proveedores:'prov'};
 function cambiarVista(nombre) {
   /* Producción, Inventario y Recepción de proveedores viven dentro de Bodega */
@@ -3450,7 +3458,7 @@ function escuchar(){
       snap.forEach(d => {
         const x = d.data({serverTimestamps:'estimate'});
         out.push({id:d.id, col:col, prueba:col === 'pruebas_produccion', pend:!!(d.metadata && d.metadata.hasPendingWrites),
-          pid:x.producto_id, nombre:x.producto_nombre, unidad:x.unidad_medida, cant:x.cantidad_producida, cpe:x.cantidad_por_etiqueta || 0, batches:x.batches, modo:x.conservacion_modo,
+          pid:x.producto_id, nombre:x.producto_nombre, pres:x.presentacion || '', unidad:x.unidad_medida, cant:x.cantidad_producida, cpe:x.cantidad_por_etiqueta || 0, batches:x.batches, modo:x.conservacion_modo,
           ts:tsMs(x.fecha_produccion), vence:tsMs(x.vence), dias:x.dias_vida || 0, lote:x.lote || '', etq:x.etiquetas || 1, op:x.operador || '',
           anulado:!!x.anulado, inv:x.inventario !== false, receta:x.insumos || [], bajas:x.bajas || []});
       });
@@ -3558,7 +3566,7 @@ function renderGrid(){
   g.innerHTML = prods.map(p => {
     const f = fichaDe(p.id);
     const hd = (estacionDe(S.op).secciones.length > 1 && p.seccion !== secPrev) ? '<div class="gsec">' + esc(SECCION_NOMBRE[p.seccion]) + '</div>' : ''; secPrev = p.seccion;
-    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="tick">' + ic('check', 20) + '</span>' + phHTML(f) + '<div class="nm">' + esc(f.nombre) + '</div><div class="un">' + esc(f.presentacion) + '</div></button>';
+    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="tick">' + ic('check', 20) + '</span>' + phHTML(f) + '<div class="nm">' + presHtml(f.id, f.nombre) + '</div></button>';
   }).join('');
 }
 
@@ -3582,7 +3590,7 @@ function qrSim(seed){
 }
 function labelHTML(r, mini){
   const ini = (r.op || '').charAt(0) + '.';
-  return '<div class="label' + (mini ? ' mini' : '') + '"><div class="l1">' + esc(r.nombre) + '</div><div class="l2">' + fmt(qEtq(r)) + ' ' + esc(r.unidad) + '</div><div class="l3">Elab.: ' + fd(new Date(r.ts), true) + '</div>' + qrSim(r.lote) +
+  return '<div class="label' + (mini ? ' mini' : '') + '"><div class="l1">' + esc(nomEtq(r)) + '</div><div class="l2">' + fmt(qEtq(r)) + ' ' + esc(r.unidad) + '</div><div class="l3">Elab.: ' + fd(new Date(r.ts), true) + '</div>' + qrSim(r.lote) +
     '<div class="l4">VENCE: ' + (r.vence ? fd(new Date(r.vence), r.dias <= 3) : '—') + '</div><div class="l5"><span>' + esc(r.lote) + '</span><span>' + (MODOS[r.modo] || '') + ' · ' + ini + '</span></div></div>';
 }
 
@@ -3600,14 +3608,14 @@ function renderPanel(){
   const regTxt = g ? (S.guard.kind === 'max' ? 'Cantidad alta · toca otra vez' : 'Ya registrado · toca otra vez') : 'Registrar';
   const lote = nextLote(f, now);
   const keys = ['7','8','9','4','5','6','1','2','3', f.decimales ? ',' : 'C', '0', 'back'];
-  const pseudo = {nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, ts:now.getTime(), vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, modo:S.modo, op:S.op};
+  const pseudo = {pid:f.id, pres:f.presentacion, nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, ts:now.getTime(), vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, modo:S.modo, op:S.op};
   const cant = S.mode === 'typing' ? (S.buf ? fmt(parseFloat(S.buf)) + (S.buf.slice(-1) === '.' ? ',' : '') : '0') : fmt(S.qty);
   const chip = vida
     ? '<div class="chipv ' + cls + '">' + ic('clock', 26) + '<span>Vence ' + fd(vence, dias <= 3) + '<br><small>' + dias + ' días · ' + MODOS[S.modo] + '</small></span></div>'
     : '<button class="chipv wn" style="border:0;font-family:inherit;text-align:left;cursor:pointer" data-act="ficha" data-pid="' + f.id + '">' + ic('clock', 26) + '<span>Falta la vida útil<br><small>Toca para configurar la ficha (sin etiqueta)</small></span></button>';
   el.innerHTML = '<div class="pcols">' +
     '<div class="pc1">' +
-      '<div class="phead">' + phHTML(f, 'sm') + '<div><div class="nm">' + esc(f.nombre) + '</div><div class="un">' + esc(f.unidad) + ' · 1 batch = ' + fmt(f.batch) + '</div><div class="un" id="pr-stock">En inventario: ' + fmt(stockDe(f.id)) + '</div></div></div>' +
+      '<div class="phead">' + phHTML(f, 'sm') + '<div><div class="nm">' + presHtml(f.id, f.nombre) + '</div><div class="un">' + esc(f.unidad) + ' · 1 batch = ' + fmt(f.batch) + '</div><div class="un" id="pr-stock">En inventario: ' + fmt(stockDe(f.id)) + '</div></div></div>' +
       '<div class="pq" id="pr-pq"><span class="n">' + cant + '</span><span class="u">' + esc(f.unidad) + '</span></div>' +
       '<div class="eq">' + eqt + '</div>' +
       '<div class="quick">' + qk.map((q, i) => '<button class="btn" data-act="quick" data-i="' + i + '">' + q.t + '</button>').join('') + '</div>' +
@@ -3713,12 +3721,12 @@ function registrar(){
   let jobRef = null;
   if(vida){
     jobRef = db.collection('cola_impresion').doc();
-    batch.set(jobRef, trabajoEtiqueta({id:regRef.id, nombre:f.nombre, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, unidad:f.unidad, ts:now.getTime(), vence:vence.getTime(), dias:dias, modo:S.modo, lote:lote, op:opNombre, etq:etq, prueba:prueba}, U.directo ? {estado:'directo', directo:true} : null));
+    batch.set(jobRef, trabajoEtiqueta({id:regRef.id, pid:f.id, pres:f.presentacion, nombre:f.nombre, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, unidad:f.unidad, ts:now.getTime(), vence:vence.getTime(), dias:dias, modo:S.modo, lote:lote, op:opNombre, etq:etq, prueba:prueba}, U.directo ? {estado:'directo', directo:true} : null));
   }
   batch.commit().catch(err => { console.error(err); flash('er', 'No se guardó'); snd('err'); toast('No se pudo guardar. Revisa la conexión.'); });
 
   S.ultima[f.id] = S.qty; LS.set('ultima', S.ultima);
-  const r = {id:regRef.id, col:prueba ? 'pruebas_produccion' : 'producciones_facility', prueba:prueba, pid:f.id, nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, modo:S.modo, ts:now.getTime(),
+  const r = {id:regRef.id, col:prueba ? 'pruebas_produccion' : 'producciones_facility', prueba:prueba, pid:f.id, pres:f.presentacion, nombre:f.nombre, unidad:f.unidad, cant:S.qty, cpe:f.por_etiqueta > 0 ? f.por_etiqueta : 0, modo:S.modo, ts:now.getTime(),
              vence:vence ? vence.getTime() : 0, dias:dias, lote:lote, etq:vida ? etq : 0, op:opNombre, inv:!!f.inv, jobId:jobRef ? jobRef.id : null, insumos:insumos, bajas:S.bajas.slice()};
   S.bajas = [];
   S.undo = r;
@@ -3730,9 +3738,15 @@ function registrar(){
   renderTop();
   Tn_onRegistro(r);
 }
+/* Nombre que va en la etiqueta: el producto y, justo después, su presentación (ej. "Pure de zapallo 600 g") */
+function nomEtq(r){
+  const f = r.pid ? fichaDe(r.pid) : null, pres = String(r.pres || (f && f.presentacion) || '').trim(), nom = String(r.nombre || '');
+  if(!pres || nom.toLowerCase().indexOf(pres.toLowerCase()) >= 0) return nom;
+  return nom + ' ' + pres;
+}
 function trabajoEtiqueta(r, extra){
   return Object.assign({
-    tipo:'etiqueta', registro_id:r.id, producto:r.nombre, cantidad:qEtq(r), unidad:r.unidad,
+    tipo:'etiqueta', registro_id:r.id, producto:nomEtq(r), cantidad:qEtq(r), unidad:r.unidad,
     elaborado:TS().fromDate(new Date(r.ts)), vence:TS().fromDate(new Date(r.vence)), dias:r.dias, conservacion:MODOS[r.modo] || '',
     lote:r.lote, operador:r.op, copias:r.etq, impresas:0, estado:'pendiente', intentos:0, prueba:!!r.prueba, cancelada:false, creado:SV()
   }, extra || {});
@@ -3787,7 +3801,7 @@ function lbEPL(j, cfg){
   L.push('A' + m + ',' + y + ',0,2,1,1,N,"' + e.pie2 + '"'); L.push('P' + e.copias); return L.join('\n') + '\n';
 }
 const lbConstruir = j => U.cfg.lenguaje === 'EPL' ? lbEPL(j, U.cfg) : lbZPL(j, U.cfg);
-const lbDeReg = r => ({tipo:'etiqueta', producto:r.nombre, cantidad:qEtq(r), unidad:r.unidad, elaboradoMs:r.ts, venceMs:r.vence, dias:r.dias, conservacion:MODOS[r.modo] || '', lote:r.lote, operador:r.op, copias:r.etq, prueba:!!r.prueba});
+const lbDeReg = r => ({tipo:'etiqueta', producto:nomEtq(r), cantidad:qEtq(r), unidad:r.unidad, elaboradoMs:r.ts, venceMs:r.vence, dias:r.dias, conservacion:MODOS[r.modo] || '', lote:r.lote, operador:r.op, copias:r.etq, prueba:!!r.prueba});
 
 const usbSoportado = () => !!(navigator.usb && window.isSecureContext !== false);
 function usbBuscarSalida(dev){
@@ -3899,7 +3913,7 @@ function toast(msg){
 function showSnack(r){
   const s = $('#pr-snack'); if(!s) return;
   const donde = r.prueba ? '⚠ MODO PRUEBA: no suma al inventario' : (r.inv !== false ? '✓ Suma a Inventario → Existencias' : '✓ Guardado en Hoy');
-  s.innerHTML = '<div class="snackbox"><div class="st">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + esc(r.nombre) + '<div style="font-size:13px;font-weight:500;opacity:.85;margin-top:2px">' + donde + '</div></div>' + (!r.prueba && r.inv !== false ? '<button class="btn" data-act="verinv">Ver en inventario</button>' : '') + '<button class="btn" data-act="undo" data-id="' + r.id + '">Deshacer</button><div class="snackbar"></div></div>';
+  s.innerHTML = '<div class="snackbox"><div class="st">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + presHtml(r.pid, r.nombre) + '<div style="font-size:13px;font-weight:500;opacity:.85;margin-top:2px">' + donde + '</div></div>' + (!r.prueba && r.inv !== false ? '<button class="btn" data-act="verinv">Ver en inventario</button>' : '') + '<button class="btn" data-act="undo" data-id="' + r.id + '">Deshacer</button><div class="snackbar"></div></div>';
   s.classList.add('show');
   clearTimeout(showSnack.t); showSnack.t = setTimeout(() => s.classList.remove('show'), 10000);
 }
@@ -3919,7 +3933,7 @@ function renderHoy(){
       else if(job.estado === 'impresa') pc = '<span class="pill ok">Etiquetas ' + job.copias + '/' + job.copias + '</span>';
       else if(job.estado === 'error') pc = '<span class="pill er">Sin imprimir</span>';
       else pc = '<span class="pill wn">Imprimiendo</span>';
-      return '<div class="reg-item"><div class="top"><div><div class="nm">' + esc(r.nombre) + '</div><div class="mu">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + tf.format(new Date(r.ts)) + ' · ' + esc(r.op) + '</div></div>' + pc + '</div>' +
+      return '<div class="reg-item"><div class="top"><div><div class="nm">' + presHtml(r.pid, r.nombre) + '</div><div class="mu">' + fmt(r.cant) + ' ' + esc(r.unidad) + ' · ' + tf.format(new Date(r.ts)) + ' · ' + esc(r.op) + '</div></div>' + pc + '</div>' +
         '<div>' + (r.vence ? '<span class="pill ' + cls + '">Vence ' + fd(new Date(r.vence), r.dias <= 3) + '</span> ' : '') + '<span class="pill">' + esc(r.lote) + '</span> ' + (r.pend ? '<span class="pill wn">Pendiente de enviar</span>' : '') + (r.bajas || []).map(b => ' <span class="pill wn">Baja ' + fmt(b.cantidad) + ' ' + esc(b.unidad || '') + ' ' + esc(b.nombre) + ' · ' + esc(b.motivo) + '</span>').join('') + '</div>' +
         (r.vence ? '<div class="acts"><button class="btn" data-act="label" data-id="' + r.id + '">Ver etiqueta</button><button class="btn" data-act="reprint" data-id="' + r.id + '">' + ic('printer', 22) + ' Reimprimir</button></div>' : '') + '</div>';
     }).join('') : '<div class="hint"><div class="big">Todavía no hay registros hoy</div></div>') + '</div>';
@@ -3936,7 +3950,7 @@ function renderFichasList(){
     '<div id="pr-grid" style="padding:0">' + lista.map(p => {
       const f = fichaDe(p.id);
       const ms = modosDe(f).map(m => MODOS[m].slice(0, 3) + ' ' + f.vida[m] + 'd').join(' · ') || 'Falta vida útil';
-      return '<button class="card' + (tieneVida(f) ? '' : ' falta') + '" data-act="ficha" data-pid="' + p.id + '">' + phHTML(f) + '<div class="nm">' + esc(f.nombre) + '</div><div class="un">' + esc(ms) + '</div>' + (usaReceta(p.id) ? '<div class="un">Receta: ' + (f.receta.length ? f.receta.length + ' ingr.' : 'sin receta') + '</div>' : '') + '</button>';
+      return '<button class="card' + (tieneVida(f) ? '' : ' falta') + '" data-act="ficha" data-pid="' + p.id + '">' + phHTML(f) + '<div class="nm">' + presHtml(f.id, f.nombre) + '</div><div class="un">' + esc(ms) + '</div>' + (usaReceta(p.id) ? '<div class="un">Receta: ' + (f.receta.length ? f.receta.length + ' ingr.' : 'sin receta') + '</div>' : '') + '</button>';
     }).join('') + '</div></div>';
 }
 function renderFichaEdit(){
@@ -4236,7 +4250,7 @@ function onClick(e){
     case 'label': { const r = regsActuales().filter(x => x.id === d.id)[0]; if(r) openModal('<div class="mt">Etiqueta</div>' + labelHTML(r) + '<div class="mu small" style="text-align:center">Vista previa. El diseño real lo define el programa de impresión; el QR aquí es simulado.</div><button class="btn" data-act="mclose">Cerrar</button>'); break; }
     case 'reprint': {
       const r = regsActuales().filter(x => x.id === d.id)[0];
-      if(r && r.vence){ const jr = db.collection('cola_impresion').doc(); const base = {id:r.id, nombre:r.nombre, cant:r.cant, cpe:r.cpe || 0, unidad:r.unidad, ts:r.ts, vence:r.vence, dias:r.dias, modo:r.modo, lote:r.lote, op:r.op, etq:r.etq, prueba:r.prueba};
+      if(r && r.vence){ const jr = db.collection('cola_impresion').doc(); const base = {id:r.id, pid:r.pid, pres:r.pres, nombre:r.nombre, cant:r.cant, cpe:r.cpe || 0, unidad:r.unidad, ts:r.ts, vence:r.vence, dias:r.dias, modo:r.modo, lote:r.lote, op:r.op, etq:r.etq, prueba:r.prueba};
         jr.set(trabajoEtiqueta(base, U.directo ? {reimpresion:true, estado:'directo', directo:true} : {reimpresion:true})).catch(er => console.error(er));
         if(U.directo) imprimirDirectoReg(Object.assign({}, base), jr.id).then(ok => { if(ok) toast('Etiquetas impresas otra vez'); }); else toast('Etiquetas enviadas otra vez'); }
       break;
@@ -4301,7 +4315,7 @@ window.prView = nombre => { if(nombre === 'produccion') onEnter(); else if(docum
 window.prInit = init;
 window.prActualizarStock = actualizarStock;
 usbIniciar();
-window.PR = {S:S, fichaDe:fichaDe, PROD_ALL:PROD_ALL, go:go, U:U, lbConstruir:lbConstruir};
+window.PR = {presDe:pid => { const f = pid ? fichaDe(pid) : null; return f ? String(f.presentacion || '').trim() : ''; }, S:S, fichaDe:fichaDe, PROD_ALL:PROD_ALL, go:go, U:U, lbConstruir:lbConstruir};
 })();
 
 /* ============================================================
@@ -4396,7 +4410,7 @@ function renderExistencias(){
   const MAXV = 200;
   h += '<div class="iv-list">' + list.slice(0, MAXV).map(it => {
     const e = estado(it), pct = it.max > 0 ? Math.max(0, Math.min(100, it.stock / it.max * 100)) : (it.min > 0 ? Math.max(0, Math.min(100, it.stock / (it.min * 2) * 100)) : 0);
-    return '<button class="iv-row ' + e + '" data-iv="ficha" data-id="' + esc(it.id) + '"><div class="iv-n"><div class="nm">' + esc(it.nombre) + '</div><div class="mu">' + esc(it.cat) + (it.sku ? ' · ' + esc(it.sku) : '') + (ubic(it) ? ' · ' + esc(ubic(it)) : ' · sin ubicación') + '</div>' +
+    return '<button class="iv-row ' + e + '" data-iv="ficha" data-id="' + esc(it.id) + '"><div class="iv-n"><div class="nm">' + presHtml(it.id, it.nombre) + '</div><div class="mu">' + esc(it.cat) + (it.sku ? ' · ' + esc(it.sku) : '') + (ubic(it) ? ' · ' + esc(ubic(it)) : ' · sin ubicación') + '</div>' +
       ((it.min || it.max) ? '<div class="iv-meter"><i style="width:' + pct + '%"></i></div><div class="mu s">mín ' + (it.min ? fmt(it.min) : '—') + ' · máx ' + (it.max ? fmt(it.max) : '—') + '</div>' : '<div class="mu s">Sin mínimo ni máximo</div>') +
       '</div><div class="iv-s"><b>' + fmt(it.stock) + '</b><span>' + esc(it.uAlmacen) + '</span>' + (e === 'bajo' ? '<em>Bajo mínimo</em>' : e === 'sin' && it.ficha ? '<em>Sin stock</em>' : e === 'alto' ? '<em class="al">Sobre máximo</em>' : '') + (it.costo ? '<span>' + money(Math.max(0, it.stock) * it.costo) + '</span>' : '') + '</div></button>';
   }).join('') + (list.length > MAXV ? '<div class="iv-vacio">Se muestran ' + MAXV + ' de ' + list.length + '. Usa la búsqueda o una categoría.</div>' : '') + '</div>';
@@ -4488,7 +4502,7 @@ function renderContando(){
     const z = ubic(it) || 'Sin ubicación';
     if(z !== zonaPrev){ h += '<div class="iv-zona">' + esc(z) + '</div>'; zonaPrev = z; }
     const v = c.v[id];
-    h += '<button class="iv-cuenta ' + (v != null ? 'hecho' : '') + '" data-iv="contar" data-id="' + esc(id) + '"><div class="iv-n"><div class="nm">' + esc(it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen) + '</div></div>' +
+    h += '<button class="iv-cuenta ' + (v != null ? 'hecho' : '') + '" data-iv="contar" data-id="' + esc(id) + '"><div class="iv-n"><div class="nm">' + presHtml(it.id, it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen) + '</div></div>' +
       '<div class="iv-cant"><span>Cantidad contada</span><b>' + (v != null ? fmt(v) : '[ ____ ]') + '</b></div></button>';
   });
   return h + '</div><div class="iv-pie"><button class="ivb okb big" data-iv="cnt-rev"' + (hechos ? '' : ' disabled') + '>Revisar y terminar (' + hechos + ')</button></div>';
@@ -5881,7 +5895,7 @@ function vRecDetalle(){
     const sol = it.cantidad_solicitada || 0, esp = it.comprado === false ? 0 : sol, entra = r3(Math.max(0, x.rec - x.rech)), dif = r3(x.rec - esp);
     if(dif !== 0 || x.rech > 0) nDif++; if(x.dest === 'procesamiento') nProc++;
     const pid = esc(it.producto_id);
-    return '<div class="bg-it ' + (dif < 0 || x.rech > 0 ? 'dif' : '') + '"><div class="bg-it-top"><div class="nm">' + esc(it.producto_nombre) + '</div><div class="mu">Pidió <b>' + esc(etqU(sol, it.unidad_medida)) + '</b>' + (it.comprado === false ? ' · <span class="bg-tag am">no se compró</span>' : '') + '</div></div>' +
+    return '<div class="bg-it ' + (dif < 0 || x.rech > 0 ? 'dif' : '') + '"><div class="bg-it-top"><div class="nm">' + presHtml(it.producto_id, it.producto_nombre) + '</div><div class="mu">Pidió <b>' + esc(etqU(sol, it.unidad_medida)) + '</b>' + (it.comprado === false ? ' · <span class="bg-tag am">no se compró</span>' : '') + '</div></div>' +
       '<div class="bg-it-q"><button class="ivb val" data-bg="cant" data-k="rec" data-id="' + pid + '"><span>Recibido</span><b>' + fmt(x.rec) + '</b></button>' +
       '<button class="ivb val ' + (x.rech > 0 ? 'mal' : '') + '" data-bg="cant" data-k="rech" data-id="' + pid + '"><span>Rechazado</span><b>' + fmt(x.rech) + '</b></button>' +
       '<div class="bg-entra"><span>Entra</span><b>' + fmt(entra) + '</b></div></div>' +
@@ -6037,7 +6051,7 @@ function invFilas(){
   if(!list.length) return '<div class="iv-vacio">No hay productos con ese filtro.</div>';
   return '<div class="iv-list">' + list.slice(0, 200).map(it => {
     const bajo = it.min > 0 && it.stock < it.min, m = mpIdx[it.id], p = pend[it.id], sel = !!B.sel[it.id], id = esc(it.id);
-    return '<div class="bg-inv ' + (bajo ? 'bajo' : '') + '"><div class="bg-it-top"><div style="min-width:0"><div class="nm">' + esc(it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen || it.unidad || '') + ' · mínimo ' + (it.min ? fmt(it.min) : '—') + '</div>' +
+    return '<div class="bg-inv ' + (bajo ? 'bajo' : '') + '"><div class="bg-it-top"><div style="min-width:0"><div class="nm">' + presHtml(it.id, it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen || it.unidad || '') + ' · mínimo ' + (it.min ? fmt(it.min) : '—') + '</div>' +
       (bajo ? '<span class="bg-tag am">Bajo el mínimo</span>' : '') + (m && (m.cantidad_actual || 0) > 0 ? '<span class="bg-tag az">Pendiente de procesar: ' + fmt(m.cantidad_actual) + ' ' + esc(m.unidad_medida || '') + '</span>' : '') +
       (p ? '<span class="bg-tag mo">Requerimiento pendiente: ' + fmt(p.cant) + (p.fecha ? ' · para ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') + '</div>' +
       '<div class="iv-s"><b>' + fmt(it.stock) + '</b><span>disponible</span></div></div>' +
@@ -6055,7 +6069,7 @@ function salida(id){
       b.set(db.collection('inventario_bodega').doc(id), {producto_nombre:it.nombre, cantidad_actual:INC(-n), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
       b.set(mid, {producto_id:id, producto_nombre:it.nombre, tipo:'salida', destino_id:dst[0], destino:dst[1], cantidad:-n, responsable:B.resp, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Salida a ' + dst[1]});
       b.commit().catch(e => { console.error(e); toast(errTxt(e)); });
-      snack('<b>Salida registrada</b><br>' + fmt(n) + ' ' + esc(it.uAlmacen || it.unidad || '') + ' · ' + esc(it.nombre) + ' → ' + esc(dst[1]), () => {
+      snack('<b>Salida registrada</b><br>' + fmt(n) + ' ' + esc(it.uAlmacen || it.unidad || '') + ' · ' + presHtml(it.id, it.nombre) + ' → ' + esc(dst[1]), () => {
         const u = db.batch(); u.set(db.collection('inventario_bodega').doc(id), {cantidad_actual:INC(n), ultima_actualizacion:SV()}, {merge:true}); u.delete(mid);
         u.commit().then(() => toast('Salida deshecha')).catch(e => { console.error(e); toast(errTxt(e)); });
       });
@@ -6074,7 +6088,7 @@ function ajuste(id){
       b.set(db.collection('inventario_bodega').doc(id), {producto_nombre:it.nombre, cantidad_actual:INC(dif), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
       b.set(mid, {producto_id:id, producto_nombre:it.nombre, tipo:'ajuste_conteo', cantidad:dif, sistema:it.stock, contado:n, motivo:mot, responsable:B.resp, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Ajuste: sistema ' + it.stock + ', contado ' + n + ' · ' + mot});
       b.commit().catch(e => { console.error(e); toast(errTxt(e)); });
-      snack('<b>Ajuste guardado</b><br>' + esc(it.nombre) + ': ' + fmt(it.stock) + ' → ' + fmt(n) + ' · ' + esc(mot), () => {
+      snack('<b>Ajuste guardado</b><br>' + presHtml(it.id, it.nombre) + ': ' + fmt(it.stock) + ' → ' + fmt(n) + ' · ' + esc(mot), () => {
         const u = db.batch(); u.set(db.collection('inventario_bodega').doc(id), {cantidad_actual:INC(-dif), ultima_actualizacion:SV()}, {merge:true}); u.delete(mid);
         u.commit().then(() => toast('Ajuste deshecho')).catch(e => { console.error(e); toast(errTxt(e)); });
       });
@@ -6094,7 +6108,7 @@ function vReqEd(){
   let h = '<div class="iv-subbar"><button class="ivb" data-bg="req-volver">← Volver</button><div class="iv-st">Requerimiento a Compras</div><span></span></div>' +
     '<div class="iv-card"><div class="iv-f"><label>¿Para qué fecha lo necesitas?</label><input type="date" id="bg-fecha" value="' + esc(E.fecha) + '" min="' + hoyMas(0) + '"></div><div class="mu">Compras lo verá en Lista de compras → Bodega, con esa fecha.</div></div>';
   h += E.items.map(i => { const p = pend[i.id], id = esc(i.id);
-    return '<div class="bg-card"><div class="bg-it-top"><div class="nm">' + esc(i.nombre) + '</div><div class="mu">En bodega ' + fmt(i.stock) + (i.min ? ' · mínimo ' + fmt(i.min) : '') + '</div></div>' +
+    return '<div class="bg-card"><div class="bg-it-top"><div class="nm">' + presHtml(i.id, i.nombre) + '</div><div class="mu">En bodega ' + fmt(i.stock) + (i.min ? ' · mínimo ' + fmt(i.min) : '') + '</div></div>' +
       (p ? '<span class="bg-tag mo">Ya hay un requerimiento pendiente: ' + fmt(p.cant) + (p.fecha ? ' · para ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') +
       '<div class="bg-acts"><button class="ivb val" data-bg="req-cant" data-id="' + id + '"><span>Cantidad a pedir</span><b>' + fmt(i.cant) + ' ' + esc(i.unidad) + '</b></button><button class="ivb" data-bg="req-quitar" data-id="' + id + '">Quitar</button></div></div>'; }).join('');
   return h + '<div class="iv-pie"><button class="ivb okb big" data-bg="req-enviar">' + (dups && E.dupOk ? 'Toca otra vez: ya hay ' + dups + ' pendiente' + (dups > 1 ? 's' : '') : 'Enviar requerimiento a Compras') + '</button></div>';
