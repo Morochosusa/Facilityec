@@ -910,6 +910,9 @@
   .badge.despachado { background: #faeeda; color: #633806; }
   .badge.por_despachar { background:#fde8a6; color:#5c3d00; font-weight:800; }
   .gd-ayuda{background:#f4f2ec;border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0 10px;color:#4a4943}
+  .frio-tag{display:inline-block;font-size:.8em;font-weight:700;border-radius:8px;padding:1px 7px;white-space:nowrap} .frio-tag.refrigerado{background:#e1f0fb;color:#0c447c} .frio-tag.congelado{background:#e6e4fb;color:#3c3489}
+  .frio-linea{font-size:12px;color:#5f5e5a;margin-top:3px;font-weight:400} .frio-mal{color:#b3261e} .frio-ok{color:#1d7a4d} .frio-esp{color:#8a5a00}
+  .frio-alerta{margin-top:8px;padding:6px 10px;border-radius:8px;background:#fde4e1;color:#b3261e;font-weight:700;font-size:14px} .frio-espera{margin-top:8px;padding:6px 10px;border-radius:8px;background:#fff3d6;color:#8a5a00;font-weight:700;font-size:14px}
   .gd-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 2px;border-bottom:1px solid #e2e0d6}
   .gd-row .gd-nm{flex:1 1 220px;font-weight:700;font-size:16px;line-height:1.2}
   .gd-row .gd-n{color:#4285f4;font-weight:800}
@@ -1236,7 +1239,6 @@
   #bg-root .iv-hist,#bg-sheet .iv-hist,#bg-snack .iv-hist{margin-bottom:6px} #bg-root .iv-hist .wn,#bg-sheet .iv-hist .wn,#bg-snack .iv-hist .wn{color:#a85f00;font-weight:700;text-align:right}
   body.touch #bg-root .ivb,body.touch #bg-sheet .ivb,body.touch #bg-snack .ivb{min-height:64px;font-size:18px} body.touch #bg-root .iv-row,body.touch #bg-sheet .iv-row,body.touch #bg-snack .iv-row{min-height:76px}
   #bg-root{padding-bottom:110px} #bg-root .iv-pie{padding-left:70px}
-  #bg-host-prod #pr-root{height:calc(100vh - 215px);min-height:380px}
   #bg-host-conteo .iv-tabs{display:none}
   #vista-proveedores.bg-host{padding-bottom:90px}
   #bg-root .bg-flow{display:flex;gap:6px;margin:0 0 6px}
@@ -1246,6 +1248,14 @@
   #bg-root .bg-flow .bg-sep{align-self:center;color:#b4b2a9;font-weight:800;margin:0 -2px}
   #bg-root .bg-flow .bg-n.warn{background:#b8741a}
   #bg-root.bg-solo{padding-bottom:6px}
+  #bg-root .bg-menu{display:flex;flex-direction:column;gap:6px;margin:4px 0}
+  #bg-root .bg-mi{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:8px 14px;background:#fff;border:2px solid #e3e0d6;border-radius:14px;text-align:left;font:inherit;cursor:pointer;position:relative}
+  #bg-root .bg-mi:active{transform:scale(.99)}
+  #bg-root .bg-mn{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;border-radius:50%;background:#e8f0fe;color:#1a56c4;font-weight:800;font-size:17px;flex:none}
+  #bg-root .bg-mt{flex:1;font-size:19px;font-weight:700} #bg-root .bg-mt small{display:block;font-size:12px;font-weight:400;color:#6b6a63;margin-top:2px}
+  #bg-root .bg-ch{font-size:20px;color:#8a897f}
+  #bg-root .bg-open{display:flex;align-items:center;gap:10px;margin:4px 0 8px;padding:6px 8px;background:#eef3fd;border:2px solid #b9cdf5;border-radius:14px}
+  #bg-root .bg-open .ivb{min-height:50px;flex:none} #bg-root .bg-ot{flex:1;font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
   body.touch #iv-root .iv-num .iv-row{min-height:64px} .iv-num .iv-row{min-height:60px;padding-top:6px;padding-bottom:6px;margin-bottom:4px;gap:8px} .iv-no{width:30px;text-align:right;color:#8a897f;font-weight:700;font-size:14px;flex:none}
   #bg-root .bg-lista{background:#fff;border:2px solid #e3e0d6;border-radius:14px;overflow:hidden}
   #bg-root .bg-sec{font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.4px;background:#f1efe7;padding:8px 12px;border-top:1px solid #e3e0d6} #bg-root .bg-sec:first-child{border-top:0} #bg-root .bg-sec span{font-weight:500;color:#6b6a63}
@@ -1432,6 +1442,7 @@
     <button class="nav-item" id="nav-pedidos" onclick="cambiarVista('pedidos')">📨 Pedidos de locales</button>
     <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
     <button class="nav-item" id="nav-bodega" onclick="cambiarVista('bodega')">🏬 Bodega</button>
+    <button class="nav-item" id="nav-produccion" onclick="cambiarVista('produccion')">🏭 Producción · Registro</button>
     <button class="nav-item" id="nav-estaciones" onclick="cambiarVista('estaciones')">📋 Lista de estaciones</button>
     <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
     <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
@@ -1501,18 +1512,7 @@
 <!-- VISTA: BODEGA (recepción de compras, por procesar, inventario, requerimientos, contabilidad) -->
 <div class="vista" id="vista-bodega">
   <div id="bg-root"></div>
-  <!-- Todo el recorrido en un solo lugar: estas tres piezas se muestran dentro de Bodega -->
-  <div id="bg-host-prod" style="display:none">
-  <div id="pr-root">
-    <header id="pr-top"></header>
-    <div id="pr-testbar"></div>
-    <main id="pr-main"></main>
-    <div id="pr-flash" class="pr-flash"></div>
-    <div id="pr-snack"></div>
-    <div id="pr-toast"></div>
-    <div id="pr-modal-root"></div>
-  </div>
-  </div>
+  <!-- Entrega de proveedor y Conteo físico se abren dentro de Bodega -->
   <div id="vista-proveedores" class="bg-host" style="display:none">
   <div class="compra-top-grid">
     <div class="panel">
@@ -1567,7 +1567,19 @@
   </div>
 </div>
 
-<!-- VISTA: PRODUCCION (modo tablet) -->
+<!-- VISTA: PRODUCCION (modo tablet; propia, fuera de Bodega para que no corte el teclado) -->
+<div class="vista" id="vista-produccion">
+  <div id="pr-root">
+    <header id="pr-top"></header>
+    <div id="pr-testbar"></div>
+    <main id="pr-main"></main>
+    <div id="pr-flash" class="pr-flash"></div>
+    <div id="pr-snack"></div>
+    <div id="pr-toast"></div>
+    <div id="pr-modal-root"></div>
+  </div>
+</div>
+
 <!-- VISTA: ESTACIONES (Cocina Producción / Cuarto frío) -->
 <div class="vista" id="vista-estaciones">
   <div id="es-root"></div>
@@ -2122,7 +2134,7 @@ const TITULOS_VISTA = {
   produccion: ["Producción · Registro", "Registra lo producido: suma al inventario, descuenta materia prima y saca la etiqueta"],
   despacho: ["Despacho manual", "Para enviar algo SIN pedido del local. Lo que piden los locales se despacha desde Guías"],
   guias: ["Guias", "Despacha lo aceptado (Por despachar), imprime y consulta las guias"],
-  bodega: ["Bodega", "Recibir → producción o bodega → inventario → pedir a Compras → recibir"],
+  bodega: ["Bodega", "Toca un módulo para abrirlo: recibir, por procesar, inventario, pedir a Compras, contabilidad"],
   inventario: ["Inventario", "Qué hay en bodega ahora, dónde está y conteos físicos"]
 };
 
@@ -2186,7 +2198,7 @@ window.clSync = function(pedidos){
     b.commit().catch(e => console.error(e));
   }
 };
-const HUB_TAB = {produccion:'produccion', inventario:'inventario', proveedores:'prov'};
+const HUB_TAB = {inventario:'inventario', proveedores:'prov'};
 function cambiarVista(nombre) {
   /* Producción, Inventario y Recepción de proveedores viven dentro de Bodega */
   const hubTab = HUB_TAB[nombre]; if (hubTab) nombre = 'bodega';
@@ -2267,6 +2279,7 @@ let guiasCache = [];
 let guiaAbiertaId = null;
 
 function escucharGuias() {
+  if (window.ivInit) { try { ivInit(); } catch (e) { console.error(e); } }   // carga las fichas (cómo se conserva cada producto)
   db.collection("pedidos").orderBy("fecha_despacho", "desc").limit(30).onSnapshot(snapshot => {
     guiasCache = [];
     snapshot.forEach(doc => guiasCache.push({ id: doc.id, ...doc.data() }));
@@ -2277,6 +2290,7 @@ function escucharGuias() {
   }, err => console.error(err));
 }
 
+setInterval(() => { try { if(!document.getElementById("guias-lista")) return; renderListaGuias(); const g = guiaAbiertaId ? guiasCache.find(x => x.id === guiaAbiertaId) : null; if(g && g.estado !== "por_despachar") verGuia(g.id); } catch(e){} }, 60000);
 function renderListaGuias() {
   const cont = document.getElementById("guias-lista");
   if (guiasCache.length === 0) {
@@ -2296,11 +2310,20 @@ function renderListaGuias() {
           </div>
           <span class="badge ${estadoClase}">${NOMBRES_ESTADO[estadoClase] || estadoClase}</span>
         </div>
+        ${(() => { const r = frioResumen(g); return r.alerta ? `<div class="frio-alerta">⚠ ${r.alerta} producto${r.alerta === 1 ? "" : "s"} frío${r.alerta === 1 ? "" : "s"} sin guardar fuera de tiempo</div>` : r.espera ? `<div class="frio-espera">⏱ ${r.espera} producto${r.espera === 1 ? "" : "s"} frío${r.espera === 1 ? "" : "s"} por guardar</div>` : ""; })()}
       </div>
     `;
   }).join("");
 }
 
+function frioLinea(g, it){
+  const e = frioEstado(g, it); if(!e) return "";
+  const rev = it.verificado_salida ? "salió revisado" : "salió sin revisar";
+  const hs = it.hora_salida_ms ? " " + new Date(it.hora_salida_ms).toLocaleTimeString("es-EC", {hour:"2-digit", minute:"2-digit"}) : "";
+  const est = e.k === "ok" ? `<b class="frio-ok">✅ guardado ${minTxt(e.m)} después de recibir</b>` : e.k === "tarde" ? `<b class="frio-mal">⚠ se guardó ${minTxt(e.m)} después de recibir (límite ${CONS_LIM_MIN[e.c]} min)</b>` :
+    e.k === "alerta" ? `<b class="frio-mal">⚠ SIN GUARDAR hace ${minTxt(e.m)} (límite ${CONS_LIM_MIN[e.c]} min)</b>` : e.k === "espera" ? `<b class="frio-esp">⏱ recibido hace ${minTxt(e.m)}, falta guardar</b>` : `<b class="frio-esp">en camino</b>`;
+  return `<div class="frio-linea"><span class="frio-tag ${e.c}">${CONS_TXT[e.c]}</span> ${rev}${hs} · ${est}</div>`;
+}
 function verGuia(id) {
   const guia = guiasCache.find(g => g.id === id);
   if (!guia) return;
@@ -2313,7 +2336,7 @@ function verGuia(id) {
 
   const filasItems = guia.items.map((it, idx) => `
     <div class="detalle-fila guia-fila-check">
-      <span class="guia-fila-nombre"><span style="color:#888780;">${idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_despachada} ${it.unidad_medida})</span></span>
+      <span class="guia-fila-nombre"><span style="color:#888780;">${idx + 1}.</span> ${it.producto_nombre} <span style="color:#888780;">(${it.cantidad_despachada} ${it.unidad_medida})</span>${frioLinea(guia, it)}</span>
       <span class="check-box-vacio" title="Envia"></span>
       <span class="check-box-vacio" title="Recibe"></span>
       <span class="guia-obs-columna">${it.cantidad_recibida != null ? `<b style="color:${(it.diferencia || 0) !== 0 ? '#c0392b' : '#1d7a4d'};">Recibido: ${it.cantidad_recibida}${(it.diferencia || 0) !== 0 ? ` (${it.diferencia > 0 ? '+' : ''}${it.diferencia})` : ' ✓'}</b>${it.nota_diferencia ? `<br><small>${it.nota_diferencia}</small>` : ''}` : ''}</span>
@@ -2353,6 +2376,29 @@ function verGuia(id) {
 
 /* ---------- Guia POR DESPACHAR (viene de un pedido aceptado) ----------
    Aqui se revisa lo que hay, se ajusta y se toca DESPACHAR: baja del inventario y el local la ve en "Por recibir". */
+/* ---------- CADENA DE FRÍO ----------
+   Facility revisa y registra la salida (hora + visto bueno); el local debe marcar "Guardado" al recibir (campo guardado_ms por producto en la guía).
+   Límite de tiempo fuera de frío desde que el local recibe: */
+const CONS_TXT = {refrigerado:'🧊 Refrigerado', congelado:'❄️ Congelado'};
+const CONS_LIM_MIN = {refrigerado:30, congelado:15};
+const esFrio = c => c === 'refrigerado' || c === 'congelado';
+const consItem = it => { if(CONS_TXT[it.conservacion]) return it.conservacion; try { const f = window.ivFicha ? ivFicha(it.producto_id) : null; return f && CONS_TXT[f.conservacion] ? f.conservacion : 'ambiente'; } catch(e){ return 'ambiente'; } };
+const tsMsG = t => t && t.toMillis ? t.toMillis() : (t && t.seconds ? t.seconds * 1000 : 0);
+const minTxt = m => m < 60 ? Math.max(0, Math.round(m)) + ' min' : Math.floor(m / 60) + ' h ' + Math.round(m % 60) + ' min';
+/* Estado de un producto frío de una guía ya despachada */
+function frioEstado(g, it){
+  const c = consItem(it); if(!esFrio(c)) return null;
+  const rec = tsMsG(g.fecha_recepcion);
+  if(it.guardado_ms){ const m = rec ? (it.guardado_ms - rec) / 60000 : 0; return {k:m > CONS_LIM_MIN[c] ? 'tarde' : 'ok', m:m, c:c}; }
+  if(g.estado === 'despachado' || !rec) return {k:'camino', m:0, c:c};
+  const m = (Date.now() - rec) / 60000;
+  return {k:m > CONS_LIM_MIN[c] ? 'alerta' : 'espera', m:m, c:c};
+}
+function frioResumen(g){
+  let alerta = 0, espera = 0;
+  (g.items || []).forEach(it => { if(!(it.cantidad_despachada > 0)) return; const e = frioEstado(g, it); if(!e) return; if(e.k === 'alerta') alerta++; else if(e.k === 'espera') espera++; });
+  return {alerta:alerta, espera:espera};
+}
 let gdGuard = {id: null, until: 0};
 const gdStock = it => inventarioActual[it.producto_id] ? (inventarioActual[it.producto_id].cantidad_actual || 0) : 0;
 const gdSaca = it => it.origen === "stock" || it.origen === "procesado";
@@ -2374,16 +2420,20 @@ function gdQuitar(id, idx) {
   it.cantidad_despachada = it.cantidad_despachada > 0 ? 0 : (it.cantidad_pedida != null ? it.cantidad_pedida : 1);
   gdGuardar(id, n);
 }
+function gdRev(id, idx) { const n = gdItems(id); if(!n[idx]) return; n[idx].verificado_salida = !n[idx].verificado_salida; gdGuardar(id, n); }
 function gdOrigen(id, idx, o) { const n = gdItems(id); if (!n[idx]) return; n[idx].origen = o; gdGuardar(id, n); }
 async function gdDespachar(id) {
   const g = guiasCache.find(x => x.id === id); if (!g || g.estado !== "por_despachar" || gdBusy) return;
   const items = g.items.filter(it => it.cantidad_despachada > 0);
   if (!items.length) { gdToast("No hay productos con cantidad para despachar"); return; }
   const falt = items.filter(it => gdSaca(it) && it.cantidad_despachada > gdStock(it));
-  if (falt.length && !(gdGuard.id === id && gdGuard.until > Date.now())) { gdGuard = { id: id, until: Date.now() + 7000 }; verGuia(id); return; }
+  const sinRev = items.filter(it => esFrio(consItem(it)) && !it.verificado_salida);
+  if ((falt.length || sinRev.length) && !(gdGuard.id === id && gdGuard.until > Date.now())) { gdGuard = { id: id, until: Date.now() + 7000 }; verGuia(id); return; }
   gdBusy = true; gdGuard = { id: null, until: 0 };
   try {
-    await db.collection("pedidos").doc(id).update({ estado: "despachado", fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(), despachado_por: "Edison Pacurucu", items: items });
+    const ahora = Date.now();
+    items.forEach(it => { it.conservacion = consItem(it); it.hora_salida_ms = ahora; });
+    await db.collection("pedidos").doc(id).update({ estado: "despachado", fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(), salida_ms: ahora, salida_revisada: sinRev.length === 0, despachado_por: "Edison Pacurucu", items: items });
     for (const it of items) { if (gdSaca(it)) await descontarInventarioBodega(it.producto_id, it.producto_nombre, it.cantidad_despachada); }
     gdToast("Despachado a " + (NOMBRES_LOCAL[g.local] || g.local) + ". Ya lo ven en Por recibir.");
   } catch (e) { console.error(e); gdToast("No se pudo despachar. Revisa la conexión."); }
@@ -2400,13 +2450,17 @@ function verGuiaPorDespachar(guia) {
   const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
   const id = guia.id, aviso = gdGuard.id === id && gdGuard.until > Date.now();
   const falt = guia.items.filter(it => it.cantidad_despachada > 0 && gdSaca(it) && it.cantidad_despachada > gdStock(it));
-  const filas = guia.items.map((it, idx) => {
-    const q = it.cantidad_despachada, off = !(q > 0), hay = gdStock(it), falta = !off && gdSaca(it) && q > hay;
+  const sinRev = guia.items.filter(it => it.cantidad_despachada > 0 && esFrio(consItem(it)) && !it.verificado_salida);
+  const orden = guia.items.map((it, i) => i).sort((a, b) => (esFrio(consItem(guia.items[a])) ? 1 : 0) - (esFrio(consItem(guia.items[b])) ? 1 : 0) || a - b);   // lo frío sale al final
+  let pos = 0;
+  const filas = orden.map(idx => { const it = guia.items[idx]; pos++;
+    const q = it.cantidad_despachada, off = !(q > 0), hay = gdStock(it), falta = !off && gdSaca(it) && q > hay, cs = consItem(it), frio = esFrio(cs);
     return `<div class="gd-row ${off ? "off" : ""} ${falta ? "falta" : ""}">
-      <div class="gd-nm"><span class="gd-n">${idx + 1}.</span> ${it.producto_nombre}
+      <div class="gd-nm"><span class="gd-n">${pos}.</span> ${it.producto_nombre}${frio ? ` <span class="frio-tag ${cs}">${CONS_TXT[cs]}</span>` : ""}
         <div class="gd-sub">${gdSaca(it) ? "En bodega hay " + gdFmt(hay) : "Compra directa: no baja del inventario"}${falta ? ` · <b class="gd-falta">faltan ${gdFmt(q - hay)}</b>` : ""}${it.cantidad_pedida != null && it.cantidad_pedida !== q && !off ? " · pidieron " + gdFmt(it.cantidad_pedida) : ""}</div></div>
       <button class="lcb gd-q" onclick="gdCant('${id}', ${idx})">${off ? "Quitado" : gdFmt(q) + " " + (it.unidad_medida || "")}</button>
       <div class="gd-or"><button class="lcb ${gdSaca(it) ? "on" : ""}" onclick="gdOrigen('${id}', ${idx}, 'stock')">De stock</button><button class="lcb ${gdSaca(it) ? "" : "on"}" onclick="gdOrigen('${id}', ${idx}, 'compra_directa')">Compra directa</button></div>
+      ${frio && !off ? `<button class="lcb ${it.verificado_salida ? "on" : ""}" onclick="gdRev('${id}', ${idx})">${it.verificado_salida ? "✓ Revisado" : "☐ Revisar"}</button>` : ""}
       <button class="lcb gd-x ${off ? "" : "er"}" onclick="gdQuitar('${id}', ${idx})">${off ? "Restaurar" : "Quitar"}</button>
     </div>`;
   }).join("");
@@ -2421,10 +2475,10 @@ function verGuiaPorDespachar(guia) {
         </div>
         <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
       </div>
-      <div class="gd-ayuda">Revisa lo que hay, ajusta cantidades y toca <b>Despachar</b>. Al despachar baja de bodega y el local lo ve en <b>Por recibir</b>.</div>
+      <div class="gd-ayuda">Revisa lo que hay, ajusta cantidades y toca <b>Despachar</b>. Al despachar baja de bodega y el local lo ve en <b>Por recibir</b>.${orden.some(i => esFrio(consItem(guia.items[i]))) ? " <b>Lo frío va al final:</b> revísalo (calidad y cantidad) y sácalo del frío justo antes de salir." : ""}</div>
       ${filas}
       <div class="gd-acts">
-        <button class="lcb ${aviso ? "gd-warn" : "okb"} big" onclick="gdDespachar('${id}')">${aviso ? "Falta stock en " + falt.length + " · toca otra vez para despachar igual" : "Despachar (" + n + ")"}</button>
+        <button class="lcb ${aviso ? "gd-warn" : "okb"} big" onclick="gdDespachar('${id}')">${aviso ? (falt.length ? "Falta stock en " + falt.length : "Sin revisar: " + sinRev.length + " producto" + (sinRev.length === 1 ? "" : "s") + " frío" + (sinRev.length === 1 ? "" : "s")) + " · toca otra vez para despachar igual" : "Despachar (" + n + ")"}</button>
         <button class="lcb" onclick="window.print()">Imprimir guía</button>
         <button class="lcb er" onclick="gdEliminar('${id}')">Eliminar guía</button>
       </div>
@@ -4420,7 +4474,7 @@ function items(){
       local:!!cl, sub:cl ? (cl.subcategoria || '') : (est ? est.subcategoria : ((window.PR && window.PR.PROD_ALL || []).some(x => x.id === it.id) ? 'facility' : '')),
       cat:f.categoria || it.cat, sku:f.sku || '', uCompra:f.unidad_compra || it.unidad, uAlmacen:f.unidad_almacen || f.unidad_compra || it.unidad, uConsumo:f.unidad_consumo || '',
       min:f.minimo || 0, max:f.maximo || 0, costo:f.costo_promedio || 0, prov:f.proveedor || '', zona:f.zona || '', estante:f.estante || '', nivel:f.nivel || '',
-      freq:f.conteo || 'mensual', ficha:!!IV.fichas[it.id], stock:stockDe(it.id)
+      freq:f.conteo || 'mensual', cons:(f.conservacion === 'refrigerado' || f.conservacion === 'congelado') ? f.conservacion : 'ambiente', ficha:!!IV.fichas[it.id], stock:stockDe(it.id)
     }));
   });
   return out.sort((a, b) => a.nombre.localeCompare(b.nombre) || a.uCompra.localeCompare(b.uCompra));
@@ -4487,7 +4541,7 @@ function renderExistencias(){
 function abrirFicha(id){
   const it = items().filter(x => x.id === id)[0]; if(!it) return;
   IV.ed = {id:id, nombre:it.nombre, stock:it.stock, d:{categoria:it.cat, sku:it.sku, unidad_compra:it.uCompra, unidad_almacen:it.uAlmacen, unidad_consumo:it.uConsumo, minimo:it.min, maximo:it.max,
-    costo_promedio:it.costo, proveedor:it.prov, zona:it.zona, estante:it.estante, nivel:it.nivel, conteo:it.freq}, cats:[]};
+    costo_promedio:it.costo, proveedor:it.prov, zona:it.zona, estante:it.estante, nivel:it.nivel, conteo:it.freq, conservacion:it.cons}, cats:[]};
   render(); const s = $('#iv-root'); if(s) s.scrollIntoView({block:'start'});
 }
 function renderEdicion(){
@@ -4505,6 +4559,8 @@ function renderEdicion(){
     '<div class="iv-card"><h3>Niveles y costo</h3>' + num('Mínimo (avisa si baja de aquí)', 'minimo', d.unidad_almacen) + num('Máximo', 'maximo', d.unidad_almacen) + num('Costo promedio por ' + esc(d.unidad_almacen || 'unidad') + ' ($)', 'costo_promedio', '') + '</div>' +
     '<div class="iv-card"><h3>Ubicación en bodega</h3><div class="mu">Para que alguien nuevo lo encuentre: Bodega → Estante B → Nivel 2</div>' +
       txt('Zona', 'zona', 'Ej: Bodega, Cuarto frío', 'iv-zonas') + txt('Estante', 'estante', 'Ej: Estante B', 'iv-estantes') + txt('Nivel', 'nivel', 'Ej: Nivel 2') + zonasList() + '</div>' +
+    '<div class="iv-card"><h3>Cómo se conserva</h3><div class="iv-chips">' + [['ambiente', 'Ambiente'], ['refrigerado', '🧊 Refrigerado'], ['congelado', '❄️ Congelado']].map(k => '<button class="ivb ' + ((d.conservacion || 'ambiente') === k[0] ? 'on' : '') + '" data-iv="edcons" data-v="' + k[0] + '">' + k[1] + '</button>').join('') + '</div>' +
+      '<div class="mu">Los refrigerados y congelados salen al final de la guía, se revisan antes de despachar y el local debe guardarlos rápido.</div></div>' +
     '<div class="iv-card"><h3>Con qué frecuencia se cuenta</h3><div class="iv-chips">' + Object.keys(FREQ).map(k => '<button class="ivb ' + (d.conteo === k ? 'on' : '') + '" data-iv="edfreq" data-v="' + k + '">' + FREQ[k] + '</button>').join('') + '</div>' +
       '<div class="mu">' + FREQ_AYUDA[d.conteo] + '. El conteo semanal incluye también los diarios; el mensual incluye todo.</div></div>' +
     '<div class="iv-pie"><button class="ivb okb big" data-iv="ed-save">Guardar ficha</button></div>';
@@ -4522,7 +4578,7 @@ function guardarFicha(){
   const e = IV.ed, d = e.d;
   const doc = {nombre:e.nombre, categoria:d.categoria || '', sku:d.sku || '', unidad_compra:d.unidad_compra || '', unidad_almacen:d.unidad_almacen || '', unidad_consumo:d.unidad_consumo || '',
     minimo:d.minimo || 0, maximo:d.maximo || 0, costo_promedio:d.costo_promedio || 0, proveedor:d.proveedor || '', zona:d.zona || '', estante:d.estante || '', nivel:d.nivel || '',
-    conteo:d.conteo || 'mensual', actualizado:SV(), actualizado_por:(auth.currentUser && auth.currentUser.email) || null};
+    conteo:d.conteo || 'mensual', conservacion:d.conservacion || 'ambiente', actualizado:SV(), actualizado_por:(auth.currentUser && auth.currentUser.email) || null};
   if(doc.maximo && doc.minimo && doc.maximo < doc.minimo){ mostrarAviso('El máximo no puede ser menor que el mínimo.', 'error'); return; }
   db.collection('inventario_fichas').doc(e.id).set(doc).catch(err => { console.error(err); mostrarAviso('No se pudo guardar la ficha.', 'error'); });
   IV.fichas[e.id] = doc; IV.ed = null; render();
@@ -4629,6 +4685,7 @@ document.addEventListener('click', e => {
     case 'ed-save': guardarFicha(); break;
     case 'edcat': leerTextos(); IV.ed.d.categoria = v; render(); break;
     case 'edfreq': leerTextos(); IV.ed.d.conteo = v; render(); break;
+    case 'edcons': leerTextos(); IV.ed.d.conservacion = v; render(); break;
     case 'num': { leerTextos(); const f = t.getAttribute('data-f'); const lbl = f === 'minimo' ? 'Mínimo' : f === 'maximo' ? 'Máximo' : 'Costo promedio';
       teclado(lbl + ': ' + IV.ed.nombre, f === 'costo_promedio' ? '$' : IV.ed.d.unidad_almacen, IV.ed.d[f], n => { IV.ed.d[f] = n || 0; render(); }); break; }
     case 'iniciar': iniciar(v); break;
@@ -4647,6 +4704,7 @@ document.addEventListener('click', e => {
 document.addEventListener('input', e => { if(e.target && e.target.id === 'iv-q'){ IV.q = e.target.value; const pos = e.target.selectionStart; render(); const q = $('#iv-q'); if(q){ q.focus(); try { q.setSelectionRange(pos, pos); } catch(x){} } } });
 
 window.ivItems = items;
+window.ivFicha = id => IV.fichas[id] || null;
 window.ivInit = function(){ if(IV.ready) return; IV.ready = true; escuchar(); escucharCatalogoLocales(); };
 window.ivRefresh = function(){ try { render(); } catch(er){ console.error(er); } };
 window.ivView = function(n){ if(n === 'inventario'){ render(); } };
@@ -5336,6 +5394,16 @@ function detalle(ped){
    Cada producto trae un cuadro para marcar lo que ya se produjo / alistó. */
 const NOM_SUB = {mercado:'Mercado', facility:'Facility', bodega:'Bodega', revisar:'Por revisar'};
 const NOM_CAT = {empacado:'Empacado', procesado:'Procesado', cocina:'Cocina', cafeteria:'Cafetería', bebidas:'Bebidas', panaderia:'Panadería', limpieza:'Limpieza'};
+/* Área que envía el pedido: campo explícito (area / estacion) o, si no viene, la categoría única de sus productos. */
+function areaPedido(ped){
+  const lim = t => String(t == null ? '' : t).trim();
+  let a = lim(ped.area || ped.estacion || ped.area_envio);
+  if(!a){ const its = ped.items || [];
+    const c = its.map(it => lim(it.area || it.estacion)).filter(Boolean);
+    if(c.length && c.every(x => x === c[0])) a = c[0];
+    else { const cats = {}; its.forEach(it => { cats[lim(it.categoria || (prod(it.producto_id) || {}).categoria) || '?'] = 1; }); const ks = Object.keys(cats); if(ks.length === 1 && ['cocina', 'cafeteria', 'bebidas', 'panaderia', 'limpieza'].indexOf(ks[0]) >= 0) a = ks[0]; } }
+  return a ? (NOM_CAT[a] || a) : '';
+}
 function hojaHtml(ped, f){
   f = f || {};
   const grupos = {};
@@ -5347,33 +5415,32 @@ function hojaHtml(ped, f){
     if(f.cats && f.cats.length && f.cats.indexOf(cat) < 0) return;
     ((grupos[sub] = grupos[sub] || {})[cat] = grupos[sub][cat] || []).push({it:it, q:q});
   });
-  let n = 0, filasH = '';
+  let n = 0, filasH = '<tr class="th"><td></td><td></td><td></td><td class="ck">Procesar</td><td class="ck">Pedir</td><td class="ck">Listo</td></tr>';
   ['mercado', 'facility', 'bodega', 'revisar'].forEach(sub => {
     const cats = grupos[sub]; if(!cats) return;
     const total = Object.keys(cats).reduce((a, c) => a + cats[c].length, 0);
-    filasH += '<tr class="sub"><td colspan="4">' + esc(NOM_SUB[sub]) + ' <span>(' + total + ')</span></td></tr>';
+    filasH += '<tr class="sub"><td colspan="6">' + esc(NOM_SUB[sub]) + ' <span>(' + total + ')</span></td></tr>';
     Object.keys(cats).sort().forEach(cat => {
-      if(cat) filasH += '<tr class="cat"><td colspan="4">' + esc(NOM_CAT[cat] || cat) + '</td></tr>';
       cats[cat].forEach(x => {
         n++;
         const nom = x.it.producto_nombre || (prod(x.it.producto_id) || {}).nombre || x.it.producto_id;
-        filasH += '<tr><td class="n">' + n + '</td><td class="ck"><i></i></td><td class="nm">' + esc(nom) + (x.it.nota ? '<small>' + esc(x.it.nota) + '</small>' : '') + '</td><td class="q">' + esc(etq(x.q, x.it.unidad_medida)) + '</td></tr>';
+        filasH += '<tr><td class="n">' + n + '</td><td class="nm">' + esc(nom) + (x.it.nota ? '<small>' + esc(x.it.nota) + '</small>' : '') + '</td><td class="q">' + esc(etq(x.q, x.it.unidad_medida)) + '</td><td class="ck"><i></i></td><td class="ck"><i></i></td><td class="ck"><i></i></td></tr>';
       });
     });
   });
-  if(!n) filasH = '<tr><td colspan="4" style="padding:20px;text-align:center">Este pedido no tiene productos.</td></tr>';
+  if(!n) filasH = '<tr><td colspan="6" style="padding:20px;text-align:center">Este pedido no tiene productos.</td></tr>';
   const fe = ped.fecha_envio && ped.fecha_envio.toDate ? ped.fecha_envio.toDate().toLocaleString('es-EC', {weekday:'long', day:'2-digit', month:'long', hour:'2-digit', minute:'2-digit'}) : '';
   return '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Pedido ' + esc(numTxt(ped)) + '</title><style>' +
     '@page{size:letter portrait;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#000;margin:0;font-size:13px}' +
-    'h1{font-size:22px;margin:0 0 2px}.meta{font-size:12px;color:#333;margin-bottom:6px}.nota{border:1px solid #000;padding:5px 8px;margin:6px 0;font-size:12px}' +
-    'table{width:100%;border-collapse:collapse;margin-top:6px}td{border-bottom:1px solid #bbb;padding:5px 6px;vertical-align:middle}' +
-    'tr{page-break-inside:avoid}tr.sub td{background:none;color:#000;font-weight:800;font-size:15px;letter-spacing:.5px;text-transform:uppercase;padding:10px 4px 3px;border-bottom:2px solid #000}tr.sub span{font-weight:400}' +
+    'h1{font-size:34px;line-height:1.05;margin:0;text-transform:uppercase}.ped{font-size:16px;font-weight:800;text-transform:uppercase;margin:2px 0}.meta{font-size:11px;color:#333;margin-bottom:4px}.nota{border:1px solid #000;padding:3px 7px;margin:4px 0;font-size:11px}' +
+    'table{width:100%;border-collapse:collapse;margin-top:4px}td{border-bottom:1px solid #ccc;padding:1px 5px;vertical-align:middle;line-height:1.15}' +
+    'tr{page-break-inside:avoid}tr.sub td{background:none;color:#000;font-weight:900;font-size:16px;letter-spacing:.5px;text-transform:uppercase;padding:8px 4px 2px;border-bottom:2px solid #000}tr.sub span{font-weight:400}' +
     'tr.cat td{background:none;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#444;padding:6px 4px 2px}' +
-    'td.n{width:28px;text-align:right;color:#444;font-size:12px}td.ck{width:34px;text-align:center}td.ck i{display:inline-block;width:20px;height:20px;border:2px solid #000;border-radius:3px}' +
-    'td.nm{font-size:14px;font-weight:600}td.nm small{display:block;font-weight:400;font-size:11px;color:#444}td.q{width:150px;text-align:right;font-size:14px;font-weight:700;white-space:nowrap}' +
-    '.pie{margin-top:16px;display:flex;gap:24px;font-size:12px}.pie div{flex:1;border-top:1px solid #000;padding-top:3px}' +
+    'td.n{width:26px;text-align:right;color:#444;font-size:11px}td.ck i{display:inline-block;width:13px;height:13px;border:1.5px solid #000;border-radius:2px;vertical-align:middle}' +
+    'td.nm{font-size:13px;font-weight:400}td.nm small{display:block;font-weight:400;font-size:10px;color:#444}td.q{width:140px;text-align:right;font-size:13px;font-weight:400;white-space:nowrap}tr.th td{border-bottom:1px solid #000;font-size:10px;font-weight:700;text-transform:uppercase;padding:0 2px 1px}td.ck{width:54px;text-align:center}' +
+    '.pie{margin-top:12px;display:flex;gap:24px;font-size:12px}.pie div{flex:1;border-top:1px solid #000;padding-top:3px}' +
     '.tot{margin-top:8px;font-size:12px;text-align:right}</style></head><body>' +
-    '<h1>Pedido ' + esc(numTxt(ped)) + ' · ' + esc(LOCNOM[ped.local] || ped.local) + '</h1>' +
+    '<h1>' + esc(LOCNOM[ped.local] || ped.local) + '</h1><div class="ped">Pedido ' + esc(numTxt(ped)) + (areaPedido(ped) ? ' ' + esc(areaPedido(ped)) : '') + '</div>' +
     '<div class="meta">' + esc(fe) + (ped.enviado_por ? ' · enviado por ' + esc(ped.enviado_por) : '') + ' · impreso ' + esc(new Date().toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'})) + '</div>' +
     ((f.subs && f.subs.length) || (f.cats && f.cats.length) ? '<div class="nota"><b>Solo:</b> ' + esc((f.subs || []).map(x => NOM_SUB[x]).concat((f.cats || []).map(c => NOM_CAT[c] || c || 'Sin categoría')).join(' · ')) + '</div>' : '') +
     (ped.nota ? '<div class="nota"><b>Nota:</b> ' + esc(ped.nota) + '</div>' : '') +
@@ -5565,7 +5632,7 @@ window.pdInit = function(){
   }, e => console.error(e));
   render();
 };
-window.PDS = P;
+window.PDS = P; window.pdHoja = hojaHtml;
 if(window.firebase && typeof db !== 'undefined') pdInit();
 })();
 
@@ -5829,10 +5896,9 @@ const fechaCorta = iso => { const p = String(iso || '').split('-'); return p.len
 const hoyMas = d => { const x = new Date(Date.now() + d * 86400000); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
 const etqU = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unidad_medida:u}) : fmt(n) + ' ' + (u || ''));
 
-const B = {tab:LSg('tab', 'recepcion'), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
+const B = {tab:LSg('tab', null), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
   sel:{}, q:'', verOtros:false, filtro:'todos', reqEd:null, cont:null, contaOk:false, undo:null, busy:false, ready:false, shCb:null};
-if(B.tab === 'procesar') B.tab = 'produccion';
-if(['recepcion', 'produccion', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = 'recepcion';
+if(['recepcion', 'produccion', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = null;   // null = lista de módulos
 const compras = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []);
 const porRecibir = () => compras().filter(l => l.compra_realizada && !l.recepcion_id);
 const recDe = l => B.recs.filter(r => r.id === l.recepcion_id)[0] || null;
@@ -5874,13 +5940,13 @@ function barraResp(){
     '<button class="ivb ' + (otro ? 'on' : '') + '" data-bg="resp-otro">Otro</button>' +
     (otro ? '<input id="bg-resp-in" placeholder="Nombre" autocomplete="off" value="' + esc(nombres.indexOf(B.resp) < 0 ? B.resp : '') + '">' : '') + '</div>';
 }
-const PASOS = [['recepcion', '1', '📥', 'Recibir'], ['produccion', '2', '🏭', 'Producción'], ['inventario', '3', '📦', 'Inventario'], ['req', '4', '📝', 'Pedir a Compras'], ['conta', '', '🧾', 'Contabilidad']];
+const PASOS = [['recepcion', '1', '📥', 'Recibir'], ['produccion', '2', '⏳', 'Por procesar'], ['inventario', '3', '📦', 'Inventario'], ['req', '4', '📝', 'Pedir a Compras'], ['conta', '5', '🧾', 'Contabilidad']];
 const HINTS = {
   recepcion: 'Llega la compra o la entrega del proveedor: anota lo recibido y elige si va directo a bodega o a producción.',
-  produccion: 'Procesa aquí lo que llegó para producción. Al registrar, la materia prima se descuenta y lo obtenido entra al inventario.',
+  produccion: 'La materia prima que llegó para producción: da de baja mermas y abre el Registro de producción.',
   inventario: 'Lo que hay disponible. Lo que esté bajo el mínimo, pídelo a Compras.',
-  req: 'Lo que ya pediste a Compras. Cuando lo compren, aparece en Recibir y el ciclo vuelve a empezar.',
-  conta: ''
+  req: 'Lo que ya pediste a Compras. Cuando lo compren, aparece en Recibir.',
+  conta: 'Compras recibidas y comprobantes.'
 };
 const paso = () => B.tab === 'prov' ? 'recepcion' : B.tab === 'conteo' ? 'inventario' : B.tab;
 function segInv(){
@@ -5891,33 +5957,33 @@ function barraPasos(){
   const all = window.ivItems ? window.ivItems() : [];
   const cnt = {recepcion:porRecibir().length, produccion:mpPend().length, inventario:all.filter(it => it.min > 0 && it.stock < it.min).length, req:compras().filter(l => l.requerimiento && !l.recepcion_id).length, conta:0};
   const k = paso();
-  return '<div class="iv-tabs bg-tabs bg-flow">' + PASOS.map((t, i) => (i === 4 ? '<span class="bg-sep"></span>' : (i ? '<span class="bg-sep">›</span>' : '')) +
-    '<button class="ivb ' + (k === t[0] ? 'on' : '') + '" data-bg="tab" data-v="' + t[0] + '"><span>' + t[2] + ' ' + (t[1] ? t[1] + '. ' : '') + t[3] + '</span>' +
-    (cnt[t[0]] ? '<span class="bg-n ' + (t[0] === 'inventario' ? 'warn' : '') + '">' + cnt[t[0]] + '</span>' : '') + '</button>').join('') + '</div>' +
-    (HINTS[k] ? '<div class="bg-hint">' + HINTS[k] + '</div>' : '');
+  if(!k){   // lista numerada de módulos
+    return '<div class="bg-menu">' + PASOS.map(t => '<button class="bg-mi" data-bg="tab" data-v="' + t[0] + '"><span class="bg-mn">' + t[1] + '</span><span class="bg-mt">' + t[2] + ' ' + t[3] + '<small>' + HINTS[t[0]] + '</small></span>' +
+      (cnt[t[0]] ? '<span class="bg-n ' + (t[0] === 'inventario' ? 'warn' : '') + '">' + cnt[t[0]] + '</span>' : '') + '<span class="bg-ch">▾</span></button>').join('') + '</div>';
+  }
+  const t = PASOS.filter(x => x[0] === k)[0];
+  return '<div class="bg-open"><button class="ivb" data-bg="ir-lista">▴ Bodega</button><div class="bg-ot"><span class="bg-mn">' + t[1] + '</span> ' + t[2] + ' ' + t[3] + '</div>' + (cnt[k] ? '<span class="bg-n ' + (k === 'inventario' ? 'warn' : '') + '">' + cnt[k] + '</span>' : '') + '</div>';
 }
 function render(){
   const r = $('#bg-root'); if(!r) return;
   const k = B.tab;
   let h = barraPasos();
-  if(k === 'produccion') h += vProcesar();
-  else {
-    h += barraResp();
-    if(k === 'prov') h += '<div class="iv-subbar"><button class="ivb" data-bg="tab" data-v="recepcion">← Volver a Recibir</button><div class="iv-st">Entrega de proveedor sin compra</div><span></span></div>';
+  if(k){
+    if(k !== 'prov' && k !== 'conteo') h += barraResp();
+    if(k === 'produccion') h += vProcesar();
+    else if(k === 'prov') h += '<div class="iv-subbar"><button class="ivb" data-bg="tab" data-v="recepcion">← Volver a Recibir</button><div class="iv-st">Entrega de proveedor sin compra</div><span></span></div>';
     else if(k === 'conteo') h += segInv();
     else h += k === 'recepcion' ? vRecepcion() : k === 'inventario' ? (B.reqEd ? '' : segInv()) + vInventario() : k === 'req' ? vReq() : vConta();
   }
   r.innerHTML = h;
-  r.classList.toggle('bg-solo', k === 'produccion' || k === 'prov' || k === 'conteo');
+  r.classList.toggle('bg-solo', k === 'prov' || k === 'conteo');
   syncHosts();
 }
-/* Producción (Registro), entrega de proveedor y conteo físico se muestran dentro de Bodega */
+/* Entrega de proveedor y conteo físico se muestran dentro de Bodega */
 function syncHosts(){
   const v = $('#vista-bodega'), act = !!(v && v.classList.contains('activa')), k = B.tab;
   const show = (sel, on) => { const e = $(sel); if(e) e.style.display = on ? '' : 'none'; };
-  show('#bg-host-prod', act && k === 'produccion'); show('#vista-proveedores', act && k === 'prov'); show('#bg-host-conteo', act && k === 'conteo');
-  const wantPr = act && k === 'produccion';
-  if(wantPr !== !!B.prOn){ B.prOn = wantPr; if(typeof prView === 'function') prView(wantPr ? 'produccion' : 'bodega'); }
+  show('#vista-proveedores', act && k === 'prov'); show('#bg-host-conteo', act && k === 'conteo');
   const wantCo = act && k === 'conteo';
   if(wantCo && (!B.coOn || B.coTab !== B.ivTab) && window.ivMostrar) window.ivMostrar(B.ivTab || 'exist');
   B.coOn = wantCo; B.coTab = B.ivTab;
@@ -6046,8 +6112,10 @@ async function deshacerRecepcion(recId, compraId, copia){
 /* ============ 2. POR PROCESAR ============ */
 function vProcesar(){
   const mps = mpPend();
-  return '<div class="bg-mpstrip"><span class="bg-mpl">⚙ Por procesar:</span>' + (mps.length ? mps.map(m => '<div class="ivb bg-mpc"><b>' + esc(m.producto_nombre || m.id) + '</b> ' + fmt(m.cantidad_actual || 0) + ' ' + esc(m.unidad_medida || '') +
-    ' <button class="ivb" data-bg="baja" data-id="' + esc(m.id) + '"><span>➖ Baja</span></button></div>').join('') : '<span class="mu">nada pendiente 🎉</span>') + '</div>';
+  let h = '<div class="bg-acts"><button class="ivb on" data-bg="ir-registro">🏭 Abrir Registro de producción</button></div>';
+  if(!mps.length) return h + '<div class="iv-vacio">No hay materia prima por procesar 🎉</div>';
+  return h + '<div class="bg-lista">' + mps.map((m, i) => '<div class="bg-r"><span class="bg-rn">' + (i + 1) + '</span><div class="bg-rm"><div class="nm">' + esc(m.producto_nombre || m.id) + '</div><div class="mu">Por procesar</div></div>' +
+    '<div class="bg-rs"><b>' + fmt(m.cantidad_actual || 0) + '</b><small>' + esc(m.unidad_medida || '') + '</small></div><div class="bg-ra"><button class="ivb" data-bg="baja" data-id="' + esc(m.id) + '"><span>➖ Baja</span></button></div></div>').join('') + '</div>';
 }
 function bajasRecientes(){
   if(!B.bajas.length) return '';
@@ -6270,7 +6338,8 @@ document.addEventListener('click', e => {
     case 'dest': setDraft(id, 'dest', v); render(); break;
     case 'confirmar': confirmarRecepcion(); break;
     case 'ir-proveedores': B.tab = 'prov'; B.abierta = null; render(); window.scrollTo(0, 0); break;
-    case 'ir-registro': B.tab = 'produccion'; LSs('tab', 'produccion'); render(); window.scrollTo(0, 0); break;
+    case 'ir-registro': cambiarVista('produccion'); break;
+    case 'ir-lista': B.tab = null; B.abierta = null; B.cont = null; B.reqEd = null; LSs('tab', null); render(); window.scrollTo(0, 0); break;
     case 'seg': if(v === 'disp'){ B.tab = 'inventario'; } else { B.tab = 'conteo'; B.ivTab = v; B.reqEd = null; } render(); window.scrollTo(0, 0); break;
     case 'ir-conteo': B.tab = 'conteo'; B.ivTab = 'conteos'; B.reqEd = null; render(); window.scrollTo(0, 0); break;
     case 'baja': bajaBodega(id); break;
@@ -6312,7 +6381,7 @@ function escuchar(){
   db.collection('bajas_bodega').orderBy('fecha', 'desc').limit(20).onSnapshot(snap => { B.bajas = []; snap.forEach(d => B.bajas.push(Object.assign({id:d.id}, d.data({serverTimestamps:'estimate'})))); refrescar(); }, e => console.error(e));
 }
 window.bgInit = function(){ if(B.ready) return; B.ready = true; escuchar(); };
-window.bgView = function(n){ B.prOn = false; B.coOn = false; B.coTab = null; if(n === 'bodega'){ bgInit(); render(); } };
+window.bgView = function(n){ B.coOn = false; B.coTab = null; if(n === 'bodega'){ bgInit(); render(); } };
 window.bgIr = function(t){ B.tab = t; B.abierta = null; B.cont = null; B.reqEd = null; if(t !== 'prov' && t !== 'conteo') LSs('tab', t); render(); window.scrollTo(0, 0); };
 window.bgRefresh = refrescar;
 window.BGS = B;
