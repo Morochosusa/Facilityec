@@ -5415,7 +5415,7 @@ function hojaHtml(ped, f){
     if(f.cats && f.cats.length && f.cats.indexOf(cat) < 0) return;
     ((grupos[sub] = grupos[sub] || {})[cat] = grupos[sub][cat] || []).push({it:it, q:q});
   });
-  let n = 0, filasH = '<tr class="th"><td></td><td></td><td></td><td class="ck">Procesar</td><td class="ck">Pedir</td><td class="ck">Listo</td></tr>';
+  let n = 0, filasH = '<tr class="th"><td></td><td class="ck">Listo</td><td></td><td></td><td class="ck">Procesar</td><td class="ck">Pedir</td></tr>';
   ['mercado', 'facility', 'bodega', 'revisar'].forEach(sub => {
     const cats = grupos[sub]; if(!cats) return;
     const total = Object.keys(cats).reduce((a, c) => a + cats[c].length, 0);
@@ -5424,7 +5424,7 @@ function hojaHtml(ped, f){
       cats[cat].forEach(x => {
         n++;
         const nom = x.it.producto_nombre || (prod(x.it.producto_id) || {}).nombre || x.it.producto_id;
-        filasH += '<tr><td class="n">' + n + '</td><td class="nm">' + esc(nom) + (x.it.nota ? '<small>' + esc(x.it.nota) + '</small>' : '') + '</td><td class="q">' + esc(etq(x.q, x.it.unidad_medida)) + '</td><td class="ck"><i></i></td><td class="ck"><i></i></td><td class="ck"><i></i></td></tr>';
+        filasH += '<tr><td class="n">' + n + '</td><td class="ck"><i></i></td><td class="nm">' + esc(nom) + (x.it.nota ? '<small>' + esc(x.it.nota) + '</small>' : '') + '</td><td class="q">' + esc(etq(x.q, x.it.unidad_medida)) + '</td><td class="ck"><i></i></td><td class="ck"><i></i></td></tr>';
       });
     });
   });
@@ -5433,11 +5433,11 @@ function hojaHtml(ped, f){
   return '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Pedido ' + esc(numTxt(ped)) + '</title><style>' +
     '@page{size:letter portrait;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#000;margin:0;font-size:13px}' +
     'h1{font-size:34px;line-height:1.05;margin:0;text-transform:uppercase}.ped{font-size:16px;font-weight:800;text-transform:uppercase;margin:2px 0}.meta{font-size:11px;color:#333;margin-bottom:4px}.nota{border:1px solid #000;padding:3px 7px;margin:4px 0;font-size:11px}' +
-    'table{width:100%;border-collapse:collapse;margin-top:4px}td{border-bottom:1px solid #ccc;padding:1px 5px;vertical-align:middle;line-height:1.15}' +
+    'table{width:100%;border-collapse:collapse;margin-top:4px}td{border-bottom:1px solid #ccc;padding:5px 6px;vertical-align:middle;line-height:1.3}' +
     'tr{page-break-inside:avoid}tr.sub td{background:none;color:#000;font-weight:900;font-size:16px;letter-spacing:.5px;text-transform:uppercase;padding:8px 4px 2px;border-bottom:2px solid #000}tr.sub span{font-weight:400}' +
     'tr.cat td{background:none;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#444;padding:6px 4px 2px}' +
-    'td.n{width:26px;text-align:right;color:#444;font-size:11px}td.ck i{display:inline-block;width:13px;height:13px;border:1.5px solid #000;border-radius:2px;vertical-align:middle}' +
-    'td.nm{font-size:13px;font-weight:400}td.nm small{display:block;font-weight:400;font-size:10px;color:#444}td.q{width:140px;text-align:right;font-size:13px;font-weight:400;white-space:nowrap}tr.th td{border-bottom:1px solid #000;font-size:10px;font-weight:700;text-transform:uppercase;padding:0 2px 1px}td.ck{width:54px;text-align:center}' +
+    'td.n{width:26px;text-align:right;color:#444;font-size:11px}td.ck i{display:inline-block;width:16px;height:16px;border:1.5px solid #000;border-radius:2px;vertical-align:middle}' +
+    'td.nm{font-size:14px;font-weight:400;padding-left:10px}td.nm small{display:block;font-weight:400;font-size:10px;color:#444}td.q{width:140px;text-align:right;font-size:14px;font-weight:400;white-space:nowrap}tr.th td{border-bottom:1px solid #000;font-size:10px;font-weight:700;text-transform:uppercase;padding:0 2px 1px}td.ck{width:54px;text-align:center}' +
     '.pie{margin-top:12px;display:flex;gap:24px;font-size:12px}.pie div{flex:1;border-top:1px solid #000;padding-top:3px}' +
     '.tot{margin-top:8px;font-size:12px;text-align:right}</style></head><body>' +
     '<h1>' + esc(LOCNOM[ped.local] || ped.local) + '</h1><div class="ped">Pedido ' + esc(numTxt(ped)) + (areaPedido(ped) ? ' ' + esc(areaPedido(ped)) : '') + '</div>' +
