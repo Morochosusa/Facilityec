@@ -551,8 +551,9 @@
   #pr-root .card.drag-src{opacity:.35}
   #pr-root .card.drop-b{box-shadow:0 -5px 0 0 var(--ac)}
   #pr-root .card.drop-a{box-shadow:0 5px 0 0 var(--ac)}
-  #pr-root .drag-zone{position:absolute;left:6px;right:6px;top:0;z-index:5;border:3px dashed var(--ac);border-radius:16px;background:var(--acbg);color:var(--ac);display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;padding:6px}
-  #pr-root .drag-zone.over{background:var(--ac);color:var(--acfg);border-style:solid}
+  #pr-root .drag-zone{position:absolute;left:6px;right:6px;top:0;z-index:5;display:flex;gap:6px}
+  #pr-root .dz{flex:1;border:3px dashed var(--ac);border-radius:16px;background:var(--acbg);color:var(--ac);display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;padding:6px}
+  #pr-root .dz.over{background:var(--ac);color:var(--acfg);border-style:solid}
   .drag-ghost{box-shadow:0 8px 24px rgba(0,0,0,.3);transform:scale(1.02);display:flex;background:#fff;border:3px solid #4285f4;border-radius:12px;padding:6px 12px;align-items:center;gap:12px;font:inherit;font-size:19px;font-weight:700;box-sizing:border-box}
   #pr-root #pr-left{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0}
   #pr-root #pr-left #pr-grid{flex:1;min-height:0}
@@ -3476,14 +3477,14 @@ const PROD_CAT = [
   ['EMPACADO','Queso cocina bloque',3,'unidades','6 kg','prod_queso_cocina_bloque_6_kg',''],
   ['EMPACADO','Queso cocina molido',1,'unidades','2 kg','prod_queso_cocina_molido_2_kg',''],
   ['EMPACADO','Queso tortilla molido',1,'unidades','2 kg','prod_queso_tortilla_molido_2_kg',''],
-  ['COCINA','Chicharron cerdo',50,'unidades','45 g','cocina_chicharron_cerdo','1'],
-  ['COCINA','Chuleta mariposa',30,'unidades','200 g','cocina_chuleta_mariposa','1'],
-  ['COCINA','Filete lomo cerdo',40,'unidades','120 g','cocina_filete_lomo_cerdo','1'],
-  ['COCINA','Filete pechuga pollo',180,'unidades','120 g','cocina_filete_pechuga_pollo','1'],
-  ['COCINA','Muslo de pollo picado',10,'unidades','180 g','cocina_muslo_pollo_picado','1'],
+  ['PROTEINAS','Chicharron cerdo',50,'unidades','45 g','cocina_chicharron_cerdo','1'],
+  ['PROTEINAS','Chuleta mariposa',30,'unidades','200 g','cocina_chuleta_mariposa','1'],
+  ['PROTEINAS','Filete lomo cerdo',40,'unidades','120 g','cocina_filete_lomo_cerdo','1'],
+  ['PROTEINAS','Filete pechuga pollo',180,'unidades','120 g','cocina_filete_pechuga_pollo','1'],
+  ['PROTEINAS','Muslo de pollo picado',10,'unidades','180 g','cocina_muslo_pollo_picado','1'],
   ['COCINA','Frijol cocido',1,'unidades','2 kg','cocina_frijol_cocido','1'],
-  ['COCINA','Hueso de pollo para fondo',1,'unidades','5 kg','cocina_hueso_pollo_fondo','1'],
-  ['COCINA','Presas de pollo',150,'unidades','10 presas','cocina_presas_pollo','1'],
+  ['PROTEINAS','Hueso de pollo para fondo',1,'unidades','5 kg','cocina_hueso_pollo_fondo','1'],
+  ['PROTEINAS','Presas de pollo',150,'unidades','10 presas','cocina_presas_pollo','1'],
   ['COCINA','Masa de tigrillo',15,'unidades','2 kg','cocina_masa_tigrillo','1'],
   ['COCINA','Morocho cocido',1,'unidades','450 g','cocina_morocho_cocido','1'],
   ['COCINA','Arepa masa',1,'órdenes','media orden','pan_arepa_masa','1'],
@@ -3507,10 +3508,10 @@ const PROD_ALL = PROD_CAT.map(r => ({id:r[5], nombre:r[1], unidad:r[4], uni:r[3]
 const DEFAULT_LIST = PROD_ALL.map(p => p.id);
 /* Estaciones de trabajo (no personas): cada una ve solo los productos de sus secciones. Para agregar una, suma una línea. */
 const ESTACIONES = [
-  {nombre:'Cuarto frío', secciones:['EMPACADO', 'PROCESADO']},
-  {nombre:'Cocina', secciones:['COCINA']}
+  {nombre:'Cuarto frío', secciones:['PROTEINAS', 'EMPACADO', 'PROCESADO'], def:'PROCESADO'},
+  {nombre:'Cocina', secciones:['COCINA'], def:'COCINA'}
 ];
-const SECCION_NOMBRE = {EMPACADO:'Empacado', COCINA:'Cocina', PROCESADO:'Procesado'};
+const SECCION_NOMBRE = {PROTEINAS:'Proteínas', EMPACADO:'Empacado', PROCESADO:'Procesado', COCINA:'Cocina'};
 const estacionDe = nombre => ESTACIONES.filter(e => e.nombre === nombre)[0] || ESTACIONES[0];
 const prodDe = pid => PROD_ALL.filter(p => p.id === pid)[0] || null;
 const enEstacion = (pid, est) => { const p = prodDe(pid); return !!p && estacionDe(est).secciones.indexOf(p.seccion) >= 0; };
@@ -3708,13 +3709,13 @@ function render(){
 function go(sc){ hideSnack(); S.screen = sc; if(sc !== 'ficha') S.fd = null; closeModal(); render(); renderTop(); }
 const sinAcP = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 /* soloEstacion=true: lo de la estación (fichas). Por defecto respeta la búsqueda y "Todas las estaciones". */
-const ordenKey = nombre => nombre === 'Cocina' ? 'cocina' : 'cuarto_frio';
+const ordenKey = nombre => sinAcP(nombre).replace(/[^a-z0-9]+/g, '_');
 function productosVisibles(soloEstacion){
   const e = estacionDe(S.op), q = soloEstacion ? '' : sinAcP(S.q);
   const lista = PROD_ALL.filter(p => S.listaIds.includes(p.id) && e.secciones.indexOf(p.seccion) >= 0 && (!q || sinAcP(p.nombre + ' ' + p.unidad).indexOf(q) >= 0));
-  const ord = S.orden[ordenKey(e.nombre)];
-  if(ord && ord.length){ const ix = id => { const k = ord.indexOf(id); return k >= 0 ? k : 1e6; }; return lista.map((p, i) => [p, i]).sort((a, b) => (ix(a[0].id) - ix(b[0].id)) || (a[1] - b[1])).map(x => x[0]); }
-  return lista;
+  const ord = S.orden[ordenKey(e.nombre)] || [];
+  const ix = id => { const k = ord.indexOf(id); return k >= 0 ? k : 1e6; };
+  return lista.map((p, i) => [p, i]).sort((a, b) => (e.secciones.indexOf(a[0].seccion) - e.secciones.indexOf(b[0].seccion)) || (ix(a[0].id) - ix(b[0].id)) || (a[1] - b[1])).map(x => x[0]);
 }
 function renderBar(){
   const b = $('#pr-bar'); if(!b) return;
@@ -3724,19 +3725,19 @@ function renderBar(){
       '<div class="cnt" id="pr-cnt"></div>';
   }
   const qx = b.querySelector('.qx'); if(qx) qx.style.display = S.q ? '' : 'none';
-  const c = $('#pr-cnt'); if(c) c.textContent = n + ' producto' + (n === 1 ? '' : 's') + ' · mantén presionado y arrastra: sube/baja para ordenar, o a la zona azul para pasar a ' + otraEstacion().nombre;
+  const c = $('#pr-cnt'); if(c) c.textContent = n + ' producto' + (n === 1 ? '' : 's') + ' · mantén presionado y arrastra para ordenar o cambiar de lista';
 }
 function renderGrid(){
   const g = $('#pr-grid'); if(!g) return;
   renderBar();
   const prods = productosVisibles();
   if(!prods.length){ g.innerHTML = '<div class="hint"><div class="big">' + (S.q ? 'No hay productos con “' + esc(S.q) + '”' : 'La lista está vacía') + '</div><div class="mu">' + (S.q ? 'Prueba otra palabra' : 'Menú · Fichas de producto') + '</div></div>'; return; }
-  const ord0 = S.orden[ordenKey(S.op)], propio = !!(ord0 && ord0.length), multi = estacionDe(S.op).secciones.length > 1 && !propio;
+  const multi = estacionDe(S.op).secciones.length > 1;
   let secPrev = '', n = 0;
   g.innerHTML = prods.map(p => {
     const f = fichaDe(p.id); n++;
     const hd = (multi && p.seccion !== secPrev) ? '<div class="gsec">' + esc(SECCION_NOMBRE[p.seccion]) + '</div>' : ''; secPrev = p.seccion;
-    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="num">' + n + '</span><div class="nm">' + presHtml(f.id, f.nombre) + '</div>' + (propio && estacionDe(S.op).secciones.length > 1 ? '<span class="un">' + esc(SECCION_NOMBRE[p.seccion]) + '</span>' : '') + '<span class="tick">' + ic('check', 20) + '</span></button>';
+    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="num">' + n + '</span><div class="nm">' + presHtml(f.id, f.nombre) + '</div>' + '' + '<span class="tick">' + ic('check', 20) + '</span></button>';
   }).join('');
 }
 
@@ -4129,8 +4130,8 @@ function renderFichaEdit(){
   const dm = m => p.vida[m] > 0 ? p.vida[m] + ' días' : 'No aplica';
   return '<div class="subbar"><button class="btn" data-act="ficha-cancel">Cancelar</button><div class="subt">' + esc(p.nombre) + '</div><button class="btn okb" data-act="ficha-save">Guardar</button></div><div class="screen">' +
     '<div class="sec"><h3>Foto</h3><div class="fotorow">' + phHTML(p, 'big') + '<div class="col"><label class="btn pri" for="pr-ficha-foto">' + ic('camera', 24) + ' Tomar o elegir foto</label><input id="pr-ficha-foto" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px">' + (foto ? '<button class="btn" data-act="foto-del">Quitar foto</button>' : '') + '</div></div></div>' +
-    '<div class="sec"><h3>Estación</h3><div class="mu small">Para pasar este producto de Cocina a Cuarto frío (o al revés), elige dónde va. Aparecerá en la lista de esa estación.</div><div class="modos">' +
-      [['COCINA', 'Cocina'], ['EMPACADO', 'Cuarto frío · Empacado'], ['PROCESADO', 'Cuarto frío · Procesado']].map(x => '<button class="btn ' + (p.seccion === x[0] ? 'on' : '') + '" data-act="fsec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div></div>' +
+    '<div class="sec"><h3>Estación</h3><div class="mu small">Para pasar este producto a otra lista, elige dónde va. Aparecerá en la lista de esa estación.</div><div class="modos">' +
+      [].concat.apply([], ESTACIONES.map(e => e.secciones.map(sc => [sc, e.secciones.length > 1 ? e.nombre + ' · ' + SECCION_NOMBRE[sc] : e.nombre]))).map(x => '<button class="btn ' + (p.seccion === x[0] ? 'on' : '') + '" data-act="fsec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="sec"><h3>Cantidades (' + esc(p.unidad) + ')</h3>' +
       row('Batch estándar', 'batch', fmt(p.batch), p.unidad) +
       row('Avisar si pasa de', 'max', p.max > 0 ? fmt(p.max) : '3 batches', p.max > 0 ? p.unidad : '') +
@@ -4171,11 +4172,11 @@ function guardarFicha(){
 }
 
 /* ---------- Pasar un producto a la otra estación (mantener y arrastrar) ---------- */
-const otraEstacion = () => ESTACIONES.filter(e => e.nombre !== S.op)[0];
+const otrasEstaciones = () => ESTACIONES.filter(e => e.nombre !== S.op);
 function moverProducto(pid, destNombre, esDeshacer){
   const p = prodDe(pid); if(!p) return;
   const dest = estacionDe(destNombre), prev = p.seccion;
-  const nueva = dest.secciones.indexOf(prev) >= 0 ? prev : dest.secciones[0];
+  const nueva = dest.secciones.indexOf(prev) >= 0 ? prev : (dest.def || dest.secciones[0]);
   if(nueva === prev) return;
   p.seccion = nueva;
   db.collection('fichas_produccion').doc(pid).set({producto_id:pid, seccion:nueva}, {merge:true}).catch(e => { console.error(e); toast('No se pudo guardar el cambio'); });
@@ -4200,6 +4201,12 @@ function guardarOrden(ids){
 function reordenar(pid, tid, despues){
   if(S.q){ toast('Borra la búsqueda para cambiar el orden'); return; }
   if(pid === tid) return;
+  const pp = prodDe(pid), tp = prodDe(tid);
+  if(pp && tp && pp.seccion !== tp.seccion){
+    pp.seccion = tp.seccion; S.fichas[pid] = Object.assign({}, S.fichas[pid] || {}, {seccion:tp.seccion});
+    db.collection('fichas_produccion').doc(pid).set({producto_id:pid, seccion:tp.seccion}, {merge:true}).catch(e => console.error(e));
+    toast(pp.nombre + ' ahora está en ' + SECCION_NOMBRE[tp.seccion]);
+  }
   const ids = productosVisibles(true).map(p => p.id).filter(id => id !== pid);
   const i = ids.indexOf(tid); if(i < 0) return;
   ids.splice(despues ? i + 1 : i, 0, pid);
@@ -4209,10 +4216,10 @@ const DRAG = {tgt:null, after:false, sc:0, iv:null, t:null, on:false, pid:null, 
 function dragEnd(cancel){
   clearTimeout(DRAG.t);
   if(DRAG.on){
-    const z = DRAG.zone, over = z && z.classList.contains('over');
+    const z = DRAG.zone, ov = z && z.querySelector('.dz.over'), over = !!ov, destN = ov ? ov.dataset.dest : null;
     if(DRAG.ghost) DRAG.ghost.remove(); if(z) z.remove();
     const tg = DRAG.tgt, af = DRAG.after; dragMarcar(null);
-    if(!cancel && over) moverProducto(DRAG.pid, otraEstacion().nombre);
+    if(!cancel && over) moverProducto(DRAG.pid, destN);
     else if(!cancel && tg) reordenar(DRAG.pid, tg.dataset.pid, af);
     DRAG.swallow = Date.now() + 500;
   }
@@ -4231,7 +4238,7 @@ function dragStart(card, x, y){
   g.className += ' drag-ghost'; g.style.cssText = 'position:fixed;z-index:99999;pointer-events:none;width:' + r.width + 'px;left:' + (x - r.width / 2) + 'px;top:' + (y - r.height / 2) + 'px;opacity:.9';
   document.body.appendChild(g); DRAG.ghost = g;
   const z = document.createElement('div'); z.className = 'drag-zone'; z.id = 'pr-dz';
-  z.innerHTML = '<b>⇢ Soltar aquí para pasar a ' + esc(otraEstacion().nombre) + '</b>';
+  z.innerHTML = otrasEstaciones().map(e => '<div class="dz" data-dest="' + esc(e.nombre) + '"><b>⇢ ' + esc(e.nombre) + '</b></div>').join('');
   const bar = $('#pr-bar'); z.style.height = Math.max(64, (bar ? bar.offsetHeight : 0) + 8) + 'px';
   left.appendChild(z); DRAG.zone = z;
   card.classList.add('drag-src');
@@ -4243,8 +4250,8 @@ function dragMove(x, y){
   const g = DRAG.ghost, r = g.getBoundingClientRect();
   g.style.left = (x - r.width / 2) + 'px'; g.style.top = (y - r.height / 2) + 'px';
   const zr = DRAG.zone.getBoundingClientRect();
-  const over = x >= zr.left && x <= zr.right && y >= zr.top && y <= zr.bottom;
-  DRAG.zone.classList.toggle('over', over);
+  let over = false;
+  DRAG.zone.querySelectorAll('.dz').forEach(d => { const q = d.getBoundingClientRect(), on = x >= q.left && x <= q.right && y >= q.top && y <= q.bottom; d.classList.toggle('over', on); if(on) over = true; });
   const gr = $('#pr-grid'), gb = gr ? gr.getBoundingClientRect() : null;
   DRAG.sc = (gb && !over && y > gb.top && y < gb.top + 70 && y > zr.bottom) ? -14 : (gb && y > gb.bottom - 70 && y <= gb.bottom ? 14 : 0);
   if(over){ dragMarcar(null); return; }
@@ -4277,7 +4284,7 @@ function renderNuevo(){
     '<div class="lbl">Nombre del producto</div><input type="text" id="pr-np-nombre" value="' + esc(n.nombre) + '" placeholder="Ej. Salsa de mango" autocomplete="off">' +
     '<div class="lbl">Presentación (opcional)</div><input type="text" id="pr-np-pres" value="' + esc(n.pres) + '" placeholder="Ej. Funda 250 g" autocomplete="off">' +
     '<div class="lbl">Se cuenta en</div><div class="chips">' + UNIS_NUEVO.map(u => '<button class="btn ' + (n.uni === u ? 'on' : '') + '" data-act="np-uni" data-v="' + u + '">' + u + '</button>').join('') + '</div>' +
-    '<div class="lbl">Sección</div><div class="chips">' + Object.keys(SECCION_NOMBRE).map(k => '<button class="btn ' + (n.seccion === k ? 'on' : '') + '" data-act="np-sec" data-v="' + k + '">' + SECCION_NOMBRE[k] + '</button>').join('') + '</div>' +
+    '<div class="lbl">Sección</div><div class="chips">' + [].concat.apply([], ESTACIONES.map(e => e.secciones.map(sc => [sc, e.secciones.length > 1 ? e.nombre + ' · ' + SECCION_NOMBRE[sc] : e.nombre]))).map(x => '<button class="btn ' + (n.seccion === x[0] ? 'on' : '') + '" data-act="np-sec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div>' +
     '<div class="lbl">Batch estándar</div><div><button class="btn val" data-act="np-batch">' + fmt(n.batch || 0) + ' ' + esc(n.uni) + '</button></div>' +
     '<div class="mu small">Después de guardar se abre la ficha para poner la vida útil (sin eso no sale etiqueta).</div></div></div>';
 }
@@ -4656,7 +4663,7 @@ const r2 = n => Math.round(n * 100) / 100;
 const SV = () => firebase.firestore.FieldValue.serverTimestamp();
 const LSget = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
 const LSset = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
-const SEC = {EMPACADO:'Empacado', COCINA:'Cocina', PROCESADO:'Procesado'};
+const SEC = {EMPACADO:'Empacado', COCINA:'Cocina', PROCESADO:'Procesado', PROTEINAS:'Proteínas'};
 const FREQ = {diario:'Diario', semanal:'Semanal', mensual:'Mensual'};
 const FREQ_AYUDA = {diario:'Productos críticos o caros', semanal:'Categorías importantes', mensual:'Inventario completo'};
 
