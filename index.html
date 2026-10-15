@@ -548,6 +548,31 @@
   #pr-root #pr-grid{overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*150px),1fr));gap:12px;align-content:start;grid-auto-rows:max-content;-webkit-overflow-scrolling:touch}
   #pr-root #pr-panel{overflow:auto;background:var(--s1);border-top:1px solid var(--bd);padding:12px;display:flex;flex-direction:column;gap:10px;max-height:var(--pr-ph,60%);-webkit-overflow-scrolling:touch}
   #pr-root.pr-land #pr-panel{border-top:0;border-left:1px solid var(--bd);max-height:none}
+  #pr-root .card.drag-src{opacity:.35}
+  #pr-root .card.drop-b{box-shadow:0 -5px 0 0 var(--ac)}
+  #pr-root .card.drop-a{box-shadow:0 5px 0 0 var(--ac)}
+  #pr-root .drag-zone{position:absolute;left:6px;right:6px;top:0;z-index:5;border:3px dashed var(--ac);border-radius:16px;background:var(--acbg);color:var(--ac);display:flex;align-items:center;justify-content:center;text-align:center;font-size:18px;padding:6px}
+  #pr-root .drag-zone.over{background:var(--ac);color:var(--acfg);border-style:solid}
+  .drag-ghost{box-shadow:0 8px 24px rgba(0,0,0,.3);transform:scale(1.02);display:flex;background:#fff;border:3px solid #4285f4;border-radius:12px;padding:6px 12px;align-items:center;gap:12px;font:inherit;font-size:19px;font-weight:700;box-sizing:border-box}
+  #pr-root #pr-left{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0}
+  #pr-root #pr-left #pr-grid{flex:1;min-height:0}
+  #pr-root #pr-bar{display:flex;align-items:center;gap:8px;padding:8px 12px 0;flex-wrap:wrap;flex-shrink:0}
+  #pr-root #pr-bar .btn{min-height:calc(var(--u)*50px)}
+  #pr-root .qwrap{position:relative;flex:1 1 220px;min-width:180px}
+  #pr-root #pr-q{width:100%;min-height:calc(var(--u)*50px);font:inherit;font-size:18px;padding:0 48px 0 14px;border:2px solid var(--bd);border-radius:14px;background:var(--s1);color:#1f1f1d;-webkit-user-select:text;user-select:text}
+  #pr-root .qx{position:absolute;right:0;top:0;min-width:48px!important;border:0!important;background:transparent!important}
+  #pr-root #pr-bar .cnt{color:var(--mu);font-size:14px;font-weight:700;margin-left:auto}
+  #pr-root .num{position:absolute;top:8px;left:8px;z-index:1;min-width:30px;height:30px;padding:0 6px;border-radius:15px;background:#1f1f1d;color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  #pr-root .npf{display:flex;flex-direction:column;gap:8px}
+  #pr-root .npf input[type=text]{width:100%;min-height:56px;font:inherit;font-size:20px;padding:0 14px;border:2px solid var(--bd);border-radius:14px;background:var(--s1);-webkit-user-select:text;user-select:text}
+  #pr-root .npf .lbl{font-weight:700;font-size:16px;color:var(--mu)}
+  #pr-root .npf .chips{display:flex;gap:8px;flex-wrap:wrap}
+  #pr-root #pr-left .card{flex-direction:row;align-items:center;gap:12px;min-height:calc(var(--u)*58px);padding:6px 12px;border-width:2px;border-radius:12px}
+  #pr-root #pr-left .num{position:static;flex-shrink:0}
+  #pr-root #pr-left .nm{flex:1;font-size:19px}
+  #pr-root #pr-left .tick{position:static;flex-shrink:0;width:30px;height:30px}
+  #pr-root #pr-left #pr-grid{grid-template-columns:1fr;gap:6px;padding:8px 12px 12px}
+  #pr-root #pr-left .gsec{margin-top:4px}
   #pr-root .card{position:relative;display:flex;flex-direction:column;text-align:left;padding:8px 8px 13px;gap:6px;background:var(--s1);border:3px solid var(--bd);border-radius:16px;font:inherit;color:inherit;cursor:pointer;min-height:calc(var(--u)*150px);margin:0}
   #pr-root .card:active{transform:scale(.98)}
   #pr-root .card.sel{border-color:var(--ac);background:var(--acbg)}
@@ -3541,7 +3566,7 @@ const S = {
   screen:'main', op:opInicial(LS.get('op', '')), sound:LS.get('sound', true), size:LS.get('size', 'n'), zones:false, prueba:LS.get('prueba', false), forzarPrueba:false,
   fichas:{}, listaIds:DEFAULT_LIST.slice(), mp:[], regsPor:{producciones_facility:[], pruebas_produccion:[]}, cola:[], hb:{n:null, lastSeen:0, imp:'', msg:''},
   online:navigator.onLine, pendientes:0,
-  pid:null, qty:0, mode:'preload', buf:'', modo:'ref', etqOv:null, guard:null, kbd:false, undo:null, ultima:LS.get('ultima', {}),
+  q:'', orden:{}, np:null, pid:null, qty:0, mode:'preload', buf:'', modo:'ref', etqOv:null, guard:null, kbd:false, undo:null, ultima:LS.get('ultima', {}),
   bajas:[], fd:null, filtroFalta:false, lt:new Set(), audit:null, T:null, tcond:'Con guantes', top:opInicial(LS.get('op', '')), lastRun:null, pruebas:LS.get('pruebas_ux', []), ready:false
 };
 const modoPrueba = () => S.prueba || S.forzarPrueba;
@@ -3552,14 +3577,20 @@ const cur = () => S.pid ? fichaDe(S.pid) : null;
 /* ---------- escuchas de Firestore ---------- */
 function escuchar(){
   db.collection('fichas_produccion').onSnapshot(snap => {
-    S.fichas = {}; snap.forEach(d => { S.fichas[d.id] = d.data(); });
+    S.fichas = {}; snap.forEach(d => { const x = d.data(); S.fichas[d.id] = x; const pp = prodDe(d.id); if(pp && x && SECCION_NOMBRE[x.seccion]) pp.seccion = x.seccion; });
+    if(S.pid && !enEstacion(S.pid, S.op)) S.pid = null;
     if(S.screen === 'main') renderGrid(); else if(S.screen === 'fichas') render();
     if(S.pid) renderPanel();
   }, e => console.error(e));
+  db.collection('productos_produccion').onSnapshot(snap => {
+    snap.forEach(d => { const r = d.data() || {}; if(r.nombre) agregarProducto(Object.assign({}, r, {id:d.id})); });
+    if(S.screen === 'main') render(); else if(S.screen === 'fichas') render();
+  }, e => console.error(e));
   db.collection('config_facility').onSnapshot(snap => {
     snap.forEach(d => {
+      if(d.id === 'produccion_orden_v1'){ S.orden = d.data() || {}; return; }
       if(d.id !== 'produccion_productos_v2') return;
-      const ids = ((d.data() || {}).ids || []).filter(id => PROD_ALL.some(p => p.id === id));
+      const ids = ((d.data() || {}).ids || []);
       if(ids.length) S.listaIds = ids;
     });
     if(S.pid && !S.listaIds.includes(S.pid)) S.pid = null;
@@ -3664,26 +3695,48 @@ function render(){
   const m = $('#pr-main'); if(!m) return;
   const sc = S.screen;
   if(sc === 'main'){
-    m.innerHTML = '<div id="pr-reg"><div id="pr-grid"></div><div id="pr-panel"></div></div>';
+    m.innerHTML = '<div id="pr-reg"><div id="pr-left"><div id="pr-bar"></div><div id="pr-grid"></div></div><div id="pr-panel"></div></div>';
     renderGrid(); renderPanel();
   } else if(sc === 'hoy'){ m.innerHTML = renderHoy(); }
   else if(sc === 'fichas'){ m.innerHTML = renderFichasList(); }
   else if(sc === 'ficha'){ m.innerHTML = renderFichaEdit(); }
   else if(sc === 'lista'){ m.innerHTML = renderLista(); }
   else if(sc === 'pruebas'){ m.innerHTML = renderPruebas(); }
+  else if(sc === 'nuevo'){ m.innerHTML = renderNuevo(); }
   layout();
 }
 function go(sc){ hideSnack(); S.screen = sc; if(sc !== 'ficha') S.fd = null; closeModal(); render(); renderTop(); }
-function productosVisibles(){ const e = estacionDe(S.op); return PROD_ALL.filter(p => S.listaIds.includes(p.id) && e.secciones.indexOf(p.seccion) >= 0); }
+const sinAcP = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+/* soloEstacion=true: lo de la estación (fichas). Por defecto respeta la búsqueda y "Todas las estaciones". */
+const ordenKey = nombre => nombre === 'Cocina' ? 'cocina' : 'cuarto_frio';
+function productosVisibles(soloEstacion){
+  const e = estacionDe(S.op), q = soloEstacion ? '' : sinAcP(S.q);
+  const lista = PROD_ALL.filter(p => S.listaIds.includes(p.id) && e.secciones.indexOf(p.seccion) >= 0 && (!q || sinAcP(p.nombre + ' ' + p.unidad).indexOf(q) >= 0));
+  const ord = S.orden[ordenKey(e.nombre)];
+  if(ord && ord.length){ const ix = id => { const k = ord.indexOf(id); return k >= 0 ? k : 1e6; }; return lista.map((p, i) => [p, i]).sort((a, b) => (ix(a[0].id) - ix(b[0].id)) || (a[1] - b[1])).map(x => x[0]); }
+  return lista;
+}
+function renderBar(){
+  const b = $('#pr-bar'); if(!b) return;
+  const n = productosVisibles().length;
+  if(!$('#pr-q')){
+    b.innerHTML = '<div class="qwrap"><input id="pr-q" type="search" placeholder="Buscar producto…" autocomplete="off" autocapitalize="off" value="' + esc(S.q) + '"><button class="btn qx" data-act="qclear" aria-label="Borrar búsqueda">✕</button></div>' +
+      '<div class="cnt" id="pr-cnt"></div>';
+  }
+  const qx = b.querySelector('.qx'); if(qx) qx.style.display = S.q ? '' : 'none';
+  const c = $('#pr-cnt'); if(c) c.textContent = n + ' producto' + (n === 1 ? '' : 's') + ' · mantén presionado y arrastra: sube/baja para ordenar, o a la zona azul para pasar a ' + otraEstacion().nombre;
+}
 function renderGrid(){
   const g = $('#pr-grid'); if(!g) return;
+  renderBar();
   const prods = productosVisibles();
-  if(!prods.length){ g.innerHTML = '<div class="hint"><div class="big">La lista está vacía</div><div class="mu">Menú · Elegir productos de la lista</div></div>'; return; }
-  let secPrev = '';
+  if(!prods.length){ g.innerHTML = '<div class="hint"><div class="big">' + (S.q ? 'No hay productos con “' + esc(S.q) + '”' : 'La lista está vacía') + '</div><div class="mu">' + (S.q ? 'Prueba otra palabra' : 'Menú · Fichas de producto') + '</div></div>'; return; }
+  const ord0 = S.orden[ordenKey(S.op)], propio = !!(ord0 && ord0.length), multi = estacionDe(S.op).secciones.length > 1 && !propio;
+  let secPrev = '', n = 0;
   g.innerHTML = prods.map(p => {
-    const f = fichaDe(p.id);
-    const hd = (estacionDe(S.op).secciones.length > 1 && p.seccion !== secPrev) ? '<div class="gsec">' + esc(SECCION_NOMBRE[p.seccion]) + '</div>' : ''; secPrev = p.seccion;
-    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="tick">' + ic('check', 20) + '</span>' + phHTML(f) + '<div class="nm">' + presHtml(f.id, f.nombre) + '</div></button>';
+    const f = fichaDe(p.id); n++;
+    const hd = (multi && p.seccion !== secPrev) ? '<div class="gsec">' + esc(SECCION_NOMBRE[p.seccion]) + '</div>' : ''; secPrev = p.seccion;
+    return hd + '<button class="card' + (S.pid === p.id ? ' sel' : '') + (tieneVida(f) ? '' : ' falta') + '" data-act="sel" data-pid="' + p.id + '"><span class="num">' + n + '</span><div class="nm">' + presHtml(f.id, f.nombre) + '</div>' + (propio && estacionDe(S.op).secciones.length > 1 ? '<span class="un">' + esc(SECCION_NOMBRE[p.seccion]) + '</span>' : '') + '<span class="tick">' + ic('check', 20) + '</span></button>';
   }).join('');
 }
 
@@ -4058,7 +4111,7 @@ function renderHoy(){
 
 /* ---------- Fichas ---------- */
 function renderFichasList(){
-  const prods = productosVisibles();
+  const prods = productosVisibles(true);
   const falta = prods.filter(p => !tieneVida(fichaDe(p.id))).length;
   const lista = prods.filter(p => !S.filtroFalta || !tieneVida(fichaDe(p.id)));
   return '<div class="subbar"><button class="btn" data-act="go" data-v="main">← Registrar</button><div class="subt">Fichas de producto</div></div><div class="screen">' +
@@ -4076,6 +4129,8 @@ function renderFichaEdit(){
   const dm = m => p.vida[m] > 0 ? p.vida[m] + ' días' : 'No aplica';
   return '<div class="subbar"><button class="btn" data-act="ficha-cancel">Cancelar</button><div class="subt">' + esc(p.nombre) + '</div><button class="btn okb" data-act="ficha-save">Guardar</button></div><div class="screen">' +
     '<div class="sec"><h3>Foto</h3><div class="fotorow">' + phHTML(p, 'big') + '<div class="col"><label class="btn pri" for="pr-ficha-foto">' + ic('camera', 24) + ' Tomar o elegir foto</label><input id="pr-ficha-foto" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px">' + (foto ? '<button class="btn" data-act="foto-del">Quitar foto</button>' : '') + '</div></div></div>' +
+    '<div class="sec"><h3>Estación</h3><div class="mu small">Para pasar este producto de Cocina a Cuarto frío (o al revés), elige dónde va. Aparecerá en la lista de esa estación.</div><div class="modos">' +
+      [['COCINA', 'Cocina'], ['EMPACADO', 'Cuarto frío · Empacado'], ['PROCESADO', 'Cuarto frío · Procesado']].map(x => '<button class="btn ' + (p.seccion === x[0] ? 'on' : '') + '" data-act="fsec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="sec"><h3>Cantidades (' + esc(p.unidad) + ')</h3>' +
       row('Batch estándar', 'batch', fmt(p.batch), p.unidad) +
       row('Avisar si pasa de', 'max', p.max > 0 ? fmt(p.max) : '3 batches', p.max > 0 ? p.unidad : '') +
@@ -4109,9 +4164,144 @@ function guardarFicha(){
   const doc = {producto_id:p.id, nombre:p.nombre, presentacion:p.presentacion, unidad:p.unidad, codigo:p.codigo, decimales:p.decimales ? 1 : 0, batch:p.batch, solo_batch:p.solo_batch ? 1 : 0,
                por_etiqueta:p.por_etiqueta || 0, max:p.max || 0, modo_defecto:p.modo_defecto, vida:p.vida, receta:p.receta, foto:p.foto || null,
                actualizado:SV(), actualizado_por:(typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.email : null};
+  if(p.seccion && SECCION_NOMBRE[p.seccion]){ doc.seccion = p.seccion; const pp = prodDe(p.id); if(pp) pp.seccion = p.seccion; }
   db.collection('fichas_produccion').doc(p.id).set(doc).catch(e => { console.error(e); toast('No se pudo guardar la ficha'); });
   S.fichas[p.id] = doc;
   S.fd = null; S.screen = 'fichas'; render(); toast('Ficha guardada');
+}
+
+/* ---------- Pasar un producto a la otra estación (mantener y arrastrar) ---------- */
+const otraEstacion = () => ESTACIONES.filter(e => e.nombre !== S.op)[0];
+function moverProducto(pid, destNombre, esDeshacer){
+  const p = prodDe(pid); if(!p) return;
+  const dest = estacionDe(destNombre), prev = p.seccion;
+  const nueva = dest.secciones.indexOf(prev) >= 0 ? prev : dest.secciones[0];
+  if(nueva === prev) return;
+  p.seccion = nueva;
+  db.collection('fichas_produccion').doc(pid).set({producto_id:pid, seccion:nueva}, {merge:true}).catch(e => { console.error(e); toast('No se pudo guardar el cambio'); });
+  S.fichas[pid] = Object.assign({}, S.fichas[pid] || {}, {seccion:nueva});
+  if(S.pid === pid) S.pid = null;
+  renderGrid(); renderPanel();
+  const sn = $('#pr-snack');
+  if(esDeshacer){ hideSnack(); toast('Devuelto a ' + estacionDe(S.op).nombre); return; }
+  S.mvUndo = {pid:pid, prev:prev, op:S.op};
+  if(sn){
+    sn.innerHTML = '<div class="snackbox"><div class="st">' + esc(p.nombre) + ' pasó a ' + esc(dest.nombre) + '</div><button class="btn" data-act="mv-undo">Deshacer</button><div class="snackbar"></div></div>';
+    sn.classList.add('show'); clearTimeout(showSnack.t); showSnack.t = setTimeout(() => sn.classList.remove('show'), 8000);
+  }
+  snd('ok');
+}
+function guardarOrden(ids){
+  const k = ordenKey(S.op); S.orden = Object.assign({}, S.orden); S.orden[k] = ids;
+  const o = {}; o[k] = ids; o.actualizado = SV();
+  db.collection('config_facility').doc('produccion_orden_v1').set(o, {merge:true}).catch(e => { console.error(e); toast('No se pudo guardar el orden'); });
+  renderGrid();
+}
+function reordenar(pid, tid, despues){
+  if(S.q){ toast('Borra la búsqueda para cambiar el orden'); return; }
+  if(pid === tid) return;
+  const ids = productosVisibles(true).map(p => p.id).filter(id => id !== pid);
+  const i = ids.indexOf(tid); if(i < 0) return;
+  ids.splice(despues ? i + 1 : i, 0, pid);
+  guardarOrden(ids);
+}
+const DRAG = {tgt:null, after:false, sc:0, iv:null, t:null, on:false, pid:null, ghost:null, zone:null, x0:0, y0:0, swallow:0};
+function dragEnd(cancel){
+  clearTimeout(DRAG.t);
+  if(DRAG.on){
+    const z = DRAG.zone, over = z && z.classList.contains('over');
+    if(DRAG.ghost) DRAG.ghost.remove(); if(z) z.remove();
+    const tg = DRAG.tgt, af = DRAG.after; dragMarcar(null);
+    if(!cancel && over) moverProducto(DRAG.pid, otraEstacion().nombre);
+    else if(!cancel && tg) reordenar(DRAG.pid, tg.dataset.pid, af);
+    DRAG.swallow = Date.now() + 500;
+  }
+  clearInterval(DRAG.iv); DRAG.iv = null; DRAG.sc = 0; DRAG.tgt = null;
+  DRAG.on = false; DRAG.pid = null; DRAG.ghost = null; DRAG.zone = null; DRAG.t = null;
+}
+function dragMarcar(card, after){
+  document.querySelectorAll('#pr-grid .drop-b,#pr-grid .drop-a').forEach(c => c.classList.remove('drop-b', 'drop-a'));
+  DRAG.tgt = card || null; DRAG.after = !!after;
+  if(card) card.classList.add(after ? 'drop-a' : 'drop-b');
+}
+function dragStart(card, x, y){
+  const left = $('#pr-left'); if(!left) return;
+  DRAG.on = true; DRAG.pid = card.dataset.pid;
+  const g = card.cloneNode(true); const r = card.getBoundingClientRect();
+  g.className += ' drag-ghost'; g.style.cssText = 'position:fixed;z-index:99999;pointer-events:none;width:' + r.width + 'px;left:' + (x - r.width / 2) + 'px;top:' + (y - r.height / 2) + 'px;opacity:.9';
+  document.body.appendChild(g); DRAG.ghost = g;
+  const z = document.createElement('div'); z.className = 'drag-zone'; z.id = 'pr-dz';
+  z.innerHTML = '<b>⇢ Soltar aquí para pasar a ' + esc(otraEstacion().nombre) + '</b>';
+  const bar = $('#pr-bar'); z.style.height = Math.max(64, (bar ? bar.offsetHeight : 0) + 8) + 'px';
+  left.appendChild(z); DRAG.zone = z;
+  card.classList.add('drag-src');
+  DRAG.iv = setInterval(() => { const gr = $('#pr-grid'); if(gr && DRAG.sc) gr.scrollTop += DRAG.sc; }, 16);
+  if(navigator.vibrate) try{ navigator.vibrate(15); }catch(e){}
+}
+function dragMove(x, y){
+  if(!DRAG.on) return;
+  const g = DRAG.ghost, r = g.getBoundingClientRect();
+  g.style.left = (x - r.width / 2) + 'px'; g.style.top = (y - r.height / 2) + 'px';
+  const zr = DRAG.zone.getBoundingClientRect();
+  const over = x >= zr.left && x <= zr.right && y >= zr.top && y <= zr.bottom;
+  DRAG.zone.classList.toggle('over', over);
+  const gr = $('#pr-grid'), gb = gr ? gr.getBoundingClientRect() : null;
+  DRAG.sc = (gb && !over && y > gb.top && y < gb.top + 70 && y > zr.bottom) ? -14 : (gb && y > gb.bottom - 70 && y <= gb.bottom ? 14 : 0);
+  if(over){ dragMarcar(null); return; }
+  const el = document.elementFromPoint(x, y), c = el && el.closest ? el.closest('#pr-grid .card') : null;
+  if(c && c.dataset.pid !== DRAG.pid){ const cr = c.getBoundingClientRect(); dragMarcar(c, y > cr.top + cr.height / 2); } else if(!c) dragMarcar(null);
+}
+function initDrag(){
+  document.addEventListener('pointerdown', e => {
+    const card = e.target.closest ? e.target.closest('#pr-left .card') : null;
+    if(!card || S.screen !== 'main' || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    DRAG.x0 = e.clientX; DRAG.y0 = e.clientY;
+    clearTimeout(DRAG.t); DRAG.t = setTimeout(() => dragStart(card, DRAG.x0, DRAG.y0), 320);
+  }, true);
+  document.addEventListener('pointermove', e => {
+    if(DRAG.on){ dragMove(e.clientX, e.clientY); return; }
+    if(DRAG.t && Math.hypot(e.clientX - DRAG.x0, e.clientY - DRAG.y0) > 10){ clearTimeout(DRAG.t); DRAG.t = null; }
+  }, true);
+  document.addEventListener('touchmove', e => { if(DRAG.on) e.preventDefault(); }, {passive:false, capture:true});
+  document.addEventListener('pointerup', () => dragEnd(false), true);
+  document.addEventListener('pointercancel', () => dragEnd(true), true);
+  document.addEventListener('contextmenu', e => { if(DRAG.on || DRAG.t) e.preventDefault(); }, true);
+  document.addEventListener('click', e => { if(DRAG.swallow > Date.now()){ e.stopPropagation(); e.preventDefault(); DRAG.swallow = 0; } }, true);
+}
+
+/* ---------- Producto nuevo ---------- */
+const UNIS_NUEVO = ['unidades', 'fundas', 'libras', 'galones', 'litros', 'porciones', 'cajas'];
+function renderNuevo(){
+  const n = S.np || (S.np = {nombre:'', pres:'', uni:'unidades', seccion:'EMPACADO', batch:10});
+  return '<div class="subbar"><button class="btn" data-act="np-cancel">Cancelar</button><div class="subt">Producto nuevo</div><button class="btn okb" data-act="np-save">Guardar y configurar</button></div><div class="screen"><div class="sec npf">' +
+    '<div class="lbl">Nombre del producto</div><input type="text" id="pr-np-nombre" value="' + esc(n.nombre) + '" placeholder="Ej. Salsa de mango" autocomplete="off">' +
+    '<div class="lbl">Presentación (opcional)</div><input type="text" id="pr-np-pres" value="' + esc(n.pres) + '" placeholder="Ej. Funda 250 g" autocomplete="off">' +
+    '<div class="lbl">Se cuenta en</div><div class="chips">' + UNIS_NUEVO.map(u => '<button class="btn ' + (n.uni === u ? 'on' : '') + '" data-act="np-uni" data-v="' + u + '">' + u + '</button>').join('') + '</div>' +
+    '<div class="lbl">Sección</div><div class="chips">' + Object.keys(SECCION_NOMBRE).map(k => '<button class="btn ' + (n.seccion === k ? 'on' : '') + '" data-act="np-sec" data-v="' + k + '">' + SECCION_NOMBRE[k] + '</button>').join('') + '</div>' +
+    '<div class="lbl">Batch estándar</div><div><button class="btn val" data-act="np-batch">' + fmt(n.batch || 0) + ' ' + esc(n.uni) + '</button></div>' +
+    '<div class="mu small">Después de guardar se abre la ficha para poner la vida útil (sin eso no sale etiqueta).</div></div></div>';
+}
+function agregarProducto(r){
+  const i = PROD_ALL.findIndex(p => p.id === r.id);
+  const p = {id:r.id, nombre:r.nombre, unidad:r.unidad || '', uni:r.uni || 'unidades', batch:r.batch || 10, seccion:r.seccion || 'EMPACADO', inv:true, nuevo:true};
+  if(i >= 0){ const sec0 = PROD_ALL[i].seccion, fs = S.fichas[r.id]; PROD_ALL[i] = Object.assign(PROD_ALL[i], p); PROD_ALL[i].seccion = (fs && SECCION_NOMBRE[fs.seccion]) ? fs.seccion : sec0; } else PROD_ALL.push(p);
+  return p;
+}
+function guardarNuevo(){
+  const n = S.np; if(!n) return;
+  const nombre = String(n.nombre || '').trim();
+  if(!nombre){ toast('Escribe el nombre del producto'); snd('warn'); return; }
+  if(PROD_ALL.some(p => sinAcP(p.nombre) === sinAcP(nombre) && sinAcP(p.unidad) === sinAcP(n.pres))){ toast('Ese producto ya existe'); snd('warn'); return; }
+  const slug = sinAcP(nombre + ' ' + n.pres).replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 40) || 'producto';
+  let id = 'x_' + slug, k = 2; while(PROD_ALL.some(p => p.id === id)) id = 'x_' + slug + '_' + (k++);
+  const r = {id:id, nombre:nombre, unidad:String(n.pres || '').trim(), uni:n.uni, batch:n.batch || 10, seccion:n.seccion};
+  const p = agregarProducto(r);
+  db.collection('productos_produccion').doc(id).set(Object.assign({}, r, {creado:SV(), creado_por:(typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.email : null})).catch(e => { console.error(e); toast('No se pudo guardar el producto'); });
+  if(!S.listaIds.includes(id)) S.listaIds = S.listaIds.concat([id]);
+  db.collection('config_facility').doc('produccion_productos_v2').set({ids:S.listaIds, actualizado:SV(), actualizado_por:(typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.email : null}).catch(e => console.error(e));
+  S.np = null; S.q = '';
+  const f = fichaDe(id); S.fd = {id:f.id, draft:JSON.parse(JSON.stringify(f))}; S.screen = 'ficha'; render(); renderTop();
+  toast('Producto agregado. Configura su vida útil.');
 }
 
 /* ---------- Elegir productos de la lista ---------- */
@@ -4281,9 +4471,8 @@ function closeModal(){ const m = $('#pr-modal-root'); if(m) m.innerHTML = ''; }
 function openMenu(){
   openModal('<div class="mt">Menú de producción</div>' +
     '<button class="btn pri" data-act="go" data-v="fichas">Fichas de producto</button>' +
-    '<button class="btn pri" data-act="lista-abrir">Elegir productos de la lista</button>' +
+    '<button class="btn pri" data-act="np-abrir">＋ Producto nuevo</button>' +
     '<button class="btn pri" data-act="go" data-v="pruebas">Pruebas de uso (guantes, manos húmedas)</button>' +
-    '<button class="btn" data-act="reloj">' + ic('clock', 22) + ' Clock In / Out</button>' +
     '<button class="btn" data-act="probar-impresora">' + ic('printer', 22) + ' Imprimir una etiqueta de prueba</button>' +
     '<button class="btn pri" data-act="usb-menu">' + ic('printer', 22) + ' Impresora por cable (USB)' + (U.directo ? ' · ' + (U.estado === 'listo' ? 'conectada' : 'sin conectar') : '') + '</button>' +
     '<div class="mu small">Ajustes de la tablet</div>' +
@@ -4336,6 +4525,14 @@ function onClick(e){
     case 'op': S.op = d.v; LS.set('op', S.op); if(S.pid && !enEstacion(S.pid, S.op)) S.pid = null; renderTop(); if(S.screen === 'main'){ renderGrid(); renderPanel(); } break;
     case 'go': go(d.v); break;
     case 'sel': selectProduct(d.pid); break;
+    case 'mv-undo': { const u = S.mvUndo; if(u){ S.mvUndo = null; const p = prodDe(u.pid); if(p){ const dest = ESTACIONES.filter(e => e.secciones.indexOf(u.prev) >= 0)[0]; p.seccion = u.prev; db.collection('fichas_produccion').doc(u.pid).set({producto_id:u.pid, seccion:u.prev}, {merge:true}).catch(e => console.error(e)); S.fichas[u.pid] = Object.assign({}, S.fichas[u.pid] || {}, {seccion:u.prev}); hideSnack(); renderGrid(); renderPanel(); toast(p.nombre + ' volvió a ' + dest.nombre); } } break; }
+    case 'qclear': { S.q = ''; const q = $('#pr-q'); if(q){ q.value = ''; } renderGrid(); break; }
+    case 'np-abrir': closeModal(); S.np = {nombre:S.q.trim(), pres:'', uni:'unidades', seccion:estacionDe(S.op).secciones[0], batch:10}; S.screen = 'nuevo'; render(); break;
+    case 'np-uni': S.np.uni = d.v; render(); break;
+    case 'np-sec': S.np.seccion = d.v; render(); break;
+    case 'np-batch': pedirNumero({titulo:'Batch estándar', unidad:S.np.uni, valor:S.np.batch || '', cero:false, dec:true, onOk:v => { S.np.batch = v; render(); }}); break;
+    case 'np-cancel': S.np = null; go('main'); break;
+    case 'np-save': guardarNuevo(); break;
     case 'key': panelKey(d.k); break;
     case 'quick': panelQuick(parseInt(d.i, 10)); break;
     case 'kbd': S.kbd = !S.kbd; layout(); renderPanel(); break;
@@ -4379,6 +4576,7 @@ function onClick(e){
     case 'foto-del': S.fd.draft.foto = null; render(); break;
     case 'ftog': { const dr = S.fd.draft; dr[d.f] = dr[d.f] ? 0 : 1; render(); break; }
     case 'fdef': S.fd.draft.modo_defecto = d.v; render(); break;
+    case 'fsec': S.fd.draft.seccion = d.v; render(); break;
     case 'fnum': {
       const dr = S.fd.draft, f2 = d.f, cero = f2 !== 'batch', esDias = f2.indexOf('vida.') === 0;
       const lbl = {batch:'Batch estándar', max:'Avisar si pasa de', por_etiqueta:'Unidades por paquete', 'vida.ref':'Días refrigerado', 'vida.con':'Días congelado', 'vida.amb':'Días ambiente'}[f2];
@@ -4420,8 +4618,15 @@ function onLeave(){
 }
 function init(){
   const r = R(); if(!r) return;
+  initDrag();
   document.addEventListener('pointerdown', onPD, true);
   document.addEventListener('click', onClick, false);
+  document.addEventListener('input', e => {
+    const t = e.target; if(!t) return;
+    if(t.id === 'pr-q'){ S.q = t.value; renderGrid(); }
+    else if(t.id === 'pr-np-nombre' && S.np) S.np.nombre = t.value;
+    else if(t.id === 'pr-np-pres' && S.np) S.np.pres = t.value;
+  });
   document.addEventListener('change', e => { if(e.target && e.target.id === 'pr-ficha-foto' && e.target.files && e.target.files[0] && S.fd) onPhoto(e.target.files[0]); });
   window.addEventListener('resize', layout);
   if(window.ResizeObserver) new ResizeObserver(() => layout()).observe(r);
