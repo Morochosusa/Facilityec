@@ -964,7 +964,7 @@
   @media print{
     #guias-detalle .gd-print{display:block;color:#000}
     #guias-detalle .badge.por_despachar,#guias-detalle .btn-cerrar{display:none !important}
-    #guias-detalle .gd-pr{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr) minmax(0,1.2fr) minmax(0,2.2fr) minmax(0,2.2fr);gap:8px;padding:6px 0;break-inside:avoid;font-size:13px;align-items:end}
+    #guias-detalle .gd-pr{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,1.3fr) minmax(0,2.4fr) minmax(0,2.4fr);gap:8px;padding:6px 0;break-inside:avoid;font-size:13px;align-items:end}
     #guias-detalle .gd-ph{font-size:11px;font-weight:800;padding-bottom:4px;border:0}
     #guias-detalle .gd-pn{font-weight:600}
     #guias-detalle .gd-pw{font-size:15px;font-weight:700}
@@ -2540,9 +2540,9 @@ function gdImpresion(guia, orden) {
   const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0);
   const presDe = it => { let p = ""; try { p = (window.PR && window.PR.presDe) ? window.PR.presDe(it.producto_id) : ""; } catch(e){} p = String(p || "").trim(); return p && String(it.producto_nombre || "").toLowerCase().indexOf(p.toLowerCase()) < 0 ? p : ""; };
   const filas = vis.map((i, k) => { const it = guia.items[i];
-    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " <small>(" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")</small>" : ""}</div><div class="gd-pw">${presDe(it)}</div><div class="gd-pq">${gdFmt(it.cantidad_despachada)} <small>${it.unidad_medida || ""}</small></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div></div>`; }).join("");
+    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " <small>(" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")</small>" : ""}</div><div class="gd-pq">${gdFmt(it.cantidad_despachada)} <small>${it.unidad_medida || ""}</small></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div></div>`; }).join("");
   return `<div class="gd-print">
-    <div class="gd-pr gd-ph"><div class="gd-pn">Producto</div><div class="gd-pw">Peso</div><div class="gd-pq">Cantidad</div><div class="gd-pc">ENVÍA</div><div class="gd-pc">RECIBE</div></div>
+    <div class="gd-pr gd-ph"><div class="gd-pn">Producto</div><div class="gd-pq">Cantidad</div><div class="gd-pc">ENVÍA</div><div class="gd-pc">RECIBE</div></div>
     ${filas}
     ${gdGavetas()}
     <div class="gd-quien"><div><small>Envía</small>&nbsp;</div><div><small>Recibe</small>&nbsp;</div></div>
@@ -3027,13 +3027,59 @@ function lcCarreta(id) {
     }});
 }
 
+/* Compra realizada → lo comprado pasa a la guía (por despachar) del pedido/local que corresponda.
+   Cada producto lleva desde_compra = id de la lista, así se puede quitar y volver a cargar sin duplicar. */
+function gcGrupos(lista) {
+  const g = {};
+  (lista.items || []).forEach(it => {
+    if (!it.comprado) return;
+    let meta;
+    if (lista.unificada) { meta = (lista.origenes || []).filter(o => o.id === it.origen_lista)[0]; }
+    else meta = { id: lista.id, local: lista.local, pedido_id: lista.pedido_id, area: lista.area, pedido_numero: lista.pedido_numero };
+    if (!meta || !meta.pedido_id || !meta.local) return;   // requerimientos de bodega: no hay local a quien despachar
+    (g[meta.pedido_id] = g[meta.pedido_id] || { meta: meta, items: [] }).items.push(it);
+  });
+  return g;
+}
+async function cargarCompraAGuias(lista) {
+  const grupos = gcGrupos(lista), ids = [], nombres = [];
+  for (const pid of Object.keys(grupos)) {
+    const { meta, items } = grupos[pid];
+    const nuevos = items.map(it => ({ producto_id: it.producto_id, producto_nombre: it.producto_nombre, categoria: it.categoria || null, subcategoria: it.subcategoria || null,
+      unidad_medida: it.unidad_medida || "", cantidad_pedida: it.cantidad_solicitada, cantidad_despachada: it.cantidad_solicitada, origen: "compra_directa",
+      cantidad_recibida: null, diferencia: null, nota_diferencia: "", desde_compra: lista.id }));
+    const g = guiasCache.filter(x => x.pedido_local_id === pid && x.estado === "por_despachar")[0];
+    if (g) {
+      const base = (g.items || []).filter(it => it.desde_compra !== lista.id);
+      await db.collection("pedidos").doc(g.id).update({ items: base.concat(nuevos) });
+      ids.push(g.id);
+    } else {
+      const ref = db.collection("pedidos").doc();
+      await ref.set({ local: meta.local, area: meta.area || null, estado: "por_despachar", pedido_local_id: pid, pedido_local_numero: meta.pedido_numero || null, fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(), fecha_recepcion: null, despachado_por: null, recibido_por: null, items: nuevos });
+      ids.push(ref.id);
+      try { const P = window.PDS, ped = P && P.lista ? P.lista.filter(p => p.id === pid)[0] : null; if (ped && !ped.despacho_id) db.collection("pedidos_locales").doc(pid).update({ despacho_id: ref.id }).catch(() => {}); } catch (e) {}
+    }
+    nombres.push((NOMBRES_LOCAL[meta.local] || meta.local) + (meta.area ? " - " + meta.area : "") + " (" + nuevos.length + ")");
+  }
+  return { ids: ids, nombres: nombres };
+}
+async function quitarCompraDeGuias(lista) {
+  for (const gid of (lista.guias_cargadas || [])) {
+    const g = guiasCache.filter(x => x.id === gid)[0];
+    if (g && g.estado === "por_despachar") await db.collection("pedidos").doc(gid).update({ items: (g.items || []).filter(it => it.desde_compra !== lista.id) });
+  }
+}
 async function marcarCompraRealizada(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || lista.enviada_contabilidad) return;
   const sinCosto = lista.items.filter(it => it.costo == null).length;
   try {
     await db.collection("listas_compra").doc(id).update({ compra_realizada: true, fecha_compra_realizada: firebase.firestore.FieldValue.serverTimestamp(), ...totalesLista(lista.items, lista.monto_asignado, lista.carreta) });
-    mostrarAviso(sinCosto ? `Compra realizada. Ojo: ${sinCosto} producto(s) sin costo.` : "Compra realizada. Ya puedes enviarla a contabilidad o imprimirla.", sinCosto ? "error" : "ok");
+    let carga = { ids: [], nombres: [] };
+    try { carga = await cargarCompraAGuias(lista); if (carga.ids.length) await db.collection("listas_compra").doc(id).update({ guias_cargadas: carga.ids }); }
+    catch (e2) { console.error(e2); mostrarAviso("Compra realizada, pero no se pudo pasar a Guías. Reabre y vuelve a marcarla.", "error"); return; }
+    const aGuias = carga.nombres.length ? " Pasó a Guías: " + carga.nombres.join(", ") + "." : "";
+    mostrarAviso((sinCosto ? `Compra realizada. Ojo: ${sinCosto} producto(s) sin costo.` : "Compra realizada. Ya puedes enviarla a contabilidad o imprimirla.") + aGuias, sinCosto ? "error" : "ok");
   } catch (err) {
     console.error(err);
     mostrarAviso("No se pudo marcar la compra. Verifica la conexion.", "error");
@@ -3044,7 +3090,9 @@ async function reabrirCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || lista.enviada_contabilidad) return;
   if (lista.recepcion_id) { mostrarAviso("Esta compra ya se recibió en Bodega. Deshaz la recepción antes de reabrirla.", "error"); return; }
-  try { await db.collection("listas_compra").doc(id).update({ compra_realizada: false, fecha_compra_realizada: null }); }
+  const yaDesp = (lista.guias_cargadas || []).some(gid => { const g = guiasCache.filter(x => x.id === gid)[0]; return g && g.estado !== "por_despachar"; });
+  if (yaDesp) { mostrarAviso("Lo comprado ya se despachó en Guías: no se puede reabrir.", "error"); return; }
+  try { await quitarCompraDeGuias(lista); await db.collection("listas_compra").doc(id).update({ compra_realizada: false, fecha_compra_realizada: null, guias_cargadas: [] }); }
   catch (err) { console.error(err); mostrarAviso("No se pudo reabrir. Verifica la conexion.", "error"); }
 }
 
