@@ -4259,11 +4259,15 @@ function renderFichasList(){
   return '<div class="subbar"><button class="btn" data-act="go" data-v="main">← Registrar</button><div class="subt">Fichas de producto</div></div><div class="screen">' +
     '<div class="sec"><div class="mu">' + esc(S.op) + ': cada producto necesita su vida útil para calcular el vencimiento y sacar la etiqueta. Faltan ' + falta + ' de ' + prods.length + '. Para ver los de la otra estación, cámbiala en la pantalla de registro.</div>' +
     '<button class="btn ' + (S.filtroFalta ? 'on' : '') + '" data-act="ffalta">' + (S.filtroFalta ? 'Mostrando solo los que faltan' : 'Mostrar solo los que faltan') + '</button></div>' +
-    '<div id="pr-grid" style="padding:0">' + lista.map(p => {
-      const f = fichaDe(p.id);
-      const ms = modosDe(f).map(m => MODOS[m].slice(0, 3) + ' ' + f.vida[m] + 'd').join(' · ') || 'Falta vida útil';
-      return '<button class="card' + (tieneVida(f) ? '' : ' falta') + '" data-act="ficha" data-pid="' + p.id + '">' + phHTML(f) + '<div class="nm">' + presHtml(f.id, f.nombre) + '</div><div class="un">' + esc(ms) + '</div>' + (usaReceta(p.id) ? '<div class="un">Receta: ' + (f.receta.length ? f.receta.length + ' ingr.' : 'sin receta') + '</div>' : '') + '</button>';
-    }).join('') + '</div></div>';
+    '<div id="pr-left" style="display:block"><div id="pr-grid" class="fichas-lista" style="padding:0 0 12px;display:grid">' + (function(){
+      const multi = estacionDe(S.op).secciones.length > 1; let secPrev = '', n = 0;
+      return lista.map(p => {
+        const f = fichaDe(p.id); n++;
+        const hd = (multi && p.seccion !== secPrev) ? '<div class="gsec">' + esc(SECCION_NOMBRE[p.seccion]) + '</div>' : ''; secPrev = p.seccion;
+        const ms = modosDe(f).map(m => MODOS[m].slice(0, 3) + ' ' + f.vida[m] + 'd').join(' · ') || 'Falta vida útil';
+        return hd + '<button class="card' + (tieneVida(f) ? '' : ' falta') + '" data-act="ficha" data-pid="' + p.id + '"><span class="num">' + n + '</span><div style="flex:1;min-width:0"><div class="nm">' + presHtml(f.id, f.nombre) + '</div><div class="un">' + esc(ms) + (usaReceta(p.id) ? ' · Receta: ' + (f.receta.length ? f.receta.length + ' ingr.' : 'sin receta') : '') + '</div></div></button>';
+      }).join('');
+    })() + '</div></div>';
 }
 function renderFichaEdit(){
   const d = S.fd, p = d.draft, foto = !!p.foto;
