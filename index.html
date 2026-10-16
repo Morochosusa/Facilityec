@@ -971,6 +971,7 @@
     #guias-detalle .gd-pq{font-size:17px;font-weight:800;white-space:nowrap}
     #guias-detalle .gd-pq small,#guias-detalle .gd-pn small{font-size:11px;font-weight:400;color:#444}
     #guias-detalle .gd-ph .gd-pw,#guias-detalle .gd-ph .gd-pq{font-size:11px;font-weight:800}
+    #guias-detalle .gd-sec{margin:12px 0 2px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid #000;padding-bottom:2px;break-after:avoid}
     #guias-detalle .gd-pc{display:flex;gap:8px;align-items:flex-end;min-height:24px}
     #guias-detalle .gd-ph .gd-pc{min-height:0}
     #guias-detalle .gd-cb{flex:0 0 18px;height:18px;border:1.5px solid #000;border-radius:3px}
@@ -2537,10 +2538,14 @@ function gdEliminar(id) {
   cerrarDetalleGuia(); gdToast("Guía eliminada");
 }
 function gdImpresion(guia, orden) {
-  const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0);
+  const secDe = it => (it.desde_compra || it.origen === "compra_directa") ? 0 : (it.subcategoria === "facility" ? 1 : 2);
+  const SECN = ["Mercado", "Facility", "Bodega"];
+  const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0).map((i, k) => [i, k]).sort((a, b) => secDe(guia.items[a[0]]) - secDe(guia.items[b[0]]) || a[1] - b[1]).map(x => x[0]);
   const presDe = it => { let p = ""; try { p = (window.PR && window.PR.presDe) ? window.PR.presDe(it.producto_id) : ""; } catch(e){} p = String(p || "").trim(); return p && String(it.producto_nombre || "").toLowerCase().indexOf(p.toLowerCase()) < 0 ? p : ""; };
-  const filas = vis.map((i, k) => { const it = guia.items[i];
-    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " <small>(" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")</small>" : ""}</div><div class="gd-pq">${gdFmt(it.cantidad_despachada)} <small>${it.unidad_medida || ""}</small></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div></div>`; }).join("");
+  let secPrev = -1;
+  const filas = vis.map((i, k) => { const it = guia.items[i], sc = secDe(it);
+    const hd = sc !== secPrev ? `<div class="gd-sec">${SECN[sc]}</div>` : ""; secPrev = sc;
+    return hd + `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " <small>(" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")</small>" : ""}</div><div class="gd-pq">${gdFmt(it.cantidad_despachada)} <small>${it.unidad_medida || ""}</small></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-ln"></span></div></div>`; }).join("");
   return `<div class="gd-print">
     <div class="gd-pr gd-ph"><div class="gd-pn">Producto</div><div class="gd-pq">Cantidad</div><div class="gd-pc">ENVÍA</div><div class="gd-pc">RECIBE</div></div>
     ${filas}
@@ -3048,7 +3053,9 @@ async function cargarCompraAGuias(lista) {
     const nuevos = items.map(it => ({ producto_id: it.producto_id, producto_nombre: it.producto_nombre, categoria: it.categoria || null, subcategoria: it.subcategoria || null,
       unidad_medida: it.unidad_medida || "", cantidad_pedida: it.cantidad_solicitada, cantidad_despachada: it.cantidad_solicitada, origen: "compra_directa",
       cantidad_recibida: null, diferencia: null, nota_diferencia: "", desde_compra: lista.id }));
-    const g = guiasCache.filter(x => x.pedido_local_id === pid && x.estado === "por_despachar")[0];
+    const areaN = t => String(t || "").trim().toLowerCase();
+    const g = guiasCache.filter(x => x.pedido_local_id === pid && x.estado === "por_despachar")[0]
+      || guiasCache.filter(x => x.estado === "por_despachar" && x.local === meta.local && areaN(guiaArea(x)) === areaN(meta.area) && areaN(meta.area))[0];   // misma lista (local + estación): entra ahí, no aparte
     if (g) {
       const base = (g.items || []).filter(it => it.desde_compra !== lista.id);
       await db.collection("pedidos").doc(g.id).update({ items: base.concat(nuevos) });
