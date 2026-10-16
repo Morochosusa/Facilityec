@@ -964,10 +964,10 @@
   @media print{
     #guias-detalle .gd-print{display:block;color:#000}
     #guias-detalle .badge.por_despachar,#guias-detalle .btn-cerrar{display:none !important}
-    #guias-detalle .gd-pr{display:grid;grid-template-columns:34% 33% 33%;gap:8px;padding:9px 0;break-inside:avoid;font-size:13px;align-items:start}
+    #guias-detalle .gd-pr{display:grid;grid-template-columns:34% 33% 33%;gap:8px;padding:5px 0;break-inside:avoid;font-size:13px;align-items:start}
     #guias-detalle .gd-ph{font-size:11px;font-weight:800;padding-bottom:4px}
     #guias-detalle .gd-pq{color:#333;font-weight:400;white-space:nowrap}
-    #guias-detalle .gd-pc{display:flex;gap:8px;align-items:flex-start;min-height:34px}
+    #guias-detalle .gd-pc{display:flex;gap:8px;align-items:flex-start;min-height:22px}
     #guias-detalle .gd-ph .gd-pc{min-height:0}
     #guias-detalle .gd-cb{flex:0 0 16px;height:16px;border:1.5px solid #000;border-radius:3px;margin-top:1px}
     #guias-detalle .gd-po{font-size:10px;color:#555}
@@ -2534,7 +2534,7 @@ function gdEliminar(id) {
 function gdImpresion(guia, orden) {
   const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0);
   const filas = vis.map((i, k) => { const it = guia.items[i];
-    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " (" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")" : ""} <span class="gd-pq">${gdFmt(it.cantidad_despachada)} ${it.unidad_medida || ""}</span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-po">Observación:</span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-po">Observación:</span></div></div>`; }).join("");
+    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " (" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")" : ""} <span class="gd-pq">${gdFmt(it.cantidad_despachada)} ${it.unidad_medida || ""}</span></div><div class="gd-pc"><span class="gd-cb"></span></div><div class="gd-pc"><span class="gd-cb"></span></div></div>`; }).join("");
   const fch = new Date().toLocaleDateString("es-EC");
   return `<div class="gd-print">
     <div class="gd-quien"><div><small>Quién envía (nombre y firma)</small>&nbsp;</div><div><small>Quién recibe — ${guiaTitulo(guia)} (nombre y firma)</small>&nbsp;</div><div style="flex:0 0 110px"><small>Fecha</small>${fch}</div></div>
@@ -4285,7 +4285,9 @@ function renderFichaEdit(){
     '<div class="sec"><h3>Foto</h3><div class="fotorow">' + phHTML(p, 'big') + '<div class="col"><label class="btn pri" for="pr-ficha-foto">' + ic('camera', 24) + ' Tomar o elegir foto</label><input id="pr-ficha-foto" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px">' + (foto ? '<button class="btn" data-act="foto-del">Quitar foto</button>' : '') + '</div></div></div>' +
     '<div class="sec"><h3>Nombre y peso</h3><div class="mu small">Los productos se cambian y se agregan aquí, en Facility. Escribe el nombre y el peso o presentación como quieres verlos en la lista y en la etiqueta.</div>' +
       '<div class="lbl">Nombre</div><input type="text" id="pr-f-nombre" value="' + esc(p.nombre) + '" autocomplete="off" style="width:100%;min-height:60px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box">' +
-      '<div class="lbl" style="margin-top:10px">Peso / presentación</div><input type="text" id="pr-f-pres" value="' + esc(p.presentacion || '') + '" placeholder="Ej. 2 kg, Funda 250 g" autocomplete="off" style="width:100%;min-height:60px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box"></div>' +
+      '<div class="lbl" style="margin-top:10px">Peso / presentación</div><input type="text" id="pr-f-pres" value="' + esc(p.presentacion || '') + '" placeholder="Ej. 2 kg, Funda 250 g" autocomplete="off" style="width:100%;min-height:60px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box">' +
+      '<div class="lbl" style="margin-top:10px">Unidad (así se cuenta y sale en la etiqueta)</div><div class="modos">' +
+      ['unidades', 'paquetes', 'fundas', 'libras', 'kg', 'galones', 'litros', 'cajas'].concat(['unidades', 'paquetes', 'fundas', 'libras', 'kg', 'galones', 'litros', 'cajas'].indexOf(p.unidad) < 0 ? [p.unidad] : []).map(u => '<button class="btn ' + (p.unidad === u ? 'on' : '') + '" data-act="funi" data-v="' + esc(u) + '">' + esc(u) + '</button>').join('') + '</div></div>' +
     '<div class="sec"><h3>Estación</h3><div class="mu small">Para pasar este producto a otra lista, elige dónde va. Aparecerá en la lista de esa estación.</div><div class="modos">' +
       [].concat.apply([], ESTACIONES.map(e => e.secciones.map(sc => [sc, e.secciones.length > 1 ? e.nombre + ' · ' + SECCION_NOMBRE[sc] : e.nombre]))).map(x => '<button class="btn ' + (p.seccion === x[0] ? 'on' : '') + '" data-act="fsec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="sec"><h3>Cantidades (' + esc(p.unidad) + ')</h3>' +
@@ -4743,6 +4745,7 @@ function onClick(e){
     case 'ftog': { const dr = S.fd.draft; dr[d.f] = dr[d.f] ? 0 : 1; render(); break; }
     case 'fdef': S.fd.draft.modo_defecto = d.v; render(); break;
     case 'fsec': S.fd.draft.seccion = d.v; render(); break;
+    case 'funi': S.fd.draft.unidad = d.v; render(); break;
     case 'fnum': {
       const dr = S.fd.draft, f2 = d.f, cero = f2 !== 'batch', esDias = f2.indexOf('vida.') === 0;
       const lbl = {batch:'Batch estándar', max:'Avisar si pasa de', por_etiqueta:'Unidades por paquete', 'vida.ref':'Días refrigerado', 'vida.con':'Días congelado', 'vida.amb':'Días ambiente'}[f2];
