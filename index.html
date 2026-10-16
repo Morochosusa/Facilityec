@@ -954,7 +954,25 @@
   .lcb.gd-warn{background:#f2c94c;border-color:#d4a800;color:#2c2c2a}
   .pd-resumen{font-size:15px;margin:0 0 8px;color:#4a4943;text-align:center}
   .pd-resumen.ok{font-weight:800;color:#1d8a4e;font-size:17px}
-  @media print{#guias-detalle .gd-acts,#guias-detalle .gd-or,#guias-detalle .gd-x,#guias-detalle .gd-ayuda{display:none !important}}
+  @media print{#guias-detalle .gd-acts,#guias-detalle .gd-or,#guias-detalle .gd-x,#guias-detalle .gd-ayuda,#guias-detalle .gd-row{display:none !important}}
+  .gd-print{display:none}
+  .gd-gav{margin-top:16px;border:2px solid #000;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:14px;font-size:15px;font-weight:700;break-inside:avoid}
+  .gd-gav .gd-gav-box{flex:0 0 110px;height:46px;border:2px solid #000;border-radius:4px}
+  @media print{
+    #guias-detalle .gd-print{display:block;color:#000}
+    #guias-detalle .badge.por_despachar,#guias-detalle .btn-cerrar{display:none !important}
+    #guias-detalle .gd-pt{width:100%;border-collapse:collapse;font-size:12px}
+    #guias-detalle .gd-pt th,#guias-detalle .gd-pt td{border:1px solid #000;padding:5px 4px;vertical-align:middle;text-align:left}
+    #guias-detalle .gd-pt th{background:#eee;font-size:11px}
+    #guias-detalle .gd-pt td.c{text-align:center;width:44px}
+    #guias-detalle .gd-pt td.ob{width:20%;height:30px}
+    #guias-detalle .gd-pt tr{break-inside:avoid}
+    #guias-detalle .gd-quien{display:flex;gap:18px;margin:8px 0 10px;font-size:13px}
+    #guias-detalle .gd-quien div{flex:1;border-bottom:1px solid #000;padding-bottom:3px}
+    #guias-detalle .gd-quien small{display:block;color:#555;font-size:10px;text-transform:uppercase}
+    #guias-detalle .gd-obs-b{margin-top:10px;display:flex;gap:18px;font-size:12px}
+    #guias-detalle .gd-obs-b div{flex:1;border:1px solid #000;min-height:54px;padding:3px 5px}
+  }
   .badge.recibido_ok { background: #eaf3de; color: #173404; }
   .badge.recibido_diferencias { background: #fcebeb; color: #501313; }
 
@@ -1094,6 +1112,33 @@
   .lc-stat.ok{background:#e1f5ea;color:#1d8a4e} .lc-stat.wn{background:#fde8a6;color:#7a5a00}
   .lc-banner{background:#fde8a6;padding:10px 14px;border-radius:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600}
   .lc-grid{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-content:start;padding:0 2px 12px}
+  .uni{padding:4px 12px 90px;max-width:760px;margin:0 auto}
+  .uni-t{font-size:22px;font-weight:800;padding:6px 2px 0}
+  .uni-ay{font-size:14px;color:#6b6a63;padding:2px 2px 8px}
+  .uni-top{display:flex;align-items:center;gap:12px;padding-top:4px} .uni-top .lcb{min-height:46px;font-size:15px;padding:0 12px}
+  .uni-loc{padding-bottom:4px} .uni-ln{font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:#6b6a63;padding:2px 2px 4px}
+  .uni-c{display:inline-block;background:#f1efe8;border-radius:8px;padding:2px 8px;margin:2px 6px 0 0;font-size:13px;color:#2c2c2a}
+  .lc-unif{width:100%;margin-top:14px;min-height:60px;background:#4285f4}
+  .uni-bl{background:#fff;border:2px solid #e2e0d6;border-radius:12px;padding:8px 12px;margin-bottom:8px}
+  .uni-bh{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+  .uni-bi{font-size:14px;color:#4b4a45;margin-top:4px;line-height:1.4}
+  .uni-go{width:100%;margin-top:10px} .uni-go[disabled]{opacity:.4}
+  .lc-grp{font-weight:800;font-size:15px;text-transform:uppercase;letter-spacing:.05em;background:#2c2c2a;color:#fff;border-radius:8px;padding:6px 10px;margin:12px 0 4px}
+  @media print{.lc-grp{background:none !important;color:#000 !important;border-bottom:2px solid #000;border-radius:0;padding:4px 0;margin:10px 0 2px;break-after:avoid}}
+  .uni-pills{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:8px}
+  .uni-pill{min-height:46px;font-size:15px;padding:0 12px;background:#fff}
+  .uni-pill.on{background:#e8f0fe;border-color:#4285f4;color:#1a56c4}
+  .uni-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 2px 8px;font-size:16px}
+  .uni-r{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #e2e0d6;border-radius:12px;padding:6px 10px;margin-bottom:6px;min-height:60px}
+  .uni-r.done{background:#eef7f0;border-color:#bfe0c8}
+  .uni-r.done .uni-nm{text-decoration:line-through;color:#8a8880}
+  .uni-ck{flex-shrink:0;width:48px;height:48px;border-radius:12px;border:3px solid #b4b2a9;background:#fff;font-size:28px;font-weight:800;color:#fff;cursor:pointer;padding:0}
+  .uni-ck.on{background:#1d8a4e;border-color:#1d8a4e}
+  .uni-n{flex-shrink:0;min-width:28px;height:28px;border-radius:14px;background:#2c2c2a;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+  .uni-m{flex:1;min-width:0}
+  .uni-nm{font-weight:700;font-size:18px;line-height:1.15} .uni-nm i{font-weight:400;font-size:14px;color:#6b6a63}
+  .uni-s{font-size:13px;color:#6b6a63;margin-top:2px}
+  .uni-q{flex-shrink:0;font-weight:800;font-size:19px;color:#1a56c4;text-align:right}
   .lc-sec{grid-column:1/-1;font-weight:800;font-size:17px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;padding:6px 4px 0}
   .lc-card{position:relative;font:inherit;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px 14px;min-height:156px;background:#fff;border:3px solid #e2e0d6;border-radius:18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;text-align:center}
   .lc-card:active{transform:scale(.97)}
@@ -1172,6 +1217,12 @@
   .lcr .lc-n{font-weight:800;color:#4285f4}
   body #lista-compra-detalle .lcr .check-doble-tap{width:34px;height:34px;min-width:34px;border-radius:9px;font-size:20px}
   .lcr .lc-ref{margin-left:6px;padding:0 6px;font-size:11px}
+  .lcr .lc-refp{display:inline-block;margin:2px 0 0 6px;height:20px;line-height:18px;padding:0 8px;border-radius:6px;border:1px solid #cfd8f6;background:#eef0fb;color:#3a6fd8;font:700 11px inherit;font-family:inherit;vertical-align:top}
+  .lcr .lc-refp.vacio{background:#fff;border:1px dashed #b4b2a9;color:#888780;font-weight:600}
+  .lcr-grip{flex-shrink:0;width:34px;height:38px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#b4b2a9;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+  .lcr.arr{position:relative;z-index:5;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:.95}
+  .lcr.dst{box-shadow:inset 0 3px 0 #4285f4}
+  .lcr.dstb{box-shadow:inset 0 -3px 0 #4285f4}
   body #lista-compra-detalle .lcr .lc-sel{display:inline-block;width:auto;max-width:132px;min-height:0;height:20px;line-height:18px;font-size:11px;padding:0 2px;margin-top:2px;border:1px solid #e2e0d6;border-radius:6px;background:#fff;color:#8a8880;text-overflow:ellipsis}
   body #lista-compra-detalle .lcr .lc-sel.vset{border-color:#4285f4;color:#2c2c2a;font-weight:600}
   .lcr .lcr-p{min-width:68px;height:38px;padding:0 8px;border-radius:10px;border:1.5px dashed #b4b2a9;background:#fff;font:700 16px inherit;font-family:inherit;color:#888780;flex-shrink:0}
@@ -1216,7 +1267,7 @@
     body #lista-compra-detalle .lc-fecha{font-weight:900;font-size:14pt;color:#000}
     body #lista-compra-detalle .detalle-header{margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
     body #lista-compra-detalle .detalle-fila{min-height:0 !important;padding:7px 0 !important;margin:0;border-bottom:1px solid #888;break-inside:avoid;font-size:12pt;line-height:1.3;gap:10px}
-    body #lista-compra-detalle .lc-sel,body #lista-compra-detalle .lc-monto,body #lista-compra-detalle .lc-fld small,body #lista-compra-detalle .lc-vend-ro,body #lista-compra-detalle .lc-ref,body #lista-compra-detalle .btn-cerrar,body .clock-fab,#lc-snack,#lc-toast{display:none !important}
+    body #lista-compra-detalle .lc-sel,body #lista-compra-detalle .lc-monto,body #lista-compra-detalle .lc-fld small,body #lista-compra-detalle .lc-vend-ro,body #lista-compra-detalle .lc-ref,body #lista-compra-detalle .lcr-grip,body #lista-compra-detalle .lc-refp,body #lista-compra-detalle .btn-cerrar,body .clock-fab,#lc-snack,#lc-toast{display:none !important}
     body #lista-compra-detalle .costo-input{border:none !important;background:none !important;width:90px !important;min-height:0 !important;height:auto !important;padding:0 !important;text-align:right;font-size:12pt;font-weight:600}
     body #lista-compra-detalle .costo-input::placeholder{color:transparent}
     body #lista-compra-detalle .check-doble-tap{width:18px !important;height:18px !important;min-width:18px;font-size:13px;border:1.5px solid #000}
@@ -2291,7 +2342,7 @@ function escucharInventario() {
 /* ============================================================
    GUIAS CREADAS (coleccion pedidos)
    ============================================================ */
-const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado", facility_feria_libre: "Facility Feria Libre", cocina_produccion: "Cocina Producción", cuarto_frio: "Cuarto frío", bodega: "Bodega" };
+const NOMBRES_LOCAL = { la_victoria: "La Victoria", el_salado: "El Salado", facility_feria_libre: "Facility Feria Libre", cocina_produccion: "Cocina Producción", cuarto_frio: "Cuarto frío", bodega: "Bodega", varios: "Varios locales" };
 const NOMBRES_ESTADO = {
   despachado: "Despachado",
   recibido_ok: "Recibido OK",
@@ -2389,6 +2440,7 @@ function verGuia(id) {
         <span>Observacion</span>
       </div>
       ${filasItems}
+      ${gdGavetas()}
       <div style="display:flex; gap:20px; margin-top:16px; font-size:12px; color:#888780; flex-wrap:wrap;">
         <span>Envia: _________________________</span>
         <span>Recibe: _________________________</span>
@@ -2472,6 +2524,18 @@ function gdEliminar(id) {
   db.collection("pedidos").doc(id).delete().catch(e => console.error(e));
   cerrarDetalleGuia(); gdToast("Guía eliminada");
 }
+function gdImpresion(guia, orden) {
+  const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0);
+  const filas = vis.map((i, k) => { const it = guia.items[i];
+    return `<tr><td class="c">${k + 1}</td><td>${it.producto_nombre}${esFrio(consItem(it)) ? " (" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")" : ""}</td><td class="c" style="width:70px">${gdFmt(it.cantidad_despachada)} ${it.unidad_medida || ""}</td><td class="c"></td><td class="c"></td><td class="ob"></td><td class="ob"></td></tr>`; }).join("");
+  const fch = new Date().toLocaleDateString("es-EC");
+  return `<div class="gd-print">
+    <div class="gd-quien"><div><small>Quién envía (nombre y firma)</small>&nbsp;</div><div><small>Quién recibe — ${NOMBRES_LOCAL[guia.local] || guia.local} (nombre y firma)</small>&nbsp;</div><div style="flex:0 0 120px"><small>Fecha</small>${fch}</div></div>
+    <table class="gd-pt"><thead><tr><th>#</th><th>Producto</th><th>Cantidad</th><th>Envía</th><th>Recibe</th><th>Observación de quien envía</th><th>Observación de quien recibe</th></tr></thead><tbody>${filas}</tbody></table>
+    ${gdGavetas()}
+  </div>`;
+}
+const gdGavetas = () => `<div class="gd-gav"><span>Total de gavetas enviadas:</span><span class="gd-gav-box"></span><span style="margin-left:auto">Recibidas:</span><span class="gd-gav-box"></span></div>`;
 function verGuiaPorDespachar(guia) {
   const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
   const id = guia.id, aviso = gdGuard.id === id && gdGuard.until > Date.now();
@@ -2503,6 +2567,7 @@ function verGuiaPorDespachar(guia) {
       </div>
       <div class="gd-ayuda">Revisa lo que hay, ajusta cantidades y toca <b>Despachar</b>. Al despachar baja de bodega y el local lo ve en <b>Por recibir</b>.${orden.some(i => esFrio(consItem(guia.items[i]))) ? " <b>Lo frío va al final:</b> revísalo (calidad y cantidad) y sácalo del frío justo antes de salir." : ""}</div>
       ${filas}
+      ${gdImpresion(guia, orden)}
       <div class="gd-acts">
         <button class="lcb ${aviso ? "gd-warn" : "okb"} big" onclick="gdDespachar('${id}')">${aviso ? (falt.length ? "Falta stock en " + falt.length : "Sin revisar: " + sinRev.length + " producto" + (sinRev.length === 1 ? "" : "s") + " frío" + (sinRev.length === 1 ? "" : "s")) + " · toca otra vez para despachar igual" : "Despachar (" + n + ")"}</button>
         <button class="lcb" onclick="window.print()">Imprimir guía</button>
@@ -2543,7 +2608,7 @@ function esListaCompraHistorial(l) {
 function escucharListasCompra() {
   db.collection("listas_compra").orderBy("fecha_creacion", "desc").limit(60).onSnapshot(snapshot => {
     listasCompraCache = [];
-    snapshot.forEach(doc => listasCompraCache.push({ id: doc.id, ...doc.data() }));
+    snapshot.forEach(doc => { const dd = doc.data(); if (!dd.unificada_en) listasCompraCache.push({ id: doc.id, ...dd }); });
     renderListasCompraPendientes();
     actualizarSelectListaCompra();
     if (window.lcRefresh) lcRefresh();
@@ -2566,14 +2631,55 @@ function cambiarModoListasCompra(modo) {
   renderListasCompraPendientes();
 }
 
+async function separarUnificada(id) {
+  const l = listasCompraCache.find(x => x.id === id);
+  if (!l || !l.unificada) return;
+  if (l.compra_realizada || l.enviada_contabilidad) { mostrarAviso("Esta lista ya no se puede separar.", "error"); return; }
+  if (!confirm("¿Separar en las listas originales?\n\nSe conserva lo que ya marcaste y los precios.")) return;
+  try {
+    const batch = db.batch();
+    for (const o of (l.origenes || [])) {
+      const snap = await db.collection("listas_compra").doc(o.id).get();
+      if (!snap.exists) continue;
+      const src = snap.data();
+      const items = (src.items || []).map((it, ix) => {
+        const u = l.items.find(x => x.origen_lista === o.id && x.origen_idx === ix);
+        if (!u) return it;
+        const c = Object.assign({}, u);
+        ["origen_lista", "origen_idx", "origen_local", "origen_area", "origen_pedido", "origen_et"].forEach(k => delete c[k]);
+        c.numero = it.numero != null ? it.numero : null;
+        return c;
+      });
+      batch.update(db.collection("listas_compra").doc(o.id), { items: items, unificada_en: null, estado: "pendiente" });
+      if (o.pedido_id) batch.set(db.collection("pedidos_locales").doc(o.pedido_id), { compra_lista_id: o.id }, { merge: true });
+    }
+    batch.delete(db.collection("listas_compra").doc(id));
+    await batch.commit();
+    cerrarListaCompraDetalle();
+    mostrarAviso("Listas separadas.", "ok");
+  } catch (err) { console.error(err); mostrarAviso("No se pudo separar. Verifica la conexion.", "error"); }
+}
+
+function areaLista(l) {
+  if (!l || l.requerimiento) return "";
+  if (l.area) return l.area;
+  try {
+    const P = window.PDS, ped = P && P.lista ? P.lista.filter(p => p.id === l.pedido_id)[0] : null;
+    return ped && window.pdAreaDe ? (window.pdAreaDe(ped) || "") : "";
+  } catch (e) { return ""; }
+}
+
 function renderListasCompraPendientes() {
   const cont = document.getElementById("listas-compra-pendientes");
   const esHistorial = modoListasCompra === "historial";
   const lcLocal = window.LCS ? window.LCS.local : '';
-  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente).filter(l => !lcLocal || l.local === lcLocal);
+  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente).filter(l => !lcLocal || l.local === lcLocal || l.unificada);
 
+  const btnUni = (!esHistorial && window.lcUniN && lcUniN() > 0)
+    ? `<button class="btn-despachar btn-imprimir lc-unif" onclick="lcUnificar()">🧺 Unificar listas pendientes (${lcUniN()})</button><p class="btn-imprimir" style="font-size:13px; color:#888780; margin:6px 0 0;">Junta lo que se compra en el mercado: las listas de este local y, si quieres, las de otros locales.</p>`
+    : "";
   if (listas.length === 0) {
-    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>`;
+    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>` + btnUni;
     return;
   }
 
@@ -2581,6 +2687,7 @@ function renderListasCompraPendientes() {
     const fechaBase = esHistorial && l.fecha_envio_contabilidad ? l.fecha_envio_contabilidad : l.fecha_creacion;
     const fecha = fechaBase && fechaBase.toDate ? fechaBase.toDate().toLocaleString("es-EC") : "Guardando fecha...";
     const comprados = l.items.filter(it => it.comprado).length;
+    const origTxt = l.unificada ? (l.origenes || []).map(o => (o.area || "Lista") + (o.pedido_numero ? " #" + o.pedido_numero : "")).join(" + ") : "";
     const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(l.carreta) || 0);
 
     let badge = l.estado === "despachada"
@@ -2602,7 +2709,7 @@ function renderListasCompraPendientes() {
       <div class="guia-card" onclick="verListaCompra('${l.id}')">
         <div class="guia-card-top">
           <div>
-            <div class="guia-local">${l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')}${NOMBRES_LOCAL[l.local] || l.local}</div>
+            <div class="guia-local">${l.unificada ? '<span class="lc-pnum">Unificada</span> ' : (l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : ''))}${NOMBRES_LOCAL[l.local] || l.local}${l.unificada ? ' · <b>' + origTxt + '</b>' : (areaLista(l) ? ' · <b>' + areaLista(l) + '</b>' : '')}</div>
             <div class="guia-fecha">${fecha} - ${detalleTexto}${l.fecha_necesaria ? " - para el " + l.fecha_necesaria.split("-").reverse().join("/") : ""}${totalCosto > 0 ? " - $" + totalCosto.toFixed(2) : ""}</div>
           </div>
           ${badge}
@@ -2610,7 +2717,7 @@ function renderListasCompraPendientes() {
         ${filaEliminar}
       </div>
     `;
-  }).join("");
+  }).join("") + btnUni;
 }
 
 let listaCompraDetalleAbiertaId = null;
@@ -2625,8 +2732,9 @@ function verListaCompra(id) {
   const enviada = lista.enviada_contabilidad === true;
   const esPendiente = esListaCompraPendiente(lista);
 
-  let totalCosto = 0;
+  let totalCosto = 0, prevOrig = null;
   const filasItems = lista.items.map((it, idx) => {
+    const grpH = (lista.unificada && it.origen_et && it.origen_et !== prevOrig) ? `<div class="lc-grp">${it.origen_et}</div>` : ""; prevOrig = it.origen_et || prevOrig;
     if (it.costo) totalCosto += parseFloat(it.costo);
     const tachado = it.comprado ? 'text-decoration:line-through; color:#b4b2a9;' : '';
 
@@ -2634,7 +2742,7 @@ function verListaCompra(id) {
     const precio = it.costo != null ? "$" + parseFloat(it.costo).toFixed(2) : "$ ‒";
     if (enviada) {
       // Ya enviada a contabilidad: registro fijo, solo lectura
-      return `
+      return grpH + `
     <div class="lcr lock ${it.comprado ? 'done' : ''}">
       <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}">${it.comprado ? "✓" : ""}</span>
       <div class="lcr-mid"><div class="lcr-t">${nom}</div>${it.vendedor ? `<div class="lcr-s lc-vend-ro">${it.vendedor}</div>` : ""}</div>
@@ -2643,19 +2751,20 @@ function verListaCompra(id) {
     }
     const bloq = lcBloqueada(id, idx, it);
     const ed = lcEditando.has(id + ':' + idx);
-    return `
+    return grpH + `
     <div class="lcr ${it.comprado ? 'done' : ''} ${bloq ? 'lock' : ''} ${ed ? 'edit' : ''}" onclick="lcTapFila('${id}', ${idx})">
       <span class="check-doble-tap ${it.comprado ? 'marcado' : ''}" onclick="event.stopPropagation(); lcCheck('${id}', ${idx})">${it.comprado ? "✓" : ""}</span>
       <div class="lcr-mid">
-        <div class="lcr-t">${nom}${it.precio_sugerido != null ? `<span class="lc-ref" title="Precio de referencia">Ref. $${parseFloat(it.precio_sugerido).toFixed(2)}</span>` : ""}</div>
+        <div class="lcr-t">${nom}</div>
         ${it.nota ? `<div class="lcr-s lcr-nota">${it.nota}</div>` : ""}
         <select class="lc-sel lc-vend ${it.vendedor ? 'vset' : ''}" onclick="event.stopPropagation()" data-prev="${(it.vendedor || '').replace(/"/g, '&quot;')}" onchange="lcVendChange('${id}', ${idx}, this)">
           <option value="">Vendedor…</option>${lcVendedores().map(n => `<option value="${n.replace(/"/g, '&quot;')}" ${it.vendedor === n ? "selected" : ""}>${n}</option>`).join("")}
           <option value="__nuevo__">+ Registrar nuevo vendedor/local</option>
-        </select>
+        </select>${(() => { const rp = window.lcRefPrecio ? lcRefPrecio(it) : it.precio_sugerido; return `<button class="lc-refp ${rp > 0 ? '' : 'vacio'}" title="Precio de referencia del mercado" onclick="event.stopPropagation(); lcRefEdit('${id}', ${idx})">Ref. ${rp > 0 ? '$' + parseFloat(rp).toFixed(2) : '$ ‒'}</button>`; })()}
       </div>
       <button class="lcr-p ${it.costo != null ? 'set' : 'vacio'}" onclick="event.stopPropagation(); lcPrecio('${id}', ${idx})">${precio}</button>
       ${bloq ? '<span class="lcr-cand" title="Doble toque para editar">🔒</span>' : ''}
+      <span class="lcr-grip" data-gi="${idx}" title="Arrastra para subir o bajar">⠿</span>
     </div>`;
     }).join("");
 
@@ -2675,7 +2784,7 @@ function verListaCompra(id) {
     ? `<span class="badge recibido_ok" style="display:inline-block; margin-top:4px;">Enviada a contabilidad${fechaEnvio ? " - " + fechaEnvio : ""}</span>`
     : "";
 
-  const botonElim = esPendiente ? `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>` : "";
+  const botonElim = esPendiente ? (lista.unificada ? `<button class="btn-peligro btn-imprimir" onclick="separarUnificada('${id}')">Separar en las listas originales</button>` : `<button class="btn-peligro btn-imprimir" onclick="eliminarListaCompra('${id}')">Eliminar esta lista</button>`) : "";
   const botonesAccion = enviada
     ? `<button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir</button>`
     : !realizada
@@ -2692,7 +2801,7 @@ function verListaCompra(id) {
     <div class="detalle-panel">
       <div class="detalle-header">
         <div>
-          <h2>${lista.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (lista.pedido_numero ? '<span class="lc-pnum">Pedido #' + lista.pedido_numero + '</span> ' : '')}${NOMBRES_LOCAL[lista.local] || lista.local}</h2>
+          <h2>${lista.unificada ? '<span class="lc-pnum">Unificada</span> ' : ''}${lista.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (lista.pedido_numero ? '<span class="lc-pnum">Pedido #' + lista.pedido_numero + '</span> ' : '')}${NOMBRES_LOCAL[lista.local] || lista.local}${areaLista(lista) ? ' · ' + areaLista(lista) : ''}</h2>
           <div class="guia-fecha lc-fecha">${fecha}${lista.fecha_necesaria ? " · necesario para el " + lista.fecha_necesaria.split("-").reverse().join("/") : ""}${lista.recepcion_id ? " · ✓ recibida en bodega" : ""}</div>
           ${estadoEnvio}
         </div>
@@ -2782,6 +2891,38 @@ const lcEditando = new Set();
 let lcUltimoToque = {k:null, t:0};
 function lcBloqueada(id, idx, it) { return !!(it.comprado && it.costo != null) && !lcEditando.has(id + ':' + idx); }
 function lcRefrescar(id) { if (listaCompraDetalleAbiertaId === id) verListaCompra(id); }
+(function(){
+  let D = null;
+  document.addEventListener('pointerdown', e => {
+    const g = e.target.closest && e.target.closest('.lcr-grip'); if(!g) return;
+    const row = g.closest('.lcr'); const cont = document.getElementById('lista-compra-detalle'); if(!row || !cont || !listaCompraDetalleAbiertaId) return;
+    const rows = Array.from(cont.querySelectorAll('.lcr')); const from = rows.indexOf(row); if(from < 0) return;
+    e.preventDefault(); try { g.setPointerCapture(e.pointerId); } catch(_) {}
+    D = {g, row, rows, from, to: from, y0: e.clientY, id: listaCompraDetalleAbiertaId}; row.classList.add('arr');
+  });
+  document.addEventListener('pointermove', e => {
+    if(!D) return; e.preventDefault();
+    D.row.style.transform = 'translateY(' + (e.clientY - D.y0) + 'px)';
+    let to = D.from;
+    D.rows.forEach((r, i) => { if(r === D.row) return; const b = r.getBoundingClientRect(), m = b.top + b.height / 2; if(i < D.from && e.clientY < m && i < to) to = i; if(i > D.from && e.clientY > m && i > to) to = i; });
+    D.to = to;
+    D.rows.forEach((r, i) => { r.classList.remove('dst', 'dstb'); if(r !== D.row && i === to) r.classList.add(to < D.from ? 'dst' : 'dstb'); });
+    const sc = document.scrollingElement; if(e.clientY < 70) sc.scrollTop -= 12; else if(e.clientY > innerHeight - 70) sc.scrollTop += 12;
+  }, {passive:false});
+  const fin = ok => {
+    if(!D) return; const d = D; D = null;
+    d.row.classList.remove('arr'); d.row.style.transform = ''; d.rows.forEach(r => r.classList.remove('dst', 'dstb'));
+    if(!ok || d.to === d.from) return;
+    const l = listasCompraCache.find(x => x.id === d.id); if(!l || l.enviada_contabilidad) return;
+    const items = l.items.slice(); const m = items.splice(d.from, 1)[0]; items.splice(d.to, 0, m);
+    const nuevos = items.map((it, i) => Object.assign({}, it, {numero: i + 1}));
+    l.items = nuevos; verListaCompra(d.id);
+    db.collection('listas_compra').doc(d.id).update({items: nuevos}).catch(er => { console.error(er); mostrarAviso && mostrarAviso('No se pudo guardar el orden'); });
+  };
+  document.addEventListener('pointerup', () => fin(true));
+  document.addEventListener('pointercancel', () => fin(false));
+})();
+
 function lcTapFila(id, idx) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || lista.enviada_contabilidad) return;
@@ -5149,13 +5290,76 @@ function render(){
     h += '<div class="lc-bar"><div class="lc-cnt"><b>' + n + '</b> ' + (n === 1 ? 'producto' : 'productos') + (L.local ? '' : ' · <span class="wn">Elige el local</span>') + '</div>' +
       '<button class="lcb" data-lc="revisar"' + (n ? '' : ' disabled') + '>Ver lista</button>' +
       '<button class="lcb okb big" data-lc="guardar"' + (n ? '' : ' disabled') + '>Guardar lista</button></div>';
+  } else if(UNI.open){
+    h += uniHtml();
   } else {
     h += '<div class="lc-listas-hint">Cuando aceptas un pedido en Pedidos de locales, su lista aparece aquí. Toca una para marcar lo comprado, poner costos y la carreta, y cerrarla con Compra realizada.</div>';
   }
   r.innerHTML = h;
-  const lv = $('#lc-listas'); if(lv) lv.style.display = L.tab === 'listas' ? '' : 'none';
+  const lv = $('#lc-listas'); if(lv) lv.style.display = (L.tab === 'listas' && !UNI.open) ? '' : 'none';
   sheet(); fit();
   if(typeof renderListasCompraPendientes === 'function' && typeof listasCompraCache !== 'undefined') renderListasCompraPendientes();
+}
+/* ---------- Unificar listas pendientes: una sola lista de compra, en orden por área (Cocina, Cafetería…), sin mezclar productos ---------- */
+const UNI = {open:false, sel:new Set(), busy:false};
+const uniListas = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => !l.enviada_contabilidad && !l.unificada && l.estado !== 'despachada' && !l.compra_realizada && Array.isArray(l.items));
+const UNI_AREAS = ['cocina', 'cafeteria', 'bebidas', 'panaderia', 'limpieza', 'empacado', 'procesado'];
+const uniLocN = loc => (typeof NOMBRES_LOCAL !== 'undefined' && NOMBRES_LOCAL[loc]) || loc;
+const uniArea = l => (typeof areaLista === 'function' ? areaLista(l) : '') || '';
+const uniSinAc = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+function uniRango(l){ if(l.requerimiento) return 90; const k = UNI_AREAS.indexOf(uniSinAc(uniArea(l))); return k < 0 ? 50 : k; }
+const uniOrden = arr => arr.slice().sort((a, b) => uniRango(a) - uniRango(b) || String(a.local).localeCompare(String(b.local)) || ((a.pedido_numero || 0) - (b.pedido_numero || 0)));
+window.lcUniN = () => uniListas().length;
+window.lcUnificar = function(){
+  const cur = uniListas().filter(l => l.local === L.local);
+  UNI.sel = new Set((cur.length ? cur : uniListas()).map(l => l.id));
+  UNI.open = true; L.sel = null; beep('tap'); render(); window.scrollTo(0, 0);
+};
+function uniEtiqueta(l, multi){
+  const a = uniArea(l), n = l.pedido_numero ? '#' + l.pedido_numero : '';
+  const base = [a, n].filter(Boolean).join(' ') || (l.requerimiento ? 'Requerimiento' : 'Lista');
+  return multi ? uniLocN(l.local) + ' · ' + base : base;
+}
+function uniHtml(){
+  const ls = uniListas();
+  let h = '<div class="uni"><div class="uni-top"><button class="lcb" data-lc="uni-cerrar">← Listas pendientes</button><div class="uni-t">Unificar listas</div></div>' +
+    '<div class="uni-ay">Junta varias listas en <b>una sola lista de compra</b> para ir al mercado. No mezcla los productos: van en orden por lista, primero Cocina, luego Cafetería, etc. En la lista unificada pones el dinero disponible y vas anotando los precios.</div>';
+  if(!ls.length) return h + '<div class="lc-empty"><b>No hay listas pendientes</b></div></div>';
+  const porLocal = {}; ls.forEach(l => { (porLocal[l.local] = porLocal[l.local] || []).push(l); });
+  const locs = Object.keys(porLocal).sort((a, b) => (b === L.local) - (a === L.local));
+  h += locs.map(loc => '<div class="uni-loc"><div class="uni-ln">' + esc(uniLocN(loc)) + '</div><div class="uni-pills">' + uniOrden(porLocal[loc]).map(l => { const on = UNI.sel.has(l.id); return '<button class="lcb uni-pill ' + (on ? 'on' : '') + '" data-lc="uni-list" data-id="' + l.id + '">' + (on ? '✓ ' : '＋ ') + esc([uniArea(l), l.pedido_numero ? '#' + l.pedido_numero : (l.requerimiento ? 'Requerimiento' : '')].filter(Boolean).join(' ') || 'Lista') + ' · ' + l.items.length + '</button>'; }).join('') + '</div></div>').join('');
+  const sel = uniOrden(ls.filter(l => UNI.sel.has(l.id))), multi = new Set(sel.map(l => l.local)).size > 1;
+  const nProd = sel.reduce((t, l) => t + l.items.length, 0);
+  h += '<div class="uni-bar"><div>Así quedará: <b>' + sel.length + '</b> lista' + (sel.length === 1 ? '' : 's') + ' · <b>' + nProd + '</b> productos</div></div>';
+  h += sel.map((l, k) => '<div class="uni-bl"><div class="uni-bh"><span class="uni-n">' + (k + 1) + '</span> ' + esc(uniEtiqueta(l, multi)) + ' <span class="mu">· ' + l.items.length + ' productos</span></div><div class="uni-bi">' + l.items.map(it => esc(it.producto_nombre) + ' <b>' + esc(etq(it.cantidad_solicitada, it.unidad_medida)) + '</b>').join(' · ') + '</div></div>').join('');
+  h += '<button class="lcb okb big uni-go" data-lc="uni-crear"' + (sel.length >= 2 && !UNI.busy ? '' : ' disabled') + '>Crear lista unificada' + (sel.length >= 2 ? ' (' + nProd + ' productos)' : ' · elige 2 o más listas') + '</button></div>';
+  return h;
+}
+async function uniCrear(){
+  const ls = uniListas(), sel = uniOrden(ls.filter(l => UNI.sel.has(l.id)));
+  if(sel.length < 2 || UNI.busy){ toast('Elige 2 o más listas'); return; }
+  UNI.busy = true; render();
+  const locs = new Set(sel.map(l => l.local)), multi = locs.size > 1;
+  const items = [];
+  sel.forEach(l => l.items.forEach((it, ix) => items.push(Object.assign({}, it, {numero:null, origen_lista:l.id, origen_idx:ix, origen_local:l.local, origen_area:uniArea(l) || null, origen_pedido:l.pedido_numero || null, origen_et:uniEtiqueta(l, multi)}))));
+  const sum = k => { const v = sel.map(l => parseFloat(l[k])).filter(x => !isNaN(x)); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) * 100) / 100 : null; };
+  const monto = sum('monto_asignado'), carreta = sum('carreta');
+  const ref = db.collection('listas_compra').doc();
+  const doc = {local:locs.size === 1 ? sel[0].local : 'varios', estado:'pendiente', unificada:true, pedido_id:null, pedido_numero:null, monto_asignado:monto, carreta:carreta || 0, impresa:false, fecha_creacion:firebase.firestore.FieldValue.serverTimestamp(), creado_por:'Unificada',
+    origenes:sel.map(l => ({id:l.id, local:l.local, area:uniArea(l) || null, pedido_numero:l.pedido_numero || null, pedido_id:l.pedido_id || null})), items:items};
+  Object.assign(doc, totalesLista(items, monto, carreta));
+  try {
+    const batch = db.batch();
+    batch.set(ref, doc);
+    sel.forEach(l => {
+      batch.update(db.collection('listas_compra').doc(l.id), {unificada_en:ref.id, estado:'unificada'});
+      if(l.pedido_id) batch.set(db.collection('pedidos_locales').doc(l.pedido_id), {compra_lista_id:ref.id}, {merge:true});
+    });
+    await batch.commit();
+    UNI.busy = false; UNI.open = false; beep('ok'); render();
+    if(typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes();
+    setTimeout(() => { if(typeof verListaCompra === 'function') verListaCompra(ref.id); }, 150);
+  } catch(e){ console.error(e); UNI.busy = false; beep('err'); toast('No se pudo unificar. Revisa la conexión.'); render(); }
 }
 function fit(){
   const r = $('#lc-root'); if(!r) return;
@@ -5345,7 +5549,10 @@ document.addEventListener('click', e => {
   if(!(t.closest('#lc-root') || t.closest('#lc-sheet') || t.closest('#lc-review') || t.closest('#lc-snack'))) return;
   const a = t.getAttribute('data-lc'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
   switch(a){
-    case 'local': saveDraft(); L.local = v; LSs('local', v); L.sel = null; loadDraft(); beep('tap'); render(); if(typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
+    case 'local': saveDraft(); UNI.open = false; L.local = v; LSs('local', v); L.sel = null; loadDraft(); beep('tap'); render(); if(typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
+    case 'uni-list': if(UNI.sel.has(id)) UNI.sel.delete(id); else UNI.sel.add(id); beep('tap'); render(); break;
+    case 'uni-cerrar': UNI.open = false; beep('tap'); render(); if(typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
+    case 'uni-crear': uniCrear(); break;
     case 'tab': L.tab = v; L.sel = null; render(); if(v === 'listas' && typeof renderListasCompraPendientes === 'function') renderListasCompraPendientes(); break;
     case 'card': {
       if(L.edit){ abrirEd(id); break; }
@@ -5443,6 +5650,19 @@ window.lcSetItem = function(listaId, idx, campo, valor){
   if(campo === 'precio_sugerido'){ const f = parseFloat(valor); valor = isNaN(f) || f < 0 ? null : f; }
   const items = l.items.map((it, i) => { if(i !== idx) return it; const n = Object.assign({}, it); n[campo] = (valor === '' || valor === undefined) ? null : valor; return n; });
   db.collection('listas_compra').doc(listaId).update({items:items}).catch(e => { console.error(e); beep('err'); toast('No se pudo guardar. Revisa la conexión.'); });
+};
+window.lcRefPrecio = function(it){ const f = L.fichas && L.fichas[it.producto_id]; if(f && f.precio > 0) return f.precio; return it.precio_sugerido > 0 ? it.precio_sugerido : null; };
+window.lcRefEdit = function(listaId, idx){
+  const l = listasCompraCache.filter(x => x.id === listaId)[0]; if(!l || l.enviada_contabilidad) return;
+  const it = l.items[idx]; if(!it) return;
+  pedirNumero('Precio de referencia: ' + it.producto_nombre, '$', lcRefPrecio(it), n => {
+    const v = n > 0 ? n : null; const f = L.fichas[it.producto_id] || {};
+    L.fichas[it.producto_id] = Object.assign({}, f, {precio: v});
+    db.collection('fichas_compra').doc(it.producto_id).set({precio: v, actualizado: SV()}, {merge: true}).catch(er => { console.error(er); toast('No se pudo guardar'); });
+    const items = l.items.map((x, i) => i === idx ? Object.assign({}, x, {precio_sugerido: v}) : x);
+    db.collection('listas_compra').doc(listaId).update({items: items}).catch(() => {});
+    l.items = items; if(window.verListaCompra) verListaCompra(listaId);
+  });
 };
 window.lcVendChange = function(listaId, idx, sel){
   if(sel.value !== '__nuevo__'){ lcSetItem(listaId, idx, 'vendedor', sel.value); return; }
@@ -5724,7 +5944,7 @@ function crearLista(ped, its){
       unidad_medida:c ? c.unidad : (it.unidad_medida || (prod(it.producto_id) || {}).unidad || ''), cantidad_solicitada:qty(ped, it), comprado:false, costo:null, nota:(c && c.nota) || '', precio_sugerido:(f.precio > 0 ? f.precio : ((c && c.precio > 0) ? c.precio : null)), vendedor:null};
   });
   const ref = db.collection('listas_compra').doc();
-  ref.set({local:ped.local, estado:'pendiente', pedido_id:ped.id, pedido_numero:ped.numero || null, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido de ' + (LOCNOM[ped.local] || ped.local), items:items})
+  ref.set({local:ped.local, area:areaPedido(ped) || null, estado:'pendiente', pedido_id:ped.id, pedido_numero:ped.numero || null, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido de ' + (LOCNOM[ped.local] || ped.local), items:items})
     .catch(e => { console.error(e); toast('No se pudo crear la lista de compras'); });
   return ref;
 }
@@ -5844,7 +6064,7 @@ window.pdInit = function(){
   }, e => console.error(e));
   render();
 };
-window.PDS = P; window.pdHoja = hojaHtml;
+window.PDS = P; window.pdHoja = hojaHtml; window.pdAreaDe = ped => areaPedido(ped);
 if(window.firebase && typeof db !== 'undefined') pdInit();
 })();
 
