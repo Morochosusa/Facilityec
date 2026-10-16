@@ -567,6 +567,7 @@
   #pr-root .npf{display:flex;flex-direction:column;gap:8px}
   #pr-root .npf input[type=text]{width:100%;min-height:56px;font:inherit;font-size:20px;padding:0 14px;border:2px solid var(--bd);border-radius:14px;background:var(--s1);-webkit-user-select:text;user-select:text}
   #pr-root .npf .lbl{font-weight:700;font-size:16px;color:var(--mu)}
+  #pr-root .screen .lbl{font-weight:700;font-size:16px;color:var(--mu);margin:6px 0 4px}
   #pr-root .npf .chips{display:flex;gap:8px;flex-wrap:wrap}
   #pr-root #pr-left .card{flex-direction:row;align-items:center;gap:12px;min-height:calc(var(--u)*58px);padding:6px 12px;border-width:2px;border-radius:12px}
   #pr-root #pr-left .num{position:static;flex-shrink:0}
@@ -956,17 +957,21 @@
   .pd-resumen.ok{font-weight:800;color:#1d8a4e;font-size:17px}
   @media print{#guias-detalle .gd-acts,#guias-detalle .gd-or,#guias-detalle .gd-x,#guias-detalle .gd-ayuda,#guias-detalle .gd-row{display:none !important}}
   .gd-print{display:none}
+  .gd-top{margin:0 0 8px}
+  .gd-top .lcb{width:100%;min-height:56px;font-size:18px}
   .gd-gav{margin-top:16px;border:2px solid #000;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:14px;font-size:15px;font-weight:700;break-inside:avoid}
   .gd-gav .gd-gav-box{flex:0 0 110px;height:46px;border:2px solid #000;border-radius:4px}
   @media print{
     #guias-detalle .gd-print{display:block;color:#000}
     #guias-detalle .badge.por_despachar,#guias-detalle .btn-cerrar{display:none !important}
-    #guias-detalle .gd-pt{width:100%;border-collapse:collapse;font-size:12px}
-    #guias-detalle .gd-pt th,#guias-detalle .gd-pt td{border:1px solid #000;padding:5px 4px;vertical-align:middle;text-align:left}
-    #guias-detalle .gd-pt th{background:#eee;font-size:11px}
-    #guias-detalle .gd-pt td.c{text-align:center;width:44px}
-    #guias-detalle .gd-pt td.ob{width:20%;height:30px}
-    #guias-detalle .gd-pt tr{break-inside:avoid}
+    #guias-detalle .gd-pr{display:grid;grid-template-columns:34% 33% 33%;gap:8px;padding:9px 0;break-inside:avoid;font-size:13px;align-items:start}
+    #guias-detalle .gd-ph{font-size:11px;font-weight:800;padding-bottom:4px}
+    #guias-detalle .gd-pq{color:#333;font-weight:400;white-space:nowrap}
+    #guias-detalle .gd-pc{display:flex;gap:8px;align-items:flex-start;min-height:34px}
+    #guias-detalle .gd-ph .gd-pc{min-height:0}
+    #guias-detalle .gd-cb{flex:0 0 16px;height:16px;border:1.5px solid #000;border-radius:3px;margin-top:1px}
+    #guias-detalle .gd-po{font-size:10px;color:#555}
+    #guias-detalle .gd-top{display:none !important}
     #guias-detalle .gd-quien{display:flex;gap:18px;margin:8px 0 10px;font-size:13px}
     #guias-detalle .gd-quien div{flex:1;border-bottom:1px solid #000;padding-bottom:3px}
     #guias-detalle .gd-quien small{display:block;color:#555;font-size:10px;text-transform:uppercase}
@@ -2353,6 +2358,8 @@ const NOMBRES_ESTADO = {
 };
 
 let guiasCache = [];
+const guiaArea = g => { let a = (g && g.area) || ""; if(!a){ try { const P = window.PDS, ped = P && P.lista ? P.lista.filter(p => p.id === g.pedido_local_id)[0] : null; a = ped && window.pdAreaDe ? (window.pdAreaDe(ped) || "") : ""; } catch(e){} } a = String(a || "").trim(); return a ? a.charAt(0).toUpperCase() + a.slice(1) : ""; };
+const guiaTitulo = g => (NOMBRES_LOCAL[g.local] || g.local) + (guiaArea(g) ? " - " + guiaArea(g) : "");
 let guiaAbiertaId = null;
 
 function escucharGuias() {
@@ -2382,7 +2389,7 @@ function renderListaGuias() {
       <div class="guia-card" onclick="verGuia('${g.id}')">
         <div class="guia-card-top">
           <div>
-            <div class="guia-local">${NOMBRES_LOCAL[g.local] || g.local}</div>
+            <div class="guia-local">${guiaTitulo(g)}</div>
             <div class="guia-fecha">${fecha} - ${g.items.length} productos</div>
           </div>
           <span class="badge ${estadoClase}">${NOMBRES_ESTADO[estadoClase] || estadoClase}</span>
@@ -2426,13 +2433,14 @@ function verGuia(id) {
     <div class="detalle-panel">
       <div class="detalle-header">
         <div>
-          <h2>${NOMBRES_LOCAL[guia.local] || guia.local}</h2>
+          <h2>${guiaTitulo(guia)}</h2>
           <div class="guia-fecha">${fecha}</div>
           <div class="guia-fecha">Despachado por: ${guia.despachado_por || "-"}</div>
           ${lineaRecepcion}
         </div>
         <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
       </div>
+      <button class="btn-despachar btn-imprimir" style="margin:0 0 10px" onclick="window.print()">🖨 Imprimir guía</button>
       <div class="guia-fila-check guia-check-encabezado">
         <span class="guia-fila-nombre"></span>
         <span>Envia</span>
@@ -2446,7 +2454,6 @@ function verGuia(id) {
         <span>Recibe: _________________________</span>
         <span>Hora: _____________</span>
       </div>
-      <button class="btn-despachar btn-imprimir" onclick="window.print()">Imprimir guia</button>
     </div>
   `;
 }
@@ -2527,15 +2534,16 @@ function gdEliminar(id) {
 function gdImpresion(guia, orden) {
   const vis = orden.filter(i => guia.items[i].cantidad_despachada > 0);
   const filas = vis.map((i, k) => { const it = guia.items[i];
-    return `<tr><td class="c">${k + 1}</td><td>${it.producto_nombre}${esFrio(consItem(it)) ? " (" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")" : ""}</td><td class="c" style="width:70px">${gdFmt(it.cantidad_despachada)} ${it.unidad_medida || ""}</td><td class="c"></td><td class="c"></td><td class="ob"></td><td class="ob"></td></tr>`; }).join("");
+    return `<div class="gd-pr"><div class="gd-pn"><b>${k + 1}.</b> ${it.producto_nombre}${esFrio(consItem(it)) ? " (" + (consItem(it) === "congelado" ? "congelado" : "refrigerado") + ")" : ""} <span class="gd-pq">${gdFmt(it.cantidad_despachada)} ${it.unidad_medida || ""}</span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-po">Observación:</span></div><div class="gd-pc"><span class="gd-cb"></span><span class="gd-po">Observación:</span></div></div>`; }).join("");
   const fch = new Date().toLocaleDateString("es-EC");
   return `<div class="gd-print">
-    <div class="gd-quien"><div><small>Quién envía (nombre y firma)</small>&nbsp;</div><div><small>Quién recibe — ${NOMBRES_LOCAL[guia.local] || guia.local} (nombre y firma)</small>&nbsp;</div><div style="flex:0 0 120px"><small>Fecha</small>${fch}</div></div>
-    <table class="gd-pt"><thead><tr><th>#</th><th>Producto</th><th>Cantidad</th><th>Envía</th><th>Recibe</th><th>Observación de quien envía</th><th>Observación de quien recibe</th></tr></thead><tbody>${filas}</tbody></table>
+    <div class="gd-quien"><div><small>Quién envía (nombre y firma)</small>&nbsp;</div><div><small>Quién recibe — ${guiaTitulo(guia)} (nombre y firma)</small>&nbsp;</div><div style="flex:0 0 110px"><small>Fecha</small>${fch}</div></div>
+    <div class="gd-pr gd-ph"><div class="gd-pn">Producto</div><div class="gd-pc">ENVÍA</div><div class="gd-pc">RECIBE</div></div>
+    ${filas}
     ${gdGavetas()}
   </div>`;
 }
-const gdGavetas = () => `<div class="gd-gav"><span>Total de gavetas enviadas:</span><span class="gd-gav-box"></span><span style="margin-left:auto">Recibidas:</span><span class="gd-gav-box"></span></div>`;
+const gdGavetas = () => `<div class="gd-gav"><span>Total de gavetas enviadas:</span><span class="gd-gav-box"></span></div>`;
 function verGuiaPorDespachar(guia) {
   const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
   const id = guia.id, aviso = gdGuard.id === id && gdGuard.until > Date.now();
@@ -2559,18 +2567,18 @@ function verGuiaPorDespachar(guia) {
     <div class="detalle-panel">
       <div class="detalle-header">
         <div>
-          <h2>${NOMBRES_LOCAL[guia.local] || guia.local}</h2>
+          <h2>${guiaTitulo(guia)}</h2>
           <div class="guia-fecha lc-fecha">${fecha}</div>
           <span class="badge por_despachar">Por despachar · aún no baja del inventario</span>
         </div>
         <button class="btn-cerrar" onclick="cerrarDetalleGuia()">&times;</button>
       </div>
+      <div class="gd-top"><button class="lcb okb" onclick="window.print()">🖨 Imprimir guía</button></div>
       <div class="gd-ayuda">Revisa lo que hay, ajusta cantidades y toca <b>Despachar</b>. Al despachar baja de bodega y el local lo ve en <b>Por recibir</b>.${orden.some(i => esFrio(consItem(guia.items[i]))) ? " <b>Lo frío va al final:</b> revísalo (calidad y cantidad) y sácalo del frío justo antes de salir." : ""}</div>
       ${filas}
       ${gdImpresion(guia, orden)}
       <div class="gd-acts">
         <button class="lcb ${aviso ? "gd-warn" : "okb"} big" onclick="gdDespachar('${id}')">${aviso ? (falt.length ? "Falta stock en " + falt.length : "Sin revisar: " + sinRev.length + " producto" + (sinRev.length === 1 ? "" : "s") + " frío" + (sinRev.length === 1 ? "" : "s")) + " · toca otra vez para despachar igual" : "Despachar (" + n + ")"}</button>
-        <button class="lcb" onclick="window.print()">Imprimir guía</button>
         <button class="lcb er" onclick="gdEliminar('${id}')">Eliminar guía</button>
       </div>
     </div>`;
@@ -3682,7 +3690,7 @@ function fichaDe(pid){
   f.vida = Object.assign({ref:0, con:0, amb:0}, f.vida || {});
   f.receta = f.receta || [];
   f.id = pid; f.guardada = !!d; f.inv = p.inv; f.seccion = p.seccion;
-  const cl = window.catLocal ? catLocal(pid) : null; if(cl && cl.nombre) f.nombre = cl.nombre;
+  const cl = window.catLocal ? catLocal(pid) : null; if(cl && cl.nombre && !(d && d.nombre_propio)) f.nombre = cl.nombre;   // si Facility lo renombró, manda Facility
   return f;
 }
 const tieneVida = f => f.vida.ref > 0 || f.vida.con > 0 || f.vida.amb > 0;
@@ -4275,6 +4283,9 @@ function renderFichaEdit(){
   const dm = m => p.vida[m] > 0 ? p.vida[m] + ' días' : 'No aplica';
   return '<div class="subbar"><button class="btn" data-act="ficha-cancel">Cancelar</button><div class="subt">' + esc(p.nombre) + '</div><button class="btn okb" data-act="ficha-save">Guardar</button></div><div class="screen">' +
     '<div class="sec"><h3>Foto</h3><div class="fotorow">' + phHTML(p, 'big') + '<div class="col"><label class="btn pri" for="pr-ficha-foto">' + ic('camera', 24) + ' Tomar o elegir foto</label><input id="pr-ficha-foto" type="file" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px">' + (foto ? '<button class="btn" data-act="foto-del">Quitar foto</button>' : '') + '</div></div></div>' +
+    '<div class="sec"><h3>Nombre y peso</h3><div class="mu small">Los productos se cambian y se agregan aquí, en Facility. Escribe el nombre y el peso o presentación como quieres verlos en la lista y en la etiqueta.</div>' +
+      '<div class="lbl">Nombre</div><input type="text" id="pr-f-nombre" value="' + esc(p.nombre) + '" autocomplete="off" style="width:100%;min-height:60px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box">' +
+      '<div class="lbl" style="margin-top:10px">Peso / presentación</div><input type="text" id="pr-f-pres" value="' + esc(p.presentacion || '') + '" placeholder="Ej. 2 kg, Funda 250 g" autocomplete="off" style="width:100%;min-height:60px;font-size:20px;padding:0 14px;border:2px solid #d3d1c7;border-radius:14px;box-sizing:border-box"></div>' +
     '<div class="sec"><h3>Estación</h3><div class="mu small">Para pasar este producto a otra lista, elige dónde va. Aparecerá en la lista de esa estación.</div><div class="modos">' +
       [].concat.apply([], ESTACIONES.map(e => e.secciones.map(sc => [sc, e.secciones.length > 1 ? e.nombre + ' · ' + SECCION_NOMBRE[sc] : e.nombre]))).map(x => '<button class="btn ' + (p.seccion === x[0] ? 'on' : '') + '" data-act="fsec" data-v="' + x[0] + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="sec"><h3>Cantidades (' + esc(p.unidad) + ')</h3>' +
@@ -4307,7 +4318,10 @@ function onPhoto(file){
 function guardarFicha(){
   const d = S.fd; if(!d) return;
   const p = d.draft;
-  const doc = {producto_id:p.id, nombre:p.nombre, presentacion:p.presentacion, unidad:p.unidad, codigo:p.codigo, decimales:p.decimales ? 1 : 0, batch:p.batch, solo_batch:p.solo_batch ? 1 : 0,
+  p.nombre = String(p.nombre || '').trim(); p.presentacion = String(p.presentacion || '').trim();
+  if(!p.nombre){ toast('El nombre no puede quedar vacío'); return; }
+  const orig = fichaDe(p.id), cambioNombre = !orig || orig.nombre !== p.nombre;
+  const doc = {producto_id:p.id, nombre_propio:(cambioNombre || (S.fichas[p.id] && S.fichas[p.id].nombre_propio)) ? 1 : 0, nombre:p.nombre, presentacion:p.presentacion, unidad:p.unidad, codigo:p.codigo, decimales:p.decimales ? 1 : 0, batch:p.batch, solo_batch:p.solo_batch ? 1 : 0,
                por_etiqueta:p.por_etiqueta || 0, max:p.max || 0, modo_defecto:p.modo_defecto, vida:p.vida, receta:p.receta, foto:p.foto || null,
                actualizado:SV(), actualizado_por:(typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.email : null};
   if(p.seccion && SECCION_NOMBRE[p.seccion]){ doc.seccion = p.seccion; const pp = prodDe(p.id); if(pp) pp.seccion = p.seccion; }
@@ -4778,6 +4792,8 @@ function init(){
     if(t.id === 'pr-q'){ S.q = t.value; renderGrid(); }
     else if(t.id === 'pr-np-nombre' && S.np) S.np.nombre = t.value;
     else if(t.id === 'pr-np-pres' && S.np) S.np.pres = t.value;
+    else if(t.id === 'pr-f-nombre' && S.fd) S.fd.draft.nombre = t.value;
+    else if(t.id === 'pr-f-pres' && S.fd) S.fd.draft.presentacion = t.value;
   });
   document.addEventListener('change', e => { if(e.target && e.target.id === 'pr-ficha-foto' && e.target.files && e.target.files[0] && S.fd) onPhoto(e.target.files[0]); });
   window.addEventListener('resize', layout);
@@ -5960,7 +5976,7 @@ function crearGuia(ped, its){
       unidad_medida:it.unidad_medida || p.unidad || '', cantidad_pedida:q, cantidad_despachada:q, origen:'stock', cantidad_recibida:null, diferencia:null, nota_diferencia:''};
   });
   const ref = db.collection('pedidos').doc();
-  ref.set({local:ped.local, estado:'por_despachar', pedido_local_id:ped.id, pedido_local_numero:ped.numero || null, fecha_despacho:SV(), fecha_recepcion:null, despachado_por:null, recibido_por:null, items:items})
+  ref.set({local:ped.local, area:areaPedido(ped) || null, estado:'por_despachar', pedido_local_id:ped.id, pedido_local_numero:ped.numero || null, fecha_despacho:SV(), fecha_recepcion:null, despachado_por:null, recibido_por:null, items:items})
     .catch(e => { console.error(e); toast('No se pudo crear la guía de despacho'); });
   return ref;
 }
