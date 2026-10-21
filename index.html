@@ -26,50 +26,57 @@
     color: #2c2c2a;
   }
 
-  .shell { display: flex; min-height: 100vh; }
+  .shell { display: flex; min-height: 100vh; padding-left: var(--navw); transition: padding-left .18s ease; }
 
+  :root{--navw:68px}
+  body.nav-dock{--navw:250px}
   .sidebar {
-    width: 240px;
-    flex-shrink: 0;
+    position: fixed; left: 0; top: 0; bottom: 0; z-index: 60;
+    width: var(--navw);
     background: #fff;
     border-right: 1px solid #e2e0d6;
-    padding: 18px 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
+    padding: 10px 0;
+    overflow-x: hidden; overflow-y: auto;
+    transition: width .18s ease;
   }
-  .brand-block {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 20px 18px;
-  }
-  .brand-logo { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
-  .brand-texto { line-height: 1.25; }
+  body.nav-open .sidebar{width:250px;box-shadow:4px 0 24px rgba(0,0,0,.18)}
+  body.nav-dock.nav-open .sidebar{box-shadow:none}
+  .nav-scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+  body.nav-open:not(.nav-dock) .nav-scrim{display:block}
+  .nav-toggle{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;cursor:pointer;padding:6px 0 6px 14px;margin-bottom:6px;text-align:left;min-height:48px}
+  .nav-burger{flex:0 0 40px;height:40px;border-radius:10px;background:#f4f2ec;display:flex;align-items:center;justify-content:center;font-size:22px;color:#2c2c2a}
+  .brand-block { align-items: center; gap: 10px; padding: 0; min-width: 0; }
+  .brand-logo { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; }
+  .brand-texto { line-height: 1.25; white-space: nowrap; }
   .brand { font-size: 15px; font-weight: 600; color: #2c2c2a; }
   .brand-sub { font-size: 12px; color: #888780; }
   .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #5f5e5a;
-    cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 0 0 0 14px; min-height: 48px;
+    font-size: 15px; color: #5f5e5a; cursor: pointer; white-space: nowrap;
   }
+  .nav-ic{position:relative;flex:0 0 40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .nav-tx{overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .12s}
+  body.nav-open .nav-tx,body.nav-dock .nav-tx{opacity:1}
+  .nav-item.activo .nav-ic{background:#eeedfe}
+  .nav-ic .nav-bd{position:absolute;top:-3px;right:-5px;margin:0;min-width:20px;text-align:center}
   .nav-grupo {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #b4b2a9;
-    padding: 14px 20px 4px;
+    display:flex;align-items:center;gap:12px;padding:8px 0 4px 14px;margin-top:4px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #8a8880;
+    border-top:1px solid #eceae2; white-space:nowrap;
   }
+  .nav-grupo .nav-ic{height:28px;font-size:18px}
+  .nav-sub{padding-left:14px}
+  .brand-block{display:none}
+  body.nav-open .brand-block,body.nav-dock .brand-block{display:flex}
+  #nav-pantalla{font-size:0;padding-left:14px}
+  #nav-pantalla::before{content:'⛶';font-size:20px;flex:0 0 40px;height:40px;display:flex;align-items:center;justify-content:center}
+  body.nav-open #nav-pantalla,body.nav-dock #nav-pantalla{font-size:15px;padding-left:14px}
+  body.nav-open #nav-pantalla::before,body.nav-dock #nav-pantalla::before{display:none}
+  body.nav-open #nav-pantalla,body.nav-dock #nav-pantalla{padding-left:26px}
+  .nav-sub .nav-ic{font-size:19px}
+  body.nav-open .nav-sub,body.nav-dock .nav-sub{padding-left:30px}
   .nav-item:hover { background: #f4f2ec; }
   .nav-item.activo { background: #eeedfe; color: #4285f4; font-weight: 500; }
 
@@ -86,34 +93,7 @@
   .topbar h1 { margin: 0; font-size: 19px; font-weight: 600; }
   .topbar p { margin: 4px 0 0; font-size: 13px; color: #888780; }
 
-  @media (max-width: 900px) {
-    .shell { flex-direction: column; }
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: 10px 0;
-      display: flex;
-      align-items: center;
-      overflow-x: auto;
-      overflow-y: visible;
-      border-right: none;
-      border-bottom: 1px solid #e2e0d6;
-    }
-    .brand-block { display: none; }
-    .nav-grupo { display: none; }
-    .nav-item {
-      flex-shrink: 0;
-      width: auto;
-      padding: 8px 14px;
-      border-radius: 8px;
-      margin: 0 4px;
-      white-space: nowrap;
-    }
-    .barra-inferior { left: 0 !important; padding-left: 88px !important; }
-  }
+  @media (max-width: 900px) { .barra-inferior { padding-left: 14px !important; } }
 
   .panel {
     background: #fff;
@@ -245,7 +225,7 @@
   .barra-inferior {
     position: fixed;
     bottom: 0;
-    left: 240px;
+    left: var(--navw);
     right: 0;
     background: #fff;
     border-top: 1px solid #e2e0d6;
@@ -691,16 +671,11 @@
   body.pr-on .content{padding-bottom:0}
   .teclado-sindec .teclado-tecla[data-tecla="."]{visibility:hidden}
   /* ---------- Modo tactil (tablet/celular): una sola regla para todos los modulos ---------- */
-  body.touch .shell{flex-direction:column}
-  body.touch .sidebar{width:100%;height:auto;position:sticky;top:0;z-index:20;padding:10px 0;display:flex;align-items:center;overflow-x:auto;overflow-y:visible;border-right:none;border-bottom:1px solid #e2e0d6}
-  body.touch .brand-block,body.touch .nav-grupo{display:none}
-  body.touch .nav-item{flex-shrink:0;width:auto;padding:0 18px;min-height:56px;border-radius:10px;margin:0 4px;white-space:nowrap;font-size:16px}
-  body.touch .barra-inferior{left:0 !important;padding-left:88px !important}
+  body.touch .nav-item{min-height:56px;font-size:16px}
   body.touch .btn-despachar,body.touch .btn-secundario,body.touch .btn-chico,body.touch .btn-cerrar{min-height:56px;font-size:16px}
   body.touch select,body.touch input[type=text],body.touch input[type=number],body.touch input[type=password]{min-height:52px;font-size:17px}
   body.touch .item-row1 input[type=checkbox]{width:30px;height:30px}
   body.touch .guia-card,body.touch .item{min-height:56px}
-  body.touch .sidebar{padding:6px 0}
   body.touch.pr-on .topbar{display:none}
   body.pr-on .clock-fab{display:none}
 
@@ -1384,6 +1359,8 @@
   #bg-root .bg-baja{text-align:right;flex:none} #bg-root .bg-baja b{display:block;font-size:17px} #bg-root .bg-baja span{font-size:12px;color:#6b6a64}
   #bg-sheet{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;font-size:16px;color:#1f1f1d} #bg-sheet.show{display:flex}
   #bg-sheet .bg-sh-box{background:#fff;width:min(560px,100%);border-radius:18px 18px 0 0;padding:16px;max-height:88vh;overflow:auto;box-sizing:border-box} #bg-sheet h3{margin:0 0 4px;font-size:20px}
+  #bg-root .bg-tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0} #bg-root .bg-vl{display:flex;align-items:center;gap:8px;font-size:13px;color:#6b6a64}
+  #bg-root .bg-tr input{width:100%;box-sizing:border-box;min-height:48px}
   #bg-sheet .bg-sh-op{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0} #bg-sheet .bg-sh-op .ivb{min-height:64px} #bg-sheet .bg-sh-x{width:100%;min-height:56px}
   #bg-snack,#bg-toast{display:none} #bg-snack.show{display:block;position:fixed;left:0;right:0;bottom:100px;z-index:160;pointer-events:none}
   .bg-sn{pointer-events:auto;margin:0 auto;max-width:520px;background:#2c2c2a;color:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:15px}
@@ -1417,7 +1394,7 @@
   .pd-row.off{opacity:.5} .pd-row.off .pd-nm{text-decoration:line-through}
   .pd-nm{flex:1;font-weight:700;font-size:18px;line-height:1.2} .pd-nota{font-size:13px;color:#6b6a63;font-weight:500}
   .pd-q{font-size:20px} .pd-qb{min-width:130px;font-size:20px}
-  .pd-bar{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;gap:10px;padding:10px 12px 10px 84px;background:#fff;border-top:1px solid #e2e0d6} .pd-bar .lcb{flex:1}
+  .pd-bar{position:fixed;left:var(--navw);right:0;bottom:0;z-index:90;display:flex;gap:10px;padding:10px 12px;background:#fff;border-top:1px solid #e2e0d6} .pd-bar .lcb{flex:1}
   .lcb.pd-done{background:#e1f5ea;border-color:#1d8a4e;color:#1d8a4e}
   #pd-snack,#pd-toast{display:none}
   #pd-snack.show{display:block;position:fixed;left:0;right:0;bottom:100px;z-index:160;pointer-events:none}
@@ -1486,6 +1463,54 @@
   #es-toast{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:110px;background:#1f1f1d;color:#fff;padding:14px 20px;border-radius:14px;font-size:16px;z-index:330;max-width:90vw}
   #es-toast.show{display:block}
   .nav-item.es-open{background:#eeedfe}
+  @media print{.shell{padding-left:0 !important}.nav-scrim{display:none !important}}
+  #bg-root .bg-esp{text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0} #bg-root .bg-esp small{font-size:13px;font-weight:700;color:#4a4943;text-transform:uppercase;letter-spacing:.03em} #bg-root .bg-esp b{font-size:30px;line-height:1.1;font-weight:800;color:#1f1f1d}
+  #bg-root .bg-it-top .nm{font-size:20px;font-weight:700}
+  #bg-root .bg-it.st-n{border-color:#b9b6a8;background:#fff}
+  #bg-root .bg-it.st-ok{border-color:#1d7a4d;background:#f0faf4}
+  #bg-root .bg-it.st-am{border-color:#b26a00;background:#fff8e8}
+  #bg-root .bg-it.st-no{border-color:#c0392b;background:#fff3f1}
+  #bg-root .bg-it.flash{animation:bgflash .9s 2}
+  @keyframes bgflash{50%{box-shadow:0 0 0 6px rgba(60,52,137,.35)}}
+  .bg-st{display:inline-block;font-size:15px;font-weight:800;padding:4px 12px;border-radius:99px;margin:6px 0}
+  .bg-st.st-n{background:#e6e4dc;color:#4a4943}.bg-st.st-ok{background:#d6f0e0;color:#0f5a35}.bg-st.st-am{background:#ffe9b8;color:#7a4700}.bg-st.st-no{background:#ffd9d4;color:#9b1c10}
+  #bg-root .bg-acc{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:8px;margin-top:4px} #bg-root .bg-acc.solo{grid-template-columns:1fr 1fr}
+  #bg-root .bg-acc .ivb{min-height:60px;font-size:16px;font-weight:700} #bg-root .bg-acc .ivb.on{background:#1f1f1d;color:#fff;border-color:#1f1f1d}
+  #bg-root .bg-dest .ivb{min-height:52px}
+  #bg-root .bg-sum{display:flex;flex-wrap:wrap;gap:6px 16px;width:100%;text-align:left;background:#faf9f4;border:2px dashed #cfcbbd;border-radius:12px;padding:10px 12px;margin:6px 0;font-size:16px;cursor:pointer;min-height:52px}
+  #bg-root .bg-sum small{flex-basis:100%;color:#6b6a64}
+  #bg-root .bg-lt{background:none;border:none;color:#3c3489;font-size:15px;font-weight:700;padding:12px 4px;min-height:48px;cursor:pointer}
+  #bg-root .bg-foto{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px} #bg-root .bg-foto .ivb{display:flex;align-items:center;justify-content:center;min-height:60px;text-align:center}
+  .bg-fin{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+  #bg-root .bg-fprev{display:flex;gap:12px;align-items:center;margin-top:10px} #bg-root .bg-fprev img{width:92px;height:92px;object-fit:cover;border-radius:10px;border:2px solid #1d7a4d}
+  #bg-dif,#bg-pick,#bg-sum,#bg-fotov,#bg-provm{display:none;position:fixed;inset:0;z-index:170;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;padding:0}
+  #bg-dif.show,#bg-pick.show,#bg-sum.show,#bg-fotov.show,#bg-provm.show{display:flex}
+  .bg-dbox,.bg-fvb{background:#fff;width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px 22px;font-size:17px;color:#1f1f1d}
+  .bg-dbox h3{margin:0 0 4px;font-size:20px}
+  .bg-dq{margin-top:12px}.bg-dq>span{font-size:14px;font-weight:700;color:#4a4943}
+  .bg-dqr{display:grid;grid-template-columns:auto 1fr auto;gap:8px;margin-top:4px}.bg-dqr .ivb{min-height:64px;min-width:64px;font-size:26px}
+  .bg-dqr .ivb.val{display:flex;flex-direction:column;align-items:center;justify-content:center} .bg-dqr .ivb.val b{font-size:30px} .bg-dqr .ivb.val small{font-size:13px;color:#6b6a64}
+  .bg-dqr:not(:has(button:nth-child(3))){grid-template-columns:1fr}
+  .bg-dacc{margin-top:12px;padding:12px;border-radius:12px;background:#f0faf4;border:2px solid #1d7a4d;font-size:18px}
+  .bg-dmot{display:flex;flex-wrap:wrap;gap:8px}.bg-dmot .ivb{min-height:52px;padding:0 14px}.bg-dmot .ivb.on,.bg-dbt .ivb.on{background:#1f1f1d;color:#fff;border-color:#1f1f1d}
+  .bg-dbt{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:16px}.bg-dbt .ivb{min-height:60px;font-size:17px;font-weight:700}
+  .bg-pl{display:grid;gap:8px;margin-top:10px;max-height:46vh;overflow:auto}.bg-pl .ivb{min-height:56px;text-align:left;display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .bg-sl{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.bg-sl span{padding:6px 12px;border-radius:99px;font-weight:800;font-size:15px}
+  .bg-sl .st-ok{background:#d6f0e0;color:#0f5a35}.bg-sl .st-am{background:#ffe9b8;color:#7a4700}.bg-sl .st-no{background:#ffd9d4;color:#9b1c10}
+  .bg-fvb img{width:100%;border-radius:12px;margin-bottom:12px} .bg-rb{border-top:1px solid #e3e0d6;padding:8px 0}
+  @media (max-width:640px){ #bg-root .bg-acc,#bg-root .bg-acc.solo{grid-template-columns:1fr} #bg-root .bg-foto{grid-template-columns:1fr} }
+  #mp-banner{background:#fff3cd;border-bottom:2px solid #b7791f;color:#5c3b00;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:15px}
+  #mp-banner span{flex:1 1 220px} #mp-banner button{min-height:48px;padding:0 16px;border-radius:12px;border:2px solid #b7791f;background:#fff;font-size:15px;font-weight:700;cursor:pointer}
+  #mp-modal{display:none;position:fixed;inset:0;z-index:180;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:12px} #mp-modal.show{display:flex}
+  .mp-box{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:18px;color:#1f1f1d} .mp-box h3{margin:0 0 6px;font-size:20px}
+  .mp-g{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;margin-top:8px;padding:8px 14px;border-radius:14px;border:2px solid #cfcbbd;background:#fff;font-size:16px;text-align:left;cursor:pointer} .mp-g.on{border-color:#c0392b;background:#fff3f1}
+  .mp-ck{font-size:24px} .mp-gt{flex:1} .mp-g b{font-size:20px}
+  .mp-bt{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:16px} .mp-bt .ivb{min-height:60px;font-size:17px;font-weight:700} .mp-peligro{background:#c0392b !important;color:#fff !important;border-color:#c0392b !important}
+  body.modo-prueba .sidebar{box-shadow:inset 4px 0 0 #b7791f}
+  .mp-del{margin:-4px 0 10px;min-height:48px;padding:0 14px;border-radius:12px;border:2px solid #c0392b;background:#fff;color:#c0392b;font-size:15px;font-weight:700;cursor:pointer}
+  .bg-steps{display:flex;gap:8px;padding:10px 14px 0;flex-wrap:wrap}
+  .bg-steps .ivb{min-height:48px;padding:0 18px;font-size:15px}
+  .bg-steps .ivb.on{background:#eeedfe;color:#4285f4;font-weight:600;border-color:#4285f4}
 </style>
 </head>
 <body>
@@ -1499,7 +1524,7 @@
     <div class="login-error" id="login-error"></div>
 
     <div class="login-form" id="login-form-nombre-dispositivo" style="display:none;">
-      <input type="text" id="dispositivo-nombre-input" placeholder="Nombre del dispositivo (ej: Celular Edison)" maxlength="40" onkeydown="if(event.key==='Enter'){solicitarAccesoDispositivo();}">
+      <input type="text" id="dispositivo-nombre-input" placeholder="Nombre del dispositivo (ej: Celular Bodega)" maxlength="40" onkeydown="if(event.key==='Enter'){solicitarAccesoDispositivo();}">
       <button id="dispositivo-nombre-btn" onclick="solicitarAccesoDispositivo()">Solicitar acceso</button>
     </div>
 
@@ -1517,7 +1542,9 @@
 <div id="app-wrapper" style="display:none;">
 
 <div class="shell">
+  <div class="nav-scrim" onclick="navCerrar()"></div>
   <aside class="sidebar">
+    <button class="nav-toggle" id="nav-toggle" onclick="navAlternar()" aria-label="Menú"><span class="nav-burger">☰</span>
     <div class="brand-block">
       <img class="brand-logo" src="data:image/png;base64,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" alt="Morochos logo">
       <div class="brand-texto">
@@ -1525,15 +1552,21 @@
         <div class="brand-sub">Facility Os Ec</div>
       </div>
     </div>
+    </button>
 
-    <div class="nav-grupo">Operacion</div>
-    <button class="nav-item" id="nav-pedidos" onclick="cambiarVista('pedidos')">📨 Pedidos de locales</button>
-    <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')">🛒 Lista de compras</button>
-    <button class="nav-item" id="nav-bodega" onclick="cambiarVista('bodega')">🏬 Bodega</button>
-    <button class="nav-item" id="nav-produccion" onclick="cambiarVista('produccion')">🏭 Producción · Registro</button>
-    <button class="nav-item" id="nav-estaciones" onclick="cambiarVista('estaciones')">📋 Lista de estaciones</button>
-    <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')">🚚 Despacho</button>
-    <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')">📋 Guias</button>
+    <button class="nav-item" id="nav-pedidos" onclick="cambiarVista('pedidos')"><span class="nav-ic">📨</span><span class="nav-tx">Pedidos locales</span></button>
+    <button class="nav-item activo" id="nav-compra" onclick="cambiarVista('compra')"><span class="nav-ic">🛒</span><span class="nav-tx">Lista de compras</span></button>
+    <div class="nav-grupo"><span class="nav-ic">📥</span><span class="nav-tx">Recepción</span></div>
+    <button class="nav-item nav-sub" id="nav-recepcion" onclick="cambiarVista('recepcion')"><span class="nav-ic">📦</span><span class="nav-tx">Recepción de productos</span></button>
+    <button class="nav-item nav-sub" id="nav-provs" onclick="cambiarVista('provs')"><span class="nav-ic">👥</span><span class="nav-tx">Proveedores</span></button>
+    <div class="nav-grupo"><span class="nav-ic">🏭</span><span class="nav-tx">Producción</span></div>
+    <button class="nav-item nav-sub" id="nav-estaciones" onclick="cambiarVista('estaciones')"><span class="nav-ic">📝</span><span class="nav-tx">Producción interna</span></button>
+    <button class="nav-item nav-sub" id="nav-produccion" onclick="cambiarVista('produccion')"><span class="nav-ic">🏷️</span><span class="nav-tx">Registro de producción</span></button>
+    <div class="nav-grupo" style="margin-top:0"></div>
+    <button class="nav-item" id="nav-inventario" onclick="cambiarVista('inventario')"><span class="nav-ic">📦</span><span class="nav-tx">Inventario</span></button>
+    <button class="nav-item" id="nav-despacho" onclick="cambiarVista('despacho')"><span class="nav-ic">🚚</span><span class="nav-tx">Despacho</span></button>
+    <button class="nav-item" id="nav-guias" onclick="cambiarVista('guias')"><span class="nav-ic">📋</span><span class="nav-tx">Guías</span></button>
+    <button class="nav-item" id="nav-prueba" onclick="mpAlternar()"><span class="nav-ic">🧪</span><span class="nav-tx">Modo prueba</span></button>
     <button class="nav-item" id="nav-pantalla" onclick="pantallaCompletaOInstalar()" style="display:none;"></button>
 
   </aside>
@@ -1543,6 +1576,7 @@
       <h1 id="topbar-title">Lista de compras</h1>
       <p id="topbar-subtitle">Transcribe el pedido del local: lo que se compra en el mercado</p>
     </header>
+    <div id="mp-banner" style="display:none"><span>🧪 <b>MODO PRUEBA</b> · puedes borrar listas y datos de ejemplo</span><button onclick="mpAbrir()">🧹 Borrar datos de prueba</button><button onclick="mpAlternar()">Salir</button></div>
 
     <div id="aviso-container"></div>
 
@@ -1612,6 +1646,8 @@
         <option value="completo">Completo, sin novedad</option>
         <option value="con_novedad">Con novedad (faltante, dano, retraso)</option>
       </select>
+      <label for="recepcion-documento" style="margin-top:10px;">Factura / guía del proveedor</label>
+      <input type="text" id="recepcion-documento" placeholder="Número de factura o guía (opcional)">
       <p style="font-size:12px; color:#888780; margin:8px 0 0;">Escribe el nombre; si ya lo usaste antes, te va a sugerir autocompletarlo.</p>
     </div>
 
@@ -1635,6 +1671,8 @@
         <option value="requiere_proceso">Requiere procesamiento (no entra a inventario aun)</option>
         <option value="directo">Pasa directo a inventario (ej: desechables)</option>
       </select>
+      <input type="text" id="insumo-lote" placeholder="Lote del proveedor (opcional)">
+      <input type="date" id="insumo-vence" title="Fecha de vencimiento">
       <input type="text" id="insumo-observacion" placeholder="Observacion (opcional)">
       <button class="btn-secundario" onclick="agregarLineaInsumo()">+ Agregar a esta recepcion</button>
     </div>
@@ -1743,7 +1781,7 @@ async function solicitarAccesoDispositivo() {
   const user = usuarioPendienteNombreDispositivo;
 
   if (!nombre) {
-    mostrarErrorLogin("Escribe un nombre para este dispositivo (ej: Celular Edison).");
+    mostrarErrorLogin("Escribe un nombre para este dispositivo (ej: Celular Bodega).");
     return;
   }
   if (!user) return;
@@ -2177,7 +2215,7 @@ async function crearGuiaDespacho() {
       estado: "despachado",
       fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(),
       fecha_recepcion: null,
-      despachado_por: "Edison Pacurucu",
+      despachado_por: "Nestor Santos",
       recibido_por: null,
       items: itemsSeleccionados
     });
@@ -2217,12 +2255,14 @@ async function crearGuiaDespacho() {
 const TITULOS_VISTA = {
   pedidos: ["Pedidos de locales", "Acepta el pedido: el mercado va a Guardadas y la bodega a Guías para despachar"],
   compra: ["Lista de compras", "Las listas de los pedidos aceptados: marca lo comprado, pon costos y la carreta"],
+  provs: ["Proveedores", "Los proveedores que nos entregan: nombre, teléfono y qué nos venden"],
+  recepcion: ["Recepción de productos", "Elige la entrega, revisa producto por producto y confírmala: va a bodega o a procesar"],
   proveedores: ["Recepcion proveedores", "Registra lo que llega de cada proveedor: cantidad, costo y observaciones"],
-  estaciones: ["Producción · Lista", "Toca lo que necesita la estación y envía el pedido a Facility"],
+  estaciones: ["Producción interna", "Toca lo que necesita la estación: va directo a Lista de compras"],
   produccion: ["Producción · Registro", "Registra lo producido: suma al inventario, descuenta materia prima y saca la etiqueta"],
   despacho: ["Despacho manual", "Para enviar algo SIN pedido del local. Lo que piden los locales se despacha desde Guías"],
   guias: ["Guias", "Despacha lo aceptado (Por despachar), imprime y consulta las guias"],
-  bodega: ["Bodega", "Toca un módulo para abrirlo: recibir, por procesar, inventario, pedir a Compras, contabilidad"],
+  bodega: ["Bodega", "Recibe la materia prima, procesa con receta fija y mira el inventario"],
   inventario: ["Inventario", "Qué hay en bodega ahora, dónde está y conteos físicos"]
 };
 
@@ -2286,17 +2326,46 @@ window.clSync = function(pedidos){
     b.commit().catch(e => console.error(e));
   }
 };
-const HUB_TAB = {inventario:'inventario', proveedores:'prov'};
+const HUB_TAB = {inventario:'inventario', proveedores:'prov', recepcion:'recepcion', provs:'provs'};
+/* Menu lateral: en tablet/celular es un riel de iconos que se despliega encima; en computador queda abierto y se puede plegar */
+const navTactil = () => (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || /[?&]tactil=1/.test(location.search);
+const navDock = () => !navTactil() && window.innerWidth > 900;
+function navCerrar(){ document.body.classList.remove('nav-open'); if(navDock()) document.body.classList.remove('nav-dock'); }
+function navAlternar(){
+  const b = document.body, abierto = b.classList.contains('nav-open');
+  if(abierto){ navCerrar(); } else { b.classList.add('nav-open'); if(navDock()) b.classList.add('nav-dock'); }
+  try { if(navDock()) localStorage.setItem('nav_abierto', abierto ? '0' : '1'); } catch(e){}
+}
+(function(){ let a = true; try { a = localStorage.getItem('nav_abierto') !== '0'; } catch(e){}
+  if(navDock() && a){ document.body.classList.add('nav-open', 'nav-dock'); } })();
+/* Resalta el modulo del menu segun la pestaña de Bodega en que estas */
+const NAV_DE_TAB = {provs:'provs', recepcion:'recepcion', prov:'recepcion', produccion:'recepcion', inventario:'inventario', conteo:'inventario', req:'inventario', conta:'compra'};
+function navBadge(id, n){
+  const ic = document.querySelector('#nav-' + id + ' .nav-ic'); if(!ic) return;
+  let b = ic.querySelector('.nav-bd');
+  if(!n){ if(b) b.remove(); return; }
+  if(!b){ b = document.createElement('span'); b.className = 'pd-badge nav-bd'; ic.appendChild(b); }
+  b.textContent = n;
+}
+window.navBadge = navBadge;
+window.navSync = function(t){
+  const n = NAV_DE_TAB[t]; if(!n) return;
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('activo'));
+  const nb = document.getElementById('nav-' + n); if(nb) nb.classList.add('activo');
+  const T = TITULOS_VISTA[n === 'compra' ? 'bodega' : n]; if(T){ document.getElementById('topbar-title').textContent = T[0]; document.getElementById('topbar-subtitle').textContent = T[1]; }
+};
 function cambiarVista(nombre) {
   /* Producción, Inventario y Recepción de proveedores viven dentro de Bodega */
-  const hubTab = HUB_TAB[nombre]; if (hubTab) nombre = 'bodega';
+  const orig = nombre, hubTab = HUB_TAB[nombre]; if (hubTab) nombre = 'bodega';
+  if (!navDock()) navCerrar();
   document.querySelectorAll(".vista").forEach(v => v.classList.remove("activa"));
   document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("activo"));
   document.getElementById(`vista-${nombre}`).classList.add("activa");
-  const navB = document.getElementById(`nav-${nombre}`); if (navB) navB.classList.add("activo");
+  const navB = document.getElementById(`nav-${orig}`) || document.getElementById(`nav-${nombre}`); if (navB) navB.classList.add("activo");
 
-  document.getElementById("topbar-title").textContent = TITULOS_VISTA[nombre][0];
-  document.getElementById("topbar-subtitle").textContent = TITULOS_VISTA[nombre][1];
+  const TT = TITULOS_VISTA[orig] || TITULOS_VISTA[nombre];
+  document.getElementById("topbar-title").textContent = TT[0];
+  document.getElementById("topbar-subtitle").textContent = TT[1];
   if (typeof prView === 'function') prView(nombre);
   if (typeof ivView === 'function') ivView(nombre);
   if (typeof lcView === 'function') lcView(nombre);
@@ -2375,7 +2444,7 @@ function escucharGuias() {
     snapshot.forEach(doc => guiasCache.push({ id: doc.id, ...doc.data() }));
     renderListaGuias();
     const nb = guiasCache.filter(g => g.estado === "por_despachar").length, bt = document.getElementById("nav-guias");
-    if (bt) bt.innerHTML = "📋 Guias" + (nb ? ' <span class="pd-badge">' + nb + "</span>" : "");
+    navBadge("guias", nb);
     if (guiaAbiertaId) { if (guiasCache.some(g => g.id === guiaAbiertaId)) verGuia(guiaAbiertaId); else cerrarDetalleGuia(); }
   }, err => console.error(err));
 }
@@ -2524,7 +2593,7 @@ async function gdDespachar(id) {
   try {
     const ahora = Date.now();
     items.forEach(it => { it.conservacion = consItem(it); it.hora_salida_ms = ahora; });
-    await db.collection("pedidos").doc(id).update({ estado: "despachado", fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(), salida_ms: ahora, salida_revisada: sinRev.length === 0, despachado_por: "Edison Pacurucu", items: items });
+    await db.collection("pedidos").doc(id).update({ estado: "despachado", fecha_despacho: firebase.firestore.FieldValue.serverTimestamp(), salida_ms: ahora, salida_revisada: sinRev.length === 0, despachado_por: "Nestor Santos", items: items });
     for (const it of items) { if (gdSaca(it)) await descontarInventarioBodega(it.producto_id, it.producto_nombre, it.cantidad_despachada); }
     gdToast("Despachado a " + (NOMBRES_LOCAL[g.local] || g.local) + ". Ya lo ven en Por recibir.");
   } catch (e) { console.error(e); gdToast("No se pudo despachar. Revisa la conexión."); }
@@ -2691,22 +2760,23 @@ function renderListasCompraPendientes() {
   const cont = document.getElementById("listas-compra-pendientes");
   const esHistorial = modoListasCompra === "historial";
   const lcLocal = window.LCS ? window.LCS.local : '';
-  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente).filter(l => !lcLocal || l.local === lcLocal || l.unificada);
+  const listas = listasCompraCache.filter(esHistorial ? esListaCompraHistorial : esListaCompraPendiente).filter(l => !l.requerimiento).filter(l => !lcLocal || l.local === lcLocal || l.unificada);
 
   const btnUni = (!esHistorial && window.lcUniN && lcUniN() > 0)
     ? `<button class="btn-despachar btn-imprimir lc-unif" onclick="lcUnificar()">🧺 Unificar listas pendientes (${lcUniN()})</button><p class="btn-imprimir" style="font-size:13px; color:#888780; margin:6px 0 0;">Junta lo que se compra en el mercado: las listas de este local y, si quieres, las de otros locales.</p>`
     : "";
+  const btnConta = esHistorial ? `<button class="btn-despachar btn-imprimir" style="margin:0 0 10px" onclick="bgConta()">🧾 Contabilidad: compras recibidas y comprobantes</button>` : "";
   if (listas.length === 0) {
-    cont.innerHTML = `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>` + btnUni;
+    cont.innerHTML = btnConta + `<p style="font-size:13px; color:#888780; margin-top:10px;">${esHistorial ? "Todavia no hay listas en el historial." : "No hay listas de compras pendientes."}</p>` + btnUni;
     return;
   }
 
-  cont.innerHTML = listas.map(l => {
+  cont.innerHTML = btnConta + listas.map(l => {
     const fechaBase = esHistorial && l.fecha_envio_contabilidad ? l.fecha_envio_contabilidad : l.fecha_creacion;
     const fecha = fechaBase && fechaBase.toDate ? fechaBase.toDate().toLocaleString("es-EC") : "Guardando fecha...";
     const comprados = l.items.filter(it => it.comprado).length;
     const origTxt = l.unificada ? (l.origenes || []).map(o => (o.area || "Lista") + (o.pedido_numero ? " #" + o.pedido_numero : "")).join(" + ") : "";
-    const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(l.carreta) || 0);
+    const totalCosto = l.items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(l.carreta) || 0) + (parseFloat(l.flete) || 0);
 
     let badge = l.estado === "despachada"
       ? `<span class="badge procesado">Despachada</span>`
@@ -2788,7 +2858,8 @@ function verListaCompra(id) {
 
   const subtotal = totalCosto;
   const carreta = parseFloat(lista.carreta) || 0;
-  totalCosto = Math.round((totalCosto + carreta) * 100) / 100;
+  const flete = parseFloat(lista.flete) || 0;
+  totalCosto = Math.round((totalCosto + carreta + flete) * 100) / 100;
   const realizada = lista.compra_realizada === true;
   const monto = lista.monto_asignado != null && !isNaN(parseFloat(lista.monto_asignado)) ? parseFloat(lista.monto_asignado) : null;
   const saldo = monto != null ? Math.round((monto - totalCosto) * 100) / 100 : null;
@@ -2835,6 +2906,10 @@ function verListaCompra(id) {
         <span>Carreta</span>
         ${enviada ? `<span>$${carreta.toFixed(2)}</span>` : `<button class="lcr-p ${carreta ? 'set' : 'vacio'}" onclick="lcCarreta('${id}')">${carreta ? '$' + carreta.toFixed(2) : '$ ‒'}</button>`}
       </div>
+      <div class="detalle-fila lc-tot lc-carreta lc-flete">
+        <span>Flete (transporte)</span>
+        ${enviada ? `<span>$${flete.toFixed(2)}</span>` : `<button class="lcr-p ${flete ? 'set' : 'vacio'}" onclick="lcFlete('${id}')">${flete ? '$' + flete.toFixed(2) : '$ ‒'}</button>`}
+      </div>
       <div class="detalle-fila lc-tot lc-gastado">
         <span>Total gastado (costo pagado)</span>
         <span>$${totalCosto.toFixed(2)}</span>
@@ -2880,7 +2955,7 @@ async function marcarEnviadaContabilidad(id) {
 async function eliminarListaCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || !esListaCompraPendiente(lista)) return;
-  if (lista.recepcion_id) { mostrarAviso("Esta compra ya se recibió en Bodega: no se puede eliminar.", "error"); return; }
+  if (lista.recepcion_id || lista.recepciones_n) { mostrarAviso("Esta compra ya se recibió (total o parcial) en Bodega: no se puede eliminar.", "error"); return; }
 
   const nombreLocal = NOMBRES_LOCAL[lista.local] || lista.local;
   const avisoDespacho = lista.estado === "despachada" ? "\n\nOjo: esta lista ya se uso en un despacho. La guia no se borra, pero se pierden los costos de esta lista." : "";
@@ -2995,7 +3070,7 @@ async function actualizarCosto(listaId, idx, valor) {
   const nuevosItems = lista.items.map((it, i) => i === idx ? { ...it, costo } : it);
 
   try {
-    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems, ...totalesLista(nuevosItems, lista.monto_asignado, lista.carreta) });
+    await db.collection("listas_compra").doc(listaId).update({ items: nuevosItems, ...totalesLista(nuevosItems, lista.monto_asignado, lista.carreta, lista.flete) });
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar el costo. Verifica la conexion.", "error");
@@ -3003,8 +3078,8 @@ async function actualizarCosto(listaId, idx, valor) {
 }
 
 // total_costo y saldo se guardan en la lista para tabularlos desde otra app
-function totalesLista(items, monto, carreta) {
-  const total = Math.round((items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(carreta) || 0)) * 100) / 100;
+function totalesLista(items, monto, carreta, flete) {
+  const total = Math.round((items.reduce((sum, it) => sum + (it.costo ? parseFloat(it.costo) : 0), 0) + (parseFloat(carreta) || 0) + (parseFloat(flete) || 0)) * 100) / 100;
   const m = monto != null && !isNaN(parseFloat(monto)) ? parseFloat(monto) : null;
   return { total_costo: total, saldo: m != null ? Math.round((m - total) * 100) / 100 : null };
 }
@@ -3014,11 +3089,22 @@ async function actualizarMontoAsignado(listaId, valor) {
   if (!lista || lista.enviada_contabilidad) return;
   const monto = valor === "" || isNaN(parseFloat(valor)) ? null : parseFloat(valor);
   try {
-    await db.collection("listas_compra").doc(listaId).update({ monto_asignado: monto, ...totalesLista(lista.items, monto, lista.carreta) });
+    await db.collection("listas_compra").doc(listaId).update({ monto_asignado: monto, ...totalesLista(lista.items, monto, lista.carreta, lista.flete) });
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar el monto. Verifica la conexion.", "error");
   }
+}
+
+function lcFlete(id) {
+  const lista = listasCompraCache.find(l => l.id === id);
+  if (!lista || lista.enviada_contabilidad) return;
+  abrirTeclado({titulo: "Flete", subtitulo: "Lo que se pagó por el transporte (flete). Déjalo en blanco si no hubo.", unidad: "$", inicial: lista.flete != null ? lista.flete : "", permitirVacio: true, permitirCero: true,
+    onListo: async v => {
+      const flete = v == null || isNaN(v) || v <= 0 ? null : v;
+      try { await db.collection("listas_compra").doc(id).update({ flete: flete, ...totalesLista(lista.items, lista.monto_asignado, lista.carreta, flete) }); if (flete) mostrarAviso("Flete $" + flete.toFixed(2) + " sumado al total gastado.", "ok"); }
+      catch (err) { console.error(err); mostrarAviso("Error al guardar el flete. Verifica la conexion.", "error"); }
+    }});
 }
 
 function lcCarreta(id) {
@@ -3027,7 +3113,7 @@ function lcCarreta(id) {
   abrirTeclado({titulo: "Carreta", subtitulo: "Lo que se pagó por la carreta", unidad: "$", inicial: lista.carreta != null ? lista.carreta : "", permitirVacio: true, permitirCero: true,
     onListo: async v => {
       const carreta = v == null || isNaN(v) || v <= 0 ? null : v;
-      try { await db.collection("listas_compra").doc(id).update({ carreta: carreta, ...totalesLista(lista.items, lista.monto_asignado, carreta) }); }
+      try { await db.collection("listas_compra").doc(id).update({ carreta: carreta, ...totalesLista(lista.items, lista.monto_asignado, carreta, lista.flete) }); }
       catch (err) { console.error(err); mostrarAviso("Error al guardar la carreta. Verifica la conexion.", "error"); }
     }});
 }
@@ -3081,10 +3167,11 @@ async function marcarCompraRealizada(id) {
   if (!lista || lista.enviada_contabilidad) return;
   const sinCosto = lista.items.filter(it => it.costo == null).length;
   try {
-    await db.collection("listas_compra").doc(id).update({ compra_realizada: true, fecha_compra_realizada: firebase.firestore.FieldValue.serverTimestamp(), ...totalesLista(lista.items, lista.monto_asignado, lista.carreta) });
+    await db.collection("listas_compra").doc(id).update({ compra_realizada: true, fecha_compra_realizada: firebase.firestore.FieldValue.serverTimestamp(), ...totalesLista(lista.items, lista.monto_asignado, lista.carreta, lista.flete) });
     let carga = { ids: [], nombres: [] };
     try { carga = await cargarCompraAGuias(lista); if (carga.ids.length) await db.collection("listas_compra").doc(id).update({ guias_cargadas: carga.ids }); }
     catch (e2) { console.error(e2); mostrarAviso("Compra realizada, pero no se pudo pasar a Guías. Reabre y vuelve a marcarla.", "error"); return; }
+    setTimeout(() => lcFlete(id), 350);   // pregunta el flete del transporte (se puede dejar en blanco)
     const aGuias = carga.nombres.length ? " Pasó a Guías: " + carga.nombres.join(", ") + "." : "";
     mostrarAviso((sinCosto ? `Compra realizada. Ojo: ${sinCosto} producto(s) sin costo.` : "Compra realizada. Ya puedes enviarla a contabilidad o imprimirla.") + aGuias, sinCosto ? "error" : "ok");
   } catch (err) {
@@ -3096,7 +3183,7 @@ async function marcarCompraRealizada(id) {
 async function reabrirCompra(id) {
   const lista = listasCompraCache.find(l => l.id === id);
   if (!lista || lista.enviada_contabilidad) return;
-  if (lista.recepcion_id) { mostrarAviso("Esta compra ya se recibió en Bodega. Deshaz la recepción antes de reabrirla.", "error"); return; }
+  if (lista.recepcion_id || lista.recepciones_n) { mostrarAviso("Esta compra ya se recibió (total o parcial) en Bodega. Deshaz la recepción antes de reabrirla.", "error"); return; }
   const yaDesp = (lista.guias_cargadas || []).some(gid => { const g = guiasCache.filter(x => x.id === gid)[0]; return g && g.estado !== "por_despachar"; });
   if (yaDesp) { mostrarAviso("Lo comprado ya se despachó en Guías: no se puede reabrir.", "error"); return; }
   try { await quitarCompraDeGuias(lista); await db.collection("listas_compra").doc(id).update({ compra_realizada: false, fecha_compra_realizada: null, guias_cargadas: [] }); }
@@ -3172,6 +3259,7 @@ function agregarLineaInsumo() {
   const costo = parseFloat(document.getElementById("insumo-costo").value);
   const destino = document.getElementById("insumo-destino").value;
   const observacion = document.getElementById("insumo-observacion").value.trim();
+  const lote = document.getElementById("insumo-lote").value.trim(), vence = document.getElementById("insumo-vence").value || "";
 
   if (!nombre) {
     mostrarAviso("Escribe el nombre del insumo.", "error");
@@ -3188,7 +3276,9 @@ function agregarLineaInsumo() {
     cantidad: cantidad,
     costo: isNaN(costo) ? null : costo,
     destino: destino,
-    observacion: observacion
+    observacion: observacion,
+    lote_proveedor: lote,
+    vence: vence
   });
 
   document.getElementById("insumo-nombre").value = "";
@@ -3196,6 +3286,7 @@ function agregarLineaInsumo() {
   document.getElementById("insumo-cantidad").value = "";
   document.getElementById("insumo-costo").value = "";
   document.getElementById("insumo-observacion").value = "";
+  document.getElementById("insumo-lote").value = ""; document.getElementById("insumo-vence").value = "";
   document.getElementById("insumo-destino").value = "requiere_proceso";
 
   renderLineasInsumo();
@@ -3221,6 +3312,7 @@ function renderLineasInsumo() {
         <strong>${l.nombre}</strong> <span style="color:#888780;">(${l.cantidad} ${l.unidad})</span>
         <span class="badge ${l.destino === 'directo' ? 'stock' : 'procesado'}" style="margin-left:6px;">${l.destino === 'directo' ? 'Directo' : 'Requiere proceso'}</span>
         ${l.costo != null ? ` - $${l.costo.toFixed(2)}` : ""}
+        ${(l.lote_proveedor || l.vence) ? `<br><span style="color:#888780; font-size:12px;">${l.lote_proveedor ? "Lote " + l.lote_proveedor : ""}${l.lote_proveedor && l.vence ? " · " : ""}${l.vence ? "Vence " + l.vence : ""}</span>` : ""}
         ${l.observacion ? `<br><span style="color:#888780; font-size:12px;">${l.observacion}</span>` : ""}
       </span>
       <button class="btn-cerrar" onclick="quitarLineaInsumo(${idx})">&times;</button>
@@ -3253,7 +3345,8 @@ async function guardarRecepcionProveedor() {
       proveedor: proveedor,
       estado: estadoEntrega,
       fecha: firebase.firestore.FieldValue.serverTimestamp(),
-      recibido_por: "Edison Pacurucu",
+      recibido_por: "Nestor Santos",
+      documento: (document.getElementById("recepcion-documento").value || "").trim(),
       items: lineasInsumoActual
     });
 
@@ -3281,7 +3374,8 @@ async function guardarRecepcionProveedor() {
         destino: item.destino,
         cantidad: item.cantidad,
         fecha: firebase.firestore.FieldValue.serverTimestamp(),
-        nota: `Proveedor: ${proveedor}${item.costo != null ? " - $" + item.costo.toFixed(2) : ""}${item.observacion ? " - " + item.observacion : ""}`
+        proveedor: proveedor, lote_proveedor: item.lote_proveedor || null, vence: item.vence || null,
+        nota: `Proveedor: ${proveedor}${item.lote_proveedor ? " - Lote " + item.lote_proveedor : ""}${item.vence ? " - Vence " + item.vence : ""}${item.costo != null ? " - $" + item.costo.toFixed(2) : ""}${item.observacion ? " - " + item.observacion : ""}`
       });
     }
 
@@ -3291,6 +3385,7 @@ async function guardarRecepcionProveedor() {
     renderLineasInsumo();
     document.getElementById("proveedor-nombre").value = "";
     document.getElementById("recepcion-estado").value = "completo";
+    document.getElementById("recepcion-documento").value = "";
   } catch (err) {
     console.error(err);
     mostrarAviso("Error al guardar la recepcion. Verifica la conexion.", "error");
@@ -3398,8 +3493,7 @@ function cerrarRecepcionProveedorDetalle() {
    { empleado_id, nombre, tipo: "entrada" | "salida", fecha }
    ============================================================ */
 const EMPLEADOS_CLOCK = {
-  nestor: { nombre: "Nestor Santos", pin: "1111" },
-  edison: { nombre: "Edison Pacurucu", pin: "2222" }
+  nestor: { nombre: "Nestor Santos", pin: "1111" }
 };
 
 let empleadoClockSeleccionado = null;
@@ -4868,7 +4962,7 @@ window.prView = nombre => { if(nombre === 'produccion') onEnter(); else if(docum
 window.prInit = init;
 window.prActualizarStock = actualizarStock;
 usbIniciar();
-window.PR = {refresh:() => { try { render(); renderTop(); } catch(er){} }, presDe:pid => { const f = pid ? fichaDe(pid) : null; return f ? String(f.presentacion || '').trim() : ''; }, S:S, fichaDe:fichaDe, PROD_ALL:PROD_ALL, go:go, U:U, lbConstruir:lbConstruir};
+window.PR = {productos:() => PROD_ALL.map(p => ({id:p.id, nombre:p.nombre, presentacion:p.unidad, unidad:p.uni || unidadPalabra(p.unidad)})), refresh:() => { try { render(); renderTop(); } catch(er){} }, presDe:pid => { const f = pid ? fichaDe(pid) : null; return f ? String(f.presentacion || '').trim() : ''; }, S:S, fichaDe:fichaDe, PROD_ALL:PROD_ALL, go:go, U:U, lbConstruir:lbConstruir};
 })();
 
 /* ============================================================
@@ -5310,10 +5404,10 @@ const LISTAS = Object.assign({}, LISTAS_BASE);
 const EST_LOCALES = ['cocina_produccion', 'cuarto_frio'];   // las estaciones tienen su propia pestaña (Estaciones), no salen en Lista de compras
 const CODIGO_CONFIG = '2468';  // código para modificar listas. Cámbialo aquí (solo números, sin cero al inicio).
 const SEC_NOMBRE = {MERCADO:'Mercado', BEBIDAS:'Bebidas · Mercado', BODEGA:'Bodega'};
-const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío'], ['bodega', 'Bodega']];
+const LOCALES = [['la_victoria', 'La Victoria'], ['el_salado', 'El Salado'], ['facility_feria_libre', 'Facility Feria Libre'], ['cocina_produccion', 'Cocina Producción'], ['cuarto_frio', 'Cuarto frío']];
 const LOCALES_SEL = LOCALES.filter(l => EST_LOCALES.indexOf(l[0]) < 0);
 // Siempre: La Victoria, El Salado y Cocina Producción (su propio cajón). Feria Libre y Cuarto frío aparecen cuando tengan listas guardadas.
-const listasDe = lc => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => l.local === lc);
+const listasDe = lc => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => l.local === lc && !l.requerimiento);
 const FIJOS = ['la_victoria', 'el_salado', 'cocina_produccion'];
 const localesVis = () => LOCALES.filter(l => FIJOS.indexOf(l[0]) >= 0 || listasDe(l[0]).length);
 // "5" + "1 lb" -> "5 × 1 lb";  "12" + "uds" -> "12 uds";  "1" + "saco × 50 uds" -> "1 saco × 50 uds"
@@ -5376,7 +5470,7 @@ function render(){
   } else if(UNI.open){
     h += uniHtml();
   } else {
-    h += '<div class="lc-listas-hint">Cuando aceptas un pedido en Pedidos de locales, su lista aparece aquí. Toca una para marcar lo comprado, poner costos y la carreta, y cerrarla con Compra realizada.</div>';
+    h += '<div class="lc-listas-hint">Cuando aceptas un pedido en Pedidos de locales, su lista aparece aquí. Lo de Producción interna llega directo, en su cajón (Cocina Producción / Cuarto frío). Toca una para marcar lo comprado, poner costos y la carreta, y cerrarla con Compra realizada.</div>';
   }
   r.innerHTML = h;
   const lv = $('#lc-listas'); if(lv) lv.style.display = (L.tab === 'listas' && !UNI.open) ? '' : 'none';
@@ -5385,7 +5479,7 @@ function render(){
 }
 /* ---------- Unificar listas pendientes: una sola lista de compra, en orden por área (Cocina, Cafetería…), sin mezclar productos ---------- */
 const UNI = {open:false, sel:new Set(), busy:false};
-const uniListas = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => !l.enviada_contabilidad && !l.unificada && l.estado !== 'despachada' && !l.compra_realizada && Array.isArray(l.items));
+const uniListas = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []).filter(l => !l.enviada_contabilidad && !l.unificada && !l.requerimiento && l.estado !== 'despachada' && !l.compra_realizada && Array.isArray(l.items));
 const UNI_AREAS = ['cocina', 'cafeteria', 'bebidas', 'panaderia', 'limpieza', 'empacado', 'procesado'];
 const uniLocN = loc => (typeof NOMBRES_LOCAL !== 'undefined' && NOMBRES_LOCAL[loc]) || loc;
 const uniArea = l => (typeof areaLista === 'function' ? areaLista(l) : '') || '';
@@ -5426,11 +5520,11 @@ async function uniCrear(){
   const items = [];
   sel.forEach(l => l.items.forEach((it, ix) => items.push(Object.assign({}, it, {numero:null, origen_lista:l.id, origen_idx:ix, origen_local:l.local, origen_area:uniArea(l) || null, origen_pedido:l.pedido_numero || null, origen_et:uniEtiqueta(l, multi)}))));
   const sum = k => { const v = sel.map(l => parseFloat(l[k])).filter(x => !isNaN(x)); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) * 100) / 100 : null; };
-  const monto = sum('monto_asignado'), carreta = sum('carreta');
+  const monto = sum('monto_asignado'), carreta = sum('carreta'), flete = sum('flete');
   const ref = db.collection('listas_compra').doc();
-  const doc = {local:locs.size === 1 ? sel[0].local : 'varios', estado:'pendiente', unificada:true, pedido_id:null, pedido_numero:null, monto_asignado:monto, carreta:carreta || 0, impresa:false, fecha_creacion:firebase.firestore.FieldValue.serverTimestamp(), creado_por:'Unificada',
+  const doc = {local:locs.size === 1 ? sel[0].local : 'varios', estado:'pendiente', unificada:true, pedido_id:null, pedido_numero:null, monto_asignado:monto, carreta:carreta || 0, flete:flete || 0, impresa:false, fecha_creacion:firebase.firestore.FieldValue.serverTimestamp(), creado_por:'Unificada',
     origenes:sel.map(l => ({id:l.id, local:l.local, area:uniArea(l) || null, pedido_numero:l.pedido_numero || null, pedido_id:l.pedido_id || null})), items:items};
-  Object.assign(doc, totalesLista(items, monto, carreta));
+  Object.assign(doc, totalesLista(items, monto, carreta, flete));
   try {
     const batch = db.batch();
     batch.set(ref, doc);
@@ -5809,8 +5903,9 @@ const etq = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unida
 function fechaTxt(ts){
   const d = ts && ts.toDate ? ts.toDate() : null; if(!d) return 'Enviando...';
   const min = Math.round((Date.now() - d.getTime()) / 60000);
-  if(min < 1) return 'ahora mismo'; if(min < 60) return 'hace ' + min + ' min';
-  return d.toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+  const dia = d.toLocaleDateString('es-EC', {weekday:'long'}), dc = dia.charAt(0).toUpperCase() + dia.slice(1);
+  if(min < 1) return dc + ' · ahora mismo'; if(min < 60) return dc + ' · hace ' + min + ' min';
+  return dc + ' ' + d.toLocaleString('es-EC', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
 }
 function estadoDe(ped){
   const m = efectivos(ped, 'mercado').length > 0, b = efectivos(ped, 'bodega').length > 0;
@@ -5837,7 +5932,7 @@ function asignarNumeros(arr){
 }
 function badge(){
   const n = pend().length, b = $('#nav-pedidos');
-  if(b) b.innerHTML = '📨 Pedidos de locales' + (n ? ' <span class="pd-badge">' + n + '</span>' : '');
+  navBadge('pedidos', n);
 }
 function toast(m){
   let t = $('#pd-toast'); if(!t){ t = document.createElement('div'); t.id = 'pd-toast'; document.body.appendChild(t); }
@@ -6230,7 +6325,7 @@ function paint(){
   $('#es-cnt').textContent = n + ' producto' + (n === 1 ? '' : 's');
   $('#es-go').disabled = !n;
 }
-function titulo(){ const t = $('#topbar-title'); if(t && document.body.classList.contains('es-on')) t.textContent = 'Producción · Lista · ' + estInfo().nom; }
+function titulo(){ const t = $('#topbar-title'); if(t && document.body.classList.contains('es-on')) t.textContent = 'Producción interna · ' + estInfo().nom; }
 window.esRefresh = function(){ if(document.body.classList.contains('es-on') && $('#es-grid')) paint(); };
 window.esView = function(nombre){
   const on = nombre === 'estaciones';
@@ -6249,7 +6344,7 @@ window.esMenu = function(ev){
   const enLista = document.body.classList.contains('es-on'), enReg = document.body.classList.contains('pr-on');
   const nLista = ESTS.reduce((a, x) => a + Object.keys(lsG('es_draft_' + x.k, {}) || {}).length, 0);
   p.innerHTML = '<button class="es-pi ' + (enReg ? 'act' : '') + '" data-es="goto-reg"><span>📝</span><div>Registro<small>Registrar lo producido y sacar etiquetas</small></div></button>' +
-    '<button class="es-pi ' + (enLista ? 'act' : '') + '" data-es="goto-lista"><span>📋</span><div>Lista<small>' + (nLista ? nLista + ' por pedir · ' : '') + 'Cocina Producción y Cuarto frío</small></div></button>';
+    '<button class="es-pi ' + (enLista ? 'act' : '') + '" data-es="goto-lista"><span>📋</span><div>Producción interna<small>' + (nLista ? nLista + ' por pedir · ' : '') + 'Cocina Producción y Cuarto frío</small></div></button>';
   const r = b.getBoundingClientRect();
   p.style.top = Math.round(r.bottom + 4) + 'px'; p.style.left = Math.max(8, Math.min(Math.round(r.left), window.innerWidth - 276)) + 'px';
   p.className = 'show'; b.classList.add('es-open');
@@ -6274,9 +6369,11 @@ function enviar(){
   const d = draft(), ids = enBorrador();
   if(!ids.length){ toast('Agrega al menos un producto'); return; }
   if(E.busy) return; E.busy = true; setTimeout(() => { E.busy = false; }, 1500);
-  const est = estInfo(), ref = db.collection('pedidos_locales').doc();
-  const its = items().filter(p => d[p.id] !== undefined).map(p => ({producto_id:p.id, producto_nombre:p.nombre, unidad_medida:p.unidad || '', cantidad:d[p.id], categoria:null, subcategoria:areaDe(p) === 'facility' ? 'facility' : 'mercado', nota:p.nota || ''}));
-  ref.set({local:est.k, estado:'enviado', fecha_envio:SV(), enviado_por:'Tablet Facility', nota:'', items:its})
+  /* Producción interna: va directo a Lista de compras (listas_compra), sin pasar por Pedidos locales */
+  const est = estInfo(), ref = db.collection('listas_compra').doc(), fich = (window.LCS && window.LCS.fichas) || {};
+  const its = items().filter(p => d[p.id] !== undefined).map(p => { const f = fich[p.id] || {};
+    return {numero:p.numero || null, seccion:p.sec || 'MERCADO', producto_id:p.id, producto_nombre:p.nombre, unidad_medida:p.unidad || '', cantidad_solicitada:d[p.id], comprado:false, costo:null, nota:p.nota || '', precio_sugerido:(f.precio > 0 ? f.precio : (p.precio > 0 ? p.precio : null)), vendedor:null}; });
+  ref.set({local:est.k, area:null, estado:'pendiente', pedido_id:null, pedido_numero:null, produccion_interna:true, monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Producción interna · ' + est.nom, items:its})
     .catch(er => { console.error(er); toast('No se pudo enviar. Revisa la conexión.'); });
   E.undo = {ref:ref, est:est.k, draft:Object.assign({}, d), n:its.length};
   E.drafts[est.k] = {}; saveDraft(); vib(40); paint(); snack();
@@ -6285,7 +6382,7 @@ function snack(){
   let s = $('#es-snack'); if(!s){ s = document.createElement('div'); s.id = 'es-snack'; document.body.appendChild(s); }
   const u = E.undo; if(!u){ s.className = ''; return; }
   const nom = ESTS.filter(x => x.k === u.est)[0].nom;
-  s.innerHTML = '<div class="es-sn"><div><b>Pedido enviado</b><br>' + u.n + ' producto' + (u.n === 1 ? '' : 's') + ' · ' + esc(nom) + '</div><button class="es-bt" data-es="undo">Deshacer</button></div>';
+  s.innerHTML = '<div class="es-sn"><div><b>Enviado a Lista de compras</b><br>' + u.n + ' producto' + (u.n === 1 ? '' : 's') + ' · ' + esc(nom) + '</div><button class="es-bt" data-es="undo">Deshacer</button></div>';
   s.className = 'show'; clearTimeout(snack.t); snack.t = setTimeout(() => { s.className = ''; E.undo = null; }, 10000);
 }
 function deshacer(){
@@ -6364,7 +6461,7 @@ document.addEventListener('click', e => {
     const m = /[?&]vista=([a-z]+)/.exec(location.search);
     let v = m ? m[1] : null; if(v === 'lista') v = 'estaciones'; if(v === 'registro') v = 'produccion';
     if(!v){ try { v = localStorage.getItem('ultima_vista'); } catch(e){} }   // sin parametro: abre donde se quedo la tablet
-    if(v && typeof TITULOS_VISTA !== 'undefined' && TITULOS_VISTA[v] && document.getElementById('vista-' + v)) cambiarVista(v);
+    if(v && typeof TITULOS_VISTA !== 'undefined' && TITULOS_VISTA[v] && (document.getElementById('vista-' + v) || HUB_TAB[v])) cambiarVista(v);
   };
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(e => console.warn('sw', e)); });
@@ -6411,13 +6508,14 @@ const fechaCorta = iso => { const p = String(iso || '').split('-'); return p.len
 const hoyMas = d => { const x = new Date(Date.now() + d * 86400000); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
 const etqU = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unidad_medida:u}) : fmt(n) + ' ' + (u || ''));
 
-const B = {tab:LSg('tab', null), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
+const B = {provs:[], pm:null, libre:LSg('libre', null), foto:{}, dif:null, pick:null, sum:null, tab:LSg('tab', null), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
   sel:{}, q:'', verOtros:false, filtro:'todos', reqEd:null, cont:null, contaOk:false, undo:null, busy:false, ready:false, shCb:null};
-if(['recepcion', 'produccion', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = null;   // null = lista de módulos
+if(['recepcion', 'provs', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = null;   // null = lista de módulos
 const compras = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []);
-const porRecibir = () => compras().filter(l => l.compra_realizada && !l.recepcion_id);
+const porRecibir = () => compras().filter(l => l.requerimiento && l.compra_realizada && !l.recepcion_id);   // solo lo que Facility pide a proveedores; las compras de los locales NUNCA se reciben aquí (van a Guías)
 const recDe = l => B.recs.filter(r => r.id === l.recepcion_id)[0] || null;
 const itemInv = id => (window.ivItems ? window.ivItems() : []).filter(x => x.id === id)[0] || null;
+const rendDe = id => (B.rend || {})[id] || null;
 const mpPend = () => B.mp.filter(m => (m.cantidad_actual || 0) > 0.0001);
 
 /* ---------- avisos, hoja de opciones y deshacer ---------- */
@@ -6455,12 +6553,13 @@ function barraResp(){
     '<button class="ivb ' + (otro ? 'on' : '') + '" data-bg="resp-otro">Otro</button>' +
     (otro ? '<input id="bg-resp-in" placeholder="Nombre" autocomplete="off" value="' + esc(nombres.indexOf(B.resp) < 0 ? B.resp : '') + '">' : '') + '</div>';
 }
-const PASOS = [['recepcion', '1', '📥', 'Recibir'], ['produccion', '2', '⏳', 'Por procesar'], ['inventario', '3', '📦', 'Inventario'], ['req', '4', '📝', 'Pedir a Compras'], ['conta', '5', '🧾', 'Contabilidad']];
+const PASOS = [['recepcion', '1', '📥', 'Recibir'], ['produccion', '2', '⚙️', 'Procesar'], ['inventario', '3', '📦', 'Inventario'], ['req', '4', '📝', 'Pedidos a proveedores'], ['conta', '5', '🧾', 'Contabilidad']];
+const PASOS_MENU = ['recepcion', 'provs', 'inventario'];   // Pedidos a Compras vive dentro de Inventario; Contabilidad dentro de Lista de compras
 const HINTS = {
-  recepcion: 'Llega la compra o la entrega del proveedor: anota lo recibido y elige si va directo a bodega o a producción.',
-  produccion: 'La materia prima que llegó para producción: da de baja mermas y abre el Registro de producción.',
-  inventario: 'Lo que hay disponible. Lo que esté bajo el mínimo, pídelo a Compras.',
-  req: 'Lo que ya pediste a Compras. Cuando lo compren, aparece en Recibir.',
+  recepcion: 'Llega la compra o la entrega del proveedor: anota lo recibido y elige si va directo a bodega o a procesar.',
+  produccion: 'Lo que llegó para procesar: dices cuánto usas y la receta fija reparte lo que sale, la merma y otros productos.',
+  inventario: 'Lo que hay disponible. Lo que esté bajo el mínimo, pídelo al proveedor desde aquí.',
+  req: 'Lo que ya pediste a proveedores. Aparece en Recepción para recibirlo.',
   conta: 'Compras recibidas y comprobantes.'
 };
 const paso = () => B.tab === 'prov' ? 'recepcion' : B.tab === 'conteo' ? 'inventario' : B.tab;
@@ -6473,22 +6572,23 @@ function barraPasos(){
   const cnt = {recepcion:porRecibir().length, produccion:mpPend().length, inventario:all.filter(it => it.min > 0 && it.stock < it.min).length, req:compras().filter(l => l.requerimiento && !l.recepcion_id).length, conta:0};
   const k = paso();
   if(!k){   // lista numerada de módulos
-    return '<div class="bg-menu">' + PASOS.map(t => '<button class="bg-mi" data-bg="tab" data-v="' + t[0] + '"><span class="bg-mn">' + t[1] + '</span><span class="bg-mt">' + t[2] + ' ' + t[3] + '<small>' + HINTS[t[0]] + '</small></span>' +
+    return '<div class="bg-menu">' + PASOS.filter(t => PASOS_MENU.indexOf(t[0]) >= 0).map(t => '<button class="bg-mi" data-bg="tab" data-v="' + t[0] + '"><span class="bg-mn">' + t[1] + '</span><span class="bg-mt">' + t[2] + ' ' + t[3] + '<small>' + HINTS[t[0]] + '</small></span>' +
       (cnt[t[0]] ? '<span class="bg-n ' + (t[0] === 'inventario' ? 'warn' : '') + '">' + cnt[t[0]] + '</span>' : '') + '<span class="bg-ch">▾</span></button>').join('') + '</div>';
   }
   const t = PASOS.filter(x => x[0] === k)[0];
-  return '<div class="bg-open"><button class="ivb" data-bg="ir-lista">▴ Bodega</button><div class="bg-ot"><span class="bg-mn">' + t[1] + '</span> ' + t[2] + ' ' + t[3] + '</div>' + (cnt[k] ? '<span class="bg-n ' + (k === 'inventario' ? 'warn' : '') + '">' + cnt[k] + '</span>' : '') + '</div>';
+  if(PASOS_MENU.indexOf(k) >= 0) return '';   // Recibir / Procesar / Inventario ya están en el menú lateral
+  return '<div class="bg-open"><button class="ivb" data-bg="ir-atras">← Volver</button><div class="bg-ot"><span class="bg-mn">' + t[1] + '</span> ' + t[2] + ' ' + t[3] + '</div>' + (cnt[k] ? '<span class="bg-n ' + (k === 'inventario' ? 'warn' : '') + '">' + cnt[k] + '</span>' : '') + '</div>';
 }
 function render(){
   const r = $('#bg-root'); if(!r) return;
   const k = B.tab;
   let h = barraPasos();
   if(k){
-    if(k !== 'prov' && k !== 'conteo') h += barraResp();
-    if(k === 'produccion') h += vProcesar();
+    if(k !== 'prov' && k !== 'conteo' && k !== 'provs') h += barraResp();
+    if(k === 'produccion') h += B.proc ? vProc() : vProcesar();
     else if(k === 'prov') h += '<div class="iv-subbar"><button class="ivb" data-bg="tab" data-v="recepcion">← Volver a Recibir</button><div class="iv-st">Entrega de proveedor sin compra</div><span></span></div>';
     else if(k === 'conteo') h += segInv();
-    else h += k === 'recepcion' ? vRecepcion() : k === 'inventario' ? (B.reqEd ? '' : segInv()) + vInventario() : k === 'req' ? vReq() : vConta();
+    else h += k === 'provs' ? vProvs() : k === 'recepcion' ? vRecepcion() : k === 'inventario' ? (B.reqEd ? '' : segInv()) + vInventario() : k === 'req' ? vReq() : vConta();
   }
   r.innerHTML = h;
   r.classList.toggle('bg-solo', k === 'prov' || k === 'conteo');
@@ -6510,127 +6610,344 @@ function refrescar(){
 }
 
 /* ============ 1. RECEPCIÓN ============ */
+/* Una compra puede recibirse en varias entregas (parciales): listas_compra.recibido_acum guarda lo ya recibido por producto,
+   recepciones_n cuenta las entregas y recepciones_bodega/rec_{compraId}_{n} guarda cada una (id único = no se duplica).
+   La foto del recibo vive en recepcion_fotos/{recId}. SIN PRECIOS: Contabilidad los consulta en la compra. */
+const MOTIVOS_REC = ['Dañado', 'Mal estado', 'Vencido', 'Faltó cantidad', 'Peso distinto', 'Otro'];
+const UNI_ENTERA = u => /unid|uds|und|funda|paquete|caja|cubeta|saco|botella|lata|porci|orden|pieza|gaveta|bandeja|atado|docena|rollo|quintal/i.test(String(u || ''));
+const libreObj = () => ({id:'libre', libre:true, local:'', items:(B.libre && B.libre.items) || []});
+const lAct = () => B.abierta === 'libre' ? (B.libre ? libreObj() : null) : (compras().filter(x => x.id === B.abierta)[0] || null);
+const acumDe = (l, pid) => ((l.recibido_acum || {})[pid]) || 0;
+const espDe = (l, it) => l.libre ? null : (it.comprado === false ? 0 : r3(Math.max(0, (it.cantidad_solicitada || 0) - acumDe(l, it.producto_id))));
+const pendItems = l => l.libre ? (l.items || []) : (l.items || []).filter(it => espDe(l, it) > 0);
+const provDe = l => { const vc = {}; (l.items || []).forEach(it => { if(it.vendedor) vc[it.vendedor] = (vc[it.vendedor] || 0) + 1; }); return Object.keys(vc).sort((a, b) => vc[b] - vc[a])[0] || ''; };
+const destDe = pid => B.dest[pid] || ((rendDe(pid) || B.mp.some(m => m.id === pid)) ? 'procesamiento' : 'directo');
+const recsDe = l => B.recs.filter(r => r.compra_id === l.id).sort((a, b) => (a.secuencia || 0) - (b.secuencia || 0) || ms(a.fecha) - ms(b.fecha));
+const saldoItems = l => (l.items || []).filter(it => it.comprado !== false && espDe(l, it) > 0);
+
+const slugProv = n => 'prov_' + String(n).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+function vProvs(){
+  const E = B.pm && B.pm.ed;
+  if(E){
+    return '<div class="iv-subbar"><button class="ivb" data-bg="prov-lista">← Volver</button><div class="iv-st">' + (E.id ? 'Editar proveedor' : 'Nuevo proveedor') + '</div><span></span></div>' +
+      '<div class="iv-card"><div class="iv-f"><label>Nombre del proveedor</label><input class="bg-obs" id="bg-pn" placeholder="Ej: Avícola Don Pepe" autocomplete="off" value="' + esc(E.nombre) + '"></div>' +
+      '<div class="iv-f"><label>Teléfono / WhatsApp (opcional)</label><input class="bg-obs" id="bg-pt" inputmode="tel" autocomplete="off" value="' + esc(E.telefono) + '"></div>' +
+      '<div class="iv-f"><label>Qué nos vende (opcional)</label><input class="bg-obs" id="bg-pp" placeholder="pollo, huevos…" autocomplete="off" value="' + esc(E.productos) + '"></div></div>' +
+      '<div class="iv-pie"><button class="ivb okb big" data-bg="prov-guardar">Guardar proveedor</button></div>';
+  }
+  return '<div class="iv-card"><h3>Proveedores</h3><div class="mu">Aquí se guardan los proveedores. Al recibir se eligen con un toque. Si escribes uno nuevo en Recepción, se agrega solo.</div><div class="bg-acts"><button class="ivb on big" data-bg="prov-nuevo">＋ Agregar proveedor</button></div></div>' +
+    (B.provs.length ? '<div class="iv-card">' + B.provs.map(p => '<div class="bg-line"><div><b>' + esc(p.nombre) + '</b><div class="mu">' + esc([p.telefono, p.productos].filter(Boolean).join(' · ') || 'Sin teléfono ni productos') + '</div></div><div><button class="ivb" data-bg="prov-ed" data-id="' + esc(p.id) + '">✎ Editar</button> <button class="ivb" data-bg="prov-del" data-id="' + esc(p.id) + '">🗑</button></div></div>').join('') + '</div>' : '<div class="iv-vacio">Todavía no hay proveedores.</div>');
+}
 function vRecepcion(){
   if(B.abierta) return vRecDetalle();
   const pend = porRecibir().sort((a, b) => ms(b.fecha_compra_realizada) - ms(a.fecha_compra_realizada));
-  let h = '<div class="iv-card"><h3>Compras por recibir</h3><div class="mu">Aquí salen las compras que ya se marcaron como “Compra realizada” (incluidos tus pedidos a Compras). Toca una para recibirla: los productos ya vienen cargados.</div></div>';
-  if(!pend.length) h += '<div class="iv-vacio">No hay compras por recibir.</div>';
-  h += '<div class="iv-list">' + pend.map(l => '<button class="iv-row" data-bg="abrir" data-id="' + esc(l.id) + '"><div class="iv-n"><div class="nm">' +
-    (l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')) + esc(NOM_LOCAL(l.local)) + '</div>' +
-    '<div class="mu">Compra del ' + esc(fechaTxt(l.fecha_compra_realizada)) + ' · ' + (l.items || []).length + ' productos' + (B.draft[l.id] ? ' · <b>recepción empezada</b>' : '') + '</div></div><div class="iv-s"><b>Recibir</b><span>›</span></div></button>').join('') + '</div>';
-  h += '<div class="bg-acts"><button class="ivb" data-bg="ir-proveedores">📥 Entrega de proveedor sin compra</button></div>';
+  let h = '<div class="iv-card"><h3>¿Qué entrega llegó?</h3><div class="mu">Toca la compra que estás recibiendo. Se cargan el proveedor, los productos y las cantidades esperadas.</div></div>';
+  if(!pend.length) h += '<div class="iv-vacio">No hay compras pendientes de recibir.</div><div class="iv-card"><h3>¿De dónde sale esta lista?</h3><div class="mu"><b>1.</b> En <b>Inventario</b> toca “＋ Pedir” en los productos que necesitas (por ejemplo pollo) y “Enviar pedido a proveedor”.<br><b>2.</b> Aparece aquí mismo para recibirlo cuando llegue. No pasa por Lista de compras.</div><div class="bg-acts"><button class="ivb on big" data-bg="ir-inv">📦 Ir a Inventario para pedir</button></div></div>';
+  h += '<div class="iv-list">' + pend.map(l => { const prov = provDe(l), parc = (l.recepciones_n || 0) > 0, falta = saldoItems(l).length;
+    return '<button class="iv-row" data-bg="abrir" data-id="' + esc(l.id) + '"><div class="iv-n"><div class="nm">' + esc(prov || NOM_LOCAL(l.local)) + '</div>' +
+    '<div class="mu">' + (l.requerimiento ? 'Pedido a proveedor' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra')) + ' · pedido el ' + esc(fechaTxt(l.fecha_compra_realizada)) + (l.fecha_necesaria ? ' · para el ' + esc(fechaCorta(l.fecha_necesaria)) : '') + ' · ' + (l.items || []).length + ' productos</div>' +
+    (parc ? '<span class="bg-tag am">⏳ Parcial · faltan ' + falta + ' productos</span> ' : '') + (B.draft[l.id] ? '<span class="bg-tag az">recepción empezada</span>' : '') + '</div><div class="iv-s"><b>Recibir</b><span>›</span></div></button>' + (window.MODO_PRUEBA ? '<button class="mp-del" data-bg="mp-del-lista" data-id="' + esc(l.id) + '">🗑 Borrar este pedido (prueba)</button>' : ''); }).join('') + '</div>';
+  h += '<div class="bg-acts"><button class="ivb big" data-bg="libre-nueva">＋ Entrega sin compra previa' + (B.libre ? ' (empezada)' : '') + '</button></div>';
   const rec = B.recs.slice(0, 8);
-  if(rec.length) h += '<div class="iv-card" style="margin-top:12px"><h3>Recibidas recientemente</h3>' + rec.map(r => '<div class="bg-line"><div><b>' + (r.pedido_numero ? 'Pedido #' + r.pedido_numero + ' · ' : '') + esc(NOM_LOCAL(r.local)) + '</b><div class="mu">' +
-    esc(fechaTxt(r.fecha)) + ' · ' + esc(r.responsable || '') + '</div></div>' + (r.estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Completa</span>') + '</div>').join('') + '</div>';
+  if(rec.length) h += '<div class="iv-card" style="margin-top:12px"><h3>Recibidas recientemente</h3>' + rec.map(r => '<div class="bg-line"><div><b>' + esc(r.proveedor || 'Entrega') + (r.documento ? ' · ' + esc(r.documento) : '') + '</b><div class="mu">' +
+    esc(fechaTxt(r.fecha)) + ' · ' + esc(r.responsable || '') + (r.sin_compra ? ' · sin compra' : '') + (r.foto ? ' · 📷' : '') + '</div></div>' + (r.parcial ? '<span class="bg-tag am">⏳ Parcial</span>' : r.estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Completa</span>') + '</div>').join('') + '</div>';
   return h;
 }
 function draftDe(l){
   let d = B.draft[l.id];
-  if(!d){
-    d = {items:{}};
-    (l.items || []).forEach(it => { d.items[it.producto_id] = {rec:(it.comprado === false ? 0 : (it.cantidad_solicitada || 0)), rech:0, obs:'', dest:B.dest[it.producto_id] || 'directo'}; });
-    B.draft[l.id] = d; LSs('draft', B.draft);
-  }
+  if(!d){ d = {items:{}, prov:l.libre ? '' : provDe(l), doc:''}; B.draft[l.id] = d; }
+  pendItems(l).forEach(it => { if(!d.items[it.producto_id]) d.items[it.producto_id] = {st:null, rec:0, rech:0, motivo:'', obs:'', lote:'', vence:'', lt:false, dest:destDe(it.producto_id)}; });
   return d;
 }
+function estItem(l, it, x){
+  if(!x.st) return {k:'n', txt:'Sin revisar'};
+  const esp = espDe(l, it), entra = r3(Math.max(0, (x.rec || 0) - (x.rech || 0)));
+  if(x.st === 'no' || (x.rec || 0) <= 0) return {k:'no', txt:'No llegó'};
+  if(entra <= 0) return {k:'no', txt:'Rechazado completo'};
+  if(esp == null ? !(x.rech > 0) : (x.rec === esp && !(x.rech > 0))) return {k:'ok', txt:esp == null ? 'Recibido y aceptado' : 'Completo y aceptado'};
+  return {k:'am', txt:'Recibido con diferencias'};
+}
+function cardItem(l, it, d){
+  const pid = it.producto_id, x = d.items[pid], e = estItem(l, it, x), esp = espDe(l, it), u = it.unidad_medida || '', entra = r3(Math.max(0, (x.rec || 0) - (x.rech || 0))), ep = esc(pid);
+  const parc = !l.libre && acumDe(l, pid) > 0;
+  return '<div class="bg-it st-' + e.k + '" id="bgit-' + ep + '"><div class="bg-it-top"><div class="nm">' + presHtml(pid, it.producto_nombre) + '</div>' +
+    '<div class="bg-esp">' + (esp == null ? '<small>Sin pedido</small><b>' + esc(u) + '</b>' : '<small>Esperado</small><b>' + esc(etqU(esp, u)) + '</b>') + (parc ? '<small>saldo · ya llegó ' + esc(etqU(acumDe(l, pid), u)) + '</small>' : '') + '</div></div>' +
+    '<div class="bg-st st-' + e.k + '">' + (e.k === 'ok' ? '✔ ' : e.k === 'am' ? '⚠ ' : e.k === 'no' ? '✖ ' : '○ ') + e.txt + '</div>' +
+    (x.st ? '<button class="bg-sum" data-bg="dif-abrir" data-id="' + ep + '"><span>Recibido <b>' + fmt(x.rec || 0) + '</b></span><span>Rechazado <b>' + fmt(x.rech || 0) + '</b></span><span>Aceptado <b>' + fmt(entra) + ' ' + esc(u) + '</b></span>' + (x.motivo ? '<small>' + esc(x.motivo) + '</small>' : '') + '</button>' : '') +
+    '<div class="bg-acc' + (esp == null ? ' solo' : '') + '">' + (esp == null ? '' : '<button class="ivb ' + (x.st === 'ok' ? 'on' : '') + '" data-bg="todo-ok" data-id="' + ep + '">✔ Todo correcto</button>') +
+    '<button class="ivb ' + (x.st === 'dif' ? 'on' : '') + '" data-bg="dif-abrir" data-id="' + ep + '">✎ ' + (esp == null ? 'Registrar cantidad' : 'Registrar diferencia') + '</button>' +
+    (esp == null ? '<button class="ivb" data-bg="libre-quitar" data-id="' + ep + '">🗑 Quitar</button>' : '<button class="ivb ' + (x.st === 'no' ? 'on' : '') + '" data-bg="no-llego" data-id="' + ep + '">✖ No llegó</button>') + '</div>' +
+    '<div class="bg-dest"><button class="ivb ' + (x.dest === 'directo' ? 'on' : '') + '" data-bg="dest" data-v="directo" data-id="' + ep + '">📦 A bodega</button>' +
+    '<button class="ivb ' + (x.dest === 'procesamiento' ? 'on' : '') + '" data-bg="dest" data-v="procesamiento" data-id="' + ep + '">⚙ A procesar</button></div>' +
+    (x.lt || x.lote || x.vence ? '<div class="bg-tr"><input class="bg-obs" data-bglote="' + ep + '" placeholder="Lote del proveedor" autocomplete="off" value="' + esc(x.lote || '') + '"><label class="bg-vl">Vence<input type="date" class="bg-obs" data-bgvence="' + ep + '" value="' + esc(x.vence || '') + '"></label></div>' :
+      '<button class="bg-lt" data-bg="lt" data-id="' + ep + '">＋ Lote y vencimiento</button>') + '</div>';
+}
 function vRecDetalle(){
-  const l = compras().filter(x => x.id === B.abierta)[0];
+  const l = lAct();
   if(!l){ B.abierta = null; return vRecepcion(); }
-  const d = draftDe(l);
-  let nDif = 0, nProc = 0;
-  const filas = (l.items || []).map(it => {
-    const x = d.items[it.producto_id] || (d.items[it.producto_id] = {rec:it.cantidad_solicitada || 0, rech:0, obs:'', dest:'directo'});
-    const sol = it.cantidad_solicitada || 0, esp = it.comprado === false ? 0 : sol, entra = r3(Math.max(0, x.rec - x.rech)), dif = r3(x.rec - esp);
-    if(dif !== 0 || x.rech > 0) nDif++; if(x.dest === 'procesamiento') nProc++;
-    const pid = esc(it.producto_id);
-    return '<div class="bg-it ' + (dif < 0 || x.rech > 0 ? 'dif' : '') + '"><div class="bg-it-top"><div class="nm">' + presHtml(it.producto_id, it.producto_nombre) + '</div><div class="mu">Pidió <b>' + esc(etqU(sol, it.unidad_medida)) + '</b>' + (it.comprado === false ? ' · <span class="bg-tag am">no se compró</span>' : '') + '</div></div>' +
-      '<div class="bg-it-q"><button class="ivb val" data-bg="cant" data-k="rec" data-id="' + pid + '"><span>Recibido</span><b>' + fmt(x.rec) + '</b></button>' +
-      '<button class="ivb val ' + (x.rech > 0 ? 'mal' : '') + '" data-bg="cant" data-k="rech" data-id="' + pid + '"><span>Rechazado</span><b>' + fmt(x.rech) + '</b></button>' +
-      '<div class="bg-entra"><span>Entra</span><b>' + fmt(entra) + '</b></div></div>' +
-      (dif < 0 ? '<div class="bg-tag am">Faltan ' + fmt(-dif) + '</div>' : dif > 0 ? '<div class="bg-tag az">Llegaron ' + fmt(dif) + ' de más</div>' : '') +
-      '<div class="bg-dest"><button class="ivb ' + (x.dest === 'directo' ? 'on' : '') + '" data-bg="dest" data-v="directo" data-id="' + pid + '">📦 Directo a bodega</button>' +
-      '<button class="ivb ' + (x.dest === 'procesamiento' ? 'on' : '') + '" data-bg="dest" data-v="procesamiento" data-id="' + pid + '">⚙ Procesamiento</button></div>' +
-      '<input class="bg-obs" data-bgobs="' + pid + '" placeholder="Observación (opcional)" autocomplete="off" value="' + esc(x.obs) + '"></div>';
-  }).join('');
-  return '<div class="iv-subbar"><button class="ivb" data-bg="cerrar">← Volver</button><div class="iv-st">' + (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra')) + ' · ' + esc(NOM_LOCAL(l.local)) + '</div><span></span></div>' +
-    '<div class="iv-aviso">Anota lo que llegó. “Entra” es lo recibido menos lo rechazado. No se piden precios aquí.</div>' + filas +
-    '<div class="iv-pie"><div class="mu" style="text-align:center;margin-bottom:6px">' + (l.items || []).length + ' productos' + (nDif ? ' · ⚠ ' + nDif + ' con diferencia' : '') + (nProc ? ' · ⚙ ' + nProc + ' a procesamiento' : '') + '</div>' +
-    '<button class="ivb okb big" data-bg="confirmar">Confirmar recepción</button></div>';
+  const d = draftDe(l), pend = pendItems(l), key = l.id;
+  const hechos = l.libre ? [] : (l.items || []).filter(it => it.comprado !== false && espDe(l, it) <= 0);
+  const nRev = pend.filter(it => d.items[it.producto_id].st).length;
+  const foto = B.foto[key];
+  let h = '<div class="iv-subbar"><button class="ivb" data-bg="cerrar">← Volver</button><div class="iv-st">' + (l.libre ? 'Entrega sin compra previa' : (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra'))) + '</div><span></span></div>' +
+    '<div class="iv-card">' + (B.provs.length ? '<div class="bg-dmot" style="margin-bottom:8px">' + B.provs.slice(0, 10).map(p => '<button class="ivb ' + (String(d.prov || '').toLowerCase() === String(p.nombre).toLowerCase() ? 'on' : '') + '" data-bg="prov-pick" data-v="' + esc(p.nombre) + '">' + esc(p.nombre) + '</button>').join('') + '</div>' : '') + '<div class="bg-tr"><input class="bg-obs" id="bg-prov" list="bg-provs" placeholder="Proveedor" autocomplete="off" value="' + esc(d.prov || '') + '"><datalist id="bg-provs">' + B.provs.map(p => '<option value="' + esc(p.nombre) + '">').join('') + '</datalist><input class="bg-obs" id="bg-doc" placeholder="Factura / guía del proveedor (opcional)" autocomplete="off" value="' + esc(d.doc || '') + '"></div></div>';
+  if(l.libre) h += '<div class="bg-acts"><button class="ivb on big" data-bg="pick-abrir">＋ Agregar producto</button></div>' + (pend.length ? '' : '<div class="iv-vacio">Agrega los productos que llegaron.</div>');
+  else h += '<div class="iv-aviso">Revisa cada producto: “Todo correcto” si llegó lo esperado, “Registrar diferencia” si cambió, “No llegó” si faltó. Nada se marca solo.</div>';
+  h += pend.map(it => cardItem(l, it, d)).join('');
+  if(hechos.length) h += '<div class="iv-card"><div class="mu">Ya recibidos antes: ' + hechos.map(it => esc(it.producto_nombre)).join(', ') + '</div></div>';
+  h += '<div class="iv-card bg-fcard"><h3>Foto del recibo o guía</h3><div class="mu">Toma la foto o elige una imagen de tu galería. Se guarda con esta recepción.</div><div class="bg-foto"><label class="ivb on big" for="bg-foto-img">📷 ' + (foto ? 'Cambiar foto' : 'Tomar o adjuntar foto') + '</label><input id="bg-foto-img" type="file" accept="image/*" class="bg-fin"></div>' +
+    (foto ? '<div class="bg-fprev"><img src="' + foto + '" alt="Recibo"><div><b>✔ Foto lista</b><button class="ivb" data-bg="foto-quitar">Quitar foto</button></div></div>' : '') + '</div>';
+  h += '<div class="iv-pie"><div class="mu" style="text-align:center;margin-bottom:6px"><b>Revisados ' + nRev + ' de ' + pend.length + '</b></div><button class="ivb okb big" data-bg="confirmar">Confirmar recepción</button></div>';
+  return h;
 }
 function setDraft(pid, campo, val){
-  const l = compras().filter(x => x.id === B.abierta)[0]; if(!l) return;
+  const l = lAct(); if(!l) return;
   const d = draftDe(l); if(!d.items[pid]) return;
   d.items[pid][campo] = val;
-  if(campo === 'rec' && d.items[pid].rech > val) d.items[pid].rech = val;
-  if(campo === 'dest') { B.dest[pid] = val; LSs('dest', B.dest); }
+  if(campo === 'dest'){ B.dest[pid] = val; LSs('dest', B.dest); }
   LSs('draft', B.draft);
 }
+/* ---- Registrar diferencia: recibido, rechazado, motivo ---- */
+function abrirDif(pid){
+  const l = lAct(); if(!l) return; const it = pendItems(l).filter(x => x.producto_id === pid)[0]; if(!it) return;
+  const x = draftDe(l).items[pid], esp = espDe(l, it);
+  B.dif = {pid:pid, nombre:it.producto_nombre, unidad:it.unidad_medida || '', esp:esp, rec:x.st && x.st !== 'no' ? x.rec : (esp == null ? 0 : esp), rech:x.st ? (x.rech || 0) : 0, motivo:x.motivo && x.motivo !== 'No llegó' ? x.motivo : ''};
+  renderDif();
+}
+function renderDif(){
+  const D = B.dif; let s = $('#bg-dif'); if(!D){ if(s) s.className = ''; return; }
+  if(!s){ s = document.createElement('div'); s.id = 'bg-dif'; document.body.appendChild(s); }
+  const ent = UNI_ENTERA(D.unidad), acepta = r3(Math.max(0, D.rec - D.rech));
+  const num = (k, lbl) => '<div class="bg-dq"><span>' + lbl + '</span><div class="bg-dqr">' + (ent ? '<button class="ivb" data-bg="dif-menos" data-k="' + k + '">−</button>' : '') + '<button class="ivb val" data-bg="dif-num" data-k="' + k + '"><b>' + fmt(D[k]) + '</b><small>' + esc(D.unidad) + '</small></button>' + (ent ? '<button class="ivb" data-bg="dif-mas" data-k="' + k + '">＋</button>' : '') + '</div></div>';
+  s.innerHTML = '<div class="bg-dbox"><h3>' + esc(D.nombre) + '</h3><div class="mu">' + (D.esp == null ? 'Sin pedido' : 'Esperado: <b>' + esc(etqU(D.esp, D.unidad)) + '</b>') + '</div>' +
+    num('rec', 'Cantidad recibida') + num('rech', 'Cantidad rechazada') +
+    '<div class="bg-dacc">Cantidad aceptada: <b>' + fmt(acepta) + ' ' + esc(D.unidad) + '</b></div>' +
+    '<div class="mu" style="margin:8px 0 4px">Motivo</div><div class="bg-dmot">' + MOTIVOS_REC.map(m => '<button class="ivb ' + (D.motivo === m ? 'on' : '') + '" data-bg="dif-mot" data-v="' + esc(m) + '">' + esc(m) + '</button>').join('') + '</div>' +
+    '<div class="bg-dbt"><button class="ivb" data-bg="dif-x">Cancelar</button><button class="ivb okb" data-bg="dif-ok">Guardar</button></div></div>';
+  s.className = 'show';
+}
+function guardarDif(){
+  const D = B.dif, l = lAct(); if(!D || !l) return;
+  const x = draftDe(l).items[D.pid]; if(!x) return;
+  const rec = r3(D.rec || 0), rech = r3(Math.min(D.rech || 0, rec));
+  const hayDif = rech > 0 || (D.esp != null && rec !== D.esp);
+  if(rec > 0 && hayDif && !D.motivo){ toast('Elige el motivo de la diferencia'); return; }
+  if(D.esp == null && rec <= 0){ toast('Pon la cantidad que llegó'); return; }
+  x.rec = rec; x.rech = rech; x.motivo = hayDif ? D.motivo : ''; x.st = rec <= 0 ? 'no' : (hayDif ? 'dif' : 'ok');
+  if(rec <= 0 && !x.motivo) x.motivo = 'No llegó';
+  LSs('draft', B.draft); B.dif = null; renderDif(); render();
+}
+/* ---- Entrega sin compra previa: agregar productos del catálogo ---- */
+function renderPick(){
+  const P = B.pick; let s = $('#bg-pick'); if(!P){ if(s) s.className = ''; return; }
+  if(!s){ s = document.createElement('div'); s.id = 'bg-pick'; document.body.appendChild(s); }
+  const ya = ((B.libre && B.libre.items) || []).map(i => i.producto_id);
+  let body;
+  if(P.nuevo){
+    body = '<div class="mu">Producto que no está en el catálogo. Mejor agrégalo luego desde su ficha.</div><input class="bg-obs" id="bg-pick-n" placeholder="Nombre del producto" autocomplete="off" value="' + esc(P.nuevo.nombre) + '"><div class="bg-dmot" style="margin-top:8px">' +
+      ['kg', 'libras', 'litros', 'galones', 'unidades', 'fundas', 'cajas'].map(u => '<button class="ivb ' + (P.nuevo.unidad === u ? 'on' : '') + '" data-bg="pick-u" data-v="' + u + '">' + u + '</button>').join('') + '</div>' +
+      '<div class="bg-dbt"><button class="ivb" data-bg="pick-atras">Atrás</button><button class="ivb okb" data-bg="pick-nuevo-ok">Agregar</button></div>';
+  } else {
+    const q = (P.q || '').toLowerCase().trim();
+    const lista = (window.ivItems ? window.ivItems() : []).filter(it => ya.indexOf(it.id) < 0 && (!q || it.nombre.toLowerCase().indexOf(q) >= 0)).slice(0, 40);
+    body = '<input class="bg-obs" id="bg-pick-q" placeholder="Buscar producto…" autocomplete="off" value="' + esc(P.q || '') + '"><div class="bg-pl" id="bg-pick-l">' + lista.map(it => '<button class="ivb" data-bg="pick-add" data-id="' + esc(it.id) + '">' + esc(it.nombre) + ' <small>' + esc(it.uAlmacen || it.unidad || '') + '</small></button>').join('') + (lista.length ? '' : '<div class="mu">Sin resultados.</div>') + '</div>' +
+      '<div class="bg-dbt"><button class="ivb" data-bg="pick-x">Cerrar</button><button class="ivb on" data-bg="pick-nuevo">＋ Producto nuevo</button></div>';
+  }
+  s.innerHTML = '<div class="bg-dbox"><h3>Agregar producto recibido</h3>' + body + '</div>'; s.className = 'show';
+}
+/* ---- Resumen y confirmación ---- */
+function buildItems(l, d){
+  return pendItems(l).map(it => { const x = d.items[it.producto_id], esp = espDe(l, it), rec = x.rec || 0, rech = Math.min(x.rech || 0, rec), entra = r3(rec - rech), e = estItem(l, it, x);
+    return {producto_id:it.producto_id, nombre:it.producto_nombre, unidad:it.unidad_medida || '', solicitado:l.libre ? 0 : (it.cantidad_solicitada || 0), esperado:esp == null ? 0 : esp, comprado:true, recibido:rec, rechazado:rech, entra:entra, diferencia:esp == null ? 0 : r3(rec - esp),
+      motivo:x.motivo || '', observacion:x.motivo || '', lote_proveedor:String(x.lote || '').trim(), vence:x.vence || '', destino:x.dest, inventario:x.dest === 'procesamiento' ? 'inventario_materia_prima' : 'inventario_bodega',
+      estado_item:e.k === 'ok' ? 'ok' : e.k === 'am' ? 'diferencia' : (x.st === 'no' || rec <= 0 ? 'no_llego' : 'rechazado')}; });
+}
+function pedirConfirmar(){
+  const l = lAct(); if(!l || B.busy) return;
+  const d = draftDe(l), pend = pendItems(l);
+  if(l.libre && !pend.length){ toast('Agrega al menos un producto'); return; }
+  const sin = pend.filter(it => !d.items[it.producto_id].st);
+  if(sin.length){ toast('Faltan ' + sin.length + ' producto' + (sin.length > 1 ? 's' : '') + ' por revisar'); const el = document.getElementById('bgit-' + sin[0].producto_id); if(el){ el.scrollIntoView({block:'center', behavior:'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } return; }
+  if(!String(d.prov || '').trim()){ toast('Escribe el proveedor'); const pi = $('#bg-prov'); if(pi){ pi.scrollIntoView({block:'center'}); pi.focus(); } return; }
+  if(!resp()) return;
+  B.sum = {cierre:'esperar'}; renderSum();
+}
+function saldoTras(l, items){
+  const acc = Object.assign({}, l.recibido_acum || {}); items.forEach(i => { acc[i.producto_id] = r3((acc[i.producto_id] || 0) + i.recibido); });
+  return (l.items || []).filter(it => it.comprado !== false && r3((it.cantidad_solicitada || 0) - (acc[it.producto_id] || 0)) > 0.0005).map(it => ({nombre:it.producto_nombre, unidad:it.unidad_medida || '', falta:r3((it.cantidad_solicitada || 0) - (acc[it.producto_id] || 0))}));
+}
+function renderSum(){
+  let s = $('#bg-sum'); if(!B.sum){ if(s) s.className = ''; return; }
+  const l = lAct(); if(!l){ B.sum = null; return; }
+  if(!s){ s = document.createElement('div'); s.id = 'bg-sum'; document.body.appendChild(s); }
+  const items = buildItems(l, draftDe(l)), c = k => items.filter(i => i.estado_item === k);
+  const ok = c('ok').length, dif = c('diferencia').length, no = c('no_llego').length + c('rechazado').length;
+  const bod = items.filter(i => i.entra > 0 && i.destino === 'directo'), pro = items.filter(i => i.entra > 0 && i.destino === 'procesamiento'), rech = items.filter(i => i.rechazado > 0);
+  const saldo = l.libre ? [] : saldoTras(l, items);
+  s.innerHTML = '<div class="bg-dbox"><h3>Resumen de la recepción</h3>' +
+    '<div class="bg-sl"><span class="st-ok">✔ ' + ok + ' completos</span><span class="st-am">⚠ ' + dif + ' con diferencias</span><span class="st-no">✖ ' + no + ' no llegaron / rechazados</span></div>' +
+    '<div class="bg-line"><div>📦 A bodega</div><b>' + bod.length + '</b></div>' + (bod.length ? '<div class="mu">' + bod.map(i => esc(i.nombre) + ' ' + fmt(i.entra) + ' ' + esc(i.unidad)).join(' · ') + '</div>' : '') +
+    '<div class="bg-line"><div>⚙ A procesar (materia prima pendiente)</div><b>' + pro.length + '</b></div>' + (pro.length ? '<div class="mu">' + pro.map(i => esc(i.nombre) + ' ' + fmt(i.entra) + ' ' + esc(i.unidad)).join(' · ') + '</div>' : '') +
+    (rech.length ? '<div class="bg-line"><div>↩ Rechazado (no entra al inventario)</div><b>' + rech.length + '</b></div><div class="mu">' + rech.map(i => esc(i.nombre) + ' ' + fmt(i.rechazado) + ' ' + esc(i.unidad) + (i.motivo ? ' · ' + esc(i.motivo) : '')).join(' · ') + '</div>' : '') +
+    (saldo.length ? '<div class="iv-aviso" style="margin-top:8px"><b>Queda pendiente:</b> ' + saldo.map(x => esc(x.nombre) + ' ' + fmt(x.falta) + ' ' + esc(x.unidad)).join(' · ') + '</div>' +
+      '<div class="bg-dmot"><button class="ivb ' + (B.sum.cierre === 'esperar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="esperar">Esperar el saldo</button><button class="ivb ' + (B.sum.cierre === 'cerrar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="cerrar">Cerrar compra sin el saldo</button></div>' : '') +
+    '<div class="bg-dbt"><button class="ivb" data-bg="sum-x">Volver</button><button class="ivb okb big" data-bg="sum-ok">Confirmar</button></div></div>';
+  s.className = 'show';
+}
 async function confirmarRecepcion(){
-  const l = compras().filter(x => x.id === B.abierta)[0]; if(!l || B.busy) return;
+  const l = lAct(); if(!l || B.busy) return;
   const quien = resp(); if(!quien) return;
-  const d = draftDe(l), recId = 'rec_' + l.id;
-  const items = (l.items || []).map(it => {
-    const x = d.items[it.producto_id] || {rec:0, rech:0, obs:'', dest:'directo'};
-    const sol = it.cantidad_solicitada || 0, esp = it.comprado === false ? 0 : sol, rec = x.rec || 0, rech = Math.min(x.rech || 0, rec), entra = r3(rec - rech);
-    return {producto_id:it.producto_id, nombre:it.producto_nombre, unidad:it.unidad_medida || '', solicitado:sol, esperado:esp, comprado:it.comprado !== false, recibido:rec, rechazado:rech, entra:entra, diferencia:r3(rec - esp), observacion:x.obs || '',
-      destino:x.dest, inventario:x.dest === 'procesamiento' ? 'inventario_materia_prima' : 'inventario_bodega'};
-  });
-  const hayDif = items.some(i => i.diferencia !== 0 || i.rechazado > 0);
-  B.busy = true; setTimeout(() => { B.busy = false; }, 2500);
+  const d = draftDe(l), items = buildItems(l, d), prov = String(d.prov || '').trim(), doc = String(d.doc || '').trim(), cierre = B.sum ? B.sum.cierre : 'esperar';
+  const n0 = l.libre ? 0 : (l.recepciones_n || 0), recId = l.libre ? B.libre.rid : 'rec_' + l.id + '_' + (n0 + 1), foto = B.foto[l.id] || null;
+  const hayDif = items.some(i => i.estado_item !== 'ok');
+  B.busy = true; B.sum = null; renderSum(); setTimeout(() => { B.busy = false; }, 4000);
+  let cerrada = true;
   try {
     await db.runTransaction(async t => {
-      const rr = db.collection('recepciones_bodega').doc(recId), lr = db.collection('listas_compra').doc(l.id);
-      const s1 = await t.get(rr), s2 = await t.get(lr);
-      if(s1.exists || (s2.exists && (s2.data() || {}).recepcion_id)) throw new Error('DUP');
-      if(!s2.exists) throw new Error('NOLISTA');
+      const rr = db.collection('recepciones_bodega').doc(recId), s1 = await t.get(rr);
+      const lr = l.libre ? null : db.collection('listas_compra').doc(l.id), s2 = lr ? await t.get(lr) : null;
+      if(s1.exists) throw new Error('DUP');
+      let ld = {}, acum = {};
+      if(lr){ if(!s2.exists) throw new Error('NOLISTA'); ld = s2.data() || {}; if((ld.recepciones_n || 0) !== n0 || ld.recepcion_id) throw new Error('DUP'); acum = Object.assign({}, ld.recibido_acum || {}); }
+      items.forEach(i => { acum[i.producto_id] = r3((acum[i.producto_id] || 0) + i.recibido); });
+      cerrada = l.libre || cierre === 'cerrar' || !(l.items || []).some(it => it.comprado !== false && r3((it.cantidad_solicitada || 0) - (acum[it.producto_id] || 0)) > 0.0005);
       const ts = SV();
-      t.set(rr, {empresa:EMPRESA, bodega:BODEGA, compra_id:l.id, pedido_numero:l.pedido_numero || null, local:l.local, requerimiento:!!l.requerimiento, fecha:ts, responsable:quien, estado:hayDif ? 'con_diferencias' : 'completa', items:items});
+      t.set(rr, {empresa:EMPRESA, bodega:BODEGA, compra_id:l.libre ? null : l.id, sin_compra:!!l.libre, secuencia:n0 + 1, pedido_numero:l.pedido_numero || null, local:l.local || '', requerimiento:!!l.requerimiento, fecha:ts, fecha_iso:new Date().toISOString(), responsable:quien,
+        proveedor:prov, documento:doc, estado:hayDif ? 'con_diferencias' : 'completa', parcial:!cerrada, foto:!!foto, items:items,
+        prev:l.libre ? null : {n:ld.recepciones_n || 0, acum:ld.recibido_acum || {}, ids:ld.recepcion_ids || [], estado:ld.recepcion_estado || null, parcial:!!ld.recepcion_parcial, fecha:ld.fecha_recepcion || null, por:ld.recibido_por || null}});
+      if(foto) t.set(db.collection('recepcion_fotos').doc(recId), {recepcion_id:recId, compra_id:l.libre ? null : l.id, data_url:foto, responsable:quien, fecha:ts});
       items.forEach(i => {
         if(!(i.entra > 0)) return;
-        t.set(db.collection(i.inventario).doc(i.producto_id), {producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_actual:INC(i.entra), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
+        t.set(db.collection(i.inventario).doc(i.producto_id), Object.assign({producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_actual:INC(i.entra), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, i.inventario === 'inventario_materia_prima' ? {ultima_recepcion:recId, ultimo_proveedor:prov, ultimo_lote:i.lote_proveedor || null, ultimo_vence:i.vence || null} : {}), {merge:true});
         t.set(db.collection('movimientos_inventario_bodega').doc(recId + '_' + i.producto_id), {producto_id:i.producto_id, producto_nombre:i.nombre, tipo:'recepcion_compra', destino:i.destino,
-          inventario:i.inventario === 'inventario_materia_prima' ? 'materia_prima' : 'terminado', cantidad:i.entra, recepcion_id:recId, compra_id:l.id, responsable:quien, empresa:EMPRESA, bodega:BODEGA, fecha:ts,
-          nota:'Recepción de compra' + (l.pedido_numero ? ' · Pedido #' + l.pedido_numero : '') + (i.observacion ? ' · ' + i.observacion : '')});
+          inventario:i.inventario === 'inventario_materia_prima' ? 'materia_prima' : 'terminado', cantidad:i.entra, recepcion_id:recId, compra_id:l.libre ? null : l.id, proveedor:prov, documento:doc, lote_proveedor:i.lote_proveedor || null, vence:i.vence || null, responsable:quien, empresa:EMPRESA, bodega:BODEGA, fecha:ts,
+          nota:'Recepción de ' + prov + (i.lote_proveedor ? ' · Lote ' + i.lote_proveedor : '') + (i.vence ? ' · Vence ' + i.vence : '') + (i.motivo ? ' · ' + i.motivo : '')});
       });
-      t.update(lr, {recepcion_id:recId, recepcion_estado:hayDif ? 'con_diferencias' : 'completa', fecha_recepcion:ts, recibido_por:quien});
+      if(lr) t.update(lr, {recepciones_n:n0 + 1, recibido_acum:acum, recepcion_ids:(ld.recepcion_ids || []).concat([recId]), recepcion_id:cerrada ? recId : null, recepcion_parcial:!cerrada, recepcion_estado:!cerrada ? 'parcial' : (hayDif ? 'con_diferencias' : 'completa'), fecha_recepcion:ts, recibido_por:quien});
     });
   } catch(e){
     if(String(e && e.message) !== 'DUP') console.error(e);
     B.busy = false;
-    toast(String(e && e.message) === 'DUP' ? 'Esta compra ya fue recibida. No se ingresó de nuevo.' : errTxt(e));
+    toast(String(e && e.message) === 'DUP' ? 'Esta entrega ya fue registrada. No se ingresó de nuevo.' : errTxt(e));
     return;
   }
-  const copia = JSON.parse(JSON.stringify(d));
-  delete B.draft[l.id]; LSs('draft', B.draft); B.abierta = null; B.busy = false;
+  if(prov && !B.provs.some(p => String(p.nombre).toLowerCase() === prov.toLowerCase())){ db.collection('proveedores').doc(slugProv(prov)).set({nombre:prov, telefono:'', productos:'', creado:SV()}, {merge:true}).catch(e => console.error(e)); }
+  const copia = JSON.parse(JSON.stringify(d)), key = l.id, libre = l.libre ? JSON.parse(JSON.stringify(B.libre)) : null;
+  delete B.draft[key]; LSs('draft', B.draft); delete B.foto[key]; if(l.libre){ B.libre = null; LSs('libre', null); }
+  B.abierta = null; B.busy = false;
   const nD = items.filter(i => i.entra > 0 && i.destino === 'directo').length, nP = items.filter(i => i.entra > 0 && i.destino === 'procesamiento').length;
   render(); window.scrollTo(0, 0);
-  snack('<b>Recepción guardada</b><br>' + (nD ? '📦 ' + nD + ' a bodega' : '') + (nD && nP ? ' · ' : '') + (nP ? '⚙ ' + nP + ' por procesar' : '') + (hayDif ? ' · ⚠ con diferencias' : ''), () => deshacerRecepcion(recId, l.id, copia));
+  snack('<b>Recepción guardada</b><br>' + (nD ? '📦 ' + nD + ' a bodega' : '') + (nD && nP ? ' · ' : '') + (nP ? '⚙ ' + nP + ' por procesar' : '') + (hayDif ? ' · ⚠ con diferencias' : '') + (!cerrada ? ' · ⏳ queda saldo pendiente' : ''), () => deshacerRecepcion(recId, l.libre ? null : l.id, copia, libre, foto));
 }
-async function deshacerRecepcion(recId, compraId, copia){
+async function deshacerRecepcion(recId, compraId, copia, libre, foto){
   try {
     await db.runTransaction(async t => {
       const rr = db.collection('recepciones_bodega').doc(recId), s = await t.get(rr); if(!s.exists) return;
-      const ts = SV();
-      ((s.data() || {}).items || []).forEach(i => {
+      const r = s.data() || {}, ts = SV();
+      (r.items || []).forEach(i => {
         if(!(i.entra > 0)) return;
         t.set(db.collection(i.inventario).doc(i.producto_id), {cantidad_actual:INC(-i.entra), ultima_actualizacion:ts}, {merge:true});
         t.delete(db.collection('movimientos_inventario_bodega').doc(recId + '_' + i.producto_id));
       });
-      t.delete(rr);
-      t.update(db.collection('listas_compra').doc(compraId), {recepcion_id:null, recepcion_estado:null, fecha_recepcion:null, recibido_por:null});
+      t.delete(rr); if(r.foto) t.delete(db.collection('recepcion_fotos').doc(recId));
+      if(compraId && r.prev){ const p = r.prev; t.update(db.collection('listas_compra').doc(compraId), {recepciones_n:p.n, recibido_acum:p.acum, recepcion_ids:p.ids, recepcion_id:null, recepcion_parcial:p.parcial, recepcion_estado:p.estado, fecha_recepcion:p.fecha, recibido_por:p.por}); }
     });
-    if(copia){ B.draft[compraId] = copia; LSs('draft', B.draft); }
+    if(copia){ B.draft[compraId || 'libre'] = copia; LSs('draft', B.draft); }
+    if(libre){ B.libre = libre; LSs('libre', libre); }
+    if(foto) B.foto[compraId || 'libre'] = foto;
     toast('Recepción deshecha: lo que anotaste sigue ahí'); refrescar();
   } catch(e){ console.error(e); toast(errTxt(e)); }
 }
+function leerFotoRec(file, key){
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = () => {
+    const sc = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    B.foto[key] = c.toDataURL('image/jpeg', 0.7); URL.revokeObjectURL(url); render();
+  };
+  img.onerror = () => toast('No se pudo leer esa foto'); img.src = url;
+}
+document.addEventListener('change', e => { const i = e.target; if(i && (i.id === 'bg-foto-cam' || i.id === 'bg-foto-img') && i.files && i.files[0]){ const l = lAct(); if(l) leerFotoRec(i.files[0], l.id); i.value = ''; } });
 
 /* ============ 2. POR PROCESAR ============ */
 function vProcesar(){
   const mps = mpPend();
   let h = '<div class="bg-acts"><button class="ivb on" data-bg="ir-registro">🏭 Abrir Registro de producción</button></div>';
   if(!mps.length) return h + '<div class="iv-vacio">No hay materia prima por procesar 🎉</div>';
-  return h + '<div class="bg-lista">' + mps.map((m, i) => '<div class="bg-r"><span class="bg-rn">' + (i + 1) + '</span><div class="bg-rm"><div class="nm">' + esc(m.producto_nombre || m.id) + '</div><div class="mu">Por procesar</div></div>' +
-    '<div class="bg-rs"><b>' + fmt(m.cantidad_actual || 0) + '</b><small>' + esc(m.unidad_medida || '') + '</small></div><div class="bg-ra"><button class="ivb" data-bg="baja" data-id="' + esc(m.id) + '"><span>➖ Baja</span></button></div></div>').join('') + '</div>';
+  return h + '<div class="bg-lista">' + mps.map((m, i) => '<div class="bg-r"><span class="bg-rn">' + (i + 1) + '</span><div class="bg-rm"><div class="nm">' + esc(m.producto_nombre || m.id) + '</div><div class="mu">' + (rendDe(m.id) ? 'Receta fija lista' : 'Falta definir qué sale') + '</div></div>' +
+    '<div class="bg-rs"><b>' + fmt(m.cantidad_actual || 0) + '</b><small>' + esc(m.unidad_medida || '') + '</small></div><div class="bg-ra"><button class="ivb okb" data-bg="pr-ir" data-id="' + esc(m.id) + '"><span>⚙ Procesar</span></button><button class="ivb" data-bg="baja" data-id="' + esc(m.id) + '"><span>➖ Baja</span></button></div></div>').join('') + '</div>';
+}
+/* ---- Procesar con receta fija (rendimiento): 1 unidad de materia prima → productos + merma ---- */
+const prodsProd = () => (window.PR && window.PR.productos) ? window.PR.productos() : [];
+function prIr(id){
+  const m = B.mp.filter(x => x.id === id)[0]; if(!m) return;
+  const nom = m.producto_nombre || m.id, u = m.unidad_medida || '', r = rendDe(id);
+  B.proc = {id:id, nombre:nom, unidad:u, pend:m.cantidad_actual || 0, mode:r ? 'run' : 'def', rend:r ? JSON.parse(JSON.stringify({salidas:r.salidas || [], merma:r.merma_por_unidad || 0})) : {salidas:[], merma:0}, usado:0, out:[], merma:0, motivo:'Merma'};
+  if(r){ B.proc.usado = r3(B.proc.pend); prCalc(); }
+  render(); window.scrollTo(0, 0);
+}
+function prCalc(){
+  const p = B.proc; if(!p) return;
+  p.out = p.rend.salidas.map(s => ({producto_id:s.producto_id, nombre:s.nombre, unidad:s.unidad, cant:r3(s.por_unidad * p.usado)}));
+  p.merma = r3(p.rend.merma * p.usado);
+}
+function vProc(){
+  const p = B.proc, u = esc(p.unidad);
+  const volver = '<div class="iv-subbar"><button class="ivb" data-bg="pr-x">← Volver</button><div class="iv-st">Procesar · ' + esc(p.nombre) + '</div><span></span></div>';
+  if(p.mode === 'def'){
+    const filas = p.rend.salidas.map((s, i) => '<div class="bg-line"><div><b>' + esc(s.nombre) + '</b><div class="mu">Sale por cada 1 ' + u + '</div></div><div class="bg-ra"><button class="ivb val" data-bg="pr-sq" data-i="' + i + '"><b>' + fmt(s.por_unidad) + '</b> ' + esc(s.unidad || '') + '</button><button class="ivb" data-bg="pr-sdel" data-i="' + i + '">✕</button></div></div>').join('');
+    return volver + '<div class="iv-aviso">Define la <b>receta fija</b> una sola vez: de <b>1 ' + u + '</b> de ' + esc(p.nombre) + ', ¿qué sale? Después solo dices cuánto usas.</div>' +
+      '<div class="iv-card"><h3>Qué sale de 1 ' + u + '</h3>' + (filas || '<div class="mu">Todavía no agregas productos.</div>') +
+      '<button class="ivb" data-bg="pr-sadd" style="margin-top:8px">＋ Agregar producto que sale</button></div>' +
+      '<div class="iv-card"><h3>Merma</h3><div class="bg-line"><div><b>Merma por cada 1 ' + u + '</b><div class="mu">Lo que se pierde (hueso, desecho…)</div></div><button class="ivb val" data-bg="pr-mq"><b>' + fmt(p.rend.merma) + '</b> ' + u + '</button></div></div>' +
+      '<div style="height:110px"></div><div class="iv-pie"><button class="ivb okb big" data-bg="pr-guardar-rend">Guardar receta y continuar</button></div>';
+  }
+  const filas = p.out.map((o, i) => '<div class="bg-line"><div><b>' + esc(o.nombre) + '</b><div class="mu">Entra al inventario</div></div><button class="ivb val" data-bg="pr-oq" data-i="' + i + '"><b>' + fmt(o.cant) + '</b> ' + esc(o.unidad || '') + '</button></div>').join('');
+  return volver + '<div class="iv-card"><div class="bg-line"><div><b>Cantidad que procesas</b><div class="mu">Por procesar: ' + fmt(p.pend) + ' ' + u + '</div></div><button class="ivb val" data-bg="pr-uq"><b>' + fmt(p.usado) + '</b> ' + u + '</button></div></div>' +
+    '<div class="iv-card"><h3>Sale de aquí (receta fija)</h3>' + (filas || '<div class="mu">Esta receta no tiene productos.</div>') +
+    '<div class="bg-line"><div><b>Merma</b><div class="mu">Se descuenta, no entra al inventario</div></div><button class="ivb val ' + (p.merma > 0 ? 'mal' : '') + '" data-bg="pr-mmq"><b>' + fmt(p.merma) + '</b> ' + u + '</button></div>' +
+    (p.merma > 0 ? '<div class="iv-chips" style="margin-top:8px">' + MOTIVOS_BAJA.map(x => '<button class="ivb ' + (p.motivo === x ? 'on' : '') + '" data-bg="pr-mot" data-v="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>' : '') + '</div>' +
+    '<div style="height:170px"></div><div class="iv-pie"><button class="ivb okb big" data-bg="pr-ok">Confirmar: procesar ' + fmt(p.usado) + ' ' + u + '</button><button class="ivb" data-bg="pr-edit" style="margin-top:8px;width:100%">✎ Cambiar la receta fija</button></div>';
+}
+function prGuardarRend(){
+  const p = B.proc; if(!p) return;
+  if(!p.rend.salidas.length && !(p.rend.merma > 0)){ toast('Agrega al menos un producto que sale o la merma'); return; }
+  const doc = {mp_id:p.id, mp_nombre:p.nombre, mp_unidad:p.unidad, salidas:p.rend.salidas, merma_por_unidad:p.rend.merma || 0, actualizado:SV(), actualizado_por:(auth.currentUser && auth.currentUser.email) || null};
+  B.rend = B.rend || {}; B.rend[p.id] = {salidas:p.rend.salidas, merma_por_unidad:p.rend.merma || 0};
+  db.collection('rendimientos_mp').doc(p.id).set(doc).catch(e => { console.error(e); toast(errTxt(e)); });
+  p.mode = 'run'; p.usado = r3(p.pend); prCalc(); render(); toast('Receta guardada');
+}
+function prConfirmar(){
+  const p = B.proc; if(!p || B.busy) return;
+  if(!(p.usado > 0)){ toast('Pon la cantidad que procesas'); return; }
+  if(p.usado > p.pend + 0.0001){ toast('Solo hay ' + fmt(p.pend) + ' ' + p.unidad + ' por procesar'); return; }
+  const outs = p.out.filter(o => o.cant > 0);
+  if(!outs.length && !(p.merma > 0)){ toast('No hay nada que registrar'); return; }
+  if(!B.resp){ pedirResp(() => prConfirmar()); return; }
+  const quien = B.resp; B.busy = true; setTimeout(() => { B.busy = false; }, 2000);
+  const ts = SV(), batch = db.batch(), pid = db.collection('procesos_bodega').doc(), movs = [], undoRefs = [];
+  batch.set(db.collection('inventario_materia_prima').doc(p.id), {cantidad_actual:INC(-p.usado), ultima_actualizacion:ts}, {merge:true});
+  const m0 = db.collection('movimientos_inventario_bodega').doc(); movs.push(m0);
+  batch.set(m0, {producto_id:p.id, producto_nombre:p.nombre, inventario:'materia_prima', tipo:'procesamiento', cantidad:-p.usado, proceso_id:pid.id, responsable:quien, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Procesado: ' + fmt(p.usado) + ' ' + p.unidad});
+  outs.forEach(o => {
+    batch.set(db.collection('inventario_bodega').doc(o.producto_id), {producto_nombre:o.nombre, cantidad_actual:INC(o.cant), ultima_actualizacion:ts, empresa:EMPRESA, bodega:BODEGA}, {merge:true});
+    const mo = db.collection('movimientos_inventario_bodega').doc(); movs.push(mo);
+    batch.set(mo, {producto_id:o.producto_id, producto_nombre:o.nombre, inventario:'terminado', tipo:'procesamiento', cantidad:o.cant, proceso_id:pid.id, responsable:quien, empresa:EMPRESA, bodega:BODEGA, fecha:ts, nota:'Sale de procesar ' + p.nombre});
+  });
+  let bid = null;
+  if(p.merma > 0){ bid = db.collection('bajas_bodega').doc();
+    batch.set(bid, {empresa:EMPRESA, bodega:BODEGA, origen:'procesamiento', inventario:'materia_prima', producto_id:p.id, producto_nombre:p.nombre, unidad:p.unidad, cantidad:p.merma, motivo:p.motivo, responsable:quien, anulada:false, ya_descontada:true, proceso_id:pid.id, fecha:ts}); }
+  batch.set(pid, {empresa:EMPRESA, bodega:BODEGA, mp_id:p.id, mp_nombre:p.nombre, unidad:p.unidad, usado:p.usado, salidas:outs.map(o => ({producto_id:o.producto_id, nombre:o.nombre, unidad:o.unidad, cantidad:o.cant})), merma:p.merma, motivo:p.merma > 0 ? p.motivo : null, responsable:quien, fecha:ts});
+  batch.commit().catch(e => { console.error(e); toast(errTxt(e)); });
+  const copia = {id:p.id, usado:p.usado, outs:outs, nombre:p.nombre};
+  B.proc = null; render(); window.scrollTo(0, 0);
+  snack('<b>Procesado</b><br>' + fmt(copia.usado) + ' ' + esc(p.unidad) + ' de ' + esc(copia.nombre) + ' → ' + (outs.length ? outs.map(o => fmt(o.cant) + ' ' + esc(o.unidad || '') + ' ' + esc(o.nombre)).join(', ') : 'solo merma') + (p.merma > 0 ? ' · merma ' + fmt(p.merma) : ''), () => {
+    const u = db.batch();
+    u.set(db.collection('inventario_materia_prima').doc(copia.id), {cantidad_actual:INC(copia.usado), ultima_actualizacion:SV()}, {merge:true});
+    copia.outs.forEach(o => u.set(db.collection('inventario_bodega').doc(o.producto_id), {cantidad_actual:INC(-o.cant), ultima_actualizacion:SV()}, {merge:true}));
+    movs.forEach(r => u.delete(r)); if(bid) u.delete(bid); u.delete(pid);
+    u.commit().then(() => toast('Proceso deshecho')).catch(e => { console.error(e); toast(errTxt(e)); });
+  });
 }
 function bajasRecientes(){
   if(!B.bajas.length) return '';
@@ -6686,10 +7003,10 @@ function vInventario(){
   let h = '<div class="iv-sum"><div><b>' + all.filter(act).length + '</b><span>productos en bodega</span></div><div class="' + (all.filter(bajo).length ? 'wn' : '') + '"><b>' + all.filter(bajo).length + '</b><span>bajo el mínimo</span></div><div><b>' + mpPend().length + '</b><span>pendientes de procesar</span></div></div>' +
     '<div class="iv-bar"><input id="bg-q" type="search" placeholder="Buscar producto" value="' + esc(B.q) + '" autocomplete="off"><div class="iv-chips">' +
     [['todos', 'Todos'], ['bajo', 'Bajo mínimo']].map(f => '<button class="ivb ' + (B.filtro === f[0] ? 'on' : '') + '" data-bg="filtro" data-v="' + f[0] + '">' + f[1] + '</button>').join('') +
-    '<button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button><button class="ivb" data-bg="ir-conteo">📋 Conteo físico completo</button></div></div>' +
+    '<button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button><button class="ivb" data-bg="tab" data-v="req">📝 Lo pedido a proveedores</button><button class="ivb" data-bg="ir-conteo">📋 Conteo físico completo</button></div></div>' +
     '<div id="bg-inv-lista">' + invFilas() + '</div>';
   h += bajasRecientes();
-  if(nSel) h += '<div class="iv-pie"><button class="ivb okb big" data-bg="req-abrir">Enviar requerimiento a Compras (' + nSel + ')</button></div>';
+  if(nSel) h += '<div class="iv-pie"><button class="ivb okb big" data-bg="req-abrir">Enviar pedido a proveedor (' + nSel + ')</button></div>';
   return h;
 }
 const SUBS_INV = [['mercado', 'Mercado', '🛒'], ['facility', 'Facility', '🏭'], ['bodega', 'Bodega', '📦']];
@@ -6704,13 +7021,17 @@ function invFilas(){
   const fila = it => {
     const bajo = it.min > 0 && it.stock < it.min, m = mpIdx[it.id], p = pend[it.id], sel = !!B.sel[it.id], id = esc(it.id);
     return '<div class="bg-r ' + (bajo ? 'bajo' : '') + '"><span class="bg-rn">' + (++n) + '</span><div class="bg-rm"><div class="nm">' + presHtml(it.id, it.nombre) + '</div><div class="mu">' + esc(it.uAlmacen || it.unidad || '') + (it.min ? ' · mínimo ' + fmt(it.min) : '') +
-      (bajo ? ' <span class="bg-tag am">Bajo el mínimo</span>' : '') + (m && (m.cantidad_actual || 0) > 0 ? ' <span class="bg-tag az">Por procesar ' + fmt(m.cantidad_actual) + ' ' + esc(m.unidad_medida || '') + '</span>' : '') +
+      (bajo ? ' <span class="bg-tag am">Bajo el mínimo</span>' : '') + 
       (p ? ' <span class="bg-tag mo">Requerimiento pendiente ' + fmt(p.cant) + (p.fecha ? ' · ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') + '</div></div>' +
-      '<div class="bg-rs"><b>' + fmt(it.stock) + '</b><small>disponible</small></div><div class="bg-ra"><button class="ivb" data-bg="salida" data-id="' + id + '">➡ Salida</button><button class="ivb" data-bg="ajuste" data-id="' + id + '">✎ Ajustar</button>' +
+      '<div class="bg-rs"><b>' + fmt(it.stock) + '</b><small>listo en bodega</small></div><div class="bg-ra"><button class="ivb" data-bg="salida" data-id="' + id + '">➡ Salida</button><button class="ivb" data-bg="ajuste" data-id="' + id + '">✎ Ajustar</button>' +
       '<button class="ivb ' + (sel ? 'on' : '') + '" data-bg="pedir" data-id="' + id + '">' + (sel ? '✓ Pedir' : '＋ Pedir') + '</button></div></div>';
   };
   const esLoc = it => !hayLoc || (it.local || (it.sub && SUBS_LOC.indexOf(it.sub) >= 0 && !hayLoc));
   let h = '<div class="bg-lista">';
+  const mps = B.mp.filter(m => (m.cantidad_actual || 0) > 0.0001 && (!q || String(m.producto_nombre || '').toLowerCase().indexOf(q) >= 0));
+  if(mps.length && B.filtro !== 'bajo'){
+    h += '<div class="bg-sec">🥩 Materia prima de proveedores · sin procesar <span>(' + mps.length + ')</span></div>' + mps.map(m => '<div class="bg-r"><span class="bg-rn">•</span><div class="bg-rm"><div class="nm">' + esc(m.producto_nombre || m.id) + '</div><div class="mu">' + (m.ultimo_proveedor ? '<span class="bg-tag az">' + esc(m.ultimo_proveedor) + '</span> ' : '') + (m.ultimo_lote ? 'Lote ' + esc(m.ultimo_lote) + ' · ' : '') + (m.ultimo_vence ? 'Vence ' + esc(fechaCorta(m.ultimo_vence)) + ' · ' : '') + 'se procesa en Registro de producción</div></div><div class="bg-rs"><b>' + fmt(m.cantidad_actual) + '</b><small>' + esc(m.unidad_medida || '') + '</small></div></div>').join('');
+  }
   SUBS_INV.forEach(sc => {
     const g = list.filter(it => esLoc(it) && it.sub === sc[0]);
     if(g.length) h += '<div class="bg-sec">' + sc[2] + ' ' + sc[1] + ' <span>(' + g.length + ')</span></div>' + g.map(fila).join('');
@@ -6769,13 +7090,13 @@ function abrirReq(ids){
 }
 function vReqEd(){
   const E = B.reqEd, pend = pedidosPend(), dups = E.items.filter(i => pend[i.id]).length;
-  let h = '<div class="iv-subbar"><button class="ivb" data-bg="req-volver">← Volver</button><div class="iv-st">Requerimiento a Compras</div><span></span></div>' +
-    '<div class="iv-card"><div class="iv-f"><label>¿Para qué fecha lo necesitas?</label><input type="date" id="bg-fecha" value="' + esc(E.fecha) + '" min="' + hoyMas(0) + '"></div><div class="mu">Compras lo verá en Lista de compras → Bodega, con esa fecha.</div></div>';
+  let h = '<div class="iv-subbar"><button class="ivb" data-bg="req-volver">← Volver</button><div class="iv-st">Pedido a proveedor</div><span></span></div>' +
+    '<div class="iv-card"><div class="iv-f"><label>¿Para qué fecha lo necesitas?</label><input type="date" id="bg-fecha" value="' + esc(E.fecha) + '" min="' + hoyMas(0) + '"></div><div class="mu">Va directo a Recepción proveedores, con esa fecha. No pasa por Lista de compras (esa es solo del mercado).</div></div>';
   h += E.items.map(i => { const p = pend[i.id], id = esc(i.id);
     return '<div class="bg-card"><div class="bg-it-top"><div class="nm">' + presHtml(i.id, i.nombre) + '</div><div class="mu">En bodega ' + fmt(i.stock) + (i.min ? ' · mínimo ' + fmt(i.min) : '') + '</div></div>' +
       (p ? '<span class="bg-tag mo">Ya hay un requerimiento pendiente: ' + fmt(p.cant) + (p.fecha ? ' · para ' + esc(fechaCorta(p.fecha)) : '') + '</span>' : '') +
       '<div class="bg-acts"><button class="ivb val" data-bg="req-cant" data-id="' + id + '"><span>Cantidad a pedir</span><b>' + fmt(i.cant) + ' ' + esc(i.unidad) + '</b></button><button class="ivb" data-bg="req-quitar" data-id="' + id + '">Quitar</button></div></div>'; }).join('');
-  return h + '<div class="iv-pie"><button class="ivb okb big" data-bg="req-enviar">' + (dups && E.dupOk ? 'Toca otra vez: ya hay ' + dups + ' pendiente' + (dups > 1 ? 's' : '') : 'Enviar requerimiento a Compras') + '</button></div>';
+  return h + '<div class="iv-pie"><button class="ivb okb big" data-bg="req-enviar">' + (dups && E.dupOk ? 'Toca otra vez: ya hay ' + dups + ' pendiente' + (dups > 1 ? 's' : '') : 'Enviar pedido a proveedor') + '</button></div>';
 }
 function enviarReq(){
   const E = B.reqEd; if(!E || B.busy) return;
@@ -6785,20 +7106,20 @@ function enviarReq(){
   if(dups && !E.dupOk){ E.dupOk = true; render(); setTimeout(() => { if(B.reqEd) { B.reqEd.dupOk = false; refrescar(); } }, 6000); return; }
   B.busy = true; setTimeout(() => { B.busy = false; }, 2500);
   const ref = db.collection('listas_compra').doc();
-  const items = E.items.map(i => ({numero:null, seccion:'MERCADO', producto_id:i.id, producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_solicitada:i.cant, comprado:false, costo:null, nota:'', precio_sugerido:null, vendedor:null}));
-  ref.set({local:'bodega', estado:'pendiente', requerimiento:true, fecha_necesaria:E.fecha, solicitado_por:quien, empresa:EMPRESA, bodega:BODEGA, pedido_id:null, pedido_numero:null,
-    monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Requerimiento de Bodega', items:items}).catch(e => { console.error(e); toast(errTxt(e)); });
-  B.sel = {}; B.reqEd = null; B.tab = 'req'; B.busy = false; render(); window.scrollTo(0, 0);
-  snack('<b>Requerimiento enviado a Compras</b><br>' + items.length + ' productos · para ' + esc(fechaCorta(E.fecha)), () => { ref.delete().then(() => toast('Requerimiento cancelado')).catch(e => { console.error(e); toast(errTxt(e)); }); });
+  const items = E.items.map(i => ({numero:null, seccion:'MERCADO', producto_id:i.id, producto_nombre:i.nombre, unidad_medida:i.unidad, cantidad_solicitada:i.cant, comprado:true, costo:null, nota:'', precio_sugerido:null, vendedor:((itemInv(i.id) || {}).prov) || null}));
+  ref.set({local:'bodega', estado:'pendiente', requerimiento:true, compra_realizada:true, fecha_compra_realizada:SV(), fecha_necesaria:E.fecha, solicitado_por:quien, empresa:EMPRESA, bodega:BODEGA, pedido_id:null, pedido_numero:null,
+    monto_asignado:null, total_costo:null, saldo:null, impresa:false, fecha_creacion:SV(), creado_por:'Pedido a proveedor (Bodega)', items:items}).catch(e => { console.error(e); toast(errTxt(e)); });
+  B.sel = {}; B.reqEd = null; B.tab = 'inventario'; B.busy = false; render(); window.scrollTo(0, 0);
+  snack('<b>Pedido enviado a Recepción</b><br>' + items.length + ' productos · para ' + esc(fechaCorta(E.fecha)), () => { ref.delete().then(() => toast('Requerimiento cancelado')).catch(e => { console.error(e); toast(errTxt(e)); }); });
 }
 function estadoReq(l){
   if(l.recepcion_id) return ['ok', '✓ Recibido'];
-  if(l.compra_realizada) return ['az', '🛒 Comprado · por recibir'];
-  return ['am', '⏳ Esperando compra'];
+  if(l.recepcion_parcial) return ['am', '⏳ Recibido parcial'];
+  return ['az', '📥 Por recibir en Recepción'];
 }
 function vReq(){
   const reqs = compras().filter(l => l.requerimiento).sort((a, b) => ms(b.fecha_creacion) - ms(a.fecha_creacion));
-  let h = '<div class="iv-card"><h3>Requerimientos a Compras</h3><div class="mu">Los productos que Bodega pide. Compras los ve en <b>Lista de compras → Bodega</b>; al marcar “Compra realizada” aparecen en Recepción.</div><div class="bg-acts"><button class="ivb on" data-bg="nuevo-req">＋ Nuevo requerimiento</button><button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button></div></div>';
+  let h = '<div class="iv-card"><h3>Pedidos a proveedores</h3><div class="mu">Lo que Bodega pide a un proveedor. Va directo a <b>Recepción proveedores</b>; no pasa por Lista de compras (esa es solo del mercado, en efectivo).</div><div class="bg-acts"><button class="ivb on" data-bg="nuevo-req">＋ Nuevo pedido</button><button class="ivb" data-bg="pedir-bajos">📝 Pedir lo que está bajo mínimo</button></div></div>';
   if(!reqs.length) return h + '<div class="iv-vacio">Todavía no hay requerimientos.</div>';
   return h + reqs.slice(0, 30).map(l => { const e = estadoReq(l); return '<div class="bg-card"><div class="bg-it-top"><div><div class="nm">' + esc(fechaTxt(l.fecha_creacion)) + ' · ' + (l.items || []).length + ' productos</div><div class="mu">Pedido por ' + esc(l.solicitado_por || '') + (l.fecha_necesaria ? ' · necesario para ' + esc(fechaCorta(l.fecha_necesaria)) : '') + '</div></div><span class="bg-tag ' + e[0] + '">' + e[1] + '</span></div>' +
     '<div class="mu" style="margin-top:6px">' + (l.items || []).slice(0, 6).map(i => esc(i.producto_nombre) + ' ' + fmt(i.cantidad_solicitada)).join(' · ') + ((l.items || []).length > 6 ? ' · +' + ((l.items || []).length - 6) + ' más' : '') + '</div></div>'; }).join('');
@@ -6806,33 +7127,39 @@ function vReq(){
 
 /* ============ 4. CONTABILIDAD (solo consulta) ============ */
 function vConta(){
-  if(!B.contaOk) return '<div class="iv-card"><h3>Contabilidad</h3><div class="mu">Aquí se consulta cada compra con su precio, su comprobante y lo que se recibió, incluidas las diferencias. Solo personal autorizado.</div><div class="bg-acts"><button class="ivb on big" data-bg="conta-codigo">🔒 Ingresar código</button></div></div>';
+  if(!B.contaOk) return '<div class="iv-card"><h3>Contabilidad</h3><div class="mu">Aquí se consulta cada compra con su precio, su comprobante, la foto del recibo y lo que se recibió, incluidas las diferencias. Solo personal autorizado.</div><div class="bg-acts"><button class="ivb on big" data-bg="conta-codigo">🔒 Ingresar código</button></div></div>';
   if(B.cont) return vContaDetalle();
   const ls = compras().filter(l => l.compra_realizada || l.enviada_contabilidad).sort((a, b) => ms(b.fecha_compra_realizada || b.fecha_creacion) - ms(a.fecha_compra_realizada || a.fecha_creacion));
   let h = '<div class="iv-card"><h3>Compras y recepciones</h3><div class="mu">Solo consulta. Las diferencias de recepción son informativas: <b>no cambian lo pagado</b>.</div></div>';
-  if(!ls.length) return h + '<div class="iv-vacio">Todavía no hay compras realizadas.</div>';
-  return h + '<div class="iv-list">' + ls.slice(0, 60).map(l => { const r = recDe(l), tot = l.total_costo || 0;
-    const rb = !l.recepcion_id ? '<span class="bg-tag am">⏳ Sin recibir</span>' : (l.recepcion_estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Recibida completa</span>');
+  const libres = B.recs.filter(r => r.sin_compra);
+  if(!ls.length && !libres.length) return h + '<div class="iv-vacio">Todavía no hay compras realizadas.</div>';
+  h += '<div class="iv-list">' + ls.slice(0, 60).map(l => { const tot = l.total_costo || 0, n = l.recepciones_n || 0;
+    const rb = (!l.recepcion_id && !n && !l.requerimiento) ? '<span class="bg-tag ok">→ Va a Guías (no se recibe)</span>' : l.recepcion_parcial ? '<span class="bg-tag am">⏳ Recibida parcial (' + n + ')</span>' : !l.recepcion_id ? '<span class="bg-tag am">⏳ Sin recibir</span>' : (l.recepcion_estado === 'con_diferencias' ? '<span class="bg-tag am">⚠ Con diferencias</span>' : '<span class="bg-tag ok">✓ Recibida completa</span>');
     return '<button class="iv-row" data-bg="conta-abrir" data-id="' + esc(l.id) + '"><div class="iv-n"><div class="nm">' + (l.requerimiento ? '<span class="lc-pnum">Requerimiento</span> ' : (l.pedido_numero ? '<span class="lc-pnum">Pedido #' + l.pedido_numero + '</span> ' : '')) + esc(NOM_LOCAL(l.local)) + '</div>' +
       '<div class="mu">Compra del ' + esc(fechaTxt(l.fecha_compra_realizada || l.fecha_creacion)) + ' · comprobante: ' + (l.comprobante ? esc(l.comprobante) : '<i>sin anotar</i>') + '</div>' + rb + '</div><div class="iv-s"><b>' + money(tot) + '</b><span>total gastado</span></div></button>'; }).join('') + '</div>';
+  if(libres.length) h += '<div class="iv-card" style="margin-top:12px"><h3>Entregas sin compra previa</h3>' + libres.slice(0, 20).map(r => '<div class="bg-line"><div><b>' + esc(r.proveedor || 'Proveedor') + (r.documento ? ' · ' + esc(r.documento) : '') + '</b><div class="mu">' + esc(fechaTxt(r.fecha)) + ' · ' + esc(r.responsable || '') + ' · ' + (r.items || []).map(i => esc(i.nombre) + ' ' + fmt(i.entra)).join(', ') + '</div></div>' + (r.foto ? '<button class="ivb" data-bg="foto-ver" data-id="' + esc(r.id) + '">📷 Ver recibo</button>' : '') + '</div>').join('') + '</div>';
+  return h;
 }
 function vContaDetalle(){
   const l = compras().filter(x => x.id === B.cont)[0]; if(!l){ B.cont = null; return vConta(); }
-  const r = recDe(l), tot = l.total_costo || 0;
+  const recs = recsDe(l), tot = l.total_costo || 0;
   const filas = (l.items || []).map(it => '<div class="bg-line"><div><b>' + esc(it.producto_nombre) + '</b><div class="mu">Pidió ' + esc(etqU(it.cantidad_solicitada || 0, it.unidad_medida)) + (it.vendedor ? ' · ' + esc(it.vendedor) : '') + (it.comprado === false ? ' · no comprado' : '') + '</div></div><b>' + (it.costo != null ? money(it.costo) : '—') + '</b></div>').join('');
   let faltaVal = 0;
-  const filasRec = r ? (r.items || []).map(i => {
-    const li = (l.items || []).filter(x => x.producto_id === i.producto_id)[0], costo = li && li.costo != null ? li.costo : 0;
-    const esp = i.esperado != null ? i.esperado : (i.solicitado || 0); const noEntra = Math.max(0, esp - (i.entra || 0)); const val = esp > 0 ? costo * noEntra / esp : 0; faltaVal += val;
-    const marca = (i.diferencia || 0) !== 0 || (i.rechazado || 0) > 0;
-    return '<div class="bg-line ' + (marca ? 'dif' : '') + '"><div><b>' + esc(i.nombre) + '</b><div class="mu">' + (i.comprado === false ? 'No se compró' : 'Pidió ' + fmt(i.solicitado)) + ' · recibió ' + fmt(i.recibido) + (i.rechazado ? ' · rechazó ' + fmt(i.rechazado) : '') + ' · entró ' + fmt(i.entra) + ' ' + esc(i.unidad || '') + ' → ' + (i.destino === 'procesamiento' ? 'procesamiento' : 'bodega') + '</div>' + (i.observacion ? '<div class="mu">“' + esc(i.observacion) + '”</div>' : '') + '</div>' +
-      '<div class="bg-baja">' + (marca ? '<b>' + (i.diferencia > 0 ? '+' : '') + fmt(i.diferencia) + '</b><span>' + (val > 0.005 ? '≈ ' + money(val) : 'diferencia') + '</span>' : '<b class="okc">✓</b>') + '</div></div>';
-  }).join('') : '';
+  const bloques = recs.map(r => '<div class="bg-rb"><div class="mu"><b>Entrega ' + (r.secuencia || '') + '</b> · ' + esc(fechaTxt(r.fecha)) + ' · recibió ' + esc(r.responsable || '') + (r.proveedor ? ' · ' + esc(r.proveedor) : '') + (r.documento ? ' · doc. ' + esc(r.documento) : '') + ' · ' + (r.estado === 'con_diferencias' ? '<b>con diferencias</b>' : 'completa') + (r.parcial ? ' · <b>parcial</b>' : '') + '</div>' +
+    (r.foto ? '<button class="ivb" data-bg="foto-ver" data-id="' + esc(r.id) + '">📷 Ver foto del recibo</button>' : '') +
+    (r.items || []).map(i => {
+      const li = (l.items || []).filter(x => x.producto_id === i.producto_id)[0], costo = li && li.costo != null ? li.costo : 0, sol = li ? (li.cantidad_solicitada || 0) : 0;
+      const esp = i.esperado != null ? i.esperado : (i.solicitado || 0); const noEntra = Math.max(0, esp - (i.entra || 0)); const val = sol > 0 ? costo * noEntra / sol : 0; faltaVal += val;
+      const marca = (i.diferencia || 0) !== 0 || (i.rechazado || 0) > 0 || i.estado_item === 'no_llego';
+      return '<div class="bg-line ' + (marca ? 'dif' : '') + '"><div><b>' + esc(i.nombre) + '</b><div class="mu">' + (i.estado_item === 'no_llego' ? '<b>No llegó</b>' : 'Esperaba ' + fmt(esp) + ' · recibió ' + fmt(i.recibido) + (i.rechazado ? ' · rechazó ' + fmt(i.rechazado) : '') + ' · aceptó ' + fmt(i.entra) + ' ' + esc(i.unidad || '') + ' → ' + (i.destino === 'procesamiento' ? 'procesar' : 'bodega')) + '</div>' + ((i.motivo || i.observacion) ? '<div class="mu">“' + esc(i.motivo || i.observacion) + '”</div>' : '') + '</div>' +
+        '<div class="bg-baja">' + (marca ? '<b>' + (i.diferencia > 0 ? '+' : '') + fmt(i.diferencia) + '</b><span>' + (val > 0.005 ? '≈ ' + money(val) : 'diferencia') + '</span>' : '<b class="okc">✓</b>') + '</div></div>'; }).join('') + '</div>').join('');
+  const pend = saldoItems(l);
   return '<div class="iv-subbar"><button class="ivb" data-bg="conta-volver">← Volver</button><div class="iv-st">' + (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra')) + ' · ' + esc(NOM_LOCAL(l.local)) + '</div><span></span></div>' +
-    '<div class="iv-card"><h3>Compra</h3>' + filas + (l.carreta ? '<div class="bg-line"><div><b>Carreta</b></div><b>' + money(l.carreta) + '</b></div>' : '') +
+    '<div class="iv-card"><h3>Compra</h3>' + filas + (l.carreta ? '<div class="bg-line"><div><b>Carreta</b></div><b>' + money(l.carreta) + '</b></div>' : '') + (l.flete ? '<div class="bg-line"><div><b>Flete</b></div><b>' + money(l.flete) + '</b></div>' : '') +
     '<div class="bg-line tot"><div><b>Total gastado</b></div><b>' + money(tot) + '</b></div>' + (l.monto_asignado != null ? '<div class="mu">Monto asignado ' + money(l.monto_asignado) + (l.saldo != null ? ' · saldo ' + money(l.saldo) : '') + '</div>' : '') + '</div>' +
     '<div class="iv-card"><h3>Comprobante</h3><div class="iv-f"><label>Factura o nota de venta (número)</label><input id="bg-comp" data-bgin="comp" placeholder="Ej: 001-001-000123" autocomplete="off" value="' + esc(l.comprobante || '') + '"></div><button class="ivb" data-bg="comp-guardar" data-id="' + esc(l.id) + '">Guardar comprobante</button></div>' +
-    '<div class="iv-card"><h3>Recepción en bodega</h3>' + (r ? '<div class="mu">' + esc(fechaTxt(r.fecha)) + ' · recibió ' + esc(r.responsable || '') + ' · ' + (r.estado === 'con_diferencias' ? '<b>con diferencias</b>' : 'completa') + '</div>' + filasRec +
+    '<div class="iv-card"><h3>Recepción en bodega</h3>' + (recs.length ? bloques +
+      (pend.length && l.recepcion_parcial ? '<div class="iv-aviso" style="margin-top:8px">Saldo pendiente de recibir: ' + pend.map(it => esc(it.producto_nombre) + ' ' + fmt(espDe(l, it)) + ' ' + esc(it.unidad_medida || '')).join(' · ') + '</div>' : '') +
       (faltaVal > 0.005 ? '<div class="iv-aviso" style="margin-top:8px">Valor estimado de lo no recibido o rechazado: <b>≈ ' + money(faltaVal) + '</b>. Es informativo: lo pagado no se modifica automáticamente.</div>' : '') : '<div class="iv-vacio">Esta compra todavía no se recibe en bodega.</div>') + '</div>';
 }
 
@@ -6841,28 +7168,82 @@ document.addEventListener('click', e => {
   const t = e.target.closest ? e.target.closest('[data-bg]') : null; if(!t) return;
   const a = t.getAttribute('data-bg'), v = t.getAttribute('data-v'), id = t.getAttribute('data-id');
   switch(a){
-    case 'tab': B.tab = v; LSs('tab', v); B.abierta = null; B.cont = null; B.reqEd = null; render(); window.scrollTo(0, 0); break;
+    case 'tab': B.proc = null; B.tab = v; LSs('tab', v); B.abierta = null; B.cont = null; B.reqEd = null; render(); window.scrollTo(0, 0); if(window.navSync) navSync(v); break;
     case 'resp': B.resp = v; B.otro = false; LSs('resp', v); render(); break;
     case 'resp-otro': B.otro = true; B.resp = ''; LSs('resp', ''); render(); setTimeout(() => { const i = $('#bg-resp-in'); if(i) i.focus(); }, 50); break;
     case 'abrir': B.abierta = id; render(); window.scrollTo(0, 0); break;
     case 'cerrar': B.abierta = null; render(); break;
-    case 'cant': { const l = compras().filter(x => x.id === B.abierta)[0]; if(!l) break; const it = (l.items || []).filter(x => x.producto_id === id)[0], x = draftDe(l).items[id]; if(!it || !x) break;
-      const k = t.getAttribute('data-k');
-      abrirTeclado({titulo:it.producto_nombre, subtitulo:(k === 'rec' ? 'Cantidad recibida' : 'Cantidad rechazada') + ' · pidió ' + etqU(it.cantidad_solicitada || 0, it.unidad_medida), unidad:'', inicial:x[k] > 0 ? x[k] : '', decimales:true, permitirVacio:true, permitirCero:true,
-        onListo:n => { n = n == null ? 0 : n; if(k === 'rech' && n > x.rec){ toast('Lo rechazado no puede ser más que lo recibido'); return; } setDraft(id, k, n); render(); }}); break; }
+    case 'todo-ok': { const l = lAct(); if(!l) break; const it = pendItems(l).filter(x => x.producto_id === id)[0], x = it && draftDe(l).items[id]; if(!x) break;
+      if(x.st === 'ok'){ x.st = null; x.rec = 0; x.rech = 0; x.motivo = ''; } else { x.st = 'ok'; x.rec = espDe(l, it); x.rech = 0; x.motivo = ''; } LSs('draft', B.draft); render(); break; }
+    case 'no-llego': { const l = lAct(); if(!l) break; const x = draftDe(l).items[id]; if(!x) break;
+      if(x.st === 'no'){ x.st = null; x.motivo = ''; } else { x.st = 'no'; x.rec = 0; x.rech = 0; x.motivo = 'No llegó'; } LSs('draft', B.draft); render(); break; }
+    case 'dif-abrir': abrirDif(id); break;
+    case 'dif-num': { const D = B.dif; if(!D) break; const k = t.getAttribute('data-k');
+      abrirTeclado({titulo:D.nombre, subtitulo:(k === 'rec' ? 'Cantidad recibida' : 'Cantidad rechazada') + (D.esp != null ? ' · esperado ' + etqU(D.esp, D.unidad) : ''), unidad:D.unidad, inicial:D[k] > 0 ? D[k] : '', decimales:true, permitirVacio:true, permitirCero:true,
+        onListo:n => { n = n == null ? 0 : n; D[k] = n; if(D.rech > D.rec) { if(k === 'rec') D.rech = D.rec; else { toast('Lo rechazado no puede ser más que lo recibido'); D.rech = D.rec; } } renderDif(); }}); break; }
+    case 'dif-mas': case 'dif-menos': { const D = B.dif; if(!D) break; const k = t.getAttribute('data-k'); D[k] = Math.max(0, r3(D[k] + (a === 'dif-mas' ? 1 : -1))); if(D.rech > D.rec) D.rech = D.rec; renderDif(); break; }
+    case 'dif-mot': if(B.dif){ B.dif.motivo = v; renderDif(); } break;
+    case 'dif-x': B.dif = null; renderDif(); break;
+    case 'dif-ok': guardarDif(); break;
+    case 'lt': setDraft(id, 'lt', true); render(); break;
     case 'dest': setDraft(id, 'dest', v); render(); break;
-    case 'confirmar': confirmarRecepcion(); break;
-    case 'ir-proveedores': B.tab = 'prov'; B.abierta = null; render(); window.scrollTo(0, 0); break;
+    case 'foto-quitar': { const l = lAct(); if(l){ delete B.foto[l.id]; render(); } break; }
+    case 'confirmar': pedirConfirmar(); break;
+    case 'sum-x': B.sum = null; renderSum(); break;
+    case 'sum-cierre': if(B.sum){ B.sum.cierre = v; renderSum(); } break;
+    case 'sum-ok': confirmarRecepcion(); break;
+    case 'libre-nueva': if(!B.libre){ B.libre = {rid:'rec_libre_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), items:[]}; LSs('libre', B.libre); } B.abierta = 'libre'; render(); window.scrollTo(0, 0); break;
+    case 'libre-quitar': if(B.libre){ B.libre.items = B.libre.items.filter(i => i.producto_id !== id); LSs('libre', B.libre); const d = B.draft.libre; if(d) delete d.items[id]; LSs('draft', B.draft); render(); } break;
+    case 'pick-abrir': B.pick = {q:'', nuevo:null}; renderPick(); break;
+    case 'pick-x': B.pick = null; renderPick(); render(); break;
+    case 'pick-add': { const it = (window.ivItems ? window.ivItems() : []).filter(x => x.id === id)[0]; if(!it || !B.libre) break; B.libre.items.push({producto_id:it.id, producto_nombre:it.nombre, unidad_medida:it.uAlmacen || it.unidad || ''}); LSs('libre', B.libre); renderPick(); render(); break; }
+    case 'pick-nuevo': B.pick.nuevo = {nombre:(B.pick.q || '').trim(), unidad:'kg'}; renderPick(); break;
+    case 'pick-atras': B.pick.nuevo = null; renderPick(); break;
+    case 'pick-u': if(B.pick && B.pick.nuevo){ const n = $('#bg-pick-n'); if(n) B.pick.nuevo.nombre = n.value; B.pick.nuevo.unidad = v; renderPick(); } break;
+    case 'pick-nuevo-ok': { const n = $('#bg-pick-n'), nombre = n ? n.value.trim() : ''; if(!nombre){ toast('Escribe el nombre del producto'); break; } if(!B.libre) break;
+      B.libre.items.push({producto_id:'nuevo_' + nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''), producto_nombre:nombre, unidad_medida:B.pick.nuevo.unidad}); LSs('libre', B.libre); B.pick = null; renderPick(); render(); break; }
+    case 'foto-ver': { const w = window.open ? null : null; db.collection('recepcion_fotos').doc(id).get().then(sn => { const dd = sn.exists ? sn.data() : null; if(!dd || !dd.data_url){ toast('No hay foto guardada'); return; }
+        let o = $('#bg-fotov'); if(!o){ o = document.createElement('div'); o.id = 'bg-fotov'; document.body.appendChild(o); } o.innerHTML = '<div class="bg-fvb"><img src="' + dd.data_url + '" alt="Recibo"><button class="ivb big" data-bg="foto-x">Cerrar</button></div>'; o.className = 'show'; }).catch(er => { console.error(er); toast(errTxt(er)); }); break; }
+    case 'foto-x': { const o = $('#bg-fotov'); if(o) o.className = ''; break; }
+    case 'prov-abrir': cambiarVista('provs'); break;
+    case 'prov-lista': B.pm = null; render(); break;
+    case 'prov-nuevo': B.pm = {ed:{id:null, nombre:'', telefono:'', productos:''}}; render(); window.scrollTo(0, 0); break;
+    case 'prov-ed': { const p = B.provs.filter(x => x.id === id)[0]; if(p){ B.pm = {ed:{id:p.id, nombre:p.nombre || '', telefono:p.telefono || '', productos:p.productos || ''}}; render(); window.scrollTo(0, 0); } break; }
+    case 'prov-del': { const p = B.provs.filter(x => x.id === id)[0]; if(!p) break; db.collection('proveedores').doc(id).delete().then(() => snack('<b>Proveedor borrado</b><br>' + esc(p.nombre), () => db.collection('proveedores').doc(id).set({nombre:p.nombre, telefono:p.telefono || '', productos:p.productos || ''}))).catch(er => { console.error(er); toast(errTxt(er)); }); break; }
+    case 'prov-guardar': { const n = ($('#bg-pn') || {}).value, t0 = ($('#bg-pt') || {}).value, pp = ($('#bg-pp') || {}).value; const nombre = String(n || '').trim(); if(!nombre){ toast('Escribe el nombre del proveedor'); break; }
+      const ed = B.pm && B.pm.ed, did = (ed && ed.id) || slugProv(nombre); db.collection('proveedores').doc(did).set({nombre:nombre, telefono:String(t0 || '').trim(), productos:String(pp || '').trim(), actualizado:SV()}, {merge:true}).then(() => { B.pm = null; render(); toast('Proveedor guardado'); }).catch(er => { console.error(er); toast(errTxt(er)); }); break; }
+    case 'prov-pick': { const l = lAct(); if(l){ draftDe(l).prov = v; LSs('draft', B.draft); render(); } break; }
+    case 'mp-del-lista': { if(!window.MODO_PRUEBA) break; if(t.getAttribute('data-ok') !== '1'){ t.setAttribute('data-ok', '1'); t.textContent = 'Toca otra vez para borrar'; setTimeout(() => { if(t.isConnected){ t.removeAttribute('data-ok'); t.textContent = '🗑 Borrar este pedido (prueba)'; } }, 4000); break; }
+      db.collection('listas_compra').doc(id).delete().then(() => { delete B.draft[id]; LSs('draft', B.draft); toast('Pedido de prueba borrado'); }).catch(er => { console.error(er); toast(errTxt(er)); }); break; }
+    case 'ir-inv': cambiarVista('inventario'); break;
+    case 'ir-atras': if(B.tab === 'conta'){ cambiarVista('compra'); } else { bgIr('inventario'); } break;
     case 'ir-registro': cambiarVista('produccion'); break;
-    case 'ir-lista': B.tab = null; B.abierta = null; B.cont = null; B.reqEd = null; LSs('tab', null); render(); window.scrollTo(0, 0); break;
+    case 'ir-lista': B.proc = null; B.tab = null; B.abierta = null; B.cont = null; B.reqEd = null; LSs('tab', null); render(); window.scrollTo(0, 0); break;
     case 'seg': if(v === 'disp'){ B.tab = 'inventario'; } else { B.tab = 'conteo'; B.ivTab = v; B.reqEd = null; } render(); window.scrollTo(0, 0); break;
     case 'ir-conteo': B.tab = 'conteo'; B.ivTab = 'conteos'; B.reqEd = null; render(); window.scrollTo(0, 0); break;
     case 'baja': bajaBodega(id); break;
+    case 'pr-ir': prIr(id); break;
+    case 'pr-x': B.proc = null; render(); break;
+    case 'pr-edit': if(B.proc){ B.proc.mode = 'def'; render(); } break;
+    case 'pr-sq': { const p = B.proc, i = +t.getAttribute('data-i'), s = p && p.rend.salidas[i]; if(!s) break;
+      abrirTeclado({titulo:s.nombre, subtitulo:'Cuánto sale de 1 ' + p.unidad + ' de ' + p.nombre, unidad:s.unidad || '', inicial:s.por_unidad > 0 ? s.por_unidad : '', decimales:true, onListo:n => { if(n > 0){ s.por_unidad = n; render(); } }}); break; }
+    case 'pr-sdel': { const p = B.proc, i = +t.getAttribute('data-i'); if(p){ p.rend.salidas.splice(i, 1); render(); } break; }
+    case 'pr-sadd': { const p = B.proc; if(!p) break; const ya = p.rend.salidas.map(s => s.producto_id), lista = prodsProd().filter(x => ya.indexOf(x.id) < 0);
+      if(!lista.length){ toast('No hay más productos de producción para agregar'); break; }
+      sheet('¿Qué producto sale?', 'Productos del Registro de producción', lista.map(x => x.nombre + (x.presentacion ? ' · ' + x.presentacion : '')), i => { cerrarSheet(); const x = lista[i];
+        setTimeout(() => abrirTeclado({titulo:x.nombre, subtitulo:'Cuánto sale de 1 ' + p.unidad + ' de ' + p.nombre, unidad:x.unidad || '', inicial:'', decimales:true, onListo:n => { if(n > 0){ p.rend.salidas.push({producto_id:x.id, nombre:x.nombre, unidad:x.unidad || 'unidades', por_unidad:n}); render(); } }}), 60); }); break; }
+    case 'pr-mq': { const p = B.proc; if(!p) break; abrirTeclado({titulo:'Merma por cada 1 ' + p.unidad, subtitulo:p.nombre, unidad:p.unidad, inicial:p.rend.merma > 0 ? p.rend.merma : '', decimales:true, permitirVacio:true, permitirCero:true, onListo:n => { p.rend.merma = n > 0 ? n : 0; render(); }}); break; }
+    case 'pr-guardar-rend': prGuardarRend(); break;
+    case 'pr-uq': { const p = B.proc; if(!p) break; abrirTeclado({titulo:'Cantidad que procesas', subtitulo:'Por procesar: ' + fmt(p.pend) + ' ' + p.unidad, unidad:p.unidad, inicial:p.usado > 0 ? p.usado : '', decimales:true, onListo:n => { if(n > 0){ p.usado = n; prCalc(); render(); } }}); break; }
+    case 'pr-oq': { const p = B.proc, i = +t.getAttribute('data-i'), o = p && p.out[i]; if(!o) break; abrirTeclado({titulo:o.nombre, subtitulo:'Cantidad que entra al inventario', unidad:o.unidad || '', inicial:o.cant > 0 ? o.cant : '', decimales:true, permitirVacio:true, permitirCero:true, onListo:n => { o.cant = n > 0 ? n : 0; render(); }}); break; }
+    case 'pr-mmq': { const p = B.proc; if(!p) break; abrirTeclado({titulo:'Merma', subtitulo:p.nombre, unidad:p.unidad, inicial:p.merma > 0 ? p.merma : '', decimales:true, permitirVacio:true, permitirCero:true, onListo:n => { p.merma = n > 0 ? n : 0; render(); }}); break; }
+    case 'pr-mot': if(B.proc){ B.proc.motivo = v; render(); } break;
+    case 'pr-ok': prConfirmar(); break;
     case 'filtro': B.filtro = v; render(); break;
     case 'otros': B.verOtros = !B.verOtros; render(); break;
     case 'pedir': if(B.sel[id]) delete B.sel[id]; else B.sel[id] = true; render(); break;
     case 'pedir-bajos': { const all = window.ivItems ? window.ivItems() : [], pend = pedidosPend(); const ids = all.filter(it => it.min > 0 && it.stock < it.min && !pend[it.id]).map(it => it.id); if(!ids.length){ toast('No hay productos bajo mínimo sin pedir'); break; } abrirReq(ids); break; }
-    case 'nuevo-req': B.tab = 'inventario'; B.filtro = 'todos'; LSs('tab', 'inventario'); render(); toast('Toca “＋ Pedir” en cada producto y luego “Enviar requerimiento”.'); break;
+    case 'nuevo-req': B.tab = 'inventario'; B.filtro = 'todos'; LSs('tab', 'inventario'); render(); toast('Toca “＋ Pedir” en cada producto y luego “Enviar pedido a proveedor”.'); break;
     case 'salida': salida(id); break;
     case 'ajuste': ajuste(id); break;
     case 'req-abrir': abrirReq(Object.keys(B.sel)); break;
@@ -6882,25 +7263,105 @@ document.addEventListener('click', e => {
   }
 });
 document.addEventListener('input', e => {
+  const i0 = e.target; if(i0 && i0.id === 'bg-pick-q' && B.pick){ B.pick.q = i0.value; const pos = i0.selectionStart; renderPick(); const q = $('#bg-pick-q'); if(q){ q.focus(); try { q.setSelectionRange(pos, pos); } catch(x){} } return; }
   const i = e.target; if(!i || !i.closest || !i.closest('#bg-root')) return;
   if(i.id === 'bg-resp-in'){ B.resp = i.value.trim(); LSs('resp', B.resp); }
   else if(i.id === 'bg-q'){ B.q = i.value; const c = $('#bg-inv-lista'); if(c) c.innerHTML = invFilas(); }
   else if(i.id === 'bg-fecha'){ if(B.reqEd) B.reqEd.fecha = i.value || hoyMas(2); }
-  else if(i.getAttribute('data-bgobs')){ setDraft(i.getAttribute('data-bgobs'), 'obs', i.value); }
+  else if(i.getAttribute('data-bglote')){ setDraft(i.getAttribute('data-bglote'), 'lote', i.value); }
+  else if(i.getAttribute('data-bgvence')){ setDraft(i.getAttribute('data-bgvence'), 'vence', i.value); }
+  else if(i.id === 'bg-prov' || i.id === 'bg-doc'){ const l = lAct(); if(l){ const d = draftDe(l); d[i.id === 'bg-prov' ? 'prov' : 'doc'] = i.value; LSs('draft', B.draft); } }
 });
 
 /* ---------- datos ---------- */
 function escuchar(){
   db.collection('inventario_materia_prima').onSnapshot(snap => { B.mp = []; snap.forEach(d => B.mp.push(Object.assign({id:d.id}, d.data()))); B.mp.sort((a, b) => (a.producto_nombre || '').localeCompare(b.producto_nombre || '')); refrescar(); }, e => console.error(e));
   db.collection('recepciones_bodega').orderBy('fecha', 'desc').limit(60).onSnapshot(snap => { B.recs = []; snap.forEach(d => B.recs.push(Object.assign({id:d.id}, d.data({serverTimestamps:'estimate'})))); refrescar(); }, e => console.error(e));
+  db.collection('proveedores').onSnapshot(snap => { B.provs = []; snap.forEach(d => B.provs.push(Object.assign({id:d.id}, d.data()))); B.provs.sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '')); refrescar(); }, e => console.error(e));
+  db.collection('rendimientos_mp').onSnapshot(snap => { B.rend = {}; snap.forEach(d => { B.rend[d.id] = d.data(); }); refrescar(); }, e => console.error(e));
   db.collection('bajas_bodega').orderBy('fecha', 'desc').limit(20).onSnapshot(snap => { B.bajas = []; snap.forEach(d => B.bajas.push(Object.assign({id:d.id}, d.data({serverTimestamps:'estimate'})))); refrescar(); }, e => console.error(e));
 }
 window.bgInit = function(){ if(B.ready) return; B.ready = true; escuchar(); };
 window.bgView = function(n){ B.coOn = false; B.coTab = null; if(n === 'bodega'){ bgInit(); render(); } };
-window.bgIr = function(t){ B.tab = t; B.abierta = null; B.cont = null; B.reqEd = null; if(t !== 'prov' && t !== 'conteo') LSs('tab', t); render(); window.scrollTo(0, 0); };
+window.bgIr = function(t){ B.tab = t; B.abierta = null; B.cont = null; B.reqEd = null; if(t !== 'prov' && t !== 'conteo') LSs('tab', t); render(); window.scrollTo(0, 0); if(window.navSync) navSync(t); };
 window.bgRefresh = refrescar;
+function navCounts(){ try { if(window.navBadge){ navBadge('recepcion', porRecibir().length); } } catch(e){} }
+setInterval(navCounts, 2500); setTimeout(navCounts, 800);
+window.bgConta = function(){ cambiarVista('bodega'); setTimeout(() => bgIr('conta'), 80); };
 window.BGS = B;
 if(window.firebase && typeof db !== 'undefined') bgInit();
+})();
+
+
+
+/* ============================================================
+   MODO PRUEBA: se activa con el código de Compras; muestra un aviso arriba, botones 🗑 para borrar
+   pedidos a proveedores de ejemplo y el botón "Borrar datos de prueba" (por grupos, con doble toque).
+   NUNCA borra catálogos, fichas, recetas, proveedores ni configuración.
+   ============================================================ */
+(function(){
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const GRUPOS = [
+  ['pl', 'Pedidos de los locales', ['pedidos_locales']],
+  ['lc', 'Listas de compra y pedidos a proveedores', ['listas_compra']],
+  ['gu', 'Guías y despachos', ['pedidos']],
+  ['rc', 'Recepciones (con fotos y movimientos)', ['recepciones_bodega', 'recepcion_fotos', 'movimientos_inventario_bodega', 'recepciones_proveedor']],
+  ['iv', 'Inventario de bodega y materia prima (vuelve a 0), bajas y procesos', ['inventario_bodega', 'inventario_materia_prima', 'bajas_bodega', 'procesos_bodega']],
+  ['pr', 'Registros de producción (producido y pruebas)', ['producciones_facility', 'pruebas_produccion']]
+];
+const M = {sel:{}, counts:null, confirm:false, busy:false};
+let on = false; try { on = localStorage.getItem('modo_prueba') === '1'; } catch(e){}
+window.MODO_PRUEBA = on;
+function pintar(){
+  window.MODO_PRUEBA = on;
+  document.body.classList.toggle('modo-prueba', on);
+  const b = $('#mp-banner'); if(b) b.style.display = on ? '' : 'none';
+  const n = $('#nav-prueba'); if(n){ n.classList.toggle('activo', on); const t = n.querySelector('.nav-tx'); if(t) t.textContent = on ? 'Modo prueba: ACTIVO' : 'Modo prueba'; }
+  if(window.bgRefresh) try { bgRefresh(); } catch(e){}
+}
+window.mpAlternar = function(){
+  if(on){ on = false; try { localStorage.setItem('modo_prueba', '0'); } catch(e){} pintar(); return; }
+  const act = () => { on = true; try { localStorage.setItem('modo_prueba', '1'); } catch(e){} pintar(); };
+  if(window.lcPedirCodigo) window.lcPedirCodigo(act); else act();
+};
+async function contar(){
+  M.counts = {};
+  for(const g of GRUPOS){ let n = 0; for(const c of g[2]){ try { const s = await db.collection(c).get(); n += s.size; } catch(e){ console.error(e); } } M.counts[g[0]] = n; }
+}
+function pintarModal(){
+  let s = $('#mp-modal'); if(!s){ s = document.createElement('div'); s.id = 'mp-modal'; document.body.appendChild(s); }
+  const tot = GRUPOS.reduce((a, g) => a + (M.sel[g[0]] && M.counts ? (M.counts[g[0]] || 0) : 0), 0);
+  s.innerHTML = '<div class="mp-box"><h3>🧹 Borrar datos de prueba</h3><div class="mu">Marca lo que quieres borrar. No se borran productos, fichas, recetas, proveedores ni configuración. <b>No se puede deshacer.</b></div>' +
+    GRUPOS.map(g => '<button class="mp-g ' + (M.sel[g[0]] ? 'on' : '') + '" data-mp="g" data-id="' + g[0] + '"><span class="mp-ck">' + (M.sel[g[0]] ? '☑' : '☐') + '</span><span class="mp-gt">' + esc(g[1]) + '</span><b>' + (M.counts ? M.counts[g[0]] : '…') + '</b></button>').join('') +
+    '<div class="mp-bt"><button class="ivb" data-mp="x">Cerrar</button><button class="ivb ' + (M.confirm ? 'mp-peligro' : 'okb') + '" data-mp="borrar"' + (M.busy ? ' disabled' : '') + '>' + (M.busy ? 'Borrando…' : M.confirm ? 'Toca otra vez: borrar ' + tot + ' registros' : 'Borrar lo marcado') + '</button></div></div>';
+  s.className = 'show';
+}
+async function borrar(){
+  const sel = GRUPOS.filter(g => M.sel[g[0]]);
+  if(!sel.length){ if(window.mostrarAviso) mostrarAviso('Marca algo para borrar.', 'error'); return; }
+  if(!M.confirm){ M.confirm = true; pintarModal(); setTimeout(() => { if(M.confirm && !M.busy){ M.confirm = false; pintarModal(); } }, 6000); return; }
+  M.busy = true; pintarModal();
+  try {
+    for(const g of sel){ for(const c of g[2]){
+      const snap = await db.collection(c).get(); let docs = []; snap.forEach(d => docs.push(d.ref));
+      for(let i = 0; i < docs.length; i += 400){ const b = db.batch(); docs.slice(i, i + 400).forEach(r => b.delete(r)); await b.commit(); }
+    } }
+    ['bg_draft', 'bg_libre'].forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
+    if(window.BGS){ BGS.draft = {}; BGS.libre = null; BGS.abierta = null; }
+    if(window.mostrarAviso) mostrarAviso('Datos de prueba borrados.', 'ok');
+    M.sel = {}; M.confirm = false; M.busy = false; await contar(); pintarModal(); if(window.bgRefresh) try { bgRefresh(); } catch(e){}
+  } catch(e){ console.error(e); M.busy = false; M.confirm = false; pintarModal(); if(window.mostrarAviso) mostrarAviso('No se pudo borrar todo. Revisa la conexión y vuelve a intentar.', 'error'); }
+}
+window.mpAbrir = async function(){ M.sel = {}; M.confirm = false; M.counts = null; pintarModal(); await contar(); pintarModal(); };
+document.addEventListener('click', e => {
+  const t = e.target.closest ? e.target.closest('[data-mp]') : null; if(!t) return;
+  const a = t.getAttribute('data-mp');
+  if(a === 'g'){ const id = t.getAttribute('data-id'); M.sel[id] = !M.sel[id]; M.confirm = false; pintarModal(); }
+  else if(a === 'x'){ const s = $('#mp-modal'); if(s) s.className = ''; }
+  else if(a === 'borrar') borrar();
+});
+document.addEventListener('DOMContentLoaded', pintar); if(document.readyState !== 'loading') pintar();
 })();
 
 </script>
@@ -6947,7 +7408,7 @@ if(window.firebase && typeof db !== 'undefined') bgInit();
     <div id="clock-paso-empleado">
       <p style="font-size:13px; color:#888780; margin-top:0;">Selecciona tu nombre</p>
       <button class="btn-secundario clock-emp-btn" onclick="seleccionarEmpleadoClock('nestor')">Nestor Santos</button>
-      <button class="btn-secundario clock-emp-btn" onclick="seleccionarEmpleadoClock('edison')">Edison Pacurucu</button>
+      
     </div>
 
     <div id="clock-paso-pin" style="display:none;">
