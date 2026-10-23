@@ -939,11 +939,11 @@
   @media print{
     #guias-detalle .gd-print{display:block;color:#000}
     #guias-detalle .badge.por_despachar,#guias-detalle .btn-cerrar{display:none !important}
-    #guias-detalle .gd-pr{display:grid;grid-template-columns:minmax(0,2.6fr) minmax(0,1.3fr) minmax(0,2.4fr) minmax(0,2.4fr);gap:8px;padding:6px 0;break-inside:avoid;font-size:13px;align-items:end}
+    #guias-detalle .gd-pr{display:grid;grid-template-columns:minmax(0,2fr) 120px minmax(0,1.7fr) minmax(0,1.7fr);gap:14px;padding:6px 0;break-inside:avoid;font-size:13px;align-items:end}
     #guias-detalle .gd-ph{font-size:11px;font-weight:800;padding-bottom:4px;border:0}
     #guias-detalle .gd-pn{font-weight:600}
     #guias-detalle .gd-pw{font-size:15px;font-weight:700}
-    #guias-detalle .gd-pq{font-size:17px;font-weight:800;white-space:nowrap}
+    #guias-detalle .gd-pq{font-size:15px;font-weight:800;white-space:nowrap;min-width:70px;padding-right:6px;text-align:right}
     #guias-detalle .gd-pq small,#guias-detalle .gd-pn small{font-size:11px;font-weight:400;color:#444}
     #guias-detalle .gd-ph .gd-pw,#guias-detalle .gd-ph .gd-pq{font-size:11px;font-weight:800}
     #guias-detalle .gd-sec{margin:12px 0 2px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid #000;padding-bottom:2px;break-after:avoid}
@@ -1426,6 +1426,14 @@
     body #bg-root .iv-sum b,body.touch #bg-root .iv-sum b,body #bg-dif .iv-sum b,body.touch #bg-dif .iv-sum b,body #bg-pick .iv-sum b,body.touch #bg-pick .iv-sum b,body #bg-sum .iv-sum b,body.touch #bg-sum .iv-sum b,body #bg-ctl .iv-sum b,body.touch #bg-ctl .iv-sum b,body #bg-sheet .iv-sum b,body.touch #bg-sheet .iv-sum b,body #bg-provm .iv-sum b,body.touch #bg-provm .iv-sum b,body #bg-fotov .iv-sum b,body.touch #bg-fotov .iv-sum b{font-size:18px}
     body #bg-root .iv-row,body.touch #bg-root .iv-row,body #bg-dif .iv-row,body.touch #bg-dif .iv-row,body #bg-pick .iv-row,body.touch #bg-pick .iv-row,body #bg-sum .iv-row,body.touch #bg-sum .iv-row,body #bg-ctl .iv-row,body.touch #bg-ctl .iv-row,body #bg-sheet .iv-row,body.touch #bg-sheet .iv-row,body #bg-provm .iv-row,body.touch #bg-provm .iv-row,body #bg-fotov .iv-row,body.touch #bg-fotov .iv-row,body #bg-root .iv-cuenta,body.touch #bg-root .iv-cuenta,body #bg-dif .iv-cuenta,body.touch #bg-dif .iv-cuenta,body #bg-pick .iv-cuenta,body.touch #bg-pick .iv-cuenta,body #bg-sum .iv-cuenta,body.touch #bg-sum .iv-cuenta,body #bg-ctl .iv-cuenta,body.touch #bg-ctl .iv-cuenta,body #bg-sheet .iv-cuenta,body.touch #bg-sheet .iv-cuenta,body #bg-provm .iv-cuenta,body.touch #bg-provm .iv-cuenta,body #bg-fotov .iv-cuenta,body.touch #bg-fotov .iv-cuenta,body #bg-root .iv-hist,body.touch #bg-root .iv-hist,body #bg-dif .iv-hist,body.touch #bg-dif .iv-hist,body #bg-pick .iv-hist,body.touch #bg-pick .iv-hist,body #bg-sum .iv-hist,body.touch #bg-sum .iv-hist,body #bg-ctl .iv-hist,body.touch #bg-ctl .iv-hist,body #bg-sheet .iv-hist,body.touch #bg-sheet .iv-hist,body #bg-provm .iv-hist,body.touch #bg-provm .iv-hist,body #bg-fotov .iv-hist,body.touch #bg-fotov .iv-hist{min-height:56px;padding:8px 10px}
     body #bg-root .bg-r,body.touch #bg-root .bg-r,body #bg-dif .bg-r,body.touch #bg-dif .bg-r,body #bg-pick .bg-r,body.touch #bg-pick .bg-r,body #bg-sum .bg-r,body.touch #bg-sum .bg-r,body #bg-ctl .bg-r,body.touch #bg-ctl .bg-r,body #bg-sheet .bg-r,body.touch #bg-sheet .bg-r,body #bg-provm .bg-r,body.touch #bg-provm .bg-r,body #bg-fotov .bg-r,body.touch #bg-fotov .bg-r{padding:8px 10px}
+    body #bg-root .bg-it .bg-acc,body.touch #bg-root .bg-it .bg-acc{grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:0}
+    body #bg-root .bg-it .bg-acc.solo,body.touch #bg-root .bg-it .bg-acc.solo{grid-template-columns:1fr 1fr}
+    body #bg-root .bg-it .bg-acc .ivb,body.touch #bg-root .bg-it .bg-acc .ivb,body #bg-root .bg-it .bg-acc:not(.solo) .ivb:nth-child(3),body.touch #bg-root .bg-it .bg-acc:not(.solo) .ivb:nth-child(3){min-height:42px;font-size:13px;padding:2px 2px;grid-column:auto}
+    body #bg-root .bg-it .bg-dest .ivb,body.touch #bg-root .bg-it .bg-dest .ivb{min-height:38px;font-size:13px;padding:2px 6px}
+    body #bg-root .bg-it .bg-dest{margin-top:6px;gap:6px}
+    body #bg-root .bg-it .bg-ctlb,body.touch #bg-root .bg-it .bg-ctlb{min-height:36px;font-size:13px;padding:4px 10px;margin-top:6px}
+    #bg-root .p1{margin-bottom:6px} #bg-root .p1n b{font-size:16px} #bg-root .p1q{min-width:84px;padding:4px 8px} #bg-root .p1q span{font-size:22px}
+    #bg-root .bg-tr{margin:0}
   }
   /* ===== PEDIDOS DE LOS LOCALES ===== */
   #pd-root{padding:8px 12px 110px}
@@ -1566,6 +1574,39 @@
   .bg-dx:active{background:#d6d3c8}
   .bg-pl .ivb.hecho{background:#e3f5ea;border-color:#1d7a4d;color:#0f5a35} .bg-pl .ivb .bg-ck{font-weight:800;color:#1d7a4d;white-space:nowrap}
   .bg-pn{margin:8px 0 0;font-weight:700;color:#1d7a4d}
+
+  /* ===== CONFIRMAR RECEPCIÓN (pantalla completa, teléfono primero) ===== */
+  #bg-root .cf-top{display:flex;align-items:center;gap:10px;margin:2px 0 10px}
+  #bg-root .cf-back{width:42px;height:42px;border-radius:50%;border:none;background:#eceae2;font-size:28px;line-height:1;cursor:pointer;color:#1f1f1d;padding:0 0 3px}
+  #bg-root .cf-k{font-size:11px;font-weight:700;letter-spacing:.14em;color:#6b6a64} #bg-root .cf-t{font-size:20px;font-weight:800}
+  #bg-root .cf-ban{display:flex;gap:12px;align-items:center;background:#e3f5ea;border-radius:16px;padding:12px 14px;margin-bottom:10px} #bg-root .cf-ban b{display:block;font-size:16px} #bg-root .cf-ban small{color:#3b5a48;font-size:13px}
+  #bg-root .cf-okc{flex:0 0 40px;height:40px;border-radius:50%;background:#1d7a4d;color:#fff;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  #bg-root .cf-card{background:#fff;border:1.5px solid #e3e0d6;border-radius:16px;padding:12px;margin-bottom:10px}
+  #bg-root .cf-row{display:flex;align-items:center;gap:12px} #bg-root .cf-ic{font-size:26px} #bg-root .cf-g{flex:1;min-width:0;display:flex;flex-direction:column} #bg-root .cf-g small{color:#6b6a64;font-size:12px} #bg-root .cf-g b{font-size:17px}
+  #bg-root .cf-chg{border:none;background:#eaf1ec;color:#1d7a4d;font-weight:700;font-size:14px;border-radius:10px;padding:8px 14px;min-height:38px;cursor:pointer}
+  #bg-root .cf-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:10px} #bg-root .cf-3 small{display:block;color:#6b6a64;font-size:11px} #bg-root .cf-3 b{font-size:13px}
+  #bg-root .cf-ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px} #bg-root .cf-ch b{font-size:16px} #bg-root .cf-ch span{font-size:12px;color:#6b6a64}
+  #bg-root .cf-p{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid #eceae2}
+  #bg-root .cf-av{flex:0 0 40px;height:40px;border-radius:12px;background:#efe4fb;color:#6a2fa3;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px} #bg-root .cf-av.g{border-radius:50%;background:#1d7a4d;color:#fff}
+  #bg-root .cf-pn{flex:1;min-width:0;display:flex;flex-direction:column} #bg-root .cf-pn b{font-size:15px} #bg-root .cf-pn small{font-size:12px;color:#6b6a64} #bg-root .cf-pn .cf-rj{color:#9b1c10}
+  #bg-root .cf-pq{display:flex;flex-direction:column;align-items:flex-end;gap:3px} #bg-root .cf-qc{background:#f1efe8;border-radius:8px;padding:4px 10px;font-weight:800;font-size:15px;white-space:nowrap} #bg-root .cf-qc i{font-style:normal;font-weight:600;font-size:12px;color:#6b6a64}
+  #bg-root .cf-tag{font-size:11px;font-weight:700;border-radius:8px;padding:2px 8px;background:#eceae2;color:#444} #bg-root .cf-tag.ok{background:#d6f0e0;color:#0f5a35} #bg-root .cf-tag.am{background:#ffe9b8;color:#7a4700} #bg-root .cf-tag.no{background:#ffd9d4;color:#9b1c10}
+  #bg-root .cf-dst{display:flex;flex-wrap:wrap;gap:6px 14px;border-top:1px solid #eceae2;padding-top:8px;font-size:13px} #bg-root .cf-hint{font-size:12px;color:#4a4943;background:#f3f1ea;border-radius:10px;padding:8px 10px;margin-top:8px}
+  #bg-root .cf-saldo{background:#fffaf0;border-color:#a85f00}
+  #bg-root .cf-foto{display:flex;gap:10px;align-items:stretch} #bg-root .cf-foto img{width:46%;max-height:170px;object-fit:cover;border-radius:12px;border:1.5px solid #e3e0d6} #bg-root .cf-fv{width:46%;min-height:96px;border:2px dashed #cfcbbd;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#6b6a64;padding:8px}
+  #bg-root .cf-fb{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center}
+  #bg-root .cf-btn{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;border-radius:12px;background:#eaf1ec;color:#1d7a4d;font-weight:700;font-size:14px;border:none;cursor:pointer;padding:6px 8px} #bg-root .cf-btn.rj{background:#fdf1ef;color:#c0392b}
+  #bg-root .cf-fin{padding:4px 0 14px;text-align:center} #bg-root .cf-fin .mu{margin-top:6px}
+  #bg-root .cf-sh{display:flex;justify-content:space-between;align-items:baseline;margin:4px 2px 8px} #bg-root .cf-sh b{font-size:17px} #bg-root .cf-sh span{font-size:12px;color:#6b6a64}
+  body #bg-root .cf-next,body.touch #bg-root .cf-next{background:#1f1f1d;border-color:#1f1f1d;color:#fff;border-radius:999px}
+
+  /* fila de producto en una sola página: nombre · esperado · cantidad recibida */
+  #bg-root .p1{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}
+  #bg-root .p1n{min-width:0;display:flex;flex-direction:column} #bg-root .p1n b{font-size:17px} #bg-root .p1n small{font-size:13px;color:#4a4943} #bg-root .p1n small b{font-size:14px;color:#1f1f1d}
+  #bg-root .p1q{flex:none;min-width:92px;border:2px solid #d6d3c8;background:#f6f4ee;border-radius:14px;padding:6px 10px;display:flex;flex-direction:column;align-items:center;cursor:pointer;font:inherit;color:#1f1f1d}
+  #bg-root .p1q span{font-size:26px;font-weight:800;line-height:1.05} #bg-root .p1q small{font-size:11px;color:#6b6a64} #bg-root .p1q em{font-style:normal;font-size:11px;font-weight:700;margin-top:2px}
+  #bg-root .p1q.st-ok{background:#e3f5ea;border-color:#1d7a4d} #bg-root .p1q.st-ok em{color:#0f5a35} #bg-root .p1q.st-am{background:#fff3d6;border-color:#a85f00} #bg-root .p1q.st-am em{color:#7a4700} #bg-root .p1q.st-no{background:#fde8e5;border-color:#c0392b} #bg-root .p1q.st-no em{color:#9b1c10}
+  #bg-root .p1m{font-size:12px;color:#9b1c10;margin:-2px 0 6px}
   /* fila del producto: cantidad · nombre · unidad, juntos */
   #bg-root .bg-q1l{font-size:12px;font-weight:700;color:#6b6a64;text-transform:uppercase;letter-spacing:.04em}
   #bg-root .bg-q1{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:2px 0 4px}
@@ -2548,6 +2589,11 @@ function escucharGuias() {
 }
 
 setInterval(() => { try { if(!document.getElementById("guias-lista")) return; renderListaGuias(); const g = guiaAbiertaId ? guiasCache.find(x => x.id === guiaAbiertaId) : null; if(g && g.estado !== "por_despachar") verGuia(g.id); } catch(e){} }, 60000);
+function gdFecha(ts) {
+  if (!ts || !ts.toDate) return "";
+  const d = ts.toDate(), dia = d.toLocaleDateString("es-EC", {weekday: "long"});
+  return dia.charAt(0).toUpperCase() + dia.slice(1) + " " + d.toLocaleString("es-EC");
+}
 function renderListaGuias() {
   const cont = document.getElementById("guias-lista");
   if (guiasCache.length === 0) {
@@ -2556,7 +2602,7 @@ function renderListaGuias() {
   }
   const ordenadas = guiasCache.filter(g => g.estado === "por_despachar").concat(guiasCache.filter(g => g.estado !== "por_despachar"));
   cont.innerHTML = ordenadas.map(g => {
-    const fecha = g.fecha_despacho && g.fecha_despacho.toDate ? g.fecha_despacho.toDate().toLocaleString("es-EC") : "Guardando fecha...";
+    const fecha = gdFecha(g.fecha_despacho) || "Guardando fecha...";
     const estadoClase = g.estado || "despachado";
     return `
       <div class="guia-card" onclick="verGuia('${g.id}')">
@@ -2589,7 +2635,7 @@ function verGuia(id) {
   document.getElementById("guias-lista").style.display = "none";
   if (guia.estado === "por_despachar") { verGuiaPorDespachar(guia); return; }
 
-  const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
+  const fecha = gdFecha(guia.fecha_despacho);
 
   const filasItems = guia.items.map((it, idx) => `
     <div class="detalle-fila guia-fila-check">
@@ -2599,7 +2645,7 @@ function verGuia(id) {
       <span class="guia-obs-columna">${it.cantidad_recibida != null ? `<b style="color:${(it.diferencia || 0) !== 0 ? '#c0392b' : '#1d7a4d'};">Recibido: ${it.cantidad_recibida}${(it.diferencia || 0) !== 0 ? ` (${it.diferencia > 0 ? '+' : ''}${it.diferencia})` : ' ✓'}</b>${it.nota_diferencia ? `<br><small>${it.nota_diferencia}</small>` : ''}` : ''}</span>
     </div>
   `).join("");
-  const fechaRec = guia.fecha_recepcion && guia.fecha_recepcion.toDate ? guia.fecha_recepcion.toDate().toLocaleString("es-EC") : "";
+  const fechaRec = gdFecha(guia.fecha_recepcion);
   const lineaRecepcion = guia.estado === "despachado" ? "" : `<div class="guia-fecha">${guia.estado === "recibido_diferencias" ? "Recibida con diferencias" : "Recibida OK"}${guia.recibido_por ? " por " + guia.recibido_por : ""}${fechaRec ? " - " + fechaRec : ""}</div>`;
 
   document.getElementById("guias-detalle").innerHTML = `
@@ -2722,7 +2768,7 @@ function gdImpresion(guia, orden) {
 }
 const gdGavetas = () => `<div class="gd-gav"><span>Total de gavetas enviadas:</span><span class="gd-gav-box"></span></div>`;
 function verGuiaPorDespachar(guia) {
-  const fecha = guia.fecha_despacho && guia.fecha_despacho.toDate ? guia.fecha_despacho.toDate().toLocaleString("es-EC") : "";
+  const fecha = gdFecha(guia.fecha_despacho);
   const id = guia.id, aviso = gdGuard.id === id && gdGuard.until > Date.now();
   const falt = guia.items.filter(it => it.cantidad_despachada > 0 && gdSaca(it) && it.cantidad_despachada > gdStock(it));
   const sinRev = guia.items.filter(it => it.cantidad_despachada > 0 && esFrio(consItem(it)) && !it.verificado_salida);
@@ -6607,7 +6653,7 @@ const fechaCorta = iso => { const p = String(iso || '').split('-'); return p.len
 const hoyMas = d => { const x = new Date(Date.now() + d * 86400000); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
 const etqU = (n, u) => (window.lcEtq ? window.lcEtq({cantidad_solicitada:n, unidad_medida:u}) : fmt(n) + ' ' + (u || ''));
 
-const B = {ctl:null, provs:[], pm:null, libre:LSg('libre', null), foto:{}, dif:null, pick:null, sum:null, tab:LSg('tab', null), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
+const B = {respEd:false, ctl:null, provs:[], pm:null, libre:LSg('libre', null), foto:{}, dif:null, pick:null, sum:null, tab:LSg('tab', null), resp:LSg('resp', ''), otro:false, abierta:null, draft:LSg('draft', {}), dest:LSg('dest', {}), mp:[], recs:[], bajas:[],
   sel:{}, q:'', verOtros:false, filtro:'todos', reqEd:null, cont:null, contaOk:false, undo:null, busy:false, ready:false, shCb:null};
 if(['recepcion', 'provs', 'inventario', 'req', 'conta'].indexOf(B.tab) < 0) B.tab = null;   // null = lista de módulos
 const compras = () => (typeof listasCompraCache !== 'undefined' ? listasCompraCache : []);
@@ -6683,7 +6729,7 @@ function render(){
   const k = B.tab;
   let h = barraPasos();
   if(k){
-    if(k !== 'prov' && k !== 'conteo' && k !== 'provs') h += barraResp();
+    if(k !== 'prov' && k !== 'conteo' && k !== 'provs' && !(k === 'recepcion' && B.abierta)) h += barraResp();
     if(k === 'produccion') h += B.proc ? vProc() : vProcesar();
     else if(k === 'prov') h += '<div class="iv-subbar"><button class="ivb" data-bg="tab" data-v="recepcion">← Volver a Recibir</button><div class="iv-st">Entrega de proveedor sin compra</div><span></span></div>';
     else if(k === 'conteo') h += segInv();
@@ -6766,49 +6812,45 @@ function estItem(l, it, x){
   if(esp == null ? !(x.rech > 0) : (x.rec === esp && !(x.rech > 0))) return {k:'ok', txt:esp == null ? 'Recibido y aceptado' : 'Completo y aceptado'};
   return {k:'am', txt:'Recibido con diferencias'};
 }
-function cardItem(l, it, d, ultimo){
-  const pid = it.producto_id, x = d.items[pid], e = estItem(l, it, x), esp = espDe(l, it), u = it.unidad_medida || '', entra = r3(Math.max(0, (x.rec || 0) - (x.rech || 0))), ep = esc(pid);
+function cardItem(l, it, d){
+  const pid = it.producto_id, x = d.items[pid], e = estItem(l, it, x), esp = espDe(l, it), u = it.unidad_medida || '', ep = esc(pid);
   const parc = !l.libre && acumDe(l, pid) > 0;
-  const qBig = esp == null ? ((x.rec || 0) > 0 ? fmt(x.rec) : '—') : fmt(esp);
-  const hint = x.dest === 'procesamiento' ? '⚙ Queda en Inventario como <b>materia prima sin procesar</b>. Cuando la procesas en <b>Registro de producción</b>, lo procesado entra al inventario.' : '📦 Entra directo al inventario de bodega.';
-  const tieneCtl = (x.peso > 0) || x.temp != null || x.nota;
-  return '<div class="bg-it st-' + e.k + '" id="bgit-' + ep + '"><div class="bg-q1l">' + (esp == null ? 'Llegó' : 'Esperado') + '</div>' +
-    '<div class="bg-q1"><span class="bg-q1n">' + qBig + '</span><span class="bg-q1t">' + presHtml(pid, it.producto_nombre) + '</span><span class="bg-q1u">' + esc(u || 'unid.') + '</span></div>' +
-    (parc ? '<div class="bg-q1s">Saldo · ya llegó ' + esc(etqU(acumDe(l, pid), u)) + '</div>' : (esp == null ? '<div class="bg-q1s">Sin pedido previo</div>' : '')) +
-    '<div class="bg-st st-' + e.k + '">' + (e.k === 'ok' ? '✔ ' : e.k === 'am' ? '⚠ ' : e.k === 'no' ? '✖ ' : '○ ') + e.txt + '</div>' +
-    (x.st ? '<button class="bg-sum" data-bg="dif-abrir" data-id="' + ep + '"><span>Recibido <b>' + fmt(x.rec || 0) + '</b></span><span>Rechazado <b>' + fmt(x.rech || 0) + '</b></span><span>Aceptado <b>' + fmt(entra) + ' ' + esc(u) + '</b></span>' + (x.motivo ? '<small>' + esc(x.motivo) + '</small>' : '') + '</button>' : '') +
-    '<div class="bg-acc' + (esp == null ? ' solo' : '') + '">' + (esp == null ? '' : '<button class="ivb ' + (x.st === 'ok' ? 'on' : '') + '" data-bg="todo-ok" data-id="' + ep + '">✔ Todo correcto</button>') +
-    '<button class="ivb ' + (x.st === 'dif' ? 'on' : '') + '" data-bg="dif-abrir" data-id="' + ep + '">✎ ' + (esp == null ? 'Registrar cantidad' : 'Registrar diferencia') + '</button>' +
+  const rc = x.st ? (x.st === 'no' ? '0' : fmt(x.rec || 0)) : '—';
+  const lbl = {n:'Sin revisar', ok:'Completo', am:'Diferencia', no:(x.rec || 0) > 0 ? 'Rechazado' : 'No llegó'}[e.k];
+  const tieneCtl = (x.peso > 0) || x.temp != null || x.nota || x.lote || x.vence;
+  const ctl = tieneCtl ? ((x.peso > 0 ? '<span>⚖ <b>' + fmt(x.peso) + ' ' + esc(x.pesoU || 'kg') + '</b></span>' : '') + (x.temp != null ? '<span>🌡 <b>' + (x.neg ? '−' : '') + fmt(x.temp) + ' °C</b></span>' : '') + (x.lote ? '<span>🏷 <b>' + esc(x.lote) + '</b></span>' : '') + (x.vence ? '<span>Vence <b>' + esc(fechaCorta(x.vence)) + '</b></span>' : '') + (x.nota ? '<small>📝 ' + esc(x.nota) + '</small>' : '')) : '<span>＋ Peso · Temperatura · Lote · Nota</span>';
+  return '<div class="bg-it st-' + e.k + '" id="bgit-' + ep + '"><div class="p1"><div class="p1n"><b>' + presHtml(pid, it.producto_nombre) + '</b><small>' + (esp == null ? 'Sin pedido previo' : 'Esperado <b>' + esc(etqU(esp, u)) + '</b>') + (parc ? ' · ya llegó ' + esc(etqU(acumDe(l, pid), u)) : '') + '</small></div>' +
+    '<button class="p1q st-' + e.k + '" data-bg="dif-abrir" data-id="' + ep + '"><span>' + rc + '</span><small>' + esc(u || 'unid.') + '</small><em>' + lbl + '</em></button></div>' +
+    ((x.rech > 0 || (x.st && x.motivo && x.st !== 'ok')) ? '<div class="p1m">' + (x.rech > 0 ? 'Rechazado ' + fmt(x.rech) + ' ' + esc(u) + ' · ' : '') + esc(x.motivo || '') + '</div>' : '') +
+    '<div class="bg-acc' + (esp == null ? ' solo' : '') + '">' + (esp == null ? '' : '<button class="ivb ' + (x.st === 'ok' ? 'on' : '') + '" data-bg="todo-ok" data-id="' + ep + '">✔ Correcto</button>') +
+    '<button class="ivb ' + (x.st === 'dif' ? 'on' : '') + '" data-bg="dif-abrir" data-id="' + ep + '">✎ ' + (esp == null ? 'Cantidad' : 'Diferencia') + '</button>' +
     (esp == null ? '<button class="ivb" data-bg="libre-quitar" data-id="' + ep + '">🗑 Quitar</button>' : '<button class="ivb ' + (x.st === 'no' ? 'on' : '') + '" data-bg="no-llego" data-id="' + ep + '">✖ No llegó</button>') + '</div>' +
-    '<button class="bg-ctlb ' + (tieneCtl ? 'hay' : '') + '" data-bg="ctl-abrir" data-id="' + ep + '">' + (tieneCtl ?
-      ((x.peso > 0 ? '<span>⚖ <b>' + fmt(x.peso) + ' ' + esc(x.pesoU || 'kg') + '</b></span>' : '') + (x.temp != null ? '<span>🌡 <b>' + (x.neg ? '−' : '') + fmt(x.temp) + ' °C</b></span>' : '') + (x.nota ? '<small>📝 ' + esc(x.nota) + '</small>' : '')) :
-      '<span>⚖ Peso · 🌡 Temperatura · 📝 Nota</span>') + '</button>' +
     '<div class="bg-dest"><button class="ivb ' + (x.dest === 'directo' ? 'on' : '') + '" data-bg="dest" data-v="directo" data-id="' + ep + '">📦 A bodega</button>' +
     '<button class="ivb ' + (x.dest === 'procesamiento' ? 'on' : '') + '" data-bg="dest" data-v="procesamiento" data-id="' + ep + '">⚙ A procesar</button></div>' +
-    '<div class="bg-dhint">' + hint + '</div>' +
-    (x.lt || x.lote || x.vence ? '<div class="bg-tr"><input class="bg-obs" data-bglote="' + ep + '" placeholder="Lote del proveedor" autocomplete="off" value="' + esc(x.lote || '') + '"><label class="bg-vl">Vence<input type="date" class="bg-obs" data-bgvence="' + ep + '" value="' + esc(x.vence || '') + '"></label></div>' :
-      '<button class="bg-lt" data-bg="lt" data-id="' + ep + '">＋ Lote y vencimiento</button>') +
-    (ultimo ? fotoHtml(l) : '') + '</div>';
+    (x.dest === 'procesamiento' ? '<div class="bg-dhint">⚙ Queda como materia prima sin procesar. Al procesarla en Registro de producción, entra al inventario.</div>' : '') +
+    '<button class="bg-ctlb ' + (tieneCtl ? 'hay' : '') + '" data-bg="ctl-abrir" data-id="' + ep + '">' + ctl + '</button></div>';
 }
-function fotoHtml(l){
-  const foto = B.foto[l.id], pn = pendItems(l).length;
-  return '<div class="bg-fcard"><div class="bg-fh"><b>📷 Foto del recibo o guía</b>' + (pn > 1 ? '<span class="mu">una foto para toda la entrega</span>' : '') + '</div><div class="bg-foto"><label class="ivb on" for="bg-foto-img">' + (foto ? '📷 Cambiar foto' : '📷 Tomar o adjuntar foto') + '</label><input id="bg-foto-img" type="file" accept="image/*" class="bg-fin"></div>' +
-    (foto ? '<div class="bg-fprev"><img src="' + foto + '" alt="Recibo"><div><b>✔ Foto lista</b><button class="ivb" data-bg="foto-quitar">Quitar foto</button></div></div>' : '') + '</div>';
-}
+const iniciales = n => String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || '?';
 function vRecDetalle(){
   const l = lAct();
   if(!l){ B.abierta = null; return vRecepcion(); }
   const d = draftDe(l), pend = pendItems(l), key = l.id;
   const hechos = l.libre ? [] : (l.items || []).filter(it => it.comprado !== false && espDe(l, it) <= 0);
-  const nRev = pend.filter(it => d.items[it.producto_id].st).length;
-  const foto = B.foto[key];
+  const nRev = pend.filter(it => d.items[it.producto_id].st).length, foto = B.foto[key];
+  const saldo = (!l.libre && pend.length && nRev === pend.length) ? saldoTras(l, buildItems(l, d)) : [];
   let h = '<div class="iv-subbar"><button class="ivb" data-bg="cerrar">← Volver</button><div class="iv-st">' + (l.libre ? 'Entrega sin compra previa' : (l.requerimiento ? 'Requerimiento' : (l.pedido_numero ? 'Pedido #' + l.pedido_numero : 'Compra'))) + '</div><span></span></div>' +
     '<div class="iv-card">' + (B.provs.length ? '<div class="bg-dmot" style="margin-bottom:8px">' + B.provs.slice(0, 10).map(p => '<button class="ivb ' + (String(d.prov || '').toLowerCase() === String(p.nombre).toLowerCase() ? 'on' : '') + '" data-bg="prov-pick" data-v="' + esc(p.nombre) + '">' + esc(p.nombre) + '</button>').join('') + '</div>' : '') + '<div class="bg-tr"><input class="bg-obs" id="bg-prov" list="bg-provs" placeholder="Proveedor" autocomplete="off" value="' + esc(d.prov || '') + '"><datalist id="bg-provs">' + B.provs.map(p => '<option value="' + esc(p.nombre) + '">').join('') + '</datalist><input class="bg-obs" id="bg-doc" placeholder="Factura / guía del proveedor (opcional)" autocomplete="off" value="' + esc(d.doc || '') + '"></div></div>';
+  h += '<div class="cf-sh"><b>Productos recibidos</b><span>' + pend.length + ' producto' + (pend.length === 1 ? '' : 's') + '</span></div>';
+  h += pend.map(it => cardItem(l, it, d)).join('');
   if(l.libre) h += '<div class="bg-acts"><button class="ivb on bg-addp" data-bg="pick-abrir">＋ Agregar producto</button></div>' + (pend.length ? '' : '<div class="iv-vacio">Agrega los productos que llegaron.</div>');
-  else h += '<div class="iv-aviso">Revisa cada producto: “Todo correcto” si llegó lo esperado, “Registrar diferencia” si cambió, “No llegó” si faltó. Nada se marca solo.</div>';
-  h += pend.map((it, k) => cardItem(l, it, d, k === pend.length - 1)).join('');
   if(hechos.length) h += '<div class="iv-card"><div class="mu">Ya recibidos antes: ' + hechos.map(it => esc(it.producto_nombre)).join(', ') + '</div></div>';
-  h += '<div class="iv-pie"><div class="mu" style="text-align:center;margin-bottom:6px"><b>Revisados ' + nRev + ' de ' + pend.length + '</b></div><button class="ivb okb big" data-bg="confirmar">Confirmar recepción</button></div>';
+  if(saldo.length) h += '<div class="cf-card cf-saldo"><b>⏳ Queda pendiente</b><div class="mu">' + saldo.map(x => esc(x.nombre) + ' ' + fmt(x.falta) + ' ' + esc(x.unidad)).join(' · ') + '</div>' +
+    '<div class="bg-dmot"><button class="ivb ' + ((B.cierre || 'esperar') === 'esperar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="esperar">Esperar el saldo</button><button class="ivb ' + (B.cierre === 'cerrar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="cerrar">Cerrar sin el saldo</button></div></div>';
+  h += '<div class="cf-card"><div class="cf-ch"><b>🧾 Comprobante</b>' + (foto ? '<span class="cf-tag ok">✔ Foto agregada</span>' : '<span class="cf-tag">opcional</span>') + '</div>' +
+    '<div class="cf-foto">' + (foto ? '<img src="' + foto + '" alt="Recibo">' : '') + '<div class="cf-fb"><label class="cf-btn" for="bg-foto-img">📷 ' + (foto ? 'Cambiar foto' : 'Tomar o adjuntar foto') + '</label><input id="bg-foto-img" type="file" accept="image/*" class="bg-fin">' + (foto ? '<button class="cf-btn rj" data-bg="foto-quitar">🗑 Eliminar</button>' : '') + '</div></div></div>';
+  h += '<div class="cf-card"><div class="cf-row"><span class="cf-av g">' + esc(iniciales(B.resp)) + '</span><div class="cf-g"><small>Responsable de la recepción</small><b>' + esc(B.resp || 'Elige quién recibe') + '</b></div><button class="cf-chg" data-bg="resp-cambiar">' + (B.resp && !B.respEd ? 'Cambiar' : 'Listo') + '</button></div>' + ((B.respEd || !B.resp) ? barraResp() : '') + '</div>';
+  h += '<div class="cf-card"><div class="cf-ch"><b>📝 Observaciones</b><span>opcional</span></div><input class="bg-obs" id="bg-obsg" placeholder="Ej. Buen estado, entrega completa." autocomplete="off" value="' + esc(d.obsg || '') + '"></div>';
+  h += '<div class="iv-pie"><div class="mu" style="text-align:center;margin-bottom:6px"><b>Revisados ' + nRev + ' de ' + pend.length + '</b></div><button class="ivb okb big" data-bg="confirmar">✓ Confirmar recepción</button></div>';
   return h;
 }
 function setDraft(pid, campo, val){
@@ -6853,7 +6895,7 @@ const pesoKg = (v, u) => r3((v || 0) * (u === 'lb' ? 0.45359237 : 1));
 function abrirCtl(pid){
   const l = lAct(); if(!l) return; const it = pendItems(l).filter(x => x.producto_id === pid)[0]; if(!it) return;
   const x = draftDe(l).items[pid], u = String(it.unidad_medida || '').toLowerCase();
-  B.ctl = {pid:pid, nombre:it.producto_nombre, peso:x.peso || 0, pesoU:x.peso > 0 ? (x.pesoU || 'kg') : (/lib/.test(u) ? 'lb' : 'kg'), temp:x.temp, neg:!!x.neg, nota:x.nota || ''};
+  B.ctl = {pid:pid, nombre:it.producto_nombre, peso:x.peso || 0, pesoU:x.peso > 0 ? (x.pesoU || 'kg') : (/lib/.test(u) ? 'lb' : 'kg'), temp:x.temp, neg:!!x.neg, nota:x.nota || '', lote:x.lote || '', vence:x.vence || ''};
   renderCtl();
 }
 function renderCtl(){
@@ -6864,6 +6906,7 @@ function renderCtl(){
       '<div class="bg-ctlu"><button class="ivb ' + (C.pesoU === 'kg' ? 'on' : '') + '" data-bg="ctl-pu" data-v="kg">kg</button><button class="ivb ' + (C.pesoU === 'lb' ? 'on' : '') + '" data-bg="ctl-pu" data-v="lb">libras</button></div></div>' +
     '<div class="bg-dq"><span>🌡 Temperatura al recibir</span><div class="bg-dqr"><button class="ivb val" data-bg="ctl-temp"><b>' + (C.temp != null ? (C.neg ? '−' : '') + fmt(C.temp) : '—') + '</b><small>°C</small></button></div>' +
       '<div class="bg-ctlu"><button class="ivb ' + (C.neg ? 'on' : '') + '" data-bg="ctl-neg">❄ Bajo cero (−)</button><button class="ivb" data-bg="ctl-temp-x">Quitar</button></div></div>' +
+    '<div class="bg-dq"><span>🏷 Lote y vencimiento</span><div class="bg-tr"><input class="bg-obs" id="bg-ctl-lote" placeholder="Lote del proveedor" autocomplete="off" value="' + esc(C.lote) + '"><input type="date" class="bg-obs" id="bg-ctl-vence" value="' + esc(C.vence) + '"></div></div>' +
     '<div class="bg-dq"><span>📝 Nota</span><input class="bg-obs" id="bg-ctl-nota" placeholder="Ej: empaque roto, olor, color…" autocomplete="off" value="' + esc(C.nota) + '"></div>' +
     '<div class="bg-dbt uno"><button class="ivb okb" data-bg="ctl-ok">Guardar</button></div></div>';
   s.className = 'show';
@@ -6872,6 +6915,8 @@ function guardarCtl(){
   const C = B.ctl, l = lAct(); if(!C || !l) return;
   const x = draftDe(l).items[C.pid]; if(!x) return;
   const n = $('#bg-ctl-nota'); if(n) C.nota = n.value.trim();
+  const lo = $('#bg-ctl-lote'), ve = $('#bg-ctl-vence'); C.lote = lo ? lo.value.trim() : C.lote; C.vence = ve ? ve.value : C.vence;
+  x.lote = C.lote; x.vence = C.vence;
   x.peso = C.peso || 0; x.pesoU = C.pesoU; x.temp = C.temp; x.neg = C.temp != null && C.neg; x.nota = C.nota;
   LSs('draft', B.draft); B.ctl = null; renderCtl(); render();
 }
@@ -6911,38 +6956,25 @@ function pedirConfirmar(){
   const sin = pend.filter(it => !d.items[it.producto_id].st);
   if(sin.length){ toast('Faltan ' + sin.length + ' producto' + (sin.length > 1 ? 's' : '') + ' por revisar'); const el = document.getElementById('bgit-' + sin[0].producto_id); if(el){ el.scrollIntoView({block:'center', behavior:'smooth'}); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } return; }
   if(!String(d.prov || '').trim()){ toast('Escribe el proveedor'); const pi = $('#bg-prov'); if(pi){ pi.scrollIntoView({block:'center'}); pi.focus(); } return; }
+  if(!B.resp){ B.respEd = true; render(); toast('Elige quién recibe'); return; }
   if(!resp()) return;
-  B.sum = {cierre:'esperar'}; renderSum();
+  confirmarRecepcion();
 }
 function saldoTras(l, items){
   const acc = Object.assign({}, l.recibido_acum || {}); items.forEach(i => { acc[i.producto_id] = r3((acc[i.producto_id] || 0) + i.recibido); });
   return (l.items || []).filter(it => it.comprado !== false && r3((it.cantidad_solicitada || 0) - (acc[it.producto_id] || 0)) > 0.0005).map(it => ({nombre:it.producto_nombre, unidad:it.unidad_medida || '', falta:r3((it.cantidad_solicitada || 0) - (acc[it.producto_id] || 0))}));
 }
 function renderSum(){
-  let s = $('#bg-sum'); if(!B.sum){ if(s) s.className = ''; return; }
-  const l = lAct(); if(!l){ B.sum = null; return; }
-  if(!s){ s = document.createElement('div'); s.id = 'bg-sum'; document.body.appendChild(s); }
-  const items = buildItems(l, draftDe(l)), c = k => items.filter(i => i.estado_item === k);
-  const ok = c('ok').length, dif = c('diferencia').length, no = c('no_llego').length + c('rechazado').length;
-  const bod = items.filter(i => i.entra > 0 && i.destino === 'directo'), pro = items.filter(i => i.entra > 0 && i.destino === 'procesamiento'), rech = items.filter(i => i.rechazado > 0);
-  const saldo = l.libre ? [] : saldoTras(l, items);
-  s.innerHTML = '<div class="bg-dbox"><button class="bg-dx" data-bg="sum-x" aria-label="Cerrar">✕</button><h3>Resumen de la recepción</h3>' +
-    '<div class="bg-sl"><span class="st-ok">✔ ' + ok + ' completos</span><span class="st-am">⚠ ' + dif + ' con diferencias</span><span class="st-no">✖ ' + no + ' no llegaron / rechazados</span></div>' +
-    '<div class="bg-line"><div>📦 A bodega</div><b>' + bod.length + '</b></div>' + (bod.length ? '<div class="mu">' + bod.map(i => esc(i.nombre) + ' ' + fmt(i.entra) + ' ' + esc(i.unidad) + (i.peso_kg ? ' (' + fmt(i.peso_kg) + ' kg)' : '')).join(' · ') + '</div>' : '') +
-    '<div class="bg-line"><div>⚙ A procesar (materia prima pendiente)</div><b>' + pro.length + '</b></div>' + (pro.length ? '<div class="mu">' + pro.map(i => esc(i.nombre) + ' ' + fmt(i.entra) + ' ' + esc(i.unidad) + (i.peso_kg ? ' (' + fmt(i.peso_kg) + ' kg)' : '')).join(' · ') + '</div>' : '') +
-    (rech.length ? '<div class="bg-line"><div>↩ Rechazado (no entra al inventario)</div><b>' + rech.length + '</b></div><div class="mu">' + rech.map(i => esc(i.nombre) + ' ' + fmt(i.rechazado) + ' ' + esc(i.unidad) + (i.motivo ? ' · ' + esc(i.motivo) : '')).join(' · ') + '</div>' : '') +
-    (saldo.length ? '<div class="iv-aviso" style="margin-top:8px"><b>Queda pendiente:</b> ' + saldo.map(x => esc(x.nombre) + ' ' + fmt(x.falta) + ' ' + esc(x.unidad)).join(' · ') + '</div>' +
-      '<div class="bg-dmot"><button class="ivb ' + (B.sum.cierre === 'esperar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="esperar">Esperar el saldo</button><button class="ivb ' + (B.sum.cierre === 'cerrar' ? 'on' : '') + '" data-bg="sum-cierre" data-v="cerrar">Cerrar compra sin el saldo</button></div>' : '') +
-    '<div class="bg-dbt uno"><button class="ivb okb big" data-bg="sum-ok">Confirmar</button></div></div>';
-  s.className = 'show';
+  const m = $('#bg-sum'); if(m) m.className = '';
+  render(); window.scrollTo(0, 0);
 }
 async function confirmarRecepcion(){
   const l = lAct(); if(!l || B.busy) return;
   const quien = resp(); if(!quien) return;
-  const d = draftDe(l), items = buildItems(l, d), prov = String(d.prov || '').trim(), doc = String(d.doc || '').trim(), cierre = B.sum ? B.sum.cierre : 'esperar';
+  const d = draftDe(l), items = buildItems(l, d), prov = String(d.prov || '').trim(), doc = String(d.doc || '').trim(), cierre = B.cierre || 'esperar';
   const n0 = l.libre ? 0 : (l.recepciones_n || 0), recId = l.libre ? B.libre.rid : 'rec_' + l.id + '_' + (n0 + 1), foto = B.foto[l.id] || null;
   const hayDif = items.some(i => i.estado_item !== 'ok');
-  B.busy = true; B.sum = null; renderSum(); setTimeout(() => { B.busy = false; }, 4000);
+  B.busy = true; B.cierre = null; setTimeout(() => { B.busy = false; }, 4000);
   let cerrada = true;
   try {
     await db.runTransaction(async t => {
@@ -6955,7 +6987,7 @@ async function confirmarRecepcion(){
       cerrada = l.libre || cierre === 'cerrar' || !(l.items || []).some(it => it.comprado !== false && r3((it.cantidad_solicitada || 0) - (acum[it.producto_id] || 0)) > 0.0005);
       const ts = SV();
       t.set(rr, {empresa:EMPRESA, bodega:BODEGA, compra_id:l.libre ? null : l.id, sin_compra:!!l.libre, secuencia:n0 + 1, pedido_numero:l.pedido_numero || null, local:l.local || '', requerimiento:!!l.requerimiento, fecha:ts, fecha_iso:new Date().toISOString(), responsable:quien,
-        proveedor:prov, documento:doc, estado:hayDif ? 'con_diferencias' : 'completa', parcial:!cerrada, foto:!!foto, items:items,
+        proveedor:prov, documento:doc, observaciones:String(d.obsg || '').trim(), estado:hayDif ? 'con_diferencias' : 'completa', parcial:!cerrada, foto:!!foto, items:items,
         prev:l.libre ? null : {n:ld.recepciones_n || 0, acum:ld.recibido_acum || {}, ids:ld.recepcion_ids || [], estado:ld.recepcion_estado || null, parcial:!!ld.recepcion_parcial, fecha:ld.fecha_recepcion || null, por:ld.recibido_por || null}});
       if(foto) t.set(db.collection('recepcion_fotos').doc(recId), {recepcion_id:recId, compra_id:l.libre ? null : l.id, data_url:foto, responsable:quien, fecha:ts});
       items.forEach(i => {
@@ -7330,19 +7362,20 @@ document.addEventListener('click', e => {
     case 'ctl-abrir': abrirCtl(id); break;
     case 'ctl-x': B.ctl = null; renderCtl(); break;
     case 'ctl-ok': guardarCtl(); break;
-    case 'ctl-pu': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; B.ctl.pesoU = v; renderCtl(); } break;
-    case 'ctl-neg': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; B.ctl.neg = !B.ctl.neg; if(B.ctl.temp == null) B.ctl.temp = 0; renderCtl(); } break;
-    case 'ctl-temp-x': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; B.ctl.temp = null; B.ctl.neg = false; renderCtl(); } break;
-    case 'ctl-peso': { const C = B.ctl; if(!C) break; const n0 = $('#bg-ctl-nota'); if(n0) C.nota = n0.value;
+    case 'ctl-pu': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; const lo = $('#bg-ctl-lote'), ve = $('#bg-ctl-vence'); if(lo) B.ctl.lote = lo.value; if(ve) B.ctl.vence = ve.value; B.ctl.pesoU = v; renderCtl(); } break;
+    case 'ctl-neg': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; const lo = $('#bg-ctl-lote'), ve = $('#bg-ctl-vence'); if(lo) B.ctl.lote = lo.value; if(ve) B.ctl.vence = ve.value; B.ctl.neg = !B.ctl.neg; if(B.ctl.temp == null) B.ctl.temp = 0; renderCtl(); } break;
+    case 'ctl-temp-x': if(B.ctl){ const n = $('#bg-ctl-nota'); if(n) B.ctl.nota = n.value; const lo = $('#bg-ctl-lote'), ve = $('#bg-ctl-vence'); if(lo) B.ctl.lote = lo.value; if(ve) B.ctl.vence = ve.value; B.ctl.temp = null; B.ctl.neg = false; renderCtl(); } break;
+    case 'ctl-peso': { const C = B.ctl; if(!C) break; const n0 = $('#bg-ctl-nota'); if(n0) C.nota = n0.value; const lo0 = $('#bg-ctl-lote'), ve0 = $('#bg-ctl-vence'); if(lo0) C.lote = lo0.value; if(ve0) C.vence = ve0.value;
       abrirTeclado({titulo:C.nombre, subtitulo:'Peso total recibido', unidad:C.pesoU === 'lb' ? 'libras' : 'kg', inicial:C.peso > 0 ? C.peso : '', decimales:true, permitirVacio:true, permitirCero:true, onListo:n => { C.peso = n == null ? 0 : n; renderCtl(); }}); break; }
-    case 'ctl-temp': { const C = B.ctl; if(!C) break; const n0 = $('#bg-ctl-nota'); if(n0) C.nota = n0.value;
+    case 'ctl-temp': { const C = B.ctl; if(!C) break; const n0 = $('#bg-ctl-nota'); if(n0) C.nota = n0.value; const lo0 = $('#bg-ctl-lote'), ve0 = $('#bg-ctl-vence'); if(lo0) C.lote = lo0.value; if(ve0) C.vence = ve0.value;
       abrirTeclado({titulo:C.nombre, subtitulo:'Temperatura al recibir' + (C.neg ? ' (bajo cero)' : ''), unidad:'°C', inicial:C.temp != null && C.temp > 0 ? C.temp : '', decimales:true, permitirVacio:true, permitirCero:true, onListo:n => { C.temp = n; renderCtl(); }}); break; }
     case 'lt': setDraft(id, 'lt', true); render(); break;
     case 'dest': setDraft(id, 'dest', v); render(); break;
     case 'foto-quitar': { const l = lAct(); if(l){ delete B.foto[l.id]; render(); } break; }
     case 'confirmar': pedirConfirmar(); break;
-    case 'sum-x': B.sum = null; renderSum(); break;
-    case 'sum-cierre': if(B.sum){ B.sum.cierre = v; renderSum(); } break;
+    case 'sum-x': B.sum = null; B.respEd = false; renderSum(); break;
+    case 'resp-cambiar': B.respEd = !B.respEd; render(); break;
+    case 'sum-cierre': B.cierre = v; render(); break;
     case 'sum-ok': confirmarRecepcion(); break;
     case 'libre-nueva': if(!B.libre){ B.libre = {rid:'rec_libre_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), items:[]}; LSs('libre', B.libre); } B.abierta = 'libre'; render(); window.scrollTo(0, 0); break;
     case 'libre-quitar': if(B.libre){ B.libre.items = B.libre.items.filter(i => i.producto_id !== id); LSs('libre', B.libre); const d = B.draft.libre; if(d) delete d.items[id]; LSs('draft', B.draft); render(); } break;
@@ -7425,6 +7458,7 @@ document.addEventListener('input', e => {
   else if(i.id === 'bg-fecha'){ if(B.reqEd) B.reqEd.fecha = i.value || hoyMas(2); }
   else if(i.getAttribute('data-bglote')){ setDraft(i.getAttribute('data-bglote'), 'lote', i.value); }
   else if(i.getAttribute('data-bgvence')){ setDraft(i.getAttribute('data-bgvence'), 'vence', i.value); }
+  else if(i.id === 'bg-obsg'){ const l = lAct(); if(l){ draftDe(l).obsg = i.value; LSs('draft', B.draft); } }
   else if(i.id === 'bg-prov' || i.id === 'bg-doc'){ const l = lAct(); if(l){ const d = draftDe(l); d[i.id === 'bg-prov' ? 'prov' : 'doc'] = i.value; LSs('draft', B.draft); } }
 });
 
